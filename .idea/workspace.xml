@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="0ccfaa0c-3731-4ce9-b348-fca445a6c314" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP 7.4.11">
+    <include_path>
+      <path value="$PROJECT_DIR$/../../../../xampp/php/PEAR" />
+      <path value="" />
+    </include_path>
+  </component>
+  <component name="ProjectId" id="1kmAzELWpgk95uL3Bub4vvflFdf" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RunManager">
+    <configuration name="Unnamed" type="PhpBuiltInWebServerConfigurationType" factoryName="PHP Built-in Web Server" nameIsGenerated="true" document_root="$PROJECT_DIR$">
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0ccfaa0c-3731-4ce9-b348-fca445a6c314" name="Default Changelist" comment="" />
+      <created>1606295653997</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1606295653997</updated>
+      <workItem from="1606295655038" duration="1513000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="954" y="197" key="#CLI_Interpreters" timestamp="1606306874091">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="954" y="197" key="#CLI_Interpreters/0.0.1920.1040@0.0.1920.1040" timestamp="1606306874091" />
+    <state x="1081" y="185" key="#PHP" timestamp="1606306884229">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="1081" y="185" key="#PHP/0.0.1920.1040@0.0.1920.1040" timestamp="1606306884229" />
+    <state x="828" y="178" width="1092" height="767" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1606306886946">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="828" y="178" width="1092" height="767" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606306886946" />
+    <state x="1153" y="297" key="FileChooserDialogImpl" timestamp="1606306866414">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="1153" y="297" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1606306866414" />
+  </component>
+</project>
