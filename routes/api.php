@@ -17,3 +17,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+//API-ветка по контроллеру ProducerController
+Route::prefix('producers')->group(function () {
+    //Все AJAX-запросы, помещенные в эту группу, будут иметь префикс /producers/...
+    Route::get('getTable',  [App\Http\Controllers\ProducerController::class, 'getTable']);
+
+});

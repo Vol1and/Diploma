@@ -2,10 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\ProducersRepository;
+
 use Illuminate\Http\Request;
 
 class ProducerController extends Controller
 {
+
+    //ссылка на хранилище модели Producer
+    private $producerRepository;
+
+    public function __construct()
+    {
+
+        //инициализация хранилища
+        $this->producerRepository = app(ProducersRepository::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -81,4 +94,9 @@ class ProducerController extends Controller
     {
         //
     }
+
+    public function getTable(){
+        return $this->producerRepository->getTable()->toJson();
+    }
+
 }

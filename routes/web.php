@@ -13,10 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
+//Все дороги ведут в Рим
+//Рим - главная страница которая лежит в шаблоне "home.blade.php"
+//Дороги - любой раут в URL
+//Из него Vue-Router рендерит соответствующий Vue-компонент
+Route::get('/{any}', [App\Http\Controllers\HomeController::class, 'index'])->where('any', '.*');

@@ -19,27 +19,28 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0ccfaa0c-3731-4ce9-b348-fca445a6c314" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.htaccess" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Models/Characteristic.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Models/Nomenclature.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Models/PriceType.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Models/Producer.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/factories/CharacteristicFactory.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_11_30_081300_producers.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_11_30_082601_price_types.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_11_30_083305_nomenclature.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_11_30_083314_characteristics.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/seeders/NomenclatureSeeder.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/seeders/PriceTypesSeeder.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/seeders/ProducersSeeder.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitattributes" beforeDir="false" afterPath="$PROJECT_DIR$/.gitattributes" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Diploma.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Diploma.iml" afterDir="false" />
+    <list default="true" id="0ccfaa0c-3731-4ce9-b348-fca445a6c314" name="Default Changelist" comment="Внедрил верстку из коробки. Перенастроил работу сервера, чтобы не было /public/ вставки в каждом url. &#10;Создал репозитории для моделей Nomenclature, Producer, PriceType, Characteristic">
+      <change afterPath="$PROJECT_DIR$/resources/js/components/HomeComponent.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/js/components/Producer/Index.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/js/routes.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ProducerController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ProducerController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Middleware/Authenticate.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Middleware/Authenticate.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Characteristic.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Characteristic.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Nomenclature.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Nomenclature.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/PriceType.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/PriceType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Producer.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Producer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/mix-manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/mix-manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/components/ExampleComponent.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/home.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/home.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +50,15 @@
   <component name="ComposerSettings" doNotAsk="true">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
     <execution />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Vue Single File Component" />
+        <option value="JavaScript File" />
+        <option value="HTML File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -175,6 +185,7 @@
       <path value="$PROJECT_DIR$/vendor/composer" />
       <path value="$PROJECT_DIR$/vendor/barryvdh/laravel-debugbar" />
       <path value="$PROJECT_DIR$/vendor/symfony/filesystem" />
+      <path value="$PROJECT_DIR$/vendor/laravel/ui" />
     </include_path>
   </component>
   <component name="ProjectId" id="1kmAzELWpgk95uL3Bub4vvflFdf" />
@@ -184,17 +195,22 @@
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="DatabaseDriversLRU" value="mariadb" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Course" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="restartRequiresConfirmation" value="false" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\vol1a\PhpstormProjects\Diploma\app\Repositories" />
       <recent name="C:\Users\vol1a\PhpstormProjects\Diploma\public" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -209,6 +225,21 @@
     <configuration name="Unnamed" type="PhpBuiltInWebServerConfigurationType" factoryName="PHP Built-in Web Server" nameIsGenerated="true" document_root="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
+    <configuration name="watch" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="watch" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.watch" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -220,7 +251,10 @@
       <updated>1606295653997</updated>
       <workItem from="1606295655038" duration="7450000" />
       <workItem from="1606723231851" duration="76000" />
-      <workItem from="1606723601789" duration="5633000" />
+      <workItem from="1606723601789" duration="13385000" />
+      <workItem from="1606808058377" duration="3760000" />
+      <workItem from="1606815367208" duration="13733000" />
+      <workItem from="1606833319039" duration="524000" />
     </task>
     <task id="LOCAL-00001" summary="Прикрутил debugbar и ide_helper">
       <created>1606387579179</created>
@@ -229,7 +263,21 @@
       <option name="project" value="LOCAL" />
       <updated>1606387579179</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Создал:&#10;Миграции - Producers, PriceTypes, Nomenclature, Characteristics&#10;Сидеры   - Producers, PriceTypes, Nomenclature &#10;Модели   - Producers, PriceTypes, Nomenclature, Characteristics">
+      <created>1606739517988</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1606739517988</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Внедрил верстку из коробки. Перенастроил работу сервера, чтобы не было /public/ вставки в каждом url. &#10;Создал репозитории для моделей Nomenclature, Producer, PriceType, Characteristic">
+      <created>1606747904715</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1606747904715</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -250,25 +298,35 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Прикрутил debugbar и ide_helper" />
-    <option name="LAST_COMMIT_MESSAGE" value="Прикрутил debugbar и ide_helper" />
+    <MESSAGE value="Создал:&#10;Миграции - Producers, PriceTypes, Nomenclature, Characteristics&#10;Сидеры   - Producers, PriceTypes, Nomenclature &#10;Модели   - Producers, PriceTypes, Nomenclature, Characteristics" />
+    <MESSAGE value="Внедрил верстку из коробки. Перенастроил работу сервера, чтобы не было /public/ вставки в каждом url. &#10;Создал репозитории для моделей Nomenclature, Producer, PriceType, Characteristic" />
+    <option name="LAST_COMMIT_MESSAGE" value="Внедрил верстку из коробки. Перенастроил работу сервера, чтобы не было /public/ вставки в каждом url. &#10;Создал репозитории для моделей Nomenclature, Producer, PriceType, Characteristic" />
   </component>
   <component name="WindowStateProjectService">
     <state x="954" y="197" key="#CLI_Interpreters" timestamp="1606306874091">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="954" y="197" key="#CLI_Interpreters/0.0.1920.1040@0.0.1920.1040" timestamp="1606306874091" />
+    <state x="1185" y="347" key="#Notifications" timestamp="1606828672107">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="1185" y="347" key="#Notifications/0.0.1920.1040@0.0.1920.1040" timestamp="1606828672107" />
     <state x="1081" y="185" key="#PHP" timestamp="1606306884229">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="1081" y="185" key="#PHP/0.0.1920.1040@0.0.1920.1040" timestamp="1606306884229" />
-    <state x="828" y="178" width="1092" height="767" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1606306886946">
+    <state x="828" y="178" width="1092" height="767" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1606812037850">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="828" y="178" width="1092" height="767" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606306886946" />
-    <state x="1153" y="278" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1606729961939">
+    <state x="828" y="178" width="1092" height="767" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606812037850" />
+    <state x="1221" y="78" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1606747176420">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="1153" y="278" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606729961939" />
+    <state x="1221" y="78" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606747176420" />
+    <state x="1153" y="278" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1606814398634">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="1153" y="278" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606814398634" />
     <state x="1153" y="297" key="FileChooserDialogImpl" timestamp="1606723894004">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -281,25 +339,25 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="732" y="224" key="Github.UntrackedFilesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606308246533" />
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1606723775635">
+    <state width="1872" height="284" key="GridCell.Tab.0.bottom" timestamp="1606833303552">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1606723775635" />
-    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1606723775635">
+    <state width="1872" height="284" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1606833303552" />
+    <state width="1872" height="284" key="GridCell.Tab.0.center" timestamp="1606833303551">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1606723775635" />
-    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1606723775634">
+    <state width="1872" height="284" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1606833303551" />
+    <state width="1872" height="284" key="GridCell.Tab.0.left" timestamp="1606833303551">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1606723775634" />
-    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1606723775635">
+    <state width="1872" height="284" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1606833303551" />
+    <state width="1872" height="284" key="GridCell.Tab.0.right" timestamp="1606833303551">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1606723775635" />
-    <state x="552" y="252" key="Vcs.Push.Dialog.v2" timestamp="1606387669287">
+    <state width="1872" height="284" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1606833303551" />
+    <state x="552" y="252" key="Vcs.Push.Dialog.v2" timestamp="1606747913077">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="252" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1606387669287" />
+    <state x="552" y="252" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1606747913077" />
   </component>
 </project>

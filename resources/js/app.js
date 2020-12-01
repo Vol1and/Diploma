@@ -8,25 +8,39 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
+//npm-модуль с пагинацией
+import JwPagination from 'jw-vue-pagination';
+Vue.component('jw-pagination', JwPagination);
 
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+//npm-модуль с механикой раутинга
+import VueRouter from 'vue-router'
+Vue.use(VueRouter)
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+import ProducerIndex from "./components/Producer/Index.vue";
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
+
+
+
+
+
+
+//Инициализация компонентов
+Vue.component('home-component', require('./components/HomeComponent').default);
+Vue.component('ProducerIndex', require('./components/Producer/Index').default);
+
+//Инициализация раутов
+const routes = [
+    { path: '/producers',name: "producers.index", component: ProducerIndex }
+]
+
+
+// Создаём экземпляр маршрутизатора и передаём маршруты в опции `routes`
+const router = new VueRouter({
+    routes, // сокращённая запись для `routes: routes`,
+    mode: 'history'
+})
+
 
 const app = new Vue({
-    el: '#app',
-});
+    router
+}).$mount('#app')
