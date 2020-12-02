@@ -25,6 +25,7 @@
     },
     "dependencies": {
         "jw-vue-pagination": "^1.0.3",
-        "vue-router": "^3.4.9"
+        "vue-router": "^3.4.9",
+        "vuejs-paginate": "^2.1.0"
     }
 }

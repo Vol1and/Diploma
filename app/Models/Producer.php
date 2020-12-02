@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Producer extends Model
 {
+    protected $fillable = [
+        'name',
+        'country'
+    ];
+
     use SoftDeletes;
     use HasFactory;
 }

@@ -14,9 +14,9 @@ class ProducersSeeder extends Seeder
     public function run()
     {
         $producers = [
-            ['name' =>'Производитель №1'],
-            ['name' =>'Производитель №2'],
-            ['name' =>'Производитель №3']
+            ['name' =>'Производитель №1', 'country'=>'Россия'],
+            ['name' =>'Производитель №2', 'country'=>'Россия'],
+            ['name' =>'Производитель №3', 'country'=>'Россия']
         ];
         \DB::table('producers')->insert($producers);
     }

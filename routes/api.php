@@ -19,8 +19,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 //API-ветка по контроллеру ProducerController
-Route::prefix('producers')->group(function () {
-    //Все AJAX-запросы, помещенные в эту группу, будут иметь префикс /producers/...
-    Route::get('getTable',  [App\Http\Controllers\ProducerController::class, 'getTable']);
+Route::apiResource('/producers', "App\Http\Controllers\ProducerController");
 
-});

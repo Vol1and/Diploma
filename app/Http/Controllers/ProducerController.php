@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProducerCreateRequest;
+use App\Models\Producer;
 use App\Repositories\ProducersRepository;
 
 use Illuminate\Http\Request;
@@ -19,35 +21,33 @@ class ProducerController extends Controller
         $this->producerRepository = app(ProducersRepository::class);
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        //
+        return $this->producerRepository->getTable()->toJson();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+    //принимает реквест ProducerCreateRequest
+    public function store(ProducerCreateRequest $request)
     {
-        //
+        //получение данных из реквеста
+        $data = $request->input();
+        //создание нового продюсера
+        $item = new Producer($data);
+        //сохраняем
+        $item->save();
+
+        //если все ок - возвращаем ответ со статусом 201
+        if($item)
+            return response(null, 201);
+        //либо можно передавать айди созданного элемента
+        //return response($item->id, 201);
+
+        //если нет - отправляем ошибку (статус возмонжо стоит поменять)
+        return response(null,500);
+
     }
 
     /**
@@ -61,16 +61,6 @@ class ProducerController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -93,10 +83,6 @@ class ProducerController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function getTable(){
-        return $this->producerRepository->getTable()->toJson();
     }
 
 }

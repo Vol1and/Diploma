@@ -6,3 +6,59 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+
+.pagination{
+    float:left;
+    display: flex;
+    border: darkgrey 1px solid ;
+    font-size: 15px;
+    font-weight: 545;
+}
+.pagination>li{
+    color: black;
+    float: left;
+
+    border: darkgrey 0.5px solid ;
+    text-decoration: none;
+}
+.pagination>li>a{
+    color: black;
+    float: left;
+    padding: 6px 12px;
+    text-decoration: none;
+}
+
+.pagination-active{
+    background-color: lightblue;
+    color: white;
+
+
+}
+
+.pagination-active:active{
+
+
+}
+
+.pagination>li:hover:not(.pagination-active) {
+    background-color: #ddd;
+
+}
+
+.pagination>li:focus{
+    background-color: #d6d8d9;
+    border: black 0.5px solid;
+}
+
+.center-50{
+    width: 50%;
+    float:left;
+   
+    margin-left: 25%;
+}
+.center-33{
+    float:left;
+    flex: 33.3%;
+    margin-left: 33.3%;
+}

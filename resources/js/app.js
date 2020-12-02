@@ -9,6 +9,9 @@ require('./bootstrap');
 window.Vue = require('vue');
 
 //npm-модуль с пагинацией
+import Paginate from 'vuejs-paginate'
+Vue.component('paginate', Paginate)
+
 import JwPagination from 'jw-vue-pagination';
 Vue.component('jw-pagination', JwPagination);
 
@@ -16,8 +19,9 @@ Vue.component('jw-pagination', JwPagination);
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
-import ProducerIndex from "./components/Producer/Index.vue";
-
+import ProducerIndex from "./components/Producer/Index";
+import ProducerCreate from "./components/Producer/Create";
+import Home from "./components/Home";
 
 
 
@@ -25,13 +29,18 @@ import ProducerIndex from "./components/Producer/Index.vue";
 
 
 //Инициализация компонентов
-Vue.component('home-component', require('./components/HomeComponent').default);
-Vue.component('ProducerIndex', require('./components/Producer/Index').default);
+Vue.component('ProducerIndex', ProducerIndex.default);
+Vue.component('ProducerCreate', ProducerCreate.default);
+Vue.component('HomeComponent', Home.default);
 
 //Инициализация раутов
 const routes = [
-    { path: '/producers',name: "producers.index", component: ProducerIndex }
+    { path: '/producers',name: "producers.index", component: ProducerIndex },
+    { path: '/producers/create',name: "producers.create", component: ProducerCreate },
+    { path: '/',name: "home.index", component: Home }
 ]
+
+
 
 
 // Создаём экземпляр маршрутизатора и передаём маршруты в опции `routes`
