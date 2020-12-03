@@ -19,6 +19,15 @@ class ProducersRepository extends BaseRepository
         return Model::all();
     }
 
+    public function find($id){
+        $columns = [
+            'id',
+            'name',
+            'country'
+        ];
+        return $this->startConditions()->select($columns)->where('id', $id)->get()->first();
+
+    }
 
   //  public function getComboBox(){
   //      $columns = 'id, name';

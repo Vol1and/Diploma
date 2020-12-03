@@ -30,7 +30,7 @@
                                 style="display: block;margin-right: auto;margin-left: auto;"
                                 class="btn btn-primary center-block"
                                 :disabled="loaded === false">
-                            Добавить
+                            Изменить
                         </button>
                     </form>
                 </div>
@@ -43,17 +43,28 @@
 
 <script>
 export default {
-    name: "ProducerCreate",
+    name: "ProducerEdit",
 
     data() {
         return {
-            fields: {name: "", country: ""},
+            fields: {id: -1, name: "", country: ""},
 
             loaded: true,
             errors: [],
             success: true
 
         };
+    },
+    mounted() {
+
+        axios.get(`/api/producers/${this.$route.params.id}`).then(response => {
+            this.fields = response.data;
+
+        }).catch((error) => {
+            console.log("Ошибка!");
+            this.$router.push({name: 'producers.index'});
+        })
+
     },
 
 
@@ -64,24 +75,26 @@ export default {
             this.loaded = false;
             this.errors = [];
 
-            axios.post('/api/producers', this.fields).then(response => {
+            axios.patch(`/api/producers/${this.fields.id}`, this.fields).then(response => {
 
                 //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
                 this.loaded = true;
-                //console.log(response.data);
 
-                console.log("Ответ получен!")
-                if (response.status >= 400) {
+                console.log("Ответ получен!");
+                this.$router.push({name: 'producers.index'});
 
-                    this.errors.push(response.statusText);
+                //if (response.status >= 400) {
 
-                } else this.$router.push({name: 'producers.index'});
-                // window.location.href = response.data;
+                //    this.errors.push(response.statusText);
+
+                //} else
             }).catch((error) => {
                 console.log("Ошибка!")
+                //this.$router.push({name: 'producers.index'});
                 this.errors.push(error.response.data.message);
             })
         }
+
 
     }
 

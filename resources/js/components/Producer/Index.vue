@@ -18,7 +18,7 @@
             <tbody>
             <tr v-for="item in page_of_items">
                 <td>{{ item.id }}</td>
-                <td>{{ item.name}}</td>
+                <td><router-link :to="{name: 'producers.edit', params:{id : item.id}}">{{ item.name}}</router-link></td>
                 <td>{{ item.country}}</td>
             </tr>
             </tbody>

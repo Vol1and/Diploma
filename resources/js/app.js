@@ -12,15 +12,13 @@ window.Vue = require('vue');
 import Paginate from 'vuejs-paginate'
 Vue.component('paginate', Paginate)
 
-import JwPagination from 'jw-vue-pagination';
-Vue.component('jw-pagination', JwPagination);
-
 //npm-модуль с механикой раутинга
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 import ProducerIndex from "./components/Producer/Index";
 import ProducerCreate from "./components/Producer/Create";
+import ProducerEdit from "./components/Producer/Edit";
 import Home from "./components/Home";
 
 
@@ -31,16 +29,17 @@ import Home from "./components/Home";
 //Инициализация компонентов
 Vue.component('ProducerIndex', ProducerIndex.default);
 Vue.component('ProducerCreate', ProducerCreate.default);
+Vue.component('ProducerEdit', ProducerEdit.default);
 Vue.component('HomeComponent', Home.default);
+
 
 //Инициализация раутов
 const routes = [
     { path: '/producers',name: "producers.index", component: ProducerIndex },
     { path: '/producers/create',name: "producers.create", component: ProducerCreate },
+    { path: '/producers/:id',name: "producers.edit", component: ProducerEdit },
     { path: '/',name: "home.index", component: Home }
 ]
-
-
 
 
 // Создаём экземпляр маршрутизатора и передаём маршруты в опции `routes`

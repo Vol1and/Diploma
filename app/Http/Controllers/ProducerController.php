@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProducerCreateRequest;
+use App\Models\Hotel\Record;
 use App\Models\Producer;
 use App\Repositories\ProducersRepository;
 
@@ -50,15 +51,17 @@ class ProducerController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
+
     public function show($id)
     {
-        //
+        $result = $this->producerRepository->find($id);
+
+        if(empty($result) || !$result){
+
+            return response(null, 404);
+        }
+        return $result->toJson();
     }
 
 
@@ -71,7 +74,19 @@ class ProducerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $item = $this->producerRepository->find($request->id);
+        if (empty($item)) {
+
+            return response(null, 404);
+        }
+        $data = $request->all();
+        $result = $item->fill($data)->save();
+        //todo: подумать над кодом ошибки
+        //Что должно вовзращать при ошибке сохранения
+        if (!$result) {
+            return response(null, 404);
+        }
+        else  return response(null, 200);
     }
 
     /**
