@@ -18,6 +18,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//API-ветка по контроллеру ProducerController
+//прописание API-маршрутов для контроллеров
 Route::apiResource('/producers', "App\Http\Controllers\ProducerController");
-
+Route::apiResource('/price-types', "App\Http\Controllers\PriceTypeController");

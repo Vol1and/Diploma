@@ -72,7 +72,7 @@ class ProducerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProducerCreateRequest $request)
     {
         $item = $this->producerRepository->find($request->id);
         if (empty($item)) {

@@ -4,7 +4,7 @@
             <div class="offset-2 col-md-8">
                 <error-component :errors="errors"></error-component>
                 <div style="margin-bottom: 10px; height: 50px" class=" form-control">
-                    <h2 class="text-center center-block">Производитель #{{fields.id}}</h2>
+                    <h2 class="text-center center-block">Ценовая группа #{{fields.id}}</h2>
                 </div>
             </div>
             <div class="row offset-2 col-md-8">
@@ -18,8 +18,8 @@
                                    class="form-text form-control"/>
                         </div>
                         <div class=" form-group col-md-11">
-                            <label class="col-form-label" for="country">Страна</label>
-                            <input type="text" name="country" id="country" v-model="fields.country"
+                            <label class="col-form-label" for="country">Наценка</label>
+                            <input type="number" name="country" id="country" v-model="fields.margin"
                                    class="form-text form-control"/>
                         </div>
                         <button @click="submit()" type="submit"
@@ -39,7 +39,7 @@
 
 <script>
 export default {
-    name: "ProducerEdit",
+    name: "PriceTypeEdit",
 
     data() {
         return {
@@ -53,12 +53,12 @@ export default {
     },
     beforeMount() {
 
-        axios.get(`/api/producers/${this.$route.params.id}`).then(response => {
+        axios.get(`/api/price-types/${this.$route.params.id}`).then(response => {
             this.fields = response.data;
 
         }).catch((error) => {
             console.log("Ошибка!");
-            this.$router.push({name: 'producers.index'});
+            this.$router.push({name: 'price-types.index'});
         })
 
     },
@@ -71,13 +71,13 @@ export default {
             this.loaded = false;
             this.errors = [];
 
-            axios.patch(`/api/producers/${this.fields.id}`, this.fields).then(response => {
+            axios.patch(`/api/price-types/${this.fields.id}`, this.fields).then(response => {
 
                 //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
                 this.loaded = true;
 
                 console.log("Ответ получен!");
-                this.$router.push({name: 'producers.index'});
+                this.$router.push({name: 'price-types.index'});
 
                 //if (response.status >= 400) {
 
@@ -87,11 +87,7 @@ export default {
             }).catch((error) => {
                 console.log("Ошибка!")
                 //this.$router.push({name: 'producers.index'});
-                for( var field in this.fields )
-                    if(error.response.data.errors[field] != null) {
-                        console.log(error.response.data.errors[field][0]);
-                        this.errors.push(error.response.data.errors[field][0])
-                    }
+                this.errors.push(error.response.data.message);
                 this.loaded = true;
             })
         }

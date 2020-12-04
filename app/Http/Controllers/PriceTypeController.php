@@ -2,73 +2,88 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PriceTypeCreateRequest;
+use App\Models\PriceType;
+use App\Repositories\PriceTypesRepository;
 use Illuminate\Http\Request;
 
 class PriceTypeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    //ссылка на хранилище модели PriceType
+    private $priceTypeRepository;
+
+    public function __construct()
+    {
+
+        //инициализация хранилища
+        $this->priceTypeRepository = app(PriceTypesRepository::class);
+    }
+
+
     public function index()
     {
-        //
+        return $this->priceTypeRepository->getTable()->toJson();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+
+
+    //принимает реквест с моделью
+    public function store(PriceTypeCreateRequest $request)
     {
-        //
+        //получение данных из реквеста
+        $data = $request->input();
+        //создание нового элемента
+        $item = new PriceType($data);
+        //сохраняем
+        $item->save();
+
+        //если все ок - возвращаем ответ со статусом 201
+        if($item)
+            return response(null, 201);
+        //либо можно передавать айди созданного элемента
+        //return response($item->id, 201);
+
+        //если нет - отправляем ошибку (статус возмонжо стоит поменять)
+        return response(null,500);
+
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
-        //
+        $result = $this->priceTypeRepository->find($id);
+
+        if(empty($result) || !$result){
+
+            return response(null, 404);
+        }
+        return $result->toJson();
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PriceTypeCreateRequest $request)
     {
-        //
+        $item = $this->priceTypeRepository->find($request->id);
+        if (empty($item)) {
+
+            return response(null, 404);
+        }
+        $data = $request->all();
+        $result = $item->fill($data)->save();
+
+        //todo: подумать над кодом ошибки
+        //Что должно вовзращать при ошибке сохранения
+        if (!$result) {
+            return response(null, 404);
+        }
+        else  return response(null, 200);
     }
 
     /**

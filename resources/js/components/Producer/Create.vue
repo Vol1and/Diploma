@@ -2,11 +2,7 @@
     <div class="row" style="width: 100%">
         <div class="offset-4 col-md-4">
             <div class="offset-2 col-md-8">
-                <div v-if="this.errors.length > 0">
-                    <ul v-for="error in this.errors">
-                        <li>{{ error }}</li>
-                    </ul>
-                </div>
+                <error-component :errors="errors"></error-component>
                 <div style="margin-bottom: 10px; height: 50px" class=" form-control">
                     <h2 class="text-center center-block">Новый производитель</h2>
                 </div>

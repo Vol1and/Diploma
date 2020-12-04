@@ -16,21 +16,28 @@ Vue.component('paginate', Paginate)
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
+import Error from "./components/Layouts/Error";
 import ProducerIndex from "./components/Producer/Index";
 import ProducerCreate from "./components/Producer/Create";
 import ProducerEdit from "./components/Producer/Edit";
+import PriceTypeIndex from "./components/PriceType/Index";
+import PriceTypeCreate from "./components/PriceType/Create";
+import PriceTypeEdit from "./components/PriceType/Edit";
 import Home from "./components/Home";
 
 
 
 
-
-
 //Инициализация компонентов
-Vue.component('ProducerIndex', ProducerIndex.default);
-Vue.component('ProducerCreate', ProducerCreate.default);
-Vue.component('ProducerEdit', ProducerEdit.default);
-Vue.component('HomeComponent', Home.default);
+Vue.component('error-component', require('./components/Layouts/Error').default);
+Vue.component('ProducerIndex',      ProducerIndex.default);
+Vue.component('ProducerCreate',     ProducerCreate.default);
+Vue.component('ProducerEdit',       ProducerEdit.default);
+Vue.component('PriceTypeIndex',     PriceTypeIndex.default);
+Vue.component('PriceTypeCreate',    PriceTypeCreate.default);
+Vue.component('PriceTypeEdit',      PriceTypeEdit.default);
+Vue.component('HomeComponent',      Home.default);
+
 
 
 //Инициализация раутов
@@ -38,6 +45,9 @@ const routes = [
     { path: '/producers',name: "producers.index", component: ProducerIndex },
     { path: '/producers/create',name: "producers.create", component: ProducerCreate },
     { path: '/producers/:id',name: "producers.edit", component: ProducerEdit },
+    { path: '/price-types',name: "price-types.index", component: PriceTypeIndex },
+    { path: '/price-types/create',name: "price-types.create", component: PriceTypeCreate },
+    { path: '/price-types/:id',name: "price-types.edit", component: PriceTypeEdit },
     { path: '/',name: "home.index", component: Home }
 ]
 

@@ -14,9 +14,9 @@ class PriceTypesSeeder extends Seeder
     public function run()
     {
         $types = [
-            ['name' =>'Общая группа '],
-            ['name' =>'Специальная группа №1'],
-            ['name' =>'Специальная группа №2']
+            ['name' =>'Общая группа ', 'margin' => 15],
+            ['name' =>'Специальная группа №1', 'margin' => 12],
+            ['name' =>'Специальная группа №2', 'margin' => 5]
         ];
         \DB::table('price_types')->insert($types);
     }

@@ -4,7 +4,7 @@
             <div class="offset-2 col-md-8">
                 <error-component :errors="errors"></error-component>
                 <div style="margin-bottom: 10px; height: 50px" class=" form-control">
-                    <h2 class="text-center center-block">Производитель #{{fields.id}}</h2>
+                    <h2 class="text-center center-block">Новая ценовая группа</h2>
                 </div>
             </div>
             <div class="row offset-2 col-md-8">
@@ -18,15 +18,15 @@
                                    class="form-text form-control"/>
                         </div>
                         <div class=" form-group col-md-11">
-                            <label class="col-form-label" for="country">Страна</label>
-                            <input type="text" name="country" id="country" v-model="fields.country"
+                            <label class="col-form-label" for="country">Наценка</label>
+                            <input type="number" name="country" id="country" v-model="fields.margin"
                                    class="form-text form-control"/>
                         </div>
                         <button @click="submit()" type="submit"
                                 style="display: block;margin-right: auto;margin-left: auto;"
                                 class="btn btn-primary center-block"
                                 :disabled="loaded === false">
-                            Изменить
+                            Добавить
                         </button>
                     </form>
                 </div>
@@ -39,28 +39,17 @@
 
 <script>
 export default {
-    name: "ProducerEdit",
+    name: "PriceTypeCreate",
 
     data() {
         return {
-            fields: {id: -1, name: "", country: ""},
+            fields: {name: "", country: ""},
 
             loaded: true,
             errors: [],
             success: true
 
         };
-    },
-    beforeMount() {
-
-        axios.get(`/api/producers/${this.$route.params.id}`).then(response => {
-            this.fields = response.data;
-
-        }).catch((error) => {
-            console.log("Ошибка!");
-            this.$router.push({name: 'producers.index'});
-        })
-
     },
 
 
@@ -71,31 +60,25 @@ export default {
             this.loaded = false;
             this.errors = [];
 
-            axios.patch(`/api/producers/${this.fields.id}`, this.fields).then(response => {
+            axios.post('/api/price-types', this.fields).then(response => {
 
                 //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
                 this.loaded = true;
+                //console.log(response.data);
 
-                console.log("Ответ получен!");
-                this.$router.push({name: 'producers.index'});
+                console.log("Ответ получен!")
+                if (response.status >= 400) {
 
-                //if (response.status >= 400) {
+                    this.errors.push(response.statusText);
 
-                //    this.errors.push(response.statusText);
-
-                //} else
+                } else this.$router.push({name: 'price-types.index'});
+                // window.location.href = response.data;
             }).catch((error) => {
                 console.log("Ошибка!")
-                //this.$router.push({name: 'producers.index'});
-                for( var field in this.fields )
-                    if(error.response.data.errors[field] != null) {
-                        console.log(error.response.data.errors[field][0]);
-                        this.errors.push(error.response.data.errors[field][0])
-                    }
+                this.errors.push(error.response.data.message);
                 this.loaded = true;
             })
         }
-
 
     }
 

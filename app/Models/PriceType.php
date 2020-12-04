@@ -8,6 +8,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PriceType extends Model
 {
+
+    protected $fillable = [
+        'name',
+        'margin'
+    ];
+
     use SoftDeletes;
     use HasFactory;
 }

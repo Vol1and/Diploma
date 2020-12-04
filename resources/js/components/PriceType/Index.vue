@@ -1,30 +1,29 @@
 <template>
 
     <div class="center-50">
-        <h1 class="text-center">Производители</h1>
+        <h1 class="text-center">Ценовые группы</h1>
         <div class="row">
-            <router-link :to="{name: 'producers.create'}" style=" float:left " class="btn btn-in-bar  btn-primary">Добавить</router-link>
+            <router-link :to="{name: 'price-types.create'}" style=" float:left " class="btn btn-in-bar  btn-primary">Добавить</router-link>
 
             <!--            <button @click="update"  v-if="!is_reload" style="float:right;" class=" btn-in-bar btn btn-primary">Обновить </button>-->
             <!--            <button disabled v-if="is_reload" style="float:right;" class=" btn-in-bar btn btn-danger"> Обновление...</button>-->
         </div>
 
         <table class="table  table-hover">
-            <tr class="bordered">
+            <tr>
                 <th>#</th>
                 <th>Название</th>
-                <th>Страна</th>
+                <th>Наценка</th>
             </tr>
             <tbody>
             <tr v-for="item in page_of_items" @dblclick="toEdit(item.id)">
                 <td>{{ item.id }}</td>
-                <td>{{ item.name}}</td>
-                <td>{{ item.country}}</td>
+                <td>{{item.name}}</td>
+                <td>{{ item.margin}}</td>
             </tr>
             </tbody>
         </table>
         <div class="centered">
-<!--            <jw-pagination :items="items" @changePage="onChangePage"></jw-pagination>-->
             <paginate
                 v-model="current_page"
                 :page-count="page_count"
@@ -44,7 +43,7 @@
 
 <script>
 export default {
-    name: "ProducerIndex",
+    name: "PriceTypeIndex",
 
     data: function () {
         return {
@@ -65,7 +64,7 @@ export default {
 
 
         update: function () {
-            axios.get('api/producers').then((response) => {
+            axios.get('api/price-types').then((response) => {
                 this.is_reload = true;
 
 
@@ -80,11 +79,9 @@ export default {
             this.page_of_items = this.items.slice(this.items_per_page*(this.current_page-1), (this.items_per_page*this.current_page) -1);
         },
 
-        //по дабл-клику - переходим на строку с изменением выбраного объекта
         toEdit(id){
-            this.$router.push({name: 'producers.edit', params:{id : id}});
+            this.$router.push({name: 'price-types.edit', params:{id : id}});
         }
-
     }
 
 }

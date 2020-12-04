@@ -35,6 +35,11 @@
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
                             <router-link  class="nav-link" :to="{name: 'producers.index'}">Производители</router-link>
+
+                        </li>
+                        <li class="nav-item">
+
+                            <router-link  class="nav-link" :to="{name: 'price-types.index'}">Типы цен</router-link>
                         </li>
                     </ul>
 

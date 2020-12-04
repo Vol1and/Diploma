@@ -19,13 +19,18 @@ class PriceTypesRepository extends BaseRepository
         return Model::all();
     }
 
+    public function find($id){
 
-//   public function getComboBox(){
-//       $columns = 'id, name';
-//       $result = $this->StartConditions()
-//           ->selectRaw($columns)
-//           ->toBase()
-//           ->get();
-//       return $result;
-//   }
+        //return Model::find($id);
+        $columns = [
+            'id',
+            'name',
+            'margin'
+        ];
+        return $this->startConditions()->select($columns)->where('id', $id)->get()->first();
+
+    }
+
+
+
 }
