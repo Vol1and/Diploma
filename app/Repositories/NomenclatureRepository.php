@@ -15,7 +15,19 @@ class NomenclatureRepository extends BaseRepository
     }
 
     public function getTable(){
-        return Model::all();
+        $columns = [
+            'id',
+            'name',
+            'producer_id',
+            'price_type_id'
+
+        ];
+        $result = $this->startConditions()
+            ->select($columns)
+            ->with(['producer', 'price_type'])
+            ->get();
+
+        return $result;
     }
 
 

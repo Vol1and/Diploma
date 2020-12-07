@@ -57,6 +57,7 @@ export default {
 
         submit: function () {
 
+            if(!this.validateFields()) return;
             this.loaded = false;
             this.errors = [];
 
@@ -77,6 +78,16 @@ export default {
                 console.log("Ошибка!")
                 this.errors.push(error.response.data.message);
             })
+        },
+        validateFields(){
+            this.errors = [];
+            if(this.fields.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
+            if(this.fields.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
+            if(this.fields.country.length === 0) this.errors.push("Поле \"Страна\" должно быть заполнено");
+            if(this.fields.country.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
+
+
+            return this.errors.length === 0;
         }
 
     }

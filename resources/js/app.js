@@ -23,6 +23,14 @@ import ProducerEdit from "./components/Producer/Edit";
 import PriceTypeIndex from "./components/PriceType/Index";
 import PriceTypeCreate from "./components/PriceType/Create";
 import PriceTypeEdit from "./components/PriceType/Edit";
+
+
+import NomenclatureIndex from "./components/Nomenclature/Index";
+import NomenclatureCreate from "./components/Nomenclature/Create";
+import NomenclatureEdit from "./components/Nomenclature/Edit";
+
+
+
 import Home from "./components/Home";
 
 
@@ -33,9 +41,16 @@ Vue.component('error-component', require('./components/Layouts/Error').default);
 Vue.component('ProducerIndex',      ProducerIndex.default);
 Vue.component('ProducerCreate',     ProducerCreate.default);
 Vue.component('ProducerEdit',       ProducerEdit.default);
+
 Vue.component('PriceTypeIndex',     PriceTypeIndex.default);
 Vue.component('PriceTypeCreate',    PriceTypeCreate.default);
 Vue.component('PriceTypeEdit',      PriceTypeEdit.default);
+
+Vue.component('NomenclatureIndex',    NomenclatureIndex.default);
+Vue.component('NomenclatureCreate',   NomenclatureCreate.default);
+Vue.component('NomenclatureEdit',     NomenclatureEdit.default);
+
+
 Vue.component('HomeComponent',      Home.default);
 
 
@@ -48,6 +63,11 @@ const routes = [
     { path: '/price-types',name: "price-types.index", component: PriceTypeIndex },
     { path: '/price-types/create',name: "price-types.create", component: PriceTypeCreate },
     { path: '/price-types/:id',name: "price-types.edit", component: PriceTypeEdit },
+    { path: '/nomenclatures',name: "nomenclatures.index", component: NomenclatureIndex },
+    { path: '/nomenclatures/create',name: "nomenclatures.create", component: NomenclatureCreate },
+    { path: '/nomenclatures/:id',name: "nomenclatures.edit", component: NomenclatureEdit },
+
+
     { path: '/',name: "home.index", component: Home }
 ]
 

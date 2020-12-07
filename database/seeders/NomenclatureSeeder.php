@@ -24,7 +24,7 @@ class NomenclatureSeeder extends Seeder
             ['name' =>'Нимесил','producer_id'=> '3', 'price_type_id'=>'3'],
             ['name' =>'Катетер','producer_id'=> '1', 'price_type_id'=>'3']
         ];
-        \DB::table('nomenclature')->insert($nomenclature);
+        \DB::table('nomenclatures')->insert($nomenclature);
 
     }
 }

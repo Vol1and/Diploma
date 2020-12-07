@@ -10951,3 +10951,16 @@ a.text-dark:focus {
   margin-left: 33.3%;
 }
 
+.highlight {
+  background-color: lightgray;
+  font-weight: 650;
+}
+
+.highlight:hover {
+  background-color: lightgray;
+}
+
+.row-hover:hover {
+  background-color: lightgray;
+}
+

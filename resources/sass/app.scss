@@ -54,7 +54,7 @@
 .center-50{
     width: 50%;
     float:left;
-   
+
     margin-left: 25%;
 }
 .center-33{
@@ -62,3 +62,17 @@
     flex: 33.3%;
     margin-left: 33.3%;
 }
+
+.highlight {
+    background-color: lightgray;
+    font-weight: 650;
+}
+.highlight:hover {
+    background-color: lightgray;
+}
+.row-hover:hover{
+    background-color: lightgray
+}
+//tr:hover{
+//    cursor: pointer;
+//}

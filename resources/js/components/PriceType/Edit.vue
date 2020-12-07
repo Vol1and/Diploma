@@ -1,13 +1,13 @@
 <template>
-    <div class="row" style="width: 100%">
+    <div v-if="is_visible" class="row" style="width: 100%">
         <div class="offset-4 col-md-4">
             <div class="offset-2 col-md-8">
                 <error-component :errors="errors"></error-component>
-                <div style="margin-bottom: 10px; height: 50px" class=" form-control">
+                <div style="margin-bottom: 10px; height: 50px" class=" form-control ">
                     <h2 class="text-center center-block">Ценовая группа #{{fields.id}}</h2>
                 </div>
             </div>
-            <div class="row offset-2 col-md-8">
+            <div class="  row offset-2 col-md-8">
                 <div class="col-md-12 no-padding" style="padding: 0">
                     <form class="form-control" style=":170px; height: 100%"
                           @submit.prevent="submit">
@@ -43,18 +43,21 @@ export default {
 
     data() {
         return {
-            fields: {id: -1, name: "", country: ""},
+            fields: {id: -1, name: "", margin: ""},
 
+            is_visible: false,
             loaded: true,
             errors: [],
             success: true
 
         };
     },
-    beforeMount() {
+
+    beforeCreate(){
 
         axios.get(`/api/price-types/${this.$route.params.id}`).then(response => {
             this.fields = response.data;
+            this.is_visible = true;
 
         }).catch((error) => {
             console.log("Ошибка!");
@@ -67,9 +70,9 @@ export default {
     methods: {
 
         submit: function () {
+            if(!this.validateFields()) return;
 
             this.loaded = false;
-            this.errors = [];
 
             axios.patch(`/api/price-types/${this.fields.id}`, this.fields).then(response => {
 
@@ -90,6 +93,16 @@ export default {
                 this.errors.push(error.response.data.message);
                 this.loaded = true;
             })
+        },
+        validateFields(){
+            this.errors = [];
+            if(this.fields.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
+            if(this.fields.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
+            if(this.fields.margin < 0) this.errors.push("Поле \"Наценка\" не должно быть отрицательным");
+            if(this.fields.margin > 255) this.errors.push("Превышено максимально допустимое значение поля \"Наценка\"");
+
+
+            return this.errors.length === 0;
         }
 
 

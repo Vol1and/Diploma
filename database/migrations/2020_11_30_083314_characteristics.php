@@ -22,7 +22,7 @@ class Characteristics extends Migration
             $table->integer('nomenclature_id')->unsigned();
 
             $table->foreign('nomenclature_id')->references('id')
-                ->on('nomenclature');
+                ->on('nomenclatures');
 
             $table->timestamps();
             $table->softDeletes();

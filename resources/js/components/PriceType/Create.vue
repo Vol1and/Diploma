@@ -57,8 +57,10 @@ export default {
 
         submit: function () {
 
+            if(!this.validateFields()) return;
+
             this.loaded = false;
-            this.errors = [];
+
 
             axios.post('/api/price-types', this.fields).then(response => {
 
@@ -78,6 +80,16 @@ export default {
                 this.errors.push(error.response.data.message);
                 this.loaded = true;
             })
+        },
+        validateFields(){
+            this.errors = [];
+            if(this.fields.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
+            if(this.fields.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
+            if(this.fields.margin < 0) this.errors.push("Поле \"Наценка\" не должно быть отрицательным");
+            if(this.fields.margin > 255) this.errors.push("Превышено максимально допустимое значение поля \"Наценка\"");
+
+
+            return this.errors.length === 0;
         }
 
     }

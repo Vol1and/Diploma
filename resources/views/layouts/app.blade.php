@@ -41,6 +41,10 @@
 
                             <router-link  class="nav-link" :to="{name: 'price-types.index'}">Типы цен</router-link>
                         </li>
+                        <li class="nav-item">
+
+                            <router-link  class="nav-link" :to="{name: 'nomenclatures.index'}">Номенклатура</router-link>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

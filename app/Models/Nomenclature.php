@@ -10,4 +10,16 @@ class Nomenclature extends Model
 {
     use SoftDeletes;
     use HasFactory;
+
+    public function price_type()
+    {
+
+        return $this->belongsTo('App\Models\PriceType');
+    }
+
+    public function producer()
+    {
+
+        return $this->belongsTo('App\Models\Producer');
+    }
 }

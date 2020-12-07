@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Nomenclature extends Migration
+class Nomenclatures extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class Nomenclature extends Migration
      */
     public function up()
     {
-        Schema::create('nomenclature', function (Blueprint $table) {
+        Schema::create('nomenclatures', function (Blueprint $table) {
             $table->increments('id');
 
             $table->string('name');
@@ -39,6 +39,6 @@ class Nomenclature extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('nomenclature');
+        Schema::dropIfExists('nomenclatures');
     }
 }

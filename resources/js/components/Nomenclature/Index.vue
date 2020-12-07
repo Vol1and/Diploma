@@ -1,33 +1,32 @@
 <template>
 
     <div class="center-50">
-        <h1 class="text-center">Производители</h1>
+        <h1 class="text-center">Номенклатура</h1>
         <div class="row">
-            <router-link :to="{name: 'producers.create'}" style=" float:left " class="btn btn-in-bar  btn-primary">
-                Добавить
-            </router-link>
+            <router-link :to="{name: 'nomenclatures.create'}" style=" float:left " class="btn btn-in-bar  btn-primary">Добавить</router-link>
 
             <!--            <button @click="update"  v-if="!is_reload" style="float:right;" class=" btn-in-bar btn btn-primary">Обновить </button>-->
             <!--            <button disabled v-if="is_reload" style="float:right;" class=" btn-in-bar btn btn-danger"> Обновление...</button>-->
         </div>
 
-        <table class="table ">
-            <tr class="bordered">
+        <table class="table">
+            <tr>
                 <th>#</th>
                 <th>Название</th>
-                <th>Страна</th>
+                <th>Производитель</th>
+                <th>Ценовая группа</th>
             </tr>
             <tbody>
-            <tr v-for="item in page_of_items" class="row-hover" :key="item.id" :class="{'highlight': (item.id === selected_item)}"
-                @click="rowSelected(item.id)" @dblclick="toEdit(item.id)">
+            <tr v-for="item in page_of_items" class="row-hover"  :key="item.id" :class="{'highlight': (item.id === selected_item)}"
+                @click="rowSelected(item.id)"  @dblclick="toEdit(item.id)">
                 <td>{{ item.id }}</td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.country }}</td>
+                <td>{{item.name}}</td>
+                <td>{{ item.producer.name}}</td>
+                <td>{{ item.price_type.name}}</td>
             </tr>
             </tbody>
         </table>
         <div class="centered">
-            <!--            <jw-pagination :items="items" @changePage="onChangePage"></jw-pagination>-->
             <paginate
                 v-model="current_page"
                 :page-count="page_count"
@@ -44,20 +43,21 @@
 </template>
 
 
+
 <script>
 export default {
-    name: "ProducerIndex",
+    name: "NomenclatureIndex",
 
     data: function () {
         return {
 
-            current_page: 1,
-            items_per_page: 10,
-            page_count: 1,
+            current_page : 1,
+            items_per_page : 10,
+            page_count : 1,
             items: [],
+            selected_item : null,
             page_of_items: [],
             is_reload: false,
-            selected_item: -1
 
         };
     },
@@ -65,33 +65,30 @@ export default {
         this.update();
     },
     methods: {
-
         rowSelected(id) {
 
             this.selected_item = id;
         },
 
         update: function () {
-            axios.get('api/producers').then((response) => {
+            axios.get('api/nomenclatures').then((response) => {
                 this.is_reload = true;
 
 
                 this.items = response.data;
-                this.page_count = Math.ceil(this.items.length / this.items_per_page);
+                this.page_count = Math.ceil(this.items.length/this.items_per_page);
                 this.onChangePage();
                 this.is_reload = false;
             });
         },
-        onChangePage() {
+        onChangePage(){
             // update page of items
-            this.page_of_items = this.items.slice(this.items_per_page * (this.current_page - 1), (this.items_per_page * this.current_page) - 1);
+            this.page_of_items = this.items.slice(this.items_per_page*(this.current_page-1), (this.items_per_page*this.current_page) -1);
         },
 
-        //по дабл-клику - переходим на строку с изменением выбраного объекта
-        toEdit(id) {
-            this.$router.push({name: 'producers.edit', params: {id: id}});
-        },
-
+        toEdit(id){
+            this.$router.push({name: 'price-types.edit', params:{id : id}});
+        }
     }
 
 }

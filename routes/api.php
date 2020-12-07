@@ -21,3 +21,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //прописание API-маршрутов для контроллеров
 Route::apiResource('/producers', "App\Http\Controllers\ProducerController");
 Route::apiResource('/price-types', "App\Http\Controllers\PriceTypeController");
+Route::apiResource('/nomenclatures', "App\Http\Controllers\NomenclatureController");

@@ -2,18 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\NomenclatureRepository;
 use Illuminate\Http\Request;
 
 class NomenclatureController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    //ссылка на хранилище модели PriceType
+    private $nomenclatureRepository;
+
+    public function __construct()
+    {
+
+        //инициализация хранилища
+        $this->nomenclatureRepository = app(NomenclatureRepository::class);
+    }
+
+
     public function index()
     {
-        //
+        return $this->nomenclatureRepository->getTable()->toJson();
     }
 
     /**

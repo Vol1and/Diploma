@@ -9,14 +9,15 @@
             <!--            <button disabled v-if="is_reload" style="float:right;" class=" btn-in-bar btn btn-danger"> Обновление...</button>-->
         </div>
 
-        <table class="table  table-hover">
+        <table class="table">
             <tr>
                 <th>#</th>
                 <th>Название</th>
                 <th>Наценка</th>
             </tr>
             <tbody>
-            <tr v-for="item in page_of_items" @dblclick="toEdit(item.id)">
+            <tr v-for="item in page_of_items" class="row-hover"  :key="item.id" :class="{'highlight': (item.id === selected_item)}"
+                @click="rowSelected(item.id)"  @dblclick="toEdit(item.id)">
                 <td>{{ item.id }}</td>
                 <td>{{item.name}}</td>
                 <td>{{ item.margin}}</td>
@@ -52,6 +53,7 @@ export default {
             items_per_page : 10,
             page_count : 1,
             items: [],
+            selected_item : null,
             page_of_items: [],
             is_reload: false,
 
@@ -61,7 +63,10 @@ export default {
         this.update();
     },
     methods: {
+        rowSelected(id) {
 
+            this.selected_item = id;
+        },
 
         update: function () {
             axios.get('api/price-types').then((response) => {
