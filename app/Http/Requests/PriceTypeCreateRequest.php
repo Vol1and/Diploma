@@ -25,7 +25,7 @@ class PriceTypeCreateRequest extends FormRequest
     {
         return [
             'name'=>'required|string|between:2,255',
-            'margin'=>'required|digits_between:0,255'
+            'margin'=>'required|numeric|between:0,255'
         ];
     }
 }

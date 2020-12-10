@@ -73,6 +73,21 @@
 .row-hover:hover{
     background-color: lightgray
 }
+
+.no-padding {
+    padding: 0;
+}
+.center-block {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.btn-in-bar{
+    padding: 0; width: 150px; height: 40px; margin-bottom: 15px;
+
+}
+
 //tr:hover{
 //    cursor: pointer;
 //}

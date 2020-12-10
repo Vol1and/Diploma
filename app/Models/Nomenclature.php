@@ -9,7 +9,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Nomenclature extends Model
 {
     use SoftDeletes;
-    use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'producer_id',
+        'price_type_id'
+    ];
 
     public function price_type()
     {

@@ -100,4 +100,9 @@ class ProducerController extends Controller
         //
     }
 
+
+    public function filter($id)
+    {
+        //
+    }
 }

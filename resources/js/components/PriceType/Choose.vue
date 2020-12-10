@@ -1,7 +1,11 @@
 <template>
 
     <div class="center-50">
-        <h1 class="text-center">Ценовые группы</h1>
+        <div>
+            <button @click="back()" class="btn  btn-primary"><--</button>
+            <h1 class="text-center">Выбор ценовой группы </h1>
+        </div>
+
         <div class="row">
             <router-link :to="{name: 'price-types.create'}" style=" float:left " class="btn btn-in-bar  btn-primary">Добавить</router-link>
 
@@ -17,7 +21,7 @@
             </tr>
             <tbody>
             <tr v-for="item in page_of_items" class="row-hover"  :key="item.id" :class="{'highlight': (item.id === selected_item)}"
-                @click="rowSelected(item.id)"  @dblclick="toEdit(item.id)">
+                @click="rowSelected(item.id)"  @dblclick="selected(item)">
                 <td>{{ item.id }}</td>
                 <td>{{item.name}}</td>
                 <td>{{ item.margin}}</td>
@@ -44,7 +48,7 @@
 
 <script>
 export default {
-    name: "PriceTypeIndex",
+    name: "PriceTypeChoose",
 
     data: function () {
         return {
@@ -69,7 +73,8 @@ export default {
         },
 
         update: function () {
-            axios.get('api/price-types').then((response) => {
+            axios.get('/api/price-types').then((response) => {
+                console.log(response.data)
                 this.is_reload = true;
 
 
@@ -81,11 +86,14 @@ export default {
         },
         onChangePage(){
             // update page of items
-            this.page_of_items = this.items.slice(this.items_per_page*(this.current_page-1), (this.items_per_page*this.current_page));
+            this.page_of_items = this.items.slice(this.items_per_page*(this.current_page-1), (this.items_per_page*this.current_page) -1);
         },
 
-        toEdit(id){
-            this.$router.push({name: 'price-types.edit', params:{id : id}});
+        selected(selected_item){
+            this.$emit("selected", {price_type: selected_item});
+        },
+        back(){
+            this.$emit("back");
         }
     }
 

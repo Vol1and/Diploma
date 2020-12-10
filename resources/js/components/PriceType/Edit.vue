@@ -4,7 +4,7 @@
             <div class="offset-2 col-md-8">
                 <error-component :errors="errors"></error-component>
                 <div style="margin-bottom: 10px; height: 50px" class=" form-control ">
-                    <h2 class="text-center center-block">Ценовая группа #{{fields.id}}</h2>
+                    <h2 class="text-center center-block">Ценовая группа #{{ fields.id }}</h2>
                 </div>
             </div>
             <div class="  row offset-2 col-md-8">
@@ -53,7 +53,7 @@ export default {
         };
     },
 
-    beforeCreate(){
+    beforeCreate() {
 
         axios.get(`/api/price-types/${this.$route.params.id}`).then(response => {
             this.fields = response.data;
@@ -70,8 +70,11 @@ export default {
     methods: {
 
         submit: function () {
-            if(!this.validateFields()) return;
+            this.fields.margin = this.fields.margin.replace(',', '.');
+            console.log(this.fields.margin);
+            if (!this.validateFields()) return;
 
+            this.fields.margin = parseFloat(this.fields.margin);
             this.loaded = false;
 
             axios.patch(`/api/price-types/${this.fields.id}`, this.fields).then(response => {
@@ -94,12 +97,12 @@ export default {
                 this.loaded = true;
             })
         },
-        validateFields(){
+        validateFields() {
             this.errors = [];
-            if(this.fields.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
-            if(this.fields.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
-            if(this.fields.margin < 0) this.errors.push("Поле \"Наценка\" не должно быть отрицательным");
-            if(this.fields.margin > 255) this.errors.push("Превышено максимально допустимое значение поля \"Наценка\"");
+            if (this.fields.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
+            if (this.fields.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
+            if (this.fields.margin < 0) this.errors.push("Поле \"Наценка\" не должно быть отрицательным");
+            if (this.fields.margin > 255) this.errors.push("Превышено максимально допустимое значение поля \"Наценка\"");
 
 
             return this.errors.length === 0;
