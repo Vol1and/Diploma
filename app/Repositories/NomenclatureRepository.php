@@ -14,7 +14,8 @@ class NomenclatureRepository extends BaseRepository
         return Model::class;
     }
 
-    public function getTable(){
+    public function getTable()
+    {
         $columns = [
             'id',
             'name',
@@ -30,13 +31,22 @@ class NomenclatureRepository extends BaseRepository
         return $result;
     }
 
+    public function find($id)
+    {
 
-  //  public function getComboBox(){
-  //      $columns = 'id, name';
-  //      $result = $this->StartConditions()
-  //          ->selectRaw($columns)
-  //          ->toBase()
-  //          ->get();
-  //      return $result;
-  //  }
+        $columns = [
+            'id',
+            'name',
+            'producer_id',
+            'price_type_id'
+        ];
+        return $this->startConditions()
+            ->select($columns)
+            ->where('id', $id)
+            ->with(['producer', 'price_type'])
+            ->get()
+            ->first();
+
+    }
+
 }
