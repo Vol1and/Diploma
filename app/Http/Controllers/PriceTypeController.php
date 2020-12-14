@@ -7,7 +7,7 @@ use App\Models\PriceType;
 use App\Repositories\PriceTypesRepository;
 use Illuminate\Http\Request;
 
-class PriceTypeController extends Controller
+class PriceTypeController extends OriginController
 {
     //ссылка на хранилище модели PriceType
     private $priceTypeRepository;

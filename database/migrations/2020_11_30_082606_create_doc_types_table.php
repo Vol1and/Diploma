@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class PriceTypes extends Migration
+class CreateDocTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class PriceTypes extends Migration
      */
     public function up()
     {
-        Schema::create('price_types', function (Blueprint $table) {
+        Schema::create('doc_types', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->decimal('margin');
+            $table->string('name',45);
+            $table->boolean('is_income');
             $table->timestamps();
-            $table->softDeletes();
-
         });
     }
 
@@ -30,6 +28,6 @@ class PriceTypes extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('price_types');
+        Schema::dropIfExists('doc_types');
     }
 }

@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Characteristic extends Model
 {
+
+    protected $fillable = [
+        'serial',
+        'nomenclature_id',
+        'expiry_date',
+        'export'
+    ];
+
     use SoftDeletes;
-    use HasFactory;
 }

@@ -4,15 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Producer extends Model
+class DocConnection extends Model
 {
     protected $fillable = [
-        'name',
-        'country'
+        'characteristic_id',
+        'document_id',
+        'amount',
+        'price'
     ];
-
-    use SoftDeletes;
-
 }

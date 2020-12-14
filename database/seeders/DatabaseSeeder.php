@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Agent;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,9 +14,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(PriceTypesSeeder::class);
-        $this->call(ProducersSeeder::class);
+        $this->call(MedFormSeeder::class);
+        $this->call(AgentSeeder::class);
+        $this->call(DocTypeSeeder::class);
+        $this->call(PriceTypeSeeder::class);
+        $this->call(ProducerSeeder::class);
         $this->call(NomenclatureSeeder::class);
+        $this->call(CharacteristicSeeder::class);
+        $this->call(DocumentSeeder::class);
+        $this->call(DocConnectionSeeder::class);
+        $this->call(WareSeeder::class);
 
         // \App\Models\User::factory(10)->create();
     }

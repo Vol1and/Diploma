@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class PriceTypes extends Migration
+class CreateAgentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class PriceTypes extends Migration
      */
     public function up()
     {
-        Schema::create('price_types', function (Blueprint $table) {
+        Schema::create('agents', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->decimal('margin');
+            $table->string('name', 100);
+            $table->string('billing', 100)->default('empty');
+            $table->string('address', 150)->default('empty');
+            $table->string('description',150)->nullable();
             $table->timestamps();
-            $table->softDeletes();
-
         });
     }
 
@@ -30,6 +30,6 @@ class PriceTypes extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('price_types');
+        Schema::dropIfExists('agents');
     }
 }

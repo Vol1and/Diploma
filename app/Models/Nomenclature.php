@@ -5,21 +5,34 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\PriceType;
 
 class Nomenclature extends Model
 {
     use SoftDeletes;
-    use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'producer_id',
+        'price_type_id',
+        'med_form_id'
+    ];
 
     public function price_type()
     {
 
-        return $this->belongsTo('App\Models\PriceType');
+        return $this->belongsTo(PriceType::class);
     }
 
     public function producer()
     {
 
-        return $this->belongsTo('App\Models\Producer');
+        return $this->belongsTo(Producer::class);
+    }
+
+    public function med_form()
+    {
+
+        return $this->belongsTo(MedForm::class);
     }
 }

@@ -9,7 +9,7 @@ use App\Repositories\ProducersRepository;
 
 use Illuminate\Http\Request;
 
-class ProducerController extends Controller
+class ProducerController extends OriginController
 {
 
     //ссылка на хранилище модели Producer

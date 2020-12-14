@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Repositories\NomenclatureRepository;
 use Illuminate\Http\Request;
 
-class NomenclatureController extends Controller
+class NomenclatureController extends OriginController
 {
     //ссылка на хранилище модели PriceType
     private $nomenclatureRepository;

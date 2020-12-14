@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class CharacteristicController extends Controller
+class CharacteristicController extends OriginController
 {
     /**
      * Display a listing of the resource.

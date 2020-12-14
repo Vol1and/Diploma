@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\OriginController;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 
-class ResetPasswordController extends Controller
+class ResetPasswordOriginController extends OriginController
 {
     /*
     |--------------------------------------------------------------------------
-    | Password Reset Controller
+    | Password Reset OriginController
     |--------------------------------------------------------------------------
     |
     | This controller is responsible for handling password reset requests

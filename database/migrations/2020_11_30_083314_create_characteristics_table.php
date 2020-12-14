@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Characteristics extends Migration
+class CreateCharacteristicsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,12 +14,11 @@ class Characteristics extends Migration
     public function up()
     {
         Schema::create('characteristics', function (Blueprint $table) {
-            $table->increments('id');
-
+            $table->id();
             $table->string('serial');
             $table->date('expiry_date');
-
-            $table->integer('nomenclature_id')->unsigned();
+            $table->decimal('export');
+            $table->bigInteger('nomenclature_id')->unsigned();
 
             $table->foreign('nomenclature_id')->references('id')
                 ->on('nomenclatures');

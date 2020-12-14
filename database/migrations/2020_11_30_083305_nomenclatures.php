@@ -14,17 +14,21 @@ class Nomenclatures extends Migration
     public function up()
     {
         Schema::create('nomenclatures', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
 
             $table->string('name');
-            $table->integer('producer_id')->unsigned();
-            $table->integer('price_type_id')->unsigned();
+            $table->bigInteger('producer_id')->unsigned();
+            $table->bigInteger('price_type_id')->unsigned();
+            $table->bigInteger('med_form_id')->unsigned();
 
             $table->foreign('producer_id')->references('id')
                 ->on('producers');
 
             $table->foreign('price_type_id')->references('id')
                 ->on('price_types');
+
+            $table->foreign('med_form_id')->references('id')
+                ->on('med_forms');
 
 
             $table->timestamps();

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class PriceTypes extends Migration
+class CreateWaresTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class PriceTypes extends Migration
      */
     public function up()
     {
-        Schema::create('price_types', function (Blueprint $table) {
+        Schema::create('wares', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->decimal('margin');
+            $table->bigInteger('characteristic_id')->unsigned();
+            $table->integer('stock');
+            $table->foreign('characteristic_id')->references('id')
+                ->on('characteristics');
             $table->timestamps();
-            $table->softDeletes();
-
         });
     }
 
@@ -30,6 +30,6 @@ class PriceTypes extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('price_types');
+        Schema::dropIfExists('wares');
     }
 }

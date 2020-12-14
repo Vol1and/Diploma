@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class PriceTypes extends Migration
+class CreateMedFormsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class PriceTypes extends Migration
      */
     public function up()
     {
-        Schema::create('price_types', function (Blueprint $table) {
+        Schema::create('med_forms', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->decimal('margin');
+            $table->string('name',45);
             $table->timestamps();
-            $table->softDeletes();
-
         });
     }
 
@@ -30,6 +27,6 @@ class PriceTypes extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('price_types');
+        Schema::dropIfExists('med_forms');
     }
 }

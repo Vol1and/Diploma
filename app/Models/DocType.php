@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Producer extends Model
+class DocType extends Model
 {
-    protected $fillable = [
-        'name',
-        'country'
-    ];
+    protected $fillable
+        = [
+            'name'
+            ,'is_income'
+        ];
 
     use SoftDeletes;
-
 }
