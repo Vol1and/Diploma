@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call(DocTypeSeeder::class);
         $this->call(PriceTypeSeeder::class);
         $this->call(ProducerSeeder::class);
+        $this->call(CharacteristicPriceSeeder::class);
         $this->call(NomenclatureSeeder::class);
         $this->call(CharacteristicSeeder::class);
         $this->call(DocumentSeeder::class);

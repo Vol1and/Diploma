@@ -13,7 +13,7 @@ class Characteristic extends Model
         'serial',
         'nomenclature_id',
         'expiry_date',
-        'export'
+        'characteristic_price_id'
     ];
 
     public function nomenclature()
