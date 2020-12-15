@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PriceTypeCreateRequest extends FormRequest
+class NomenclatureCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +25,8 @@ class PriceTypeCreateRequest extends FormRequest
     {
         return [
             'name'=>'required|string|between:2,255',
-            'margin'=>'required|numeric|between:0,255'
+            'producer_id' => 'required',
+            'price_type_id' => 'required',
         ];
     }
 }

@@ -1,7 +1,10 @@
 <template>
 
-    <div v-shortkey="['del']" @shortkey="deleteSelected" class="center-50">
-        <h1 class="text-center">Производители</h1>
+    <div class="center-50">
+        <div>
+            <button @click="back()" class="btn  btn-primary"><--</button>
+            <h1 class="text-center">Выбор производителя</h1>
+        </div>
         <div class="row">
             <router-link :to="{name: 'producers.create'}" style=" float:left " class="btn btn-in-bar  btn-primary">
                 Добавить
@@ -34,7 +37,7 @@
             </tr>
             <tbody>
             <tr v-for="item in page_of_items" class="row-hover" :key="item.id" :class="{'highlight': (item.id === selected_item)}"
-                @click="rowSelected(item.id)" @keydown.delete="deleteSelected" @dblclick="toEdit(item.id)">
+                @click="rowSelected(item.id)" @dblclick="selected(item)">
                 <td>{{ item.id }}</td>
                 <td>{{ item.name }}</td>
                 <td>{{ item.country }}</td>
@@ -61,7 +64,7 @@
 
 <script>
 export default {
-    name: "ProducerIndex",
+    name: "ProducerChoose",
 
     data: function () {
         return {
@@ -89,7 +92,7 @@ export default {
         },
 
         update: function () {
-            axios.get('api/producers').then((response) => {
+            axios.get('/api/producers').then((response) => {
                 this.is_reload = true;
 
 
@@ -101,21 +104,19 @@ export default {
         },
         onChangePage() {
             // update page of items
-            this.page_of_items = this.items.slice(this.items_per_page * (this.current_page - 1), (this.items_per_page * this.current_page));
+            this.page_of_items = this.items.slice(this.items_per_page * (this.current_page - 1), (this.items_per_page * this.current_page) - 1);
         },
 
         //по дабл-клику - переходим на строку с изменением выбраного объекта
-        toEdit(id) {
-            this.$router.push({name: 'producers.edit', params: {id: id}});
+        selected(selected_item){
+
+            this.$emit("selected", {producer: selected_item});
         },
         switch_filter(){
             this.filter_visible = !this.filter_visible;
         },
-        filter(){
-
-        },
-        deleteSelected(){
-            console.log(`удалится элемент с id ${this.selected_item}`)
+        back(){
+            this.$emit("back");
         }
 
     }

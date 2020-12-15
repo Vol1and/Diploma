@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\NomenclatureCreateRequest;
+use App\Models\Nomenclature;
 use App\Repositories\NomenclatureRepository;
 use Illuminate\Http\Request;
 
@@ -39,9 +41,25 @@ class NomenclatureController extends OriginController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(NomenclatureCreateRequest $request)
     {
-        //
+        //получение данных из реквеста
+        $data = $request->input();
+        //создание нового элемента
+        $item = new Nomenclature($data);
+        //сохраняем
+        $item->save();
+
+        //если все ок - возвращаем ответ со статусом 201
+        if($item)
+            return response(null, 201);
+        //либо можно передавать айди созданного элемента
+        //return response($item->id, 201);
+
+        //если нет - отправляем ошибку (статус возмонжо стоит поменять)
+        return response(null,500);
+
+
     }
 
     /**
@@ -52,19 +70,15 @@ class NomenclatureController extends OriginController
      */
     public function show($id)
     {
-        //
+        $result = $this->nomenclatureRepository->find($id);
+
+        if(empty($result) || !$result){
+
+            return response(null, 404);
+        }
+        return $result->toJson();
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -73,9 +87,24 @@ class NomenclatureController extends OriginController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(NomenclatureCreateRequest $request)
     {
-        //
+
+        $item = $this->nomenclatureRepository->find($request->id);
+        if (empty($item)) {
+
+            return response(null, 404);
+        }
+        $data = $request->all();
+        $result = $item->fill($data)->save();
+
+        //todo: подумать над кодом ошибки
+        //Что должно вовзращать при ошибке сохранения
+        if (!$result) {
+            return response(null, 404);
+        }
+        else  return response(null, 200);
+
     }
 
     /**

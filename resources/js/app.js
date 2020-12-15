@@ -16,10 +16,15 @@ Vue.component('paginate', Paginate)
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
+Vue.use(require('vue-shortkey'))
+
+
 import Error from "./components/Layouts/Error";
 import ProducerIndex from "./components/Producer/Index";
 import ProducerCreate from "./components/Producer/Create";
 import ProducerEdit from "./components/Producer/Edit";
+
+
 import PriceTypeIndex from "./components/PriceType/Index";
 import PriceTypeCreate from "./components/PriceType/Create";
 import PriceTypeEdit from "./components/PriceType/Edit";
@@ -36,15 +41,23 @@ import Home from "./components/Home";
 
 
 
+
+
 //Инициализация компонентов
 Vue.component('error-component', require('./components/Layouts/Error').default);
+
+
 Vue.component('ProducerIndex',      ProducerIndex.default);
 Vue.component('ProducerCreate',     ProducerCreate.default);
 Vue.component('ProducerEdit',       ProducerEdit.default);
+Vue.component('producer-choose-component',
+    require('./components/Producer/Choose').default);
 
 Vue.component('PriceTypeIndex',     PriceTypeIndex.default);
 Vue.component('PriceTypeCreate',    PriceTypeCreate.default);
 Vue.component('PriceTypeEdit',      PriceTypeEdit.default);
+Vue.component('price-type-choose-component',
+    require('./components/PriceType/Choose').default);
 
 Vue.component('NomenclatureIndex',    NomenclatureIndex.default);
 Vue.component('NomenclatureCreate',   NomenclatureCreate.default);
@@ -60,9 +73,13 @@ const routes = [
     { path: '/producers',name: "producers.index", component: ProducerIndex },
     { path: '/producers/create',name: "producers.create", component: ProducerCreate },
     { path: '/producers/:id',name: "producers.edit", component: ProducerEdit },
+
+
     { path: '/price-types',name: "price-types.index", component: PriceTypeIndex },
     { path: '/price-types/create',name: "price-types.create", component: PriceTypeCreate },
     { path: '/price-types/:id',name: "price-types.edit", component: PriceTypeEdit },
+
+
     { path: '/nomenclatures',name: "nomenclatures.index", component: NomenclatureIndex },
     { path: '/nomenclatures/create',name: "nomenclatures.create", component: NomenclatureCreate },
     { path: '/nomenclatures/:id',name: "nomenclatures.edit", component: NomenclatureEdit },

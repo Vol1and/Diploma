@@ -40,6 +40,7 @@
             </paginate>
         </div>
     </div>
+
 </template>
 
 
@@ -50,6 +51,7 @@ export default {
 
     data: function () {
         return {
+
 
             current_page : 1,
             items_per_page : 10,
@@ -83,11 +85,11 @@ export default {
         },
         onChangePage(){
             // update page of items
-            this.page_of_items = this.items.slice(this.items_per_page*(this.current_page-1), (this.items_per_page*this.current_page) -1);
+            this.page_of_items = this.items.slice(this.items_per_page*(this.current_page-1), (this.items_per_page*this.current_page));
         },
 
         toEdit(id){
-            this.$router.push({name: 'price-types.edit', params:{id : id}});
+            this.$router.push({name: 'nomenclatures.edit', params:{id : id}});
         }
     }
 
