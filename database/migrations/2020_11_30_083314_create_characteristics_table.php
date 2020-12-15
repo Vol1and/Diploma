@@ -17,11 +17,13 @@ class CreateCharacteristicsTable extends Migration
             $table->id();
             $table->string('serial');
             $table->date('expiry_date');
-            $table->decimal('export');
             $table->bigInteger('nomenclature_id')->unsigned();
+            $table->bigInteger('characteristic_price_id')->unsigned();
 
             $table->foreign('nomenclature_id')->references('id')
                 ->on('nomenclatures');
+            $table->foreign('characteristic_price_id')->references('id')
+                ->on('characteristic_prices');
 
             $table->timestamps();
             $table->softDeletes();
