@@ -16,5 +16,10 @@ class Characteristic extends Model
         'export'
     ];
 
+    public function nomenclature()
+    {
+
+        return $this->belongsTo(Nomenclature::class);
+    }
     use SoftDeletes;
 }

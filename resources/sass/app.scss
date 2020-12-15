@@ -8,58 +8,61 @@
 @import '~bootstrap/scss/bootstrap';
 
 
-.pagination{
-    float:left;
+.pagination {
+    float: left;
     display: flex;
-    border: darkgrey 1px solid ;
+    border: darkgrey 1px solid;
     font-size: 15px;
     font-weight: 545;
 }
-.pagination>li{
+
+.pagination > li {
     color: black;
     float: left;
 
-    border: darkgrey 0.5px solid ;
+    border: darkgrey 0.5px solid;
     text-decoration: none;
 }
-.pagination>li>a{
+
+.pagination > li > a {
     color: black;
     float: left;
     padding: 6px 12px;
     text-decoration: none;
 }
 
-.pagination-active{
+.pagination-active {
     background-color: lightblue;
     color: white;
 
 
 }
 
-.pagination-active:active{
+.pagination-active:active {
 
 
 }
 
-.pagination>li:hover:not(.pagination-active) {
+.pagination > li:hover:not(.pagination-active) {
     background-color: #ddd;
 
 }
 
-.pagination>li:focus{
+.pagination > li:focus {
     background-color: #d6d8d9;
     border: black 0.5px solid;
 }
 
-.center-50{
+.center-50 {
     width: 50%;
-    float:left;
+    float: left;
 
     margin-left: 25%;
 }
-.center-33{
-    float:left;
-    flex: 33.3%;
+
+.center-33 {
+    float: left;
+    width: 33.3%;
     margin-left: 33.3%;
 }
 
@@ -67,24 +70,30 @@
     background-color: lightgray;
     font-weight: 650;
 }
+
 .highlight:hover {
     background-color: lightgray;
 }
-.row-hover:hover{
+
+.row-hover:hover {
     background-color: lightgray
 }
 
 .no-padding {
     padding: 0;
 }
+
 .center-block {
     display: block;
     margin-right: auto;
     margin-left: auto;
 }
 
-.btn-in-bar{
-    padding: 0; width: 150px; height: 40px; margin-bottom: 15px;
+.btn-in-bar {
+
+    width: 150px;
+    height: 40px;
+    margin-bottom: 15px;
 
 }
 

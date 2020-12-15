@@ -1,58 +1,74 @@
 <template>
     <div>
         <div v-if="is_visible && choosing_state === 0 " class="row" style="width: 100%">
-            <div class="offset-4 col-md-4">
-                <div class="offset-2 col-md-8">
+            <div class="center-33">
+                <div class="">
                     <error-component :errors="errors"></error-component>
                     <div style="margin-bottom: 10px; height: 50px" class=" form-control ">
                         <h2 class="text-center center-block">Номенклатура #{{ fields.id }}</h2>
                     </div>
                 </div>
-                <div class="  row offset-2 col-md-8">
-                    <div class="col-md-12 no-padding" style="padding: 0">
-                        <form class="form-control" style=":170px; height: 100%"
-                              @submit.prevent="submit">
 
-                            <div class=" form-group col-md-11">
-                                <label class="col-form-label" for="name">Наименование</label>
-                                <input type="text" name="name" id="name" v-model="fields.name"
-                                       class="form-text form-control"/>
-                            </div>
-                            <div class="form-group  col-md-11">
-                                <label class="col-form-label" for="guest_id">Производитель</label>
-                                <div class="form-inline">
-                                    <input type="text" disabled name="days_count" :value="producer_field"
-                                           id="producer_id"
-                                           style="margin-top: 0" class="form-text form-control col-md-10"/>
-                                    <button @click="selectingProducer()" type="button" class="btn  btn-primary">>>
-                                    </button>
+                    <div class="row " style="padding: 0 15px 15px 15px; height: 100%" >
+                        <div class="col-md-3 form-control no-padding" style="  height: 100%">
+
+                            <h4 class="text-center">Ссылки</h4>
+                            <router-link class=" center-block btn btn-link" :to="{name: 'nomenclatures.characteristics', params: {id : this.fields.id}}">Характеристики</router-link>
+
+                        </div>
+                        <div class=" col-md-6 no-padding " >
+                            <form class="form-control" style="height: 100%"
+                                  @submit.prevent="submit">
+
+                                <div class=" form-group col-md-12">
+                                    <label class="col-form-label" for="name">Наименование</label>
+                                    <input type="text" name="name" id="name" v-model="fields.name"
+                                           class="form-text form-control"/>
                                 </div>
-                            </div>
-                            <div class="form-group  col-md-11">
-                                <label class="col-form-label" for="guest_id">Ценова группа</label>
-                                <div class="form-inline">
-                                    <input type="text" disabled name="days_count" :value="price_type_field"
-                                           id="guest_id"
-                                           style="margin-top: 0" class="form-text form-control col-md-10"/>
-                                    <button @click="selectingPriceType()" type="button" class="btn  btn-primary">>>
-                                    </button>
+                                <div class="form-group  col-md-12">
+                                    <label class="col-form-label" for="producer_id">Производитель</label>
+                                    <div class="form-inline">
+                                        <input type="text" disabled name="producer_id" :value="producer_field"
+                                               id="producer_id"
+                                               style="margin-top: 0" class="form-text form-control col-md-10"/>
+                                        <button @click="selectingProducer()" type="button" class="btn  btn-primary">>>
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                            <button @click="submit()" type="submit"
-                                    style="display: block;margin-right: auto;margin-left: auto;"
-                                    class="btn btn-primary center-block"
-                                    :disabled="loaded === false">
-                                Изменить
-                            </button>
-                        </form>
+                                <div class="form-group  col-md-12">
+                                    <label class="col-form-label" for="price_type_id">Ценова группа</label>
+                                    <div class="form-inline">
+                                        <input type="text" disabled name="price_type_id" :value="price_type_field"
+                                               id="price_type_id"
+                                               style="margin-top: 0" class="form-text form-control col-md-10"/>
+                                        <button @click="selectingPriceType()" type="button" class="btn  btn-primary">>>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button @click="submit()" type="submit"
+                                        style="display: block;margin-right: auto;margin-left: auto;"
+                                        class="btn btn-primary center-block"
+                                        :disabled="loaded === false">
+                                    Изменить
+                                </button>
+                            </form>
+
+                        </div>
+                        <div class="col-md-3 form-control no-padding" style="  height: 100%">
+
+                            <h4 class="text-center">Ссылки</h4>
+                            <router-link class=" center-block btn btn-link" :to="{name: 'nomenclatures.characteristics', params: {id : this.fields.id}}">Характеристики</router-link>
+
+                        </div>
                     </div>
 
-                </div>
             </div>
 
         </div>
-        <producer-choose-component   @back="onBack" v-if="choosing_state ===1" @selected="onSelectedProducer"></producer-choose-component>
-        <price-type-choose-component @back="onBack" v-if="choosing_state ===2" @selected="onSelectedPriceType"></price-type-choose-component>
+        <producer-choose-component @back="onBack" v-if="choosing_state ===1"
+                                   @selected="onSelectedProducer"></producer-choose-component>
+        <price-type-choose-component @back="onBack" v-if="choosing_state ===2"
+                                     @selected="onSelectedPriceType"></price-type-choose-component>
     </div>
 </template>
 
@@ -142,7 +158,7 @@ export default {
             this.price_type_field = data.price_type.name;
             this.choosing_state = 0;
         },
-        onBack(){
+        onBack() {
             this.choosing_state = 0;
         }
 

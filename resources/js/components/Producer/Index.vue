@@ -3,7 +3,7 @@
     <div v-shortkey="['del']" @shortkey="deleteSelected" class="center-50">
         <h1 class="text-center">Производители</h1>
         <div class="row">
-            <router-link :to="{name: 'producers.create'}" style=" float:left " class="btn btn-in-bar  btn-primary">
+            <router-link :to="{name: 'producers.create'}" style=" float:left " class="btn btn-in-bar text-center btn-primary">
                 Добавить
             </router-link>
             <button @click="switch_filter()" v-if="!filter_visible" class="btn btn-in-bar center-block  btn-primary">Фильтры</button>

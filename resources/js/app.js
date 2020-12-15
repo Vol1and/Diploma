@@ -19,7 +19,8 @@ Vue.use(VueRouter)
 Vue.use(require('vue-shortkey'))
 
 
-import Error from "./components/Layouts/Error";
+import NormativeInfo from "./components/Menu/NormativeInfo";
+
 import ProducerIndex from "./components/Producer/Index";
 import ProducerCreate from "./components/Producer/Create";
 import ProducerEdit from "./components/Producer/Edit";
@@ -34,6 +35,7 @@ import NomenclatureIndex from "./components/Nomenclature/Index";
 import NomenclatureCreate from "./components/Nomenclature/Create";
 import NomenclatureEdit from "./components/Nomenclature/Edit";
 
+import CharacteristicForNomenclature from "./components/Characteristic/ForNomenclature";
 
 
 import Home from "./components/Home";
@@ -46,6 +48,7 @@ import Home from "./components/Home";
 //Инициализация компонентов
 Vue.component('error-component', require('./components/Layouts/Error').default);
 
+Vue.component('NormativeInfo',      NormativeInfo.default);
 
 Vue.component('ProducerIndex',      ProducerIndex.default);
 Vue.component('ProducerCreate',     ProducerCreate.default);
@@ -63,6 +66,7 @@ Vue.component('NomenclatureIndex',    NomenclatureIndex.default);
 Vue.component('NomenclatureCreate',   NomenclatureCreate.default);
 Vue.component('NomenclatureEdit',     NomenclatureEdit.default);
 
+Vue.component('CharacteristicForNomenclature',     CharacteristicForNomenclature.default);
 
 Vue.component('HomeComponent',      Home.default);
 
@@ -70,6 +74,9 @@ Vue.component('HomeComponent',      Home.default);
 
 //Инициализация раутов
 const routes = [
+    { path: '/info',name: "menu.info", component: NormativeInfo },
+
+
     { path: '/producers',name: "producers.index", component: ProducerIndex },
     { path: '/producers/create',name: "producers.create", component: ProducerCreate },
     { path: '/producers/:id',name: "producers.edit", component: ProducerEdit },
@@ -83,7 +90,7 @@ const routes = [
     { path: '/nomenclatures',name: "nomenclatures.index", component: NomenclatureIndex },
     { path: '/nomenclatures/create',name: "nomenclatures.create", component: NomenclatureCreate },
     { path: '/nomenclatures/:id',name: "nomenclatures.edit", component: NomenclatureEdit },
-
+    { path: '/nomenclatures/:id/characteristics',name: "nomenclatures.characteristics", component: CharacteristicForNomenclature },
 
     { path: '/',name: "home.index", component: Home }
 ]

@@ -2,26 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\CharacteristicsRepository;
 use Illuminate\Http\Request;
 
 class CharacteristicController extends OriginController
 {
+
+
+    //ссылка на хранилище модели PriceType
+    private $characteristicRepository;
+
+    public function __construct()
+    {
+
+        //инициализация хранилища
+        $this->characteristicRepository = app(CharacteristicsRepository::class);
+    }
+
+
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
     {
         //
     }
@@ -49,17 +54,6 @@ class CharacteristicController extends OriginController
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -80,5 +74,12 @@ class CharacteristicController extends OriginController
     public function destroy($id)
     {
         //
+    }
+
+    public function forNomenclature($id){
+
+        $result = $this->characteristicRepository->forNomenclature($id);
+
+        return $result->toJson();
     }
 }

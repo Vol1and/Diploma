@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Auth::routes();
+//Auth::routes();
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
+
 //Все дороги ведут в Рим
 //Рим - главная страница которая лежит в шаблоне "home.blade.php"
 //Дороги - любой раут в URL

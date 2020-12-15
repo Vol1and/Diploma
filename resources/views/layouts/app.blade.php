@@ -34,16 +34,8 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <router-link  class="nav-link" :to="{name: 'producers.index'}">Производители</router-link>
+                            <router-link  class="nav-link" :to="{name: 'menu.info'}">Информация</router-link>
 
-                        </li>
-                        <li class="nav-item">
-
-                            <router-link  class="nav-link" :to="{name: 'price-types.index'}">Типы цен</router-link>
-                        </li>
-                        <li class="nav-item">
-
-                            <router-link  class="nav-link" :to="{name: 'nomenclatures.index'}">Номенклатура</router-link>
                         </li>
                     </ul>
 
