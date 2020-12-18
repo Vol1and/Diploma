@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUndefinedClassInspection */
 
 use Illuminate\Support\Facades\Route;
 
@@ -14,8 +14,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-//Auth::routes();
+Auth::routes();
 
+Route::middleware(['role:admin'])->prefix('admin_panel')->group(function () {
+    Route::get('/', [App\Http\Controllers\Admin\HomeController::class, 'index'])->name('homeAdmin'); // /admin
+});
 
 //Все дороги ведут в Рим
 //Рим - главная страница которая лежит в шаблоне "home.blade.php"

@@ -49,4 +49,8 @@ class NomenclatureRepository extends BaseRepository
 
     }
 
+    public function getTotalCount(){
+        return $this->startConditions()->all()->count();
+    }
+
 }

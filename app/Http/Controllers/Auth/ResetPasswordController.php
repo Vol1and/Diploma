@@ -6,7 +6,7 @@ use App\Http\Controllers\OriginController;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 
-class ResetPasswordOriginController extends OriginController
+class ResetPasswordController extends OriginController
 {
     /*
     |--------------------------------------------------------------------------

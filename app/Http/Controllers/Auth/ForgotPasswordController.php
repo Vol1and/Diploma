@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\OriginController;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
-class ForgotPasswordOriginController extends OriginController
+class ForgotPasswordController extends OriginController
 {
     /*
     |--------------------------------------------------------------------------

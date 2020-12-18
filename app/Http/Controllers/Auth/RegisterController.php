@@ -9,7 +9,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class RegisterOriginController extends OriginController
+class RegisterController extends OriginController
 {
     /*
     |--------------------------------------------------------------------------
@@ -64,10 +64,13 @@ class RegisterOriginController extends OriginController
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+
+        $user->assignRole('user');
+        return $user;
     }
 }

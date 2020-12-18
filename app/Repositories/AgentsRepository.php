@@ -23,4 +23,8 @@ class AgentsRepository extends BaseRepository
     {
         return $this->startConditions()->all()->except(4);
     }
+
+    public function getTotalCount(){
+        return $this->startConditions()->all()->count();
+    }
 }
