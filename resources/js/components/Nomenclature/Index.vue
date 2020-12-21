@@ -73,7 +73,7 @@ export default {
         },
 
         update: function () {
-            axios.get('api/nomenclatures').then((response) => {
+            axios.get('/api/nomenclatures').then((response) => {
                 this.is_reload = true;
 
 

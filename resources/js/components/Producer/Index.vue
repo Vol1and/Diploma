@@ -1,6 +1,7 @@
 <template>
 
     <div v-shortkey="['del']" @shortkey="deleteSelected" class="center-50">
+        <v-dialog />
         <h1 class="text-center">Производители</h1>
         <div class="row">
             <router-link :to="{name: 'producers.create'}" style=" float:left " class="btn btn-in-bar text-center btn-primary">
@@ -89,7 +90,7 @@ export default {
         },
 
         update: function () {
-            axios.get('api/producers').then((response) => {
+            axios.get('/api/producers').then((response) => {
                 this.is_reload = true;
 
 
@@ -116,6 +117,26 @@ export default {
         },
         deleteSelected(){
             console.log(`удалится элемент с id ${this.selected_item}`)
+            this.$modal.show('dialog', {
+                title: 'Вы уверены',
+                text: 'Удалить выбранный объект?',
+                buttons: [
+                    {
+                        title: 'Да',
+                        handler: () => {
+
+
+
+                        }
+                    },
+                    {
+                        title: 'Нет',
+                        handler: () => {
+
+                        }
+                    }
+                ]
+            })
         }
 
     }

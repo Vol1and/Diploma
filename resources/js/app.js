@@ -19,6 +19,10 @@ Vue.use(VueRouter)
 Vue.use(require('vue-shortkey'))
 
 
+import VModal from 'vue-js-modal'
+Vue.use(VModal, { dialog: true })
+
+
 import NormativeInfo from "./components/Menu/NormativeInfo";
 
 import ProducerIndex from "./components/Producer/Index";
@@ -73,27 +77,11 @@ Vue.component('HomeComponent',      Home.default);
 
 
 //Инициализация раутов
-const routes = [
-    { path: '/info',name: "menu.info", component: NormativeInfo },
 
+import route_file from './routes.js';
 
-    { path: '/producers',name: "producers.index", component: ProducerIndex },
-    { path: '/producers/create',name: "producers.create", component: ProducerCreate },
-    { path: '/producers/:id',name: "producers.edit", component: ProducerEdit },
+let routes = route_file.routes;
 
-
-    { path: '/price-types',name: "price-types.index", component: PriceTypeIndex },
-    { path: '/price-types/create',name: "price-types.create", component: PriceTypeCreate },
-    { path: '/price-types/:id',name: "price-types.edit", component: PriceTypeEdit },
-
-
-    { path: '/nomenclatures',name: "nomenclatures.index", component: NomenclatureIndex },
-    { path: '/nomenclatures/create',name: "nomenclatures.create", component: NomenclatureCreate },
-    { path: '/nomenclatures/:id',name: "nomenclatures.edit", component: NomenclatureEdit },
-    { path: '/nomenclatures/:id/characteristics',name: "nomenclatures.characteristics", component: CharacteristicForNomenclature },
-
-    { path: '/',name: "home.index", component: Home }
-]
 
 
 // Создаём экземпляр маршрутизатора и передаём маршруты в опции `routes`

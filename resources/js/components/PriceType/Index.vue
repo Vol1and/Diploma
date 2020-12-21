@@ -69,7 +69,7 @@ export default {
         },
 
         update: function () {
-            axios.get('api/price-types').then((response) => {
+            axios.get('/api/price-types').then((response) => {
                 this.is_reload = true;
 
 

@@ -31,7 +31,7 @@ class HomeController extends OriginController
         $nomenclature_count = $this->nomenclatureRepository->getTotalCount();
         $agents_count = $this->agentsRepository->getTotalCount();
 
-        return view('admin.home.index', [
+        return view('admin_home', [
             'nomenclature_count' => $nomenclature_count,
             'agents_count' => $agents_count,
         ]);
