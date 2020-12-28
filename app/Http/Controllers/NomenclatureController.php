@@ -117,4 +117,10 @@ class NomenclatureController extends OriginController
     {
         //
     }
+
+
+   //public function whenLastUpdate(){
+
+   //    return $this->nomenclatureRepository->getLastUpdated()->updated_at;
+   //}
 }

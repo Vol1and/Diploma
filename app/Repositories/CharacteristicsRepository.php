@@ -24,8 +24,7 @@ class CharacteristicsRepository extends BaseRepository
             'serial',
             'expiry_date',
             'nomenclature_id',
-            'export'
-        ];
+         ];
         return $this->startConditions()
             ->select($columns)
             ->where('nomenclature_id', $nomenclature_id)

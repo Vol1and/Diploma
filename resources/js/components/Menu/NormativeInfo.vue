@@ -13,6 +13,10 @@
 
             <router-link  class="nav-link" :to="{name: 'nomenclatures.index'}">Номенклатура</router-link>
         </li>
+        <li class="list-group-item">
+
+            <router-link  class="nav-link" :to="{name: 'agents.index'}">Контрагенты</router-link>
+        </li>
     </ul>
 </div>
 </template>

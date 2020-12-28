@@ -10939,6 +10939,24 @@ a.text-dark:focus {
   border: black 0.5px solid;
 }
 
+.center-90 {
+  width: 90%;
+  float: left;
+  margin-left: 5%;
+}
+
+.center-75 {
+  width: 75%;
+  float: left;
+  margin-left: 12.5%;
+}
+
+.center-50 {
+  width: 50%;
+  float: left;
+  margin-left: 25%;
+}
+
 .center-50 {
   width: 50%;
   float: left;

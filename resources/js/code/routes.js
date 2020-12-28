@@ -1,18 +1,27 @@
 
-import NormativeInfo from "./components/Menu/NormativeInfo";
-import ProducerIndex from "./components/Producer/Index";
-import ProducerCreate from "./components/Producer/Create";
-import ProducerEdit from "./components/Producer/Edit";
-import PriceTypeIndex from "./components/PriceType/Index";
-import PriceTypeCreate from "./components/PriceType/Create";
-import PriceTypeEdit from "./components/PriceType/Edit";
-import NomenclatureIndex from "./components/Nomenclature/Index";
-import NomenclatureCreate from "./components/Nomenclature/Create";
-import NomenclatureEdit from "./components/Nomenclature/Edit";
-import CharacteristicForNomenclature from "./components/Characteristic/ForNomenclature";
-import Home from "./components/Home";
+import NormativeInfo from "../components/Menu/NormativeInfo";
+import ProducerIndex from "../components/Producer/Index";
+import ProducerCreate from "../components/Producer/Create";
+import ProducerEdit from "../components/Producer/Edit";
 
-import AdminMain from "./components/Admin/Main";
+import AgentIndex from "../components/Agents/Index";
+import AgentCreate from "../components/Agents/Create";
+import AgentEdit from "../components/Agents/Edit";
+
+import PriceTypeIndex from "../components/PriceType/Index";
+import PriceTypeCreate from "../components/PriceType/Create";
+import PriceTypeEdit from "../components/PriceType/Edit";
+
+import NomenclatureIndex from "../components/Nomenclature/Index";
+import NomenclatureCreate from "../components/Nomenclature/Create";
+import NomenclatureEdit from "../components/Nomenclature/Edit";
+
+import CharacteristicForNomenclature from "../components/Characteristic/ForNomenclature";
+
+
+import Home from "../components/Home";
+
+import AdminMain from "../components/Admin/Main";
 
 const routes = [
     { path: '/info',name: "menu.info", component: NormativeInfo },
@@ -23,7 +32,12 @@ const routes = [
     { path: '/producers/:id',name: "producers.edit", component: ProducerEdit },
 
 
-    { path: '/price-types',name: "price-types.index", component: PriceTypeIndex },
+    { path: '/agents',          name: "agents.index", component: AgentIndex },
+    { path: '/agents/create',   name: "agents.create", component: PriceTypeCreate },
+    { path: '/agents/:id',      name: "agents.edit", component: PriceTypeEdit },
+
+
+    { path: '/price-types',name: "price-types.index", component:  PriceTypeIndex},
     { path: '/price-types/create',name: "price-types.create", component: PriceTypeCreate },
     { path: '/price-types/:id',name: "price-types.edit", component: PriceTypeEdit },
 
@@ -50,6 +64,11 @@ const routes = [
     { path: '/adm/price-types',name: "admin.price-types.index", component: PriceTypeIndex },
     { path: '/adm/price-types/create',name: "admin.price-types.create", component: PriceTypeCreate },
     { path: '/adm/price-types/:id',name: "admin.price-types.edit", component: PriceTypeEdit },
+
+    { path: '/adm/agents',name: "admin.agents.index", component: AgentIndex },
+    { path: '/adm/agents/create',name: "admin.agents.create", component: PriceTypeCreate },
+    { path: '/adm/agents/:id',name: "admin.agents.edit", component: PriceTypeEdit },
+
 
     { path: '/adm/nomenclatures',name: "admin.nomenclatures.index", component: NomenclatureIndex },
     { path: '/adm/nomenclatures/create',name: "admin.nomenclatures.create", component: NomenclatureCreate },

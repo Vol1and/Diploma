@@ -53,4 +53,10 @@ class NomenclatureRepository extends BaseRepository
         return $this->startConditions()->all()->count();
     }
 
+    //public function getLastUpdated(){
+        //dd(Model::orderBy('updated_at','desc')->first());
+      //  return Model::orderBy('updated_at','desc')->first();
+
+    //}
+
 }

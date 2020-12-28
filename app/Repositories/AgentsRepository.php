@@ -24,6 +24,24 @@ class AgentsRepository extends BaseRepository
         return $this->startConditions()->all()->except(4);
     }
 
+    public function getTable(){
+        return Model::all();
+    }
+
+    public function find($id){
+
+        //return Model::find($id);
+        $columns = [
+            'id',
+            'name',
+            'billing',
+            'address',
+            'description',
+        ];
+        return $this->startConditions()->select($columns)->where('id', $id)->get()->first();
+
+    }
+
     public function getTotalCount(){
         return $this->startConditions()->all()->count();
     }

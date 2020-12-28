@@ -1,15 +1,3 @@
-import NormativeInfo from "./components/Menu/NormativeInfo";
-import ProducerIndex from "./components/Producer/Index";
-import ProducerCreate from "./components/Producer/Create";
-import ProducerEdit from "./components/Producer/Edit";
-import PriceTypeIndex from "./components/PriceType/Index";
-import PriceTypeCreate from "./components/PriceType/Create";
-import PriceTypeEdit from "./components/PriceType/Edit";
-import NomenclatureIndex from "./components/Nomenclature/Index";
-import NomenclatureCreate from "./components/Nomenclature/Create";
-import NomenclatureEdit from "./components/Nomenclature/Edit";
-import CharacteristicForNomenclature from "./components/Characteristic/ForNomenclature";
-import Home from "./components/Home";
 
 window._ = require('lodash');
 

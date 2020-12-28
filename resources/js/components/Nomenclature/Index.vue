@@ -1,6 +1,6 @@
 <template>
 
-    <div class="center-50">
+    <div class="center-75">
         <h1 class="text-center">Номенклатура</h1>
         <div class="row">
             <router-link :to="{name: 'nomenclatures.create'}" style=" float:left " class="btn btn-in-bar  btn-primary">Добавить</router-link>
@@ -19,10 +19,10 @@
             <tbody>
             <tr v-for="item in page_of_items" class="row-hover"  :key="item.id" :class="{'highlight': (item.id === selected_item)}"
                 @click="rowSelected(item.id)"  @dblclick="toEdit(item.id)">
-                <td>{{ item.id }}</td>
-                <td>{{item.name}}</td>
-                <td>{{ item.producer.name}}</td>
-                <td>{{ item.price_type.name}}</td>
+                <td> {{ item.id }}</td>
+                <td> {{item.name}}</td>
+                <td> {{ item.producer.name}}</td>
+                <td> {{ item.price_type.name}}</td>
             </tr>
             </tbody>
         </table>
@@ -64,6 +64,7 @@ export default {
         };
     },
     mounted() {
+
         this.update();
     },
     methods: {
@@ -73,19 +74,22 @@ export default {
         },
 
         update: function () {
-            axios.get('/api/nomenclatures').then((response) => {
-                this.is_reload = true;
 
-
-                this.items = response.data;
-                this.page_count = Math.ceil(this.items.length/this.items_per_page);
+            this.is_reload = true;
+            this.$store.dispatch('nomenclature/update').then(() => {
+                this.page_count = this.$store.getters['nomenclature/items_length'](this.items_per_page);
                 this.onChangePage();
                 this.is_reload = false;
-            });
+            }, (reason => {
+                console.log(`Что то пошло не так. Код ответа - ${reason}`)
+                this.is_reload = false;
+            }));
+
+            console.log(this.$store.getters['nomenclature/last_updated']);
         },
         onChangePage(){
             // update page of items
-            this.page_of_items = this.items.slice(this.items_per_page*(this.current_page-1), (this.items_per_page*this.current_page));
+            this.page_of_items = this.$store.getters['nomenclature/items'].slice(this.items_per_page*(this.current_page-1), (this.items_per_page*this.current_page));
         },
 
         toEdit(id){
