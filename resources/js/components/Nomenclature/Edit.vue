@@ -5,62 +5,68 @@
                 <div class="">
                     <error-component :errors="errors"></error-component>
                     <div style="margin-bottom: 10px; height: 50px" class=" form-control ">
-                        <h2 class="text-center center-block">Номенклатура #{{ fields.id }}</h2>
+                        <h2 class="text-center center-block">Номенклатура #{{ item.id }}</h2>
                     </div>
                 </div>
 
-                    <div class="row " style="padding: 0 15px 15px 15px; height: 100%" >
-                        <div class="col-md-3 form-control no-padding" style="  height: 100%">
+                <div class="row " style="padding: 0 15px 15px 15px; height: 100%">
+                    <div class="col-md-3 form-control no-padding" style="  height: 100%">
 
-                            <h4 class="text-center">Ссылки</h4>
-                            <router-link class=" center-block btn btn-link" :to="{name: 'nomenclatures.characteristics', params: {id : this.fields.id}}">Характеристики</router-link>
+                        <h4 class="text-center">Ссылки</h4>
+                        <router-link class=" center-block btn btn-link"
+                                     :to="{name: 'nomenclatures.characteristics', params: {id : this.item.id}}">
+                            Характеристики
+                        </router-link>
 
-                        </div>
-                        <div class=" col-md-6 no-padding " >
-                            <form class="form-control" style="height: 100%"
-                                  @submit.prevent="submit">
-
-                                <div class=" form-group col-md-12">
-                                    <label class="col-form-label" for="name">Наименование</label>
-                                    <input type="text" name="name" id="name" v-model="fields.name"
-                                           class="form-text form-control"/>
-                                </div>
-                                <div class="form-group  col-md-12">
-                                    <label class="col-form-label" for="producer_id">Производитель</label>
-                                    <div class="form-inline">
-                                        <input type="text" disabled name="producer_id" :value="producer_field"
-                                               id="producer_id"
-                                               style="margin-top: 0" class="form-text form-control col-md-10"/>
-                                        <button @click="selectingProducer()" type="button" class="btn  btn-primary">>>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="form-group  col-md-12">
-                                    <label class="col-form-label" for="price_type_id">Ценова группа</label>
-                                    <div class="form-inline">
-                                        <input type="text" disabled name="price_type_id" :value="price_type_field"
-                                               id="price_type_id"
-                                               style="margin-top: 0" class="form-text form-control col-md-10"/>
-                                        <button @click="selectingPriceType()" type="button" class="btn  btn-primary">>>
-                                        </button>
-                                    </div>
-                                </div>
-                                <button @click="submit()" type="submit"
-                                        style="display: block;margin-right: auto;margin-left: auto;"
-                                        class="btn btn-primary center-block"
-                                        :disabled="loaded === false">
-                                    Изменить
-                                </button>
-                            </form>
-
-                        </div>
-                        <div class="col-md-3 form-control no-padding" style="  height: 100%">
-
-                            <h4 class="text-center">Ссылки</h4>
-                            <router-link class=" center-block btn btn-link" :to="{name: 'nomenclatures.characteristics', params: {id : this.fields.id}}">Характеристики</router-link>
-
-                        </div>
                     </div>
+                    <div class=" col-md-6 no-padding ">
+                        <form class="form-control" style="height: 100%"
+                              @submit.prevent="submit">
+
+                            <div class=" form-group col-md-12">
+                                <label class="col-form-label" for="name">Наименование</label>
+                                <input type="text" name="name" id="name" v-model="item.name"
+                                       class="form-text form-control"/>
+                            </div>
+                            <div class="form-group  col-md-11">
+                                <label class="col-form-label" for="guest_id">Производитель</label>
+                                <div class="form-inline">
+                                    <input type="text" disabled name="days_count" :value="item.producer.name"
+                                           id="producer_id"
+                                           style="margin-top: 0" class="form-text form-control col-md-10"/>
+                                    <button @click="selectingProducer()" type="button" class="btn  btn-primary">>>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group  col-md-11">
+                                <label class="col-form-label" for="guest_id">Ценова группа</label>
+                                <div class="form-inline">
+                                    <input type="text" disabled name="days_count" :value="item.price_type.name"
+                                           id="guest_id"
+                                           style="margin-top: 0" class="form-text form-control col-md-10"/>
+                                    <button @click="selectingPriceType()" type="button" class="btn  btn-primary">>>
+                                    </button>
+                                </div>
+                            </div>
+                            <button @click="submit()" type="submit"
+                                    style="display: block;margin-right: auto;margin-left: auto;"
+                                    class="btn btn-primary center-block"
+                                    :disabled="loaded === false">
+                                Изменить
+                            </button>
+                        </form>
+
+                    </div>
+                    <div class="col-md-3 form-control no-padding" style="  height: 100%">
+
+                        <h4 class="text-center">Ссылки</h4>
+                        <router-link class=" center-block btn btn-link"
+                                     :to="{name: 'nomenclatures.characteristics', params: {id : this.item.id}}">
+                            Характеристики
+                        </router-link>
+
+                    </div>
+                </div>
 
             </div>
 
@@ -73,19 +79,20 @@
 </template>
 
 <script>
+import Nomenclature from "../../code/models/Nomenclature";
+
 export default {
     name: "NomenclatureEdit",
 
     data() {
         return {
-            fields: {id: -1, name: "", producer_id: -1, price_type_id: -1},
+            item: new Nomenclature(),
             choosing_state: 0,
             is_visible: false,
             loaded: true,
             errors: [],
             success: true,
-            producer_field: "",
-            price_type_field: ""
+
 
         };
     },
@@ -93,12 +100,8 @@ export default {
     beforeCreate() {
 
         axios.get(`/api/nomenclatures/${this.$route.params.id}`).then(response => {
-            this.fields.id = response.data.id;
-            this.fields.name = response.data.name;
-            this.fields.producer_id = response.data.producer.id;
-            this.fields.price_type_id = response.data.price_type.id;
-            this.producer_field = response.data.producer.name;
-            this.price_type_field = response.data.price_type.name;
+            this.item = new Nomenclature(response.data.id, response.data.name, response.data.producer, response.data.price_type,
+                response.data.created_at, response.data.updated_at, response.data.deleted_at)
             this.is_visible = true;
 
         }).catch((error) => {
@@ -116,7 +119,8 @@ export default {
 
             this.loaded = false;
 
-            axios.patch(`/api/nomenclatures/${this.fields.id}`, this.fields).then(response => {
+            //todo:костыль; поправить отправляемые данные
+            axios.patch(`/api/nomenclatures/${this.item.id}`, this.item.getDataForServer() ).then(response => {
 
                 //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
                 this.loaded = true;
@@ -133,10 +137,13 @@ export default {
         },
         validateFields() {
             this.errors = [];
-            if (this.fields.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
-            if (this.fields.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
-            if (this.fields.price_type_id < 0) this.errors.push("Ошибка в поле \"Ценовая группа\"");
-            if (this.fields.producer_id < 0) this.errors.push("Ошибка в поле \"Производитель\"");
+            if (this.item.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
+            if (this.item.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
+            if (!this.item.price_type.id) this.errors.push("Ошибка в поле \"Ценовая группа\"");
+            if (!this.item.producer.id) this.errors.push("Ошибка в поле \"Производитель\"");
+            if (this.item.price_type.id <= 0) this.errors.push("Ошибка в поле \"Ценовая группа\"");
+            if (this.item.producer.id <= 0) this.errors.push("Ошибка в поле \"Производитель\"");
+
 
 
             return this.errors.length === 0;
@@ -148,14 +155,12 @@ export default {
             this.choosing_state = 2;
         },
         onSelectedProducer(data) {
-            this.fields.producer_id = data.producer.id;
-            this.producer_field = data.producer.name;
+            this.item.producer = data.producer;
             this.choosing_state = 0;
         },
 
         onSelectedPriceType(data) {
-            this.fields.price_type_id = data.price_type.id;
-            this.price_type_field = data.price_type.name;
+            this.item.price_type = data.price_type;
             this.choosing_state = 0;
         },
         onBack() {

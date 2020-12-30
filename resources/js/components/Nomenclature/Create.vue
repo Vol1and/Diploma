@@ -15,13 +15,13 @@
 
                             <div class=" form-group col-md-11">
                                 <label class="col-form-label" for="name">Наименование</label>
-                                <input type="text" name="name" id="name" v-model="fields.name"
+                                <input type="text" name="name" id="name" v-model="item.name"
                                        class="form-text form-control"/>
                             </div>
                             <div class="form-group  col-md-11">
                                 <label class="col-form-label" for="guest_id">Производитель</label>
                                 <div class="form-inline">
-                                    <input type="text" disabled name="days_count" :value="fields.producer.name"
+                                    <input type="text" disabled name="days_count" :value="item.producer.name"
                                            id="producer_id"
                                            style="margin-top: 0" class="form-text form-control col-md-10"/>
                                     <button @click="selectingProducer()" type="button" class="btn  btn-primary">>>
@@ -31,7 +31,7 @@
                             <div class="form-group  col-md-11">
                                 <label class="col-form-label" for="guest_id">Ценова группа</label>
                                 <div class="form-inline">
-                                    <input type="text" disabled name="days_count" :value="fields.price_type.name"
+                                    <input type="text" disabled name="days_count" :value="item.price_type.name"
                                            id="guest_id"
                                            style="margin-top: 0" class="form-text form-control col-md-10"/>
                                     <button @click="selectingPriceType()" type="button" class="btn  btn-primary">>>
@@ -57,12 +57,14 @@
 </template>
 
 <script>
+import Nomenclature from "../../code/models/Nomenclature";
+
 export default {
     name: "NomenclatureCreate",
 
     data() {
         return {
-            fields: {name: "", producer: {id: null, name : ""}, price_type: {id: null, name : ""}},
+            item: new Nomenclature(),
             choosing_state: 0,
             loaded: true,
             errors: []
@@ -77,7 +79,8 @@ export default {
 
             this.loaded = false;
 
-            axios.post(`/api/nomenclatures`, this.fields).then(response => {
+            console.log(this.item.getDataForServer())
+            axios.post(`/api/nomenclatures`, this.item.getDataForServer()).then(response => {
 
                 //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
                 this.loaded = true;
@@ -94,11 +97,13 @@ export default {
         },
         validateFields() {
             this.errors = [];
-            if (this.fields.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
-            if (this.fields.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
-            if (!this.fields.price_type.id) this.errors.push("Ошибка в поле \"Ценовая группа\"");
-            if (!this.fields.producer.id) this.errors.push("Ошибка в поле \"Производитель\"");
-
+            console.log(this.item)
+            if (this.item.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
+            if (this.item.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
+            if (!this.item.price_type.id) this.errors.push("Ошибка в поле \"Ценовая группа\"");
+            if (!this.item.producer.id) this.errors.push("Ошибка в поле \"Производитель\"");
+            if (this.item.price_type.id <= 0) this.errors.push("Ошибка в поле \"Ценовая группа\"");
+            if (this.item.producer.id <= 0) this.errors.push("Ошибка в поле \"Производитель\"");
 
             return this.errors.length === 0;
         },
@@ -109,12 +114,12 @@ export default {
             this.choosing_state = 2;
         },
         onSelectedProducer(data) {
-            this.fields.producer = data.producer;
+            this.item.producer = data.producer;
             this.choosing_state = 0;
         },
 
         onSelectedPriceType(data) {
-            this.fields.price_type = data.price_type;
+            this.item.price_type = data.price_type;
             this.choosing_state = 0;
         },
         onBack(){

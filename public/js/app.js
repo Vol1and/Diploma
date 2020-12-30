@@ -2529,6 +2529,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _code_models_Nomenclature__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../code/models/Nomenclature */ "./resources/js/code/models/Nomenclature.js");
 //
 //
 //
@@ -2587,21 +2588,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "NomenclatureCreate",
   data: function data() {
     return {
-      fields: {
-        name: "",
-        producer: {
-          id: null,
-          name: ""
-        },
-        price_type: {
-          id: null,
-          name: ""
-        }
-      },
+      item: new _code_models_Nomenclature__WEBPACK_IMPORTED_MODULE_0__["default"](),
       choosing_state: 0,
       loaded: true,
       errors: []
@@ -2613,7 +2605,8 @@ __webpack_require__.r(__webpack_exports__);
 
       if (!this.validateFields()) return;
       this.loaded = false;
-      axios.post("/api/nomenclatures", this.fields).then(function (response) {
+      console.log(this.item.getDataForServer());
+      axios.post("/api/nomenclatures", this.item.getDataForServer()).then(function (response) {
         //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
         _this.loaded = true;
         console.log("Ответ получен!");
@@ -2631,10 +2624,13 @@ __webpack_require__.r(__webpack_exports__);
     },
     validateFields: function validateFields() {
       this.errors = [];
-      if (this.fields.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
-      if (this.fields.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
-      if (!this.fields.price_type.id) this.errors.push("Ошибка в поле \"Ценовая группа\"");
-      if (!this.fields.producer.id) this.errors.push("Ошибка в поле \"Производитель\"");
+      console.log(this.item);
+      if (this.item.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
+      if (this.item.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
+      if (!this.item.price_type.id) this.errors.push("Ошибка в поле \"Ценовая группа\"");
+      if (!this.item.producer.id) this.errors.push("Ошибка в поле \"Производитель\"");
+      if (this.item.price_type.id <= 0) this.errors.push("Ошибка в поле \"Ценовая группа\"");
+      if (this.item.producer.id <= 0) this.errors.push("Ошибка в поле \"Производитель\"");
       return this.errors.length === 0;
     },
     selectingProducer: function selectingProducer() {
@@ -2644,11 +2640,11 @@ __webpack_require__.r(__webpack_exports__);
       this.choosing_state = 2;
     },
     onSelectedProducer: function onSelectedProducer(data) {
-      this.fields.producer = data.producer;
+      this.item.producer = data.producer;
       this.choosing_state = 0;
     },
     onSelectedPriceType: function onSelectedPriceType(data) {
-      this.fields.price_type = data.price_type;
+      this.item.price_type = data.price_type;
       this.choosing_state = 0;
     },
     onBack: function onBack() {
@@ -2668,6 +2664,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _code_models_Nomenclature__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../code/models/Nomenclature */ "./resources/js/code/models/Nomenclature.js");
 //
 //
 //
@@ -2742,16 +2739,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "NomenclatureEdit",
   data: function data() {
     return {
-      fields: {
-        id: -1,
-        name: "",
-        producer_id: -1,
-        price_type_id: -1
-      },
+      item: new _code_models_Nomenclature__WEBPACK_IMPORTED_MODULE_0__["default"](),
       choosing_state: 0,
       is_visible: false,
       loaded: true,
@@ -2763,10 +2762,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     axios.get("/api/nomenclatures/".concat(this.$route.params.id)).then(function (response) {
-      _this.fields.id = response.data.id;
-      _this.fields.name = response.data.name;
-      _this.fields.producer = response.data.producer;
-      _this.fields.price_type = response.data.price_type;
+      _this.item = new _code_models_Nomenclature__WEBPACK_IMPORTED_MODULE_0__["default"](response.data.id, response.data.name, response.data.producer, response.data.price_type, response.data.created_at, response.data.updated_at, response.data.deleted_at);
       _this.is_visible = true;
     })["catch"](function (error) {
       console.log("Ошибка!");
@@ -2783,12 +2779,7 @@ __webpack_require__.r(__webpack_exports__);
       if (!this.validateFields()) return;
       this.loaded = false; //todo:костыль; поправить отправляемые данные
 
-      axios.patch("/api/nomenclatures/".concat(this.fields.id), {
-        id: this.fields.id,
-        name: this.fields.name,
-        producer_id: this.fields.producer.id,
-        price_type_id: -1
-      }).then(function (response) {
+      axios.patch("/api/nomenclatures/".concat(this.item.id), this.item.getDataForServer()).then(function (response) {
         //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
         _this2.loaded = true;
         console.log("Ответ получен!");
@@ -2806,10 +2797,12 @@ __webpack_require__.r(__webpack_exports__);
     },
     validateFields: function validateFields() {
       this.errors = [];
-      if (this.fields.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
-      if (this.fields.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
-      if (this.fields.price_type.id < 0) this.errors.push("Ошибка в поле \"Ценовая группа\"");
-      if (this.fields.producer.id < 0) this.errors.push("Ошибка в поле \"Производитель\"");
+      if (this.item.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
+      if (this.item.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
+      if (!this.item.price_type.id) this.errors.push("Ошибка в поле \"Ценовая группа\"");
+      if (!this.item.producer.id) this.errors.push("Ошибка в поле \"Производитель\"");
+      if (this.item.price_type.id <= 0) this.errors.push("Ошибка в поле \"Ценовая группа\"");
+      if (this.item.producer.id <= 0) this.errors.push("Ошибка в поле \"Производитель\"");
       return this.errors.length === 0;
     },
     selectingProducer: function selectingProducer() {
@@ -2819,11 +2812,11 @@ __webpack_require__.r(__webpack_exports__);
       this.choosing_state = 2;
     },
     onSelectedProducer: function onSelectedProducer(data) {
-      this.fields.producer = data.producer;
+      this.item.producer = data.producer;
       this.choosing_state = 0;
     },
     onSelectedPriceType: function onSelectedPriceType(data) {
-      this.fields.price_type = data.price_type;
+      this.item.price_type = data.price_type;
       this.choosing_state = 0;
     },
     onBack: function onBack() {
@@ -3199,6 +3192,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _code_models_PriceType__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../code/models/PriceType */ "./resources/js/code/models/PriceType.js");
 //
 //
 //
@@ -3238,14 +3232,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PriceTypeCreate",
   data: function data() {
     return {
-      fields: {
-        name: "",
-        country: ""
-      },
+      item: new _code_models_PriceType__WEBPACK_IMPORTED_MODULE_0__["default"](),
       loaded: true,
       errors: [],
       success: true
@@ -3257,7 +3249,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (!this.validateFields()) return;
       this.loaded = false;
-      axios.post('/api/price-types', this.fields).then(function (response) {
+      axios.post('/api/price-types', this.item).then(function (response) {
         //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
         _this.loaded = true; //console.log(response.data);
 
@@ -3279,10 +3271,10 @@ __webpack_require__.r(__webpack_exports__);
     },
     validateFields: function validateFields() {
       this.errors = [];
-      if (this.fields.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
-      if (this.fields.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
-      if (this.fields.margin < 0) this.errors.push("Поле \"Наценка\" не должно быть отрицательным");
-      if (this.fields.margin > 255) this.errors.push("Превышено максимально допустимое значение поля \"Наценка\"");
+      if (this.item.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
+      if (this.item.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
+      if (this.item.margin < 0) this.errors.push("Поле \"Наценка\" не должно быть отрицательным");
+      if (this.item.margin > 255) this.errors.push("Превышено максимально допустимое значение поля \"Наценка\"");
       return this.errors.length === 0;
     }
   }
@@ -3299,6 +3291,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _code_models_PriceType__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../code/models/PriceType */ "./resources/js/code/models/PriceType.js");
 //
 //
 //
@@ -3338,15 +3331,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PriceTypeEdit",
   data: function data() {
     return {
-      fields: {
-        id: -1,
-        name: "",
-        margin: ""
-      },
+      item: new _code_models_PriceType__WEBPACK_IMPORTED_MODULE_0__["default"](),
       is_visible: false,
       loaded: true,
       errors: [],
@@ -3357,7 +3347,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     axios.get("/api/price-types/".concat(this.$route.params.id)).then(function (response) {
-      _this.fields = response.data;
+      _this.item = new _code_models_PriceType__WEBPACK_IMPORTED_MODULE_0__["default"](response.data.id, response.data.name, response.data.margin, response.data.created_at, response.data.updated_at, response.data.deleted_at);
       _this.is_visible = true;
     })["catch"](function (error) {
       console.log("Ошибка!");
@@ -3371,12 +3361,12 @@ __webpack_require__.r(__webpack_exports__);
     submit: function submit() {
       var _this2 = this;
 
-      this.fields.margin = this.fields.margin.replace(',', '.');
-      console.log(this.fields.margin);
+      this.item.margin = this.item.margin.replace(',', '.');
+      console.log(this.item.margin);
       if (!this.validateFields()) return;
-      this.fields.margin = parseFloat(this.fields.margin);
+      this.item.margin = parseFloat(this.item.margin);
       this.loaded = false;
-      axios.patch("/api/price-types/".concat(this.fields.id), this.fields).then(function (response) {
+      axios.patch("/api/price-types/".concat(this.item.id), this.item).then(function (response) {
         //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
         _this2.loaded = true;
         console.log("Ответ получен!");
@@ -3397,10 +3387,10 @@ __webpack_require__.r(__webpack_exports__);
     },
     validateFields: function validateFields() {
       this.errors = [];
-      if (this.fields.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
-      if (this.fields.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
-      if (this.fields.margin < 0) this.errors.push("Поле \"Наценка\" не должно быть отрицательным");
-      if (this.fields.margin > 255) this.errors.push("Превышено максимально допустимое значение поля \"Наценка\"");
+      if (this.item.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
+      if (this.item.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
+      if (this.item.margin < 0) this.errors.push("Поле \"Наценка\" не должно быть отрицательным");
+      if (this.item.margin > 255) this.errors.push("Превышено максимально допустимое значение поля \"Наценка\"");
       return this.errors.length === 0;
     }
   }
@@ -3651,6 +3641,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _code_models_Producer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../code/models/Producer */ "./resources/js/code/models/Producer.js");
 //
 //
 //
@@ -3690,14 +3681,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ProducerCreate",
   data: function data() {
     return {
-      fields: {
-        name: "",
-        country: ""
-      },
+      item: new _code_models_Producer__WEBPACK_IMPORTED_MODULE_0__["default"](),
       loaded: true,
       errors: [],
       success: true
@@ -3710,7 +3699,7 @@ __webpack_require__.r(__webpack_exports__);
       if (!this.validateFields()) return;
       this.loaded = false;
       this.errors = [];
-      axios.post('/api/producers', this.fields).then(function (response) {
+      axios.post('/api/producers', this.item).then(function (response) {
         //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
         _this.loaded = true; //console.log(response.data);
 
@@ -3730,10 +3719,10 @@ __webpack_require__.r(__webpack_exports__);
     },
     validateFields: function validateFields() {
       this.errors = [];
-      if (this.fields.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
-      if (this.fields.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
-      if (this.fields.country.length === 0) this.errors.push("Поле \"Страна\" должно быть заполнено");
-      if (this.fields.country.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
+      if (this.item.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
+      if (this.item.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
+      if (this.item.country.length === 0) this.errors.push("Поле \"Страна\" должно быть заполнено");
+      if (this.item.country.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
       return this.errors.length === 0;
     }
   }
@@ -3750,6 +3739,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _code_models_Producer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../code/models/Producer */ "./resources/js/code/models/Producer.js");
 //
 //
 //
@@ -3789,15 +3779,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ProducerEdit",
   data: function data() {
     return {
-      fields: {
-        id: -1,
-        name: "",
-        country: ""
-      },
+      item: new _code_models_Producer__WEBPACK_IMPORTED_MODULE_0__["default"](),
       is_visible: false,
       loaded: true,
       errors: [],
@@ -3808,7 +3795,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     axios.get("/api/producers/".concat(this.$route.params.id)).then(function (response) {
-      _this.fields = response.data;
+      _this.item = new _code_models_Producer__WEBPACK_IMPORTED_MODULE_0__["default"](response.data.id, response.data.name, response.data.country, response.data.created_at, response.data.updated_at, response.data.deleted_at);
       _this.is_visible = true;
     })["catch"](function (error) {
       console.log("Ошибка!");
@@ -3824,7 +3811,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (!this.validateFields()) return;
       this.loaded = false;
-      axios.patch("/api/producers/".concat(this.fields.id), this.fields).then(function (response) {
+      axios.patch("/api/producers/".concat(this.item.id), this.item).then(function (response) {
         //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
         _this2.loaded = true;
         console.log("Ответ получен!");
@@ -3838,7 +3825,7 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.log("Ошибка!"); //this.$router.push({name: 'producers.index'});
 
-        for (var field in _this2.fields) {
+        for (var field in _this2.item) {
           if (error.response.data.errors[field] != null) {
             console.log(error.response.data.errors[field][0]);
 
@@ -3851,10 +3838,10 @@ __webpack_require__.r(__webpack_exports__);
     },
     validateFields: function validateFields() {
       this.errors = [];
-      if (this.fields.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
-      if (this.fields.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
-      if (this.fields.country.length === 0) this.errors.push("Поле \"Страна\" должно быть заполнено");
-      if (this.fields.country.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
+      if (this.item.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
+      if (this.item.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
+      if (this.item.country.length === 0) this.errors.push("Поле \"Страна\" должно быть заполнено");
+      if (this.item.country.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
       return this.errors.length === 0;
     }
   }
@@ -40721,23 +40708,19 @@ var render = function() {
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: _vm.fields.name,
-                                expression: "fields.name"
+                                value: _vm.item.name,
+                                expression: "item.name"
                               }
                             ],
                             staticClass: "form-text form-control",
                             attrs: { type: "text", name: "name", id: "name" },
-                            domProps: { value: _vm.fields.name },
+                            domProps: { value: _vm.item.name },
                             on: {
                               input: function($event) {
                                 if ($event.target.composing) {
                                   return
                                 }
-                                _vm.$set(
-                                  _vm.fields,
-                                  "name",
-                                  $event.target.value
-                                )
+                                _vm.$set(_vm.item, "name", $event.target.value)
                               }
                             }
                           })
@@ -40763,7 +40746,7 @@ var render = function() {
                                 name: "days_count",
                                 id: "producer_id"
                               },
-                              domProps: { value: _vm.fields.producer.name }
+                              domProps: { value: _vm.item.producer.name }
                             }),
                             _vm._v(" "),
                             _c(
@@ -40802,7 +40785,7 @@ var render = function() {
                                 name: "days_count",
                                 id: "guest_id"
                               },
-                              domProps: { value: _vm.fields.price_type.name }
+                              domProps: { value: _vm.item.price_type.name }
                             }),
                             _vm._v(" "),
                             _c(
@@ -40930,7 +40913,7 @@ var render = function() {
                     },
                     [
                       _c("h2", { staticClass: "text-center center-block" }, [
-                        _vm._v("Номенклатура #" + _vm._s(_vm.fields.id))
+                        _vm._v("Номенклатура #" + _vm._s(_vm.item.id))
                       ])
                     ]
                   )
@@ -40963,11 +40946,15 @@ var render = function() {
                           attrs: {
                             to: {
                               name: "nomenclatures.characteristics",
-                              params: { id: this.fields.id }
+                              params: { id: this.item.id }
                             }
                           }
                         },
-                        [_vm._v("Характеристики")]
+                        [
+                          _vm._v(
+                            "\n                        Характеристики\n                    "
+                          )
+                        ]
                       )
                     ],
                     1
@@ -41002,23 +40989,19 @@ var render = function() {
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: _vm.fields.name,
-                                expression: "fields.name"
+                                value: _vm.item.name,
+                                expression: "item.name"
                               }
                             ],
                             staticClass: "form-text form-control",
                             attrs: { type: "text", name: "name", id: "name" },
-                            domProps: { value: _vm.fields.name },
+                            domProps: { value: _vm.item.name },
                             on: {
                               input: function($event) {
                                 if ($event.target.composing) {
                                   return
                                 }
-                                _vm.$set(
-                                  _vm.fields,
-                                  "name",
-                                  $event.target.value
-                                )
+                                _vm.$set(_vm.item, "name", $event.target.value)
                               }
                             }
                           })
@@ -41044,7 +41027,7 @@ var render = function() {
                                 name: "days_count",
                                 id: "producer_id"
                               },
-                              domProps: { value: _vm.fields.producer.name }
+                              domProps: { value: _vm.item.producer.name }
                             }),
                             _vm._v(" "),
                             _c(
@@ -41058,11 +41041,7 @@ var render = function() {
                                   }
                                 }
                               },
-                              [
-                                _vm._v(
-                                  ">>\n                                    "
-                                )
-                              ]
+                              [_vm._v(">>\n                                ")]
                             )
                           ])
                         ]),
@@ -41087,7 +41066,7 @@ var render = function() {
                                 name: "days_count",
                                 id: "guest_id"
                               },
-                              domProps: { value: _vm.fields.price_type.name }
+                              domProps: { value: _vm.item.price_type.name }
                             }),
                             _vm._v(" "),
                             _c(
@@ -41101,11 +41080,7 @@ var render = function() {
                                   }
                                 }
                               },
-                              [
-                                _vm._v(
-                                  ">>\n                                    "
-                                )
-                              ]
+                              [_vm._v(">>\n                                ")]
                             )
                           ])
                         ]),
@@ -41131,7 +41106,7 @@ var render = function() {
                           },
                           [
                             _vm._v(
-                              "\n                                Изменить\n                            "
+                              "\n                            Изменить\n                        "
                             )
                           ]
                         )
@@ -41157,11 +41132,15 @@ var render = function() {
                           attrs: {
                             to: {
                               name: "nomenclatures.characteristics",
-                              params: { id: this.fields.id }
+                              params: { id: this.item.id }
                             }
                           }
                         },
-                        [_vm._v("Характеристики")]
+                        [
+                          _vm._v(
+                            "\n                        Характеристики\n                    "
+                          )
+                        ]
                       )
                     ],
                     1
@@ -41726,19 +41705,19 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: _vm.fields.name,
-                        expression: "fields.name"
+                        value: _vm.item.name,
+                        expression: "item.name"
                       }
                     ],
                     staticClass: "form-text form-control",
                     attrs: { type: "text", name: "name", id: "name" },
-                    domProps: { value: _vm.fields.name },
+                    domProps: { value: _vm.item.name },
                     on: {
                       input: function($event) {
                         if ($event.target.composing) {
                           return
                         }
-                        _vm.$set(_vm.fields, "name", $event.target.value)
+                        _vm.$set(_vm.item, "name", $event.target.value)
                       }
                     }
                   })
@@ -41759,19 +41738,19 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: _vm.fields.margin,
-                        expression: "fields.margin"
+                        value: _vm.item.margin,
+                        expression: "item.margin"
                       }
                     ],
                     staticClass: "form-text form-control",
                     attrs: { type: "number", name: "country", id: "country" },
-                    domProps: { value: _vm.fields.margin },
+                    domProps: { value: _vm.item.margin },
                     on: {
                       input: function($event) {
                         if ($event.target.composing) {
                           return
                         }
-                        _vm.$set(_vm.fields, "margin", $event.target.value)
+                        _vm.$set(_vm.item, "margin", $event.target.value)
                       }
                     }
                   })
@@ -41864,7 +41843,7 @@ var render = function() {
                 },
                 [
                   _c("h2", { staticClass: "text-center center-block" }, [
-                    _vm._v("Ценовая группа #" + _vm._s(_vm.fields.id))
+                    _vm._v("Ценовая группа #" + _vm._s(_vm.item.id))
                   ])
                 ]
               )
@@ -41908,19 +41887,19 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.fields.name,
-                            expression: "fields.name"
+                            value: _vm.item.name,
+                            expression: "item.name"
                           }
                         ],
                         staticClass: "form-text form-control",
                         attrs: { type: "text", name: "name", id: "name" },
-                        domProps: { value: _vm.fields.name },
+                        domProps: { value: _vm.item.name },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.$set(_vm.fields, "name", $event.target.value)
+                            _vm.$set(_vm.item, "name", $event.target.value)
                           }
                         }
                       })
@@ -41941,8 +41920,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.fields.margin,
-                            expression: "fields.margin"
+                            value: _vm.item.margin,
+                            expression: "item.margin"
                           }
                         ],
                         staticClass: "form-text form-control",
@@ -41951,13 +41930,13 @@ var render = function() {
                           name: "country",
                           id: "country"
                         },
-                        domProps: { value: _vm.fields.margin },
+                        domProps: { value: _vm.item.margin },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.$set(_vm.fields, "margin", $event.target.value)
+                            _vm.$set(_vm.item, "margin", $event.target.value)
                           }
                         }
                       })
@@ -42402,19 +42381,19 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: _vm.fields.name,
-                        expression: "fields.name"
+                        value: _vm.item.name,
+                        expression: "item.name"
                       }
                     ],
                     staticClass: "form-text form-control",
                     attrs: { type: "text", name: "name", id: "name" },
-                    domProps: { value: _vm.fields.name },
+                    domProps: { value: _vm.item.name },
                     on: {
                       input: function($event) {
                         if ($event.target.composing) {
                           return
                         }
-                        _vm.$set(_vm.fields, "name", $event.target.value)
+                        _vm.$set(_vm.item, "name", $event.target.value)
                       }
                     }
                   })
@@ -42435,19 +42414,19 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: _vm.fields.country,
-                        expression: "fields.country"
+                        value: _vm.item.country,
+                        expression: "item.country"
                       }
                     ],
                     staticClass: "form-text form-control",
                     attrs: { type: "text", name: "country", id: "country" },
-                    domProps: { value: _vm.fields.country },
+                    domProps: { value: _vm.item.country },
                     on: {
                       input: function($event) {
                         if ($event.target.composing) {
                           return
                         }
-                        _vm.$set(_vm.fields, "country", $event.target.value)
+                        _vm.$set(_vm.item, "country", $event.target.value)
                       }
                     }
                   })
@@ -42540,7 +42519,7 @@ var render = function() {
                 },
                 [
                   _c("h2", { staticClass: "text-center center-block" }, [
-                    _vm._v("Производитель #" + _vm._s(_vm.fields.id))
+                    _vm._v("Производитель #" + _vm._s(_vm.item.id))
                   ])
                 ]
               )
@@ -42584,19 +42563,19 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.fields.name,
-                            expression: "fields.name"
+                            value: _vm.item.name,
+                            expression: "item.name"
                           }
                         ],
                         staticClass: "form-text form-control",
                         attrs: { type: "text", name: "name", id: "name" },
-                        domProps: { value: _vm.fields.name },
+                        domProps: { value: _vm.item.name },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.$set(_vm.fields, "name", $event.target.value)
+                            _vm.$set(_vm.item, "name", $event.target.value)
                           }
                         }
                       })
@@ -42617,19 +42596,19 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.fields.country,
-                            expression: "fields.country"
+                            value: _vm.item.country,
+                            expression: "item.country"
                           }
                         ],
                         staticClass: "form-text form-control",
                         attrs: { type: "text", name: "country", id: "country" },
-                        domProps: { value: _vm.fields.country },
+                        domProps: { value: _vm.item.country },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.$set(_vm.fields, "country", $event.target.value)
+                            _vm.$set(_vm.item, "country", $event.target.value)
                           }
                         }
                       })
@@ -59644,19 +59623,51 @@ Vue.component('HomeComponent', _components_Home__WEBPACK_IMPORTED_MODULE_11__["d
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _PriceType__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PriceType */ "./resources/js/code/models/PriceType.js");
+/* harmony import */ var _Producer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Producer */ "./resources/js/code/models/Producer.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Nomenclature = function Nomenclature(id, name, producer, price_type, created_at, updated_at, deleted_at) {
-  _classCallCheck(this, Nomenclature);
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  this.id = id;
-  this.name = name;
-  this.producer = producer;
-  this.price_type = price_type;
-  this.created_at = created_at;
-  this.updated_at = updated_at;
-  this.deleted_at = deleted_at;
-};
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+
+var Nomenclature = /*#__PURE__*/function () {
+  function Nomenclature(id, name, producer, price_type, created_at, updated_at, deleted_at) {
+    _classCallCheck(this, Nomenclature);
+
+    if (!arguments.length) {
+      this.id = -1;
+      this.name = '';
+      this.producer = new _Producer__WEBPACK_IMPORTED_MODULE_1__["default"](-1, '', null);
+      this.price_type = new _PriceType__WEBPACK_IMPORTED_MODULE_0__["default"](-1, '', null);
+    } else {
+      this.id = id;
+      this.name = name;
+      this.producer = producer;
+      this.price_type = price_type;
+      this.created_at = created_at;
+      this.updated_at = updated_at;
+      this.deleted_at = deleted_at;
+    }
+  }
+
+  _createClass(Nomenclature, [{
+    key: "getDataForServer",
+    value: function getDataForServer() {
+      return {
+        id: this.id,
+        name: this.name,
+        producer_id: this.producer.id,
+        price_type_id: this.price_type.id
+      };
+    }
+  }]);
+
+  return Nomenclature;
+}();
 
 /* harmony default export */ __webpack_exports__["default"] = (Nomenclature);
 
@@ -59675,6 +59686,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var PriceType = function PriceType(id, name, margin, created_at, updated_at, deleted_at) {
   _classCallCheck(this, PriceType);
+
+  if (!arguments.length) {
+    this.id = -1;
+    this.name = '';
+    this.margin = 0;
+  }
 
   this.id = id;
   this.name = name;
@@ -59697,10 +59714,19 @@ var PriceType = function PriceType(id, name, margin, created_at, updated_at, del
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _PriceType__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PriceType */ "./resources/js/code/models/PriceType.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
 
 var Producer = function Producer(id, name, country, created_at, updated_at, deleted_at) {
   _classCallCheck(this, Producer);
+
+  if (!arguments.length) {
+    this.id = -1;
+    this.name = '';
+    this.country = '';
+  }
 
   this.id = id;
   this.name = name;

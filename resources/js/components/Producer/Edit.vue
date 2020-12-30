@@ -1,10 +1,10 @@
-<template >
-    <div v-if="is_visible"  class="row" style="width: 100%">
+<template>
+    <div v-if="is_visible" class="row" style="width: 100%">
         <div class="offset-4 col-md-4">
             <div class="offset-2 col-md-8">
                 <error-component :errors="errors"></error-component>
                 <div style="margin-bottom: 10px; height: 50px" class=" form-control">
-                    <h2 class="text-center center-block">Производитель #{{fields.id}}</h2>
+                    <h2 class="text-center center-block">Производитель #{{ item.id }}</h2>
                 </div>
             </div>
             <div class="row offset-2 col-md-8">
@@ -14,12 +14,12 @@
 
                         <div class=" form-group col-md-11">
                             <label class="col-form-label" for="name">Наименование</label>
-                            <input type="text" name="name" id="name" v-model="fields.name"
+                            <input type="text" name="name" id="name" v-model="item.name"
                                    class="form-text form-control"/>
                         </div>
                         <div class=" form-group col-md-11">
                             <label class="col-form-label" for="country">Страна</label>
-                            <input type="text" name="country" id="country" v-model="fields.country"
+                            <input type="text" name="country" id="country" v-model="item.country"
                                    class="form-text form-control"/>
                         </div>
                         <button @click="submit()" type="submit"
@@ -38,14 +38,16 @@
 </template>
 
 <script>
+import Producer from "../../code/models/Producer";
+
 export default {
     name: "ProducerEdit",
 
     data() {
         return {
-            fields: {id: -1, name: "", country: ""},
+            item: new Producer(),
 
-            is_visible : false,
+            is_visible: false,
             loaded: true,
             errors: [],
             success: true
@@ -54,7 +56,7 @@ export default {
     },
     beforeCreate() {
         axios.get(`/api/producers/${this.$route.params.id}`).then(response => {
-            this.fields = response.data;
+            this.item = new Producer(response.data.id, response.data.name, response.data.country, response.data.created_at, response.data.updated_at, response.data.deleted_at)
 
             this.is_visible = true;
         }).catch((error) => {
@@ -70,10 +72,10 @@ export default {
 
         submit: function () {
 
-            if(!this.validateFields()) return;
+            if (!this.validateFields()) return;
             this.loaded = false;
 
-            axios.patch(`/api/producers/${this.fields.id}`, this.fields).then(response => {
+            axios.patch(`/api/producers/${this.item.id}`, this.item).then(response => {
 
                 //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
                 this.loaded = true;
@@ -89,25 +91,24 @@ export default {
             }).catch((error) => {
                 console.log("Ошибка!")
                 //this.$router.push({name: 'producers.index'});
-                for( var field in this.fields )
-                    if(error.response.data.errors[field] != null) {
+                for (var field in this.item)
+                    if (error.response.data.errors[field] != null) {
                         console.log(error.response.data.errors[field][0]);
                         this.errors.push(error.response.data.errors[field][0])
                     }
                 this.loaded = true;
             })
         },
-        validateFields(){
+        validateFields() {
             this.errors = [];
-            if(this.fields.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
-            if(this.fields.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
-            if(this.fields.country.length === 0) this.errors.push("Поле \"Страна\" должно быть заполнено");
-            if(this.fields.country.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
+            if (this.item.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
+            if (this.item.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
+            if (this.item.country.length === 0) this.errors.push("Поле \"Страна\" должно быть заполнено");
+            if (this.item.country.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
 
 
             return this.errors.length === 0;
         }
-
 
 
     }

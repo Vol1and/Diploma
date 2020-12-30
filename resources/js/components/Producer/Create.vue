@@ -14,12 +14,12 @@
 
                         <div class=" form-group col-md-11">
                             <label class="col-form-label" for="name">Наименование</label>
-                            <input type="text" name="name" id="name" v-model="fields.name"
+                            <input type="text" name="name" id="name" v-model="item.name"
                                    class="form-text form-control"/>
                         </div>
                         <div class=" form-group col-md-11">
                             <label class="col-form-label" for="country">Страна</label>
-                            <input type="text" name="country" id="country" v-model="fields.country"
+                            <input type="text" name="country" id="country" v-model="item.country"
                                    class="form-text form-control"/>
                         </div>
                         <button @click="submit()" type="submit"
@@ -38,12 +38,14 @@
 </template>
 
 <script>
+import Producer from "../../code/models/Producer";
+
 export default {
     name: "ProducerCreate",
 
     data() {
         return {
-            fields: {name: "", country: ""},
+            item: new Producer(),
 
             loaded: true,
             errors: [],
@@ -61,7 +63,7 @@ export default {
             this.loaded = false;
             this.errors = [];
 
-            axios.post('/api/producers', this.fields).then(response => {
+            axios.post('/api/producers', this.item).then(response => {
 
                 //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
                 this.loaded = true;
@@ -81,10 +83,10 @@ export default {
         },
         validateFields(){
             this.errors = [];
-            if(this.fields.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
-            if(this.fields.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
-            if(this.fields.country.length === 0) this.errors.push("Поле \"Страна\" должно быть заполнено");
-            if(this.fields.country.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
+            if(this.item.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
+            if(this.item.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
+            if(this.item.country.length === 0) this.errors.push("Поле \"Страна\" должно быть заполнено");
+            if(this.item.country.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
 
 
             return this.errors.length === 0;
