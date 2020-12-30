@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use DB;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
 
 class PriceTypeSeeder extends Seeder
 {
@@ -16,16 +17,17 @@ class PriceTypeSeeder extends Seeder
     {
         $data = [
             [
-                'name'  => 'Общая группа',
-                'margin' => 15
+                'name' => 'Общая группа',
+                'margin' => 15, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()
             ],
             [
-                'name'  => 'Специальная группа №1',
-                'margin' => 12
+                'name' => 'Специальная группа №1',
+                'margin' => 12, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()
             ],
             [
-                'name'  => 'Специальная группа №2',
-                'margin' => 5
+                'name' => 'Специальная группа №2',
+                'margin' => 5, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),
+
             ]
         ];
 

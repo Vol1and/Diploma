@@ -4,7 +4,8 @@ import PriceType from "../../code/models/PriceType";
 
 //содержит переменные, которые будут помещены в модуль хранилища
 const state = () => ({
-    items: [] //массив с моделями этого модуля
+    items: [], //массив с моделями этого модуля
+    //when_last_updated: '2000-12-28T00:00:00.000000Z',
 })
 
 // геттеры - способ получения информации, которую не имеет смысла хранить в state
@@ -18,14 +19,13 @@ const getters = {
 
         return Math.ceil(state.items.length / items_per_page);
     },
-    //логика для того чтобы узнать, были ли данные изменены на сервере
-//   last_updated: state => {
-//       return state.items.sort(function(a, b) {
-//           var keyA = new Date(a.updated_at),
-//               keyB = new Date(b.updated_at);
-//           return keyA > keyB ? -1 : keyB > keyA ? 1 : 0;
-//       })[0];
-//   },
+
+
+
+   //when_last_updated: state => {
+   //    return state.when_last_updated;
+   //}
+
 
 }
 
@@ -58,14 +58,51 @@ const actions = {
             })
         });
 
-    }
+    },
+    //updateIfChanged(context) {
+    //    return new Promise((resolve, reject) => {
+    //        //запрашивает данные с сервера
+    //        axios.get('/api/nomenclature/last-updated').then((response) => {
+//
+    //            if (context.getters.when_last_updated !== response.data) {
+//
+//
+    //                context.commit('setWhenLastUpdated', response.data);
+//
+    //                context.dispatch("update").then(() => {
+//
+    //                });
+    //            }
+//
+    //        }).catch((error) => {
+    //            //если не ок - асинхронный ответ с кодом ошибки
+    //            reject(error.response.data.message);
+    //        })
+    //        resolve();
+    //    });
+//
+    //},
+   //updateWhenLastUpdated(context) {
+   //    axios.get('/api/nomenclature/last_updated').then((response) => {
+   //        context.commit('setWhenLastUpdated', response.data);
+   //        //асинхронный ответ - все ок
+   //        resolve();
+   //    }).catch((error) => {
+   //        //если не ок - асинхронный ответ с кодом ошибки
+   //        reject(error.response.data.message);
+   //    })
+   //}
 }
 
 // мутации - СИНХРОННЫЕ операции которые меняют данные в хранилищах
 const mutations = {
     setItems(state, items) {
         state.items = items;
-    }
+    },
+   //setWhenLastUpdated(state, item) {
+
+   //    state.when_last_updated = item;
+   //}
 }
 
 export default {

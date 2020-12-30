@@ -120,7 +120,19 @@ class NomenclatureController extends OriginController
 
 
    //public function whenLastUpdate(){
-
+//
    //    return $this->nomenclatureRepository->getLastUpdated()->updated_at;
    //}
+
+    public function filter(Request $request)
+    {
+
+        $name = $request->input('name');
+        $producer_id = $request->input('producer_id');
+        $price_type_id = $request->input('price_type_id');
+
+        $result = $this->nomenclatureRepository->getFilter('%' . $name . '%',   $producer_id, $price_type_id);
+
+        return $result->toJson();
+    }
 }

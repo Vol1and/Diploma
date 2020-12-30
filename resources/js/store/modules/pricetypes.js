@@ -28,7 +28,7 @@ const actions = {
             axios.get('/api/price-types').then((response) => {
                     let result = [];
                     //оборачиваем каждый элемент пришедших данных в модель модуля
-                    response.data.forEach(item => result.push(new PriceType(item.id, item.name, item.country, item.created_at, item.updated_at, item.deleted_at)))
+                    response.data.forEach(item => result.push(new PriceType(item.id, item.name, item.margin, item.created_at, item.updated_at, item.deleted_at)))
 
                     //дергаем мутатор
                     context.commit('setItems', result);

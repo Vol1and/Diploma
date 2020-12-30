@@ -19,7 +19,7 @@
             <tr v-for="item in page_of_items" class="row-hover"  :key="item.id" :class="{'highlight': (item.id === selected_item)}"
                 @click="rowSelected(item.id)"  @dblclick="toEdit(item.id)">
                 <td>{{ item.id }}</td>
-                <td>{{item.name}}</td>
+                <td>{{ item.name}}</td>
                 <td>{{ item.margin}}</td>
             </tr>
             </tbody>
@@ -72,8 +72,8 @@ export default {
 
 
             this.is_reload = true;
-            this.$store.dispatch('producers/update').then(() => {
-                this.page_count = this.$store.getters['producers/items_length'](this.items_per_page);
+            this.$store.dispatch('pricetypes/update').then(() => {
+                this.page_count = this.$store.getters['pricetypes/items_length'](this.items_per_page);
                 this.onChangePage();
                 this.is_reload = false;
             }, (reason => {
@@ -84,7 +84,7 @@ export default {
         },
         onChangePage(){
             // update page of items
-            this.page_of_items = this.$store.getters['producers/items'].slice(this.items_per_page*(this.current_page-1), (this.items_per_page*this.current_page));
+            this.page_of_items = this.$store.getters['pricetypes/items'].slice(this.items_per_page*(this.current_page-1), (this.items_per_page*this.current_page));
         },
 
         toEdit(id){

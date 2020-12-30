@@ -33,8 +33,8 @@ const routes = [
 
 
     { path: '/agents',          name: "agents.index", component: AgentIndex },
-    { path: '/agents/create',   name: "agents.create", component: PriceTypeCreate },
-    { path: '/agents/:id',      name: "agents.edit", component: PriceTypeEdit },
+    { path: '/agents/create',   name: "agents.create", component: AgentCreate },
+    { path: '/agents/:id',      name: "agents.edit", component: AgentEdit },
 
 
     { path: '/price-types',name: "price-types.index", component:  PriceTypeIndex},

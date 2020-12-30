@@ -15,11 +15,13 @@ class ProducersRepository extends BaseRepository
         return Model::class;
     }
 
-    public function getTable(){
+    public function getTable()
+    {
         return Model::all();
     }
 
-    public function find($id){
+    public function find($id)
+    {
         //return Model::find($id);
         $columns = [
             'id',
@@ -30,12 +32,28 @@ class ProducersRepository extends BaseRepository
 
     }
 
-  //  public function getComboBox(){
-  //      $columns = 'id, name';
-  //      $result = $this->StartConditions()
-  //          ->selectRaw($columns)
-  //          ->toBase()
-  //          ->get();
-  //      return $result;
-  //  }
+    public function getFilter($name = null, $country = null)
+    {
+
+        $columns = [
+            'id',
+            'name',
+            'country'
+        ];
+
+
+        $query = $this->StartConditions()
+            ->select($columns);
+
+
+        if ($name)
+            $query = $query->where('name', 'like', $name);
+
+        if ($country)
+            $query = $query->where('country', 'like', $country);
+
+        return $query->get();
+
+
+    }
 }

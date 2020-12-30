@@ -19,7 +19,7 @@ class Nomenclatures extends Migration
             $table->string('name');
             $table->bigInteger('producer_id')->unsigned();
             $table->bigInteger('price_type_id')->unsigned();
-            $table->bigInteger('med_form_id')->unsigned();
+            $table->bigInteger('med_form_id')->unsigned()->default(1);
 
             $table->foreign('producer_id')->references('id')
                 ->on('producers');

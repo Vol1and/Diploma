@@ -16,8 +16,8 @@ class CreateAgentsTable extends Migration
         Schema::create('agents', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
-            $table->string('billing', 100)->default('empty');
-            $table->string('address', 150)->default('empty');
+            $table->string('billing', 100)->default('empty')->nullable();
+            $table->string('address', 150)->default('empty')->nullable();
             $table->string('description',150)->nullable();
             $table->timestamps();
         });

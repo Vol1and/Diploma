@@ -21,7 +21,7 @@
                             <div class="form-group  col-md-11">
                                 <label class="col-form-label" for="guest_id">Производитель</label>
                                 <div class="form-inline">
-                                    <input type="text" disabled name="days_count" :value="producer_field"
+                                    <input type="text" disabled name="days_count" :value="fields.producer.name"
                                            id="producer_id"
                                            style="margin-top: 0" class="form-text form-control col-md-10"/>
                                     <button @click="selectingProducer()" type="button" class="btn  btn-primary">>>
@@ -31,7 +31,7 @@
                             <div class="form-group  col-md-11">
                                 <label class="col-form-label" for="guest_id">Ценова группа</label>
                                 <div class="form-inline">
-                                    <input type="text" disabled name="days_count" :value="price_type_field"
+                                    <input type="text" disabled name="days_count" :value="fields.price_type.name"
                                            id="guest_id"
                                            style="margin-top: 0" class="form-text form-control col-md-10"/>
                                     <button @click="selectingPriceType()" type="button" class="btn  btn-primary">>>
@@ -62,12 +62,10 @@ export default {
 
     data() {
         return {
-            fields: {name: "", producer_id: -1, price_type_id: -1},
+            fields: {name: "", producer: {id: null, name : ""}, price_type: {id: null, name : ""}},
             choosing_state: 0,
             loaded: true,
-            errors: [],
-            producer_field: "",
-            price_type_field: ""
+            errors: []
 
         };
     },
@@ -98,8 +96,8 @@ export default {
             this.errors = [];
             if (this.fields.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
             if (this.fields.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
-            if (this.fields.price_type_id < 0) this.errors.push("Ошибка в поле \"Ценовая группа\"");
-            if (this.fields.producer_id < 0) this.errors.push("Ошибка в поле \"Производитель\"");
+            if (!this.fields.price_type.id) this.errors.push("Ошибка в поле \"Ценовая группа\"");
+            if (!this.fields.producer.id) this.errors.push("Ошибка в поле \"Производитель\"");
 
 
             return this.errors.length === 0;
@@ -111,14 +109,12 @@ export default {
             this.choosing_state = 2;
         },
         onSelectedProducer(data) {
-            this.fields.producer_id = data.producer.id;
-            this.producer_field = data.producer.name;
+            this.fields.producer = data.producer;
             this.choosing_state = 0;
         },
 
         onSelectedPriceType(data) {
-            this.fields.price_type_id = data.price_type.id;
-            this.price_type_field = data.price_type.name;
+            this.fields.price_type = data.price_type;
             this.choosing_state = 0;
         },
         onBack(){

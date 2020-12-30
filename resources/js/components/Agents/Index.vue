@@ -89,7 +89,7 @@ export default {
         },
 
         toEdit(id){
-            this.$router.push({name: 'price-types.edit', params:{id : id}});
+            this.$router.push({name: 'agents.edit', params:{id : id}});
         }
     }
 

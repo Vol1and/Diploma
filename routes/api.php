@@ -23,8 +23,13 @@ Route::apiResource('/producers', "App\Http\Controllers\ProducerController");
 Route::apiResource('/price-types', "App\Http\Controllers\PriceTypeController");
 
 //todo: продумать функционал для апдейта хранилища только в случае изменения таблицы
-Route::get('/nomenclature/last-updated', [App\Http\Controllers\NomenclatureController::class, 'whenLastUpdate']);
+//Route::get('/nomenclature/last-updated', [App\Http\Controllers\NomenclatureController::class, 'whenLastUpdate']);
+Route::get('/producer/filter', [App\Http\Controllers\ProducerController::class, 'filter']);
+Route::get('/nomenclature/filter', [App\Http\Controllers\NomenclatureController::class, 'filter']);
+
 Route::apiResource('/nomenclatures', "App\Http\Controllers\NomenclatureController");
+
+
 
 
 

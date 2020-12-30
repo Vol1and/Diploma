@@ -46,7 +46,24 @@ const actions = {
             })
         });
 
+    },
+    sendNewItem(context, data){
+        return new Promise((resolve, reject) => {
+            //запрашивает данные с сервера
+            axios.post('/api/producers', data.fields).then(response => {
+
+                this.commit
+                resolve();
+
+                //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
+            }).catch((error) => {
+                console.log("Ошибка!")
+                reject(error.response.data.message);
+            })
+        });
     }
+
+
 }
 
 // мутации - СИНХРОННЫЕ операции которые меняют данные в хранилищах

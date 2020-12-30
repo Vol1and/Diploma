@@ -29,7 +29,6 @@ class ProducerController extends OriginController
     }
 
 
-
     //принимает реквест ProducerCreateRequest
     public function store(ProducerCreateRequest $request)
     {
@@ -41,23 +40,22 @@ class ProducerController extends OriginController
         $item->save();
 
         //если все ок - возвращаем ответ со статусом 201
-        if($item)
+        if ($item)
             return response(null, 201);
         //либо можно передавать айди созданного элемента
         //return response($item->id, 201);
 
         //если нет - отправляем ошибку (статус возмонжо стоит поменять)
-        return response(null,500);
+        return response(null, 500);
 
     }
-
 
 
     public function show($id)
     {
         $result = $this->producerRepository->find($id);
 
-        if(empty($result) || !$result){
+        if (empty($result) || !$result) {
 
             return response(null, 404);
         }
@@ -68,8 +66,8 @@ class ProducerController extends OriginController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(ProducerCreateRequest $request)
@@ -85,14 +83,13 @@ class ProducerController extends OriginController
         //Что должно вовзращать при ошибке сохранения
         if (!$result) {
             return response(null, 404);
-        }
-        else  return response(null, 200);
+        } else  return response(null, 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -101,8 +98,17 @@ class ProducerController extends OriginController
     }
 
 
-    public function filter($id)
+    public function filter(Request $request)
     {
-        //
+
+        //return $request->input();
+
+        $name = $request->input('name');
+        $country = $request->input('country');
+        //dd($name,$country);
+
+        $result = $this->producerRepository->getFilter('%' . $name . '%', '%' . $country . '%');
+
+        return $result->toJson();
     }
 }

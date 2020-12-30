@@ -4,7 +4,7 @@
             <div class="offset-2 col-md-8">
                 <error-component :errors="errors"></error-component>
                 <div style="margin-bottom: 10px; height: 50px" class=" form-control">
-                    <h2 class="text-center center-block">Новая ценовая группа</h2>
+                    <h2 class="text-center center-block">Новый контрагент</h2>
                 </div>
             </div>
             <div class="row offset-2 col-md-8">
@@ -18,8 +18,18 @@
                                    class="form-text form-control"/>
                         </div>
                         <div class=" form-group col-md-11">
-                            <label class="col-form-label" for="country">Наценка</label>
-                            <input type="number" name="country" id="country" v-model="fields.margin"
+                            <label class="col-form-label" for="billing">Биллинг</label>
+                            <input type="text" name="country" id="billing" v-model="fields.billing"
+                                   class="form-text form-control"/>
+                        </div>
+                        <div class=" form-group col-md-11">
+                            <label class="col-form-label" for="address">Адрес</label>
+                            <input type="text" name="country" id="address" v-model="fields.address"
+                                   class="form-text form-control"/>
+                        </div>
+                        <div class=" form-group col-md-11">
+                            <label class="col-form-label" for="description">Доп. инфо</label>
+                            <input type="text" name="country" id="description" v-model="fields.description"
                                    class="form-text form-control"/>
                         </div>
                         <button @click="submit()" type="submit"
@@ -39,11 +49,11 @@
 
 <script>
 export default {
-    name: "PriceTypeCreate",
+    name: "AgentsCreate",
 
     data() {
         return {
-            fields: {name: "", country: ""},
+            fields: {name: "", billing: "", address: "", description: ""},
 
             loaded: true,
             errors: [],
@@ -57,36 +67,26 @@ export default {
 
         submit: function () {
 
-            if(!this.validateFields()) return;
+            if (!this.validateFields()) return;
 
             this.loaded = false;
 
 
-            axios.post('/api/price-types', this.fields).then(response => {
-
+            axios.post('/api/agents', this.fields).then(response => {
                 this.loaded = true;
-                //console.log(response.data);
+                this.$router.push({name: 'agents.index'});
 
-                console.log("Ответ получен!")
-                if (response.status >= 400) {
 
-                    this.errors.push(response.statusText);
-
-                } else this.$router.push({name: 'price-types.index'});
-                // window.location.href = response.data;
             }).catch((error) => {
                 console.log("Ошибка!")
                 this.errors.push(error.response.data.message);
                 this.loaded = true;
             })
         },
-        validateFields(){
+        validateFields() {
             this.errors = [];
-            if(this.fields.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
-            if(this.fields.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
-            if(this.fields.margin < 0) this.errors.push("Поле \"Наценка\" не должно быть отрицательным");
-            if(this.fields.margin > 255) this.errors.push("Превышено максимально допустимое значение поля \"Наценка\"");
-
+            if (this.fields.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
+            if (this.fields.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
 
             return this.errors.length === 0;
         }

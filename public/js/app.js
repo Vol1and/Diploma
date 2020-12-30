@@ -2047,13 +2047,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "PriceTypeCreate",
+  name: "AgentsCreate",
   data: function data() {
     return {
       fields: {
         name: "",
-        country: ""
+        billing: "",
+        address: "",
+        description: ""
       },
       loaded: true,
       errors: [],
@@ -2066,17 +2078,12 @@ __webpack_require__.r(__webpack_exports__);
 
       if (!this.validateFields()) return;
       this.loaded = false;
-      axios.post('/api/price-types', this.fields).then(function (response) {
-        _this.loaded = true; //console.log(response.data);
+      axios.post('/api/agents', this.fields).then(function (response) {
+        _this.loaded = true;
 
-        console.log("Ответ получен!");
-
-        if (response.status >= 400) {
-          _this.errors.push(response.statusText);
-        } else _this.$router.push({
-          name: 'price-types.index'
-        }); // window.location.href = response.data;
-
+        _this.$router.push({
+          name: 'agents.index'
+        });
       })["catch"](function (error) {
         console.log("Ошибка!");
 
@@ -2089,8 +2096,6 @@ __webpack_require__.r(__webpack_exports__);
       this.errors = [];
       if (this.fields.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
       if (this.fields.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
-      if (this.fields.margin < 0) this.errors.push("Поле \"Наценка\" не должно быть отрицательным");
-      if (this.fields.margin > 255) this.errors.push("Превышено максимально допустимое значение поля \"Наценка\"");
       return this.errors.length === 0;
     }
   }
@@ -2146,8 +2151,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "PriceTypeEdit",
+  name: "AgentsEdit",
   data: function data() {
     return {
       fields: {
@@ -2164,14 +2179,14 @@ __webpack_require__.r(__webpack_exports__);
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get("/api/price-types/".concat(this.$route.params.id)).then(function (response) {
+    axios.get("/api/agents/".concat(this.$route.params.id)).then(function (response) {
       _this.fields = response.data;
       _this.is_visible = true;
     })["catch"](function (error) {
       console.log("Ошибка!");
 
       _this.$router.push({
-        name: 'price-types.index'
+        name: 'agents.index'
       });
     });
   },
@@ -2179,24 +2194,17 @@ __webpack_require__.r(__webpack_exports__);
     submit: function submit() {
       var _this2 = this;
 
-      this.fields.margin = this.fields.margin.replace(',', '.');
-      console.log(this.fields.margin);
       if (!this.validateFields()) return;
-      this.fields.margin = parseFloat(this.fields.margin);
       this.loaded = false;
-      axios.patch("/api/price-types/".concat(this.fields.id), this.fields).then(function (response) {
-        //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
+      axios.patch("/api/agents/".concat(this.fields.id), this.fields).then(function (response) {
         _this2.loaded = true;
         console.log("Ответ получен!");
 
         _this2.$router.push({
-          name: 'price-types.index'
-        }); //if (response.status >= 400) {
-        //    this.errors.push(response.statusText);
-        //} else
-
+          name: 'agents.index'
+        });
       })["catch"](function (error) {
-        console.log("Ошибка!"); //this.$router.push({name: 'producers.index'});
+        console.log("Ошибка!");
 
         _this2.errors.push(error.response.data.message);
 
@@ -2207,8 +2215,6 @@ __webpack_require__.r(__webpack_exports__);
       this.errors = [];
       if (this.fields.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
       if (this.fields.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
-      if (this.fields.margin < 0) this.errors.push("Поле \"Наценка\" не должно быть отрицательным");
-      if (this.fields.margin > 255) this.errors.push("Превышено максимально допустимое значение поля \"Наценка\"");
       return this.errors.length === 0;
     }
   }
@@ -2312,7 +2318,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     toEdit: function toEdit(id) {
       this.$router.push({
-        name: 'price-types.edit',
+        name: 'agents.edit',
         params: {
           id: id
         }
@@ -2587,14 +2593,18 @@ __webpack_require__.r(__webpack_exports__);
     return {
       fields: {
         name: "",
-        producer_id: -1,
-        price_type_id: -1
+        producer: {
+          id: null,
+          name: ""
+        },
+        price_type: {
+          id: null,
+          name: ""
+        }
       },
       choosing_state: 0,
       loaded: true,
-      errors: [],
-      producer_field: "",
-      price_type_field: ""
+      errors: []
     };
   },
   methods: {
@@ -2623,8 +2633,8 @@ __webpack_require__.r(__webpack_exports__);
       this.errors = [];
       if (this.fields.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
       if (this.fields.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
-      if (this.fields.price_type_id < 0) this.errors.push("Ошибка в поле \"Ценовая группа\"");
-      if (this.fields.producer_id < 0) this.errors.push("Ошибка в поле \"Производитель\"");
+      if (!this.fields.price_type.id) this.errors.push("Ошибка в поле \"Ценовая группа\"");
+      if (!this.fields.producer.id) this.errors.push("Ошибка в поле \"Производитель\"");
       return this.errors.length === 0;
     },
     selectingProducer: function selectingProducer() {
@@ -2634,13 +2644,11 @@ __webpack_require__.r(__webpack_exports__);
       this.choosing_state = 2;
     },
     onSelectedProducer: function onSelectedProducer(data) {
-      this.fields.producer_id = data.producer.id;
-      this.producer_field = data.producer.name;
+      this.fields.producer = data.producer;
       this.choosing_state = 0;
     },
     onSelectedPriceType: function onSelectedPriceType(data) {
-      this.fields.price_type_id = data.price_type.id;
-      this.price_type_field = data.price_type.name;
+      this.fields.price_type = data.price_type;
       this.choosing_state = 0;
     },
     onBack: function onBack() {
@@ -2748,9 +2756,7 @@ __webpack_require__.r(__webpack_exports__);
       is_visible: false,
       loaded: true,
       errors: [],
-      success: true,
-      producer_field: "",
-      price_type_field: ""
+      success: true
     };
   },
   beforeCreate: function beforeCreate() {
@@ -2759,10 +2765,8 @@ __webpack_require__.r(__webpack_exports__);
     axios.get("/api/nomenclatures/".concat(this.$route.params.id)).then(function (response) {
       _this.fields.id = response.data.id;
       _this.fields.name = response.data.name;
-      _this.fields.producer_id = response.data.producer.id;
-      _this.fields.price_type_id = response.data.price_type.id;
-      _this.producer_field = response.data.producer.name;
-      _this.price_type_field = response.data.price_type.name;
+      _this.fields.producer = response.data.producer;
+      _this.fields.price_type = response.data.price_type;
       _this.is_visible = true;
     })["catch"](function (error) {
       console.log("Ошибка!");
@@ -2777,8 +2781,14 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       if (!this.validateFields()) return;
-      this.loaded = false;
-      axios.patch("/api/nomenclatures/".concat(this.fields.id), this.fields).then(function (response) {
+      this.loaded = false; //todo:костыль; поправить отправляемые данные
+
+      axios.patch("/api/nomenclatures/".concat(this.fields.id), {
+        id: this.fields.id,
+        name: this.fields.name,
+        producer_id: this.fields.producer.id,
+        price_type_id: -1
+      }).then(function (response) {
         //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
         _this2.loaded = true;
         console.log("Ответ получен!");
@@ -2798,8 +2808,8 @@ __webpack_require__.r(__webpack_exports__);
       this.errors = [];
       if (this.fields.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
       if (this.fields.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
-      if (this.fields.price_type_id < 0) this.errors.push("Ошибка в поле \"Ценовая группа\"");
-      if (this.fields.producer_id < 0) this.errors.push("Ошибка в поле \"Производитель\"");
+      if (this.fields.price_type.id < 0) this.errors.push("Ошибка в поле \"Ценовая группа\"");
+      if (this.fields.producer.id < 0) this.errors.push("Ошибка в поле \"Производитель\"");
       return this.errors.length === 0;
     },
     selectingProducer: function selectingProducer() {
@@ -2809,13 +2819,11 @@ __webpack_require__.r(__webpack_exports__);
       this.choosing_state = 2;
     },
     onSelectedProducer: function onSelectedProducer(data) {
-      this.fields.producer_id = data.producer.id;
-      this.producer_field = data.producer.name;
+      this.fields.producer = data.producer;
       this.choosing_state = 0;
     },
     onSelectedPriceType: function onSelectedPriceType(data) {
-      this.fields.price_type_id = data.price_type.id;
-      this.price_type_field = data.price_type.name;
+      this.fields.price_type = data.price_type;
       this.choosing_state = 0;
     },
     onBack: function onBack() {
@@ -2835,6 +2843,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _code_models_Producer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../code/models/Producer */ "./resources/js/code/models/Producer.js");
+/* harmony import */ var _code_models_Nomenclature__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../code/models/Nomenclature */ "./resources/js/code/models/Nomenclature.js");
+/* harmony import */ var _code_models_PriceType__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../code/models/PriceType */ "./resources/js/code/models/PriceType.js");
 //
 //
 //
@@ -2882,10 +2893,94 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "NomenclatureIndex",
   data: function data() {
     return {
+      filter_fields: {
+        name_str: "",
+        producer: {
+          name: ""
+        },
+        price_type: {
+          name: ""
+        }
+      },
+      filter_state: false,
+      choosing_state: 0,
+      filter_visible: false,
       current_page: 1,
       items_per_page: 10,
       page_count: 1,
@@ -2905,22 +3000,54 @@ __webpack_require__.r(__webpack_exports__);
     update: function update() {
       var _this = this;
 
+      this.filter_state = false;
+      this.filter_fields = {
+        name_str: "",
+        producer: {
+          name: "",
+          id: null
+        },
+        price_type: {
+          name: "",
+          id: null
+        }
+      };
       this.is_reload = true;
       this.$store.dispatch('nomenclature/update').then(function () {
+        _this.is_reload = false;
         _this.page_count = _this.$store.getters['nomenclature/items_length'](_this.items_per_page);
+        _this.current_page = 1;
 
         _this.onChangePage();
-
-        _this.is_reload = false;
       }, function (reason) {
         console.log("\u0427\u0442\u043E \u0442\u043E \u043F\u043E\u0448\u043B\u043E \u043D\u0435 \u0442\u0430\u043A. \u041A\u043E\u0434 \u043E\u0442\u0432\u0435\u0442\u0430 - ".concat(reason));
         _this.is_reload = false;
-      });
-      console.log(this.$store.getters['nomenclature/last_updated']);
+      }); //console.log(this.$store.getters['nomenclature/last_updated']);
     },
     onChangePage: function onChangePage() {
       // update page of items
       this.page_of_items = this.$store.getters['nomenclature/items'].slice(this.items_per_page * (this.current_page - 1), this.items_per_page * this.current_page);
+    },
+    filter: function filter() {
+      var _this2 = this;
+
+      this.filter_state = true;
+      axios.get('/api/nomenclature/filter', {
+        params: {
+          name: this.filter_fields.name_str,
+          producer_id: this.filter_fields.producer.id,
+          price_type_id: this.filter_fields.price_type.id
+        }
+      }).then(function (response) {
+        _this2.page_of_items = []; //оборачиваем каждый элемент пришедших данных в модель модуля
+
+        response.data.forEach(function (item) {
+          return _this2.page_of_items.push(new _code_models_Nomenclature__WEBPACK_IMPORTED_MODULE_1__["default"](item.id, item.name, new _code_models_Producer__WEBPACK_IMPORTED_MODULE_0__["default"](item.producer.id, item.producer.name, item.producer.country, item.producer.created_at, item.producer.updated_at, item.producer.deleted_at), new _code_models_PriceType__WEBPACK_IMPORTED_MODULE_2__["default"](item.price_type.id, item.price_type.name, item.price_type.margin, item.price_type.created_at, item.price_type.updated_at, item.price_type.deleted_at), item.created_at, item.updated_at, item.deleted_at));
+        });
+      })["catch"](function (error) {
+        //если не ок - асинхронный ответ с кодом ошибки
+        console.log("\u0427\u0442\u043E \u0442\u043E \u043F\u043E\u0448\u043B\u043E \u043D\u0435 \u0442\u0430\u043A. \u041A\u043E\u0434 \u043E\u0442\u0432\u0435\u0442\u0430 - ".concat(error));
+      });
     },
     toEdit: function toEdit(id) {
       this.$router.push({
@@ -2929,6 +3056,26 @@ __webpack_require__.r(__webpack_exports__);
           id: id
         }
       });
+    },
+    switch_filter: function switch_filter() {
+      this.filter_visible = !this.filter_visible;
+    },
+    selectingProducer: function selectingProducer() {
+      this.choosing_state = 1;
+    },
+    selectingPriceType: function selectingPriceType() {
+      this.choosing_state = 2;
+    },
+    onSelectedProducer: function onSelectedProducer(data) {
+      this.filter_fields.producer = data.producer;
+      this.choosing_state = 0;
+    },
+    onSelectedPriceType: function onSelectedPriceType(data) {
+      this.filter_fields.price_type = data.price_type;
+      this.choosing_state = 0;
+    },
+    onBack: function onBack() {
+      this.choosing_state = 0;
     }
   }
 });
@@ -3338,8 +3485,8 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.is_reload = true;
-      this.$store.dispatch('producers/update').then(function () {
-        _this.page_count = _this.$store.getters['producers/items_length'](_this.items_per_page);
+      this.$store.dispatch('pricetypes/update').then(function () {
+        _this.page_count = _this.$store.getters['pricetypes/items_length'](_this.items_per_page);
 
         _this.onChangePage();
 
@@ -3351,7 +3498,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     onChangePage: function onChangePage() {
       // update page of items
-      this.page_of_items = this.$store.getters['producers/items'].slice(this.items_per_page * (this.current_page - 1), this.items_per_page * this.current_page);
+      this.page_of_items = this.$store.getters['pricetypes/items'].slice(this.items_per_page * (this.current_page - 1), this.items_per_page * this.current_page);
     },
     toEdit: function toEdit(id) {
       this.$router.push({
@@ -3724,6 +3871,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _code_models_Producer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../code/models/Producer */ "./resources/js/code/models/Producer.js");
 //
 //
 //
@@ -3799,12 +3947,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ProducerIndex",
   data: function data() {
     return {
-      name_str: "",
-      country_str: "",
+      filter_fields: {
+        name_str: "",
+        country_str: ""
+      },
       filter_visible: false,
       current_page: 1,
       items_per_page: 10,
@@ -3813,7 +3965,7 @@ __webpack_require__.r(__webpack_exports__);
       page_of_items: [],
       is_reload: false,
       selected_item: -1,
-      filter_state: true
+      filter_state: false
     };
   },
   mounted: function mounted() {
@@ -3827,7 +3979,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.filter_state = false;
-      this.country_str = this.name_str = "";
+      this.filter_fields.country_str = this.filter_fields.name_str = "";
       this.$store.dispatch('producers/update').then(function () {
         _this.page_count = _this.$store.getters['producers/items_length'](_this.items_per_page);
 
@@ -3853,10 +4005,24 @@ __webpack_require__.r(__webpack_exports__);
       this.filter_visible = !this.filter_visible;
     },
     filter: function filter() {
+      var _this2 = this;
+
       this.filter_state = true;
-      this.items = this.$store.getters['producers/filter'](this.name_str, this.country_str);
-      this.page_count = Math.ceil(this.items.length / this.items_per_page);
-      this.onChangePage();
+      axios.get('/api/producer/filter', {
+        params: {
+          name: this.filter_fields.name_str,
+          country: this.filter_fields.country_str
+        }
+      }).then(function (response) {
+        _this2.page_of_items = []; //оборачиваем каждый элемент пришедших данных в модель модуля
+
+        response.data.forEach(function (item) {
+          return _this2.page_of_items.push(new _code_models_Producer__WEBPACK_IMPORTED_MODULE_0__["default"](item.id, item.name, item.country, item.created_at, item.updated_at, item.deleted_at));
+        });
+      })["catch"](function (error) {
+        //если не ок - асинхронный ответ с кодом ошибки
+        console.log("\u0427\u0442\u043E \u0442\u043E \u043F\u043E\u0448\u043B\u043E \u043D\u0435 \u0442\u0430\u043A. \u041A\u043E\u0434 \u043E\u0442\u0432\u0435\u0442\u0430 - ".concat(error));
+      });
     },
     deleteSelected: function deleteSelected() {
       console.log("\u0443\u0434\u0430\u043B\u0438\u0442\u0441\u044F \u044D\u043B\u0435\u043C\u0435\u043D\u0442 \u0441 id ".concat(this.selected_item));
@@ -39692,9 +39858,9 @@ var render = function() {
                     "label",
                     {
                       staticClass: "col-form-label",
-                      attrs: { for: "country" }
+                      attrs: { for: "billing" }
                     },
-                    [_vm._v("Наценка")]
+                    [_vm._v("Биллинг")]
                   ),
                   _vm._v(" "),
                   _c("input", {
@@ -39702,19 +39868,85 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: _vm.fields.margin,
-                        expression: "fields.margin"
+                        value: _vm.fields.billing,
+                        expression: "fields.billing"
                       }
                     ],
                     staticClass: "form-text form-control",
-                    attrs: { type: "number", name: "country", id: "country" },
-                    domProps: { value: _vm.fields.margin },
+                    attrs: { type: "text", name: "country", id: "billing" },
+                    domProps: { value: _vm.fields.billing },
                     on: {
                       input: function($event) {
                         if ($event.target.composing) {
                           return
                         }
-                        _vm.$set(_vm.fields, "margin", $event.target.value)
+                        _vm.$set(_vm.fields, "billing", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: " form-group col-md-11" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "col-form-label",
+                      attrs: { for: "address" }
+                    },
+                    [_vm._v("Адрес")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.fields.address,
+                        expression: "fields.address"
+                      }
+                    ],
+                    staticClass: "form-text form-control",
+                    attrs: { type: "text", name: "country", id: "address" },
+                    domProps: { value: _vm.fields.address },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.fields, "address", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: " form-group col-md-11" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "col-form-label",
+                      attrs: { for: "description" }
+                    },
+                    [_vm._v("Доп. инфо")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.fields.description,
+                        expression: "fields.description"
+                      }
+                    ],
+                    staticClass: "form-text form-control",
+                    attrs: { type: "text", name: "country", id: "description" },
+                    domProps: { value: _vm.fields.description },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.fields, "description", $event.target.value)
                       }
                     }
                   })
@@ -39763,7 +39995,7 @@ var staticRenderFns = [
       },
       [
         _c("h2", { staticClass: "text-center center-block" }, [
-          _vm._v("Новая ценовая группа")
+          _vm._v("Новый контрагент")
         ])
       ]
     )
@@ -39807,7 +40039,7 @@ var render = function() {
                 },
                 [
                   _c("h2", { staticClass: "text-center center-block" }, [
-                    _vm._v("Ценовая группа #" + _vm._s(_vm.fields.id))
+                    _vm._v("Контрагент #" + _vm._s(_vm.fields.id))
                   ])
                 ]
               )
@@ -39815,7 +40047,7 @@ var render = function() {
             1
           ),
           _vm._v(" "),
-          _c("div", { staticClass: "  row offset-2 col-md-8" }, [
+          _c("div", { staticClass: "row offset-2 col-md-8" }, [
             _c(
               "div",
               {
@@ -39874,9 +40106,9 @@ var render = function() {
                         "label",
                         {
                           staticClass: "col-form-label",
-                          attrs: { for: "country" }
+                          attrs: { for: "billing" }
                         },
-                        [_vm._v("Наценка")]
+                        [_vm._v("Биллинг")]
                       ),
                       _vm._v(" "),
                       _c("input", {
@@ -39884,23 +40116,93 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.fields.margin,
-                            expression: "fields.margin"
+                            value: _vm.fields.billing,
+                            expression: "fields.billing"
                           }
                         ],
                         staticClass: "form-text form-control",
-                        attrs: {
-                          type: "number",
-                          name: "country",
-                          id: "country"
-                        },
-                        domProps: { value: _vm.fields.margin },
+                        attrs: { type: "text", name: "country", id: "billing" },
+                        domProps: { value: _vm.fields.billing },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.$set(_vm.fields, "margin", $event.target.value)
+                            _vm.$set(_vm.fields, "billing", $event.target.value)
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: " form-group col-md-11" }, [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "col-form-label",
+                          attrs: { for: "address" }
+                        },
+                        [_vm._v("Адрес")]
+                      ),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.fields.address,
+                            expression: "fields.address"
+                          }
+                        ],
+                        staticClass: "form-text form-control",
+                        attrs: { type: "text", name: "country", id: "address" },
+                        domProps: { value: _vm.fields.address },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.fields, "address", $event.target.value)
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: " form-group col-md-11" }, [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "col-form-label",
+                          attrs: { for: "description" }
+                        },
+                        [_vm._v("Доп. инфо")]
+                      ),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.fields.description,
+                            expression: "fields.description"
+                          }
+                        ],
+                        staticClass: "form-text form-control",
+                        attrs: {
+                          type: "text",
+                          name: "country",
+                          id: "description"
+                        },
+                        domProps: { value: _vm.fields.description },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.fields,
+                              "description",
+                              $event.target.value
+                            )
                           }
                         }
                       })
@@ -40461,7 +40763,7 @@ var render = function() {
                                 name: "days_count",
                                 id: "producer_id"
                               },
-                              domProps: { value: _vm.producer_field }
+                              domProps: { value: _vm.fields.producer.name }
                             }),
                             _vm._v(" "),
                             _c(
@@ -40500,7 +40802,7 @@ var render = function() {
                                 name: "days_count",
                                 id: "guest_id"
                               },
-                              domProps: { value: _vm.price_type_field }
+                              domProps: { value: _vm.fields.price_type.name }
                             }),
                             _vm._v(" "),
                             _c(
@@ -40722,12 +41024,12 @@ var render = function() {
                           })
                         ]),
                         _vm._v(" "),
-                        _c("div", { staticClass: "form-group  col-md-12" }, [
+                        _c("div", { staticClass: "form-group  col-md-11" }, [
                           _c(
                             "label",
                             {
                               staticClass: "col-form-label",
-                              attrs: { for: "producer_id" }
+                              attrs: { for: "guest_id" }
                             },
                             [_vm._v("Производитель")]
                           ),
@@ -40739,10 +41041,10 @@ var render = function() {
                               attrs: {
                                 type: "text",
                                 disabled: "",
-                                name: "producer_id",
+                                name: "days_count",
                                 id: "producer_id"
                               },
-                              domProps: { value: _vm.producer_field }
+                              domProps: { value: _vm.fields.producer.name }
                             }),
                             _vm._v(" "),
                             _c(
@@ -40765,12 +41067,12 @@ var render = function() {
                           ])
                         ]),
                         _vm._v(" "),
-                        _c("div", { staticClass: "form-group  col-md-12" }, [
+                        _c("div", { staticClass: "form-group  col-md-11" }, [
                           _c(
                             "label",
                             {
                               staticClass: "col-form-label",
-                              attrs: { for: "price_type_id" }
+                              attrs: { for: "guest_id" }
                             },
                             [_vm._v("Ценова группа")]
                           ),
@@ -40782,10 +41084,10 @@ var render = function() {
                               attrs: {
                                 type: "text",
                                 disabled: "",
-                                name: "price_type_id",
-                                id: "price_type_id"
+                                name: "days_count",
+                                id: "guest_id"
                               },
-                              domProps: { value: _vm.price_type_field }
+                              domProps: { value: _vm.fields.price_type.name }
                             }),
                             _vm._v(" "),
                             _c(
@@ -40907,88 +41209,306 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "center-75" }, [
-    _c("h1", { staticClass: "text-center" }, [_vm._v("Номенклатура")]),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "row" },
-      [
-        _c(
-          "router-link",
-          {
-            staticClass: "btn btn-in-bar  btn-primary",
-            staticStyle: { float: "left" },
-            attrs: { to: { name: "nomenclatures.create" } }
-          },
-          [_vm._v("Добавить")]
-        )
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c("table", { staticClass: "table" }, [
-      _vm._m(0),
+  return _c(
+    "div",
+    [
+      _vm.choosing_state === 0
+        ? _c("div", { staticClass: "center-75" }, [
+            _c("h1", { staticClass: "text-center" }, [_vm._v("Номенклатура")]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "row" },
+              [
+                _c(
+                  "router-link",
+                  {
+                    staticClass: "btn btn-in-bar text-center btn-primary",
+                    staticStyle: { float: "left" },
+                    attrs: { to: { name: "nomenclatures.create" } }
+                  },
+                  [_vm._v("\n                Добавить\n            ")]
+                ),
+                _vm._v(" "),
+                !_vm.filter_visible
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-in-bar center-block  btn-primary",
+                        on: {
+                          click: function($event) {
+                            return _vm.switch_filter()
+                          }
+                        }
+                      },
+                      [_vm._v("\n                Фильтры\n            ")]
+                    )
+                  : _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-in-bar center-block  btn-danger",
+                        on: {
+                          click: function($event) {
+                            return _vm.switch_filter()
+                          }
+                        }
+                      },
+                      [_vm._v("Закрыть")]
+                    ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: " btn-in-bar btn btn-primary",
+                    staticStyle: { float: "right" },
+                    attrs: { disabled: _vm.is_reload },
+                    on: { click: _vm.update }
+                  },
+                  [_vm._v("\n                Обновить\n            ")]
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _vm.filter_visible
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "row",
+                    staticStyle: { "margin-bottom": "10px" }
+                  },
+                  [
+                    _c("div", { staticClass: "col-md-3" }, [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "col-form-label-lg",
+                          attrs: { for: "name_input" }
+                        },
+                        [
+                          _vm._v(
+                            "\n                    Поиск:\n                "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "input-group " }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.filter_fields.name_str,
+                              expression: "filter_fields.name_str"
+                            }
+                          ],
+                          staticClass: " form-control ",
+                          attrs: { id: "name_input" },
+                          domProps: { value: _vm.filter_fields.name_str },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.filter_fields,
+                                "name_str",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-3" }, [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "col-form-label-lg",
+                          attrs: { for: "producer_input" }
+                        },
+                        [
+                          _vm._v(
+                            "\n                    Производитель:\n                "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "input-group " }, [
+                        _c("input", {
+                          staticClass: "form-control ",
+                          attrs: {
+                            type: "text",
+                            disabled: "",
+                            name: "price_type_input",
+                            id: "producer_input"
+                          },
+                          domProps: { value: _vm.filter_fields.producer.name }
+                        }),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "input-group-append" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-primary",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.selectingProducer()
+                                }
+                              }
+                            },
+                            [_vm._v(">>")]
+                          )
+                        ])
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-3" }, [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "col-form-label-lg",
+                          staticStyle: { float: "left" },
+                          attrs: { for: "price_type_input" }
+                        },
+                        [
+                          _vm._v(
+                            "\n                    Ценовая группа:\n                "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "input-group " }, [
+                        _c("input", {
+                          staticClass: "form-control ",
+                          attrs: {
+                            type: "text",
+                            disabled: "",
+                            name: "price_type_input",
+                            id: "price_type_input"
+                          },
+                          domProps: { value: _vm.filter_fields.price_type.name }
+                        }),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "input-group-append" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-primary",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.selectingPriceType()
+                                }
+                              }
+                            },
+                            [_vm._v(">>")]
+                          )
+                        ])
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-3" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "  btn btn btn-in-bar btn-primary",
+                          staticStyle: { float: "right" },
+                          on: { click: _vm.filter }
+                        },
+                        [
+                          _vm._v(
+                            "\n                    Поиск\n                "
+                          )
+                        ]
+                      )
+                    ])
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c("table", { staticClass: "table" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(_vm.page_of_items, function(item) {
+                  return _c(
+                    "tr",
+                    {
+                      key: item.id,
+                      staticClass: "row-hover",
+                      class: { highlight: item.id === _vm.selected_item },
+                      on: {
+                        click: function($event) {
+                          return _vm.rowSelected(item.id)
+                        },
+                        dblclick: function($event) {
+                          return _vm.toEdit(item.id)
+                        }
+                      }
+                    },
+                    [
+                      _c("td", [_vm._v(" " + _vm._s(item.id))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(" " + _vm._s(item.name))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(" " + _vm._s(item.producer.name))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(" " + _vm._s(item.price_type.name))])
+                    ]
+                  )
+                }),
+                0
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "centered" },
+              [
+                !_vm.filter_state
+                  ? _c("paginate", {
+                      attrs: {
+                        "page-count": _vm.page_count,
+                        "page-range": 3,
+                        "click-handler": _vm.onChangePage,
+                        "prev-text": "<<",
+                        "next-text": ">>",
+                        "container-class": "pagination",
+                        "active-class": "pagination-active"
+                      },
+                      model: {
+                        value: _vm.current_page,
+                        callback: function($$v) {
+                          _vm.current_page = $$v
+                        },
+                        expression: "current_page"
+                      }
+                    })
+                  : _vm._e()
+              ],
+              1
+            )
+          ])
+        : _vm._e(),
       _vm._v(" "),
-      _c(
-        "tbody",
-        _vm._l(_vm.page_of_items, function(item) {
-          return _c(
-            "tr",
-            {
-              key: item.id,
-              staticClass: "row-hover",
-              class: { highlight: item.id === _vm.selected_item },
-              on: {
-                click: function($event) {
-                  return _vm.rowSelected(item.id)
-                },
-                dblclick: function($event) {
-                  return _vm.toEdit(item.id)
-                }
-              }
-            },
-            [
-              _c("td", [_vm._v(" " + _vm._s(item.id))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(" " + _vm._s(item.name))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(" " + _vm._s(item.producer.name))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(" " + _vm._s(item.price_type.name))])
-            ]
-          )
-        }),
-        0
-      )
-    ]),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "centered" },
-      [
-        _c("paginate", {
-          attrs: {
-            "page-count": _vm.page_count,
-            "page-range": 3,
-            "click-handler": _vm.onChangePage,
-            "prev-text": "<<",
-            "next-text": ">>",
-            "container-class": "pagination",
-            "active-class": "pagination-active"
-          },
-          model: {
-            value: _vm.current_page,
-            callback: function($$v) {
-              _vm.current_page = $$v
-            },
-            expression: "current_page"
-          }
-        })
-      ],
-      1
-    )
-  ])
+      _vm.choosing_state === 1
+        ? _c("producer-choose-component", {
+            on: { back: _vm.onBack, selected: _vm.onSelectedProducer }
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.choosing_state === 2
+        ? _c("price-type-choose-component", {
+            on: { back: _vm.onBack, selected: _vm.onSelectedPriceType }
+          })
+        : _vm._e()
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {
@@ -42182,7 +42702,7 @@ var render = function() {
           expression: "['del']"
         }
       ],
-      staticClass: "center-50",
+      staticClass: "center-75",
       on: { shortkey: _vm.deleteSelected }
     },
     [
@@ -42265,20 +42785,24 @@ var render = function() {
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.name_str,
-                      expression: "name_str"
+                      value: _vm.filter_fields.name_str,
+                      expression: "filter_fields.name_str"
                     }
                   ],
                   staticClass: " form-control form-group btn-in-bar ",
                   staticStyle: { float: "left", "margin-left": "10px" },
                   attrs: { id: "name_input" },
-                  domProps: { value: _vm.name_str },
+                  domProps: { value: _vm.filter_fields.name_str },
                   on: {
                     input: function($event) {
                       if ($event.target.composing) {
                         return
                       }
-                      _vm.name_str = $event.target.value
+                      _vm.$set(
+                        _vm.filter_fields,
+                        "name_str",
+                        $event.target.value
+                      )
                     }
                   }
                 }),
@@ -42298,20 +42822,24 @@ var render = function() {
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.country_str,
-                      expression: "country_str"
+                      value: _vm.filter_fields.country_str,
+                      expression: "filter_fields.country_str"
                     }
                   ],
                   staticClass: " form-control form-group btn-in-bar ",
                   staticStyle: { float: "left", "margin-left": "10px" },
                   attrs: { id: "country_input" },
-                  domProps: { value: _vm.country_str },
+                  domProps: { value: _vm.filter_fields.country_str },
                   on: {
                     input: function($event) {
                       if ($event.target.composing) {
                         return
                       }
-                      _vm.country_str = $event.target.value
+                      _vm.$set(
+                        _vm.filter_fields,
+                        "country_str",
+                        $event.target.value
+                      )
                     }
                   }
                 }),
@@ -42377,31 +42905,33 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "centered" },
-        [
-          _c("paginate", {
-            attrs: {
-              "page-count": _vm.page_count,
-              "page-range": 3,
-              "click-handler": _vm.onChangePage,
-              "prev-text": "<<",
-              "next-text": ">>",
-              "container-class": "pagination",
-              "active-class": "pagination-active"
-            },
-            model: {
-              value: _vm.current_page,
-              callback: function($$v) {
-                _vm.current_page = $$v
-              },
-              expression: "current_page"
-            }
-          })
-        ],
-        1
-      )
+      !_vm.filter_state
+        ? _c(
+            "div",
+            { staticClass: "centered" },
+            [
+              _c("paginate", {
+                attrs: {
+                  "page-count": _vm.page_count,
+                  "page-range": 3,
+                  "click-handler": _vm.onChangePage,
+                  "prev-text": "<<",
+                  "next-text": ">>",
+                  "container-class": "pagination",
+                  "active-class": "pagination-active"
+                },
+                model: {
+                  value: _vm.current_page,
+                  callback: function($$v) {
+                    _vm.current_page = $$v
+                  },
+                  expression: "current_page"
+                }
+              })
+            ],
+            1
+          )
+        : _vm._e()
     ],
     1
   )
@@ -59248,11 +59778,11 @@ var routes = [{
 }, {
   path: '/agents/create',
   name: "agents.create",
-  component: _components_PriceType_Create__WEBPACK_IMPORTED_MODULE_8__["default"]
+  component: _components_Agents_Create__WEBPACK_IMPORTED_MODULE_5__["default"]
 }, {
   path: '/agents/:id',
   name: "agents.edit",
-  component: _components_PriceType_Edit__WEBPACK_IMPORTED_MODULE_9__["default"]
+  component: _components_Agents_Edit__WEBPACK_IMPORTED_MODULE_6__["default"]
 }, {
   path: '/price-types',
   name: "price-types.index",
@@ -60715,6 +61245,7 @@ __webpack_require__.r(__webpack_exports__);
 var state = function state() {
   return {
     items: [] //массив с моделями этого модуля
+    //when_last_updated: '2000-12-28T00:00:00.000000Z',
 
   };
 }; // геттеры - способ получения информации, которую не имеет смысла хранить в state
@@ -60730,14 +61261,9 @@ var getters = {
     return function (items_per_page) {
       return Math.ceil(state.items.length / items_per_page);
     };
-  } //логика для того чтобы узнать, были ли данные изменены на сервере
-  //   last_updated: state => {
-  //       return state.items.sort(function(a, b) {
-  //           var keyA = new Date(a.updated_at),
-  //               keyB = new Date(b.updated_at);
-  //           return keyA > keyB ? -1 : keyB > keyA ? 1 : 0;
-  //       })[0];
-  //   },
+  } //when_last_updated: state => {
+  //    return state.when_last_updated;
+  //}
 
 }; // actions - операции-обертки для мутаций - могут быть асинхронными
 
@@ -60761,13 +61287,49 @@ var actions = {
         reject(error.response.data.message);
       });
     });
-  }
+  } //updateIfChanged(context) {
+  //    return new Promise((resolve, reject) => {
+  //        //запрашивает данные с сервера
+  //        axios.get('/api/nomenclature/last-updated').then((response) => {
+  //
+  //            if (context.getters.when_last_updated !== response.data) {
+  //
+  //
+  //                context.commit('setWhenLastUpdated', response.data);
+  //
+  //                context.dispatch("update").then(() => {
+  //
+  //                });
+  //            }
+  //
+  //        }).catch((error) => {
+  //            //если не ок - асинхронный ответ с кодом ошибки
+  //            reject(error.response.data.message);
+  //        })
+  //        resolve();
+  //    });
+  //
+  //},
+  //updateWhenLastUpdated(context) {
+  //    axios.get('/api/nomenclature/last_updated').then((response) => {
+  //        context.commit('setWhenLastUpdated', response.data);
+  //        //асинхронный ответ - все ок
+  //        resolve();
+  //    }).catch((error) => {
+  //        //если не ок - асинхронный ответ с кодом ошибки
+  //        reject(error.response.data.message);
+  //    })
+  //}
+
 }; // мутации - СИНХРОННЫЕ операции которые меняют данные в хранилищах
 
 var mutations = {
   setItems: function setItems(state, items) {
     state.items = items;
-  }
+  } //setWhenLastUpdated(state, item) {
+  //    state.when_last_updated = item;
+  //}
+
 };
 /* harmony default export */ __webpack_exports__["default"] = ({
   namespaced: true,
@@ -60821,7 +61383,7 @@ var actions = {
         var result = []; //оборачиваем каждый элемент пришедших данных в модель модуля
 
         response.data.forEach(function (item) {
-          return result.push(new _code_models_PriceType__WEBPACK_IMPORTED_MODULE_0__["default"](item.id, item.name, item.country, item.created_at, item.updated_at, item.deleted_at));
+          return result.push(new _code_models_PriceType__WEBPACK_IMPORTED_MODULE_0__["default"](item.id, item.name, item.margin, item.created_at, item.updated_at, item.deleted_at));
         }); //дергаем мутатор
 
         context.commit('setItems', result); //асинхронный ответ - все ок
@@ -60911,6 +61473,20 @@ var actions = {
         resolve();
       })["catch"](function (error) {
         //если не ок - асинхронный ответ с кодом ошибки
+        reject(error.response.data.message);
+      });
+    });
+  },
+  sendNewItem: function sendNewItem(context, data) {
+    var _this = this;
+
+    return new Promise(function (resolve, reject) {
+      //запрашивает данные с сервера
+      axios.post('/api/producers', data.fields).then(function (response) {
+        _this.commit;
+        resolve(); //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
+      })["catch"](function (error) {
+        console.log("Ошибка!");
         reject(error.response.data.message);
       });
     });

@@ -1,6 +1,6 @@
 <template>
 
-    <div v-shortkey="['del']" @shortkey="deleteSelected" class="center-50">
+    <div v-shortkey="['del']" @shortkey="deleteSelected" class="center-75">
         <v-dialog/>
         <h1 class="text-center">Производители</h1>
         <div class="row">
@@ -25,12 +25,13 @@
                 <label class="col-form-label-lg" style="float: left" for="name_input">
                     Поиск:
                 </label>
-                <input id="name_input" v-model="name_str" class=" form-control form-group btn-in-bar "
+                <input id="name_input" v-model="filter_fields.name_str" class=" form-control form-group btn-in-bar "
                        style="float:left; margin-left: 10px"/>
                 <label class="col-form-label-lg" style="float: left" for="country_input">
                     Страна:
                 </label>
-                <input id="country_input" v-model="country_str" class=" form-control form-group btn-in-bar "
+                <input id="country_input" v-model="filter_fields.country_str"
+                       class=" form-control form-group btn-in-bar "
                        style="float:left; margin-left: 10px"/>
                 <button @click="filter" style="float:right; margin-left: 20px" class=" btn-in-bar btn btn-primary">
                     Поиск
@@ -55,7 +56,7 @@
             </tr>
             </tbody>
         </table>
-        <div class="centered">
+        <div v-if="!filter_state" class="centered">
             <!--            <jw-pagination :items="items" @changePage="onChangePage"></jw-pagination>-->
             <paginate
                 v-model="current_page"
@@ -74,14 +75,19 @@
 
 
 <script>
+import Producer from "../../code/models/Producer";
+
 export default {
     name: "ProducerIndex",
 
     data: function () {
         return {
 
-            name_str: "",
-            country_str: "",
+            filter_fields: {
+                name_str: "",
+                country_str: "",
+
+            },
             filter_visible: false,
             current_page: 1,
             items_per_page: 10,
@@ -90,7 +96,7 @@ export default {
             page_of_items: [],
             is_reload: false,
             selected_item: -1,
-            filter_state : true
+            filter_state: false
 
         };
     },
@@ -106,7 +112,7 @@ export default {
 
         update: function () {
             this.filter_state = false;
-            this.country_str = this.name_str = ""
+            this.filter_fields.country_str = this.filter_fields.name_str = ""
             this.$store.dispatch('producers/update').then(() => {
                 this.page_count = this.$store.getters['producers/items_length'](this.items_per_page);
                 this.onChangePage();
@@ -119,7 +125,7 @@ export default {
         onChangePage() {
             // update page of items
 
-            if(this.filter_state)     this.page_of_items = this.items.slice(this.items_per_page * (this.current_page - 1), (this.items_per_page * this.current_page));
+            if (this.filter_state) this.page_of_items = this.items.slice(this.items_per_page * (this.current_page - 1), (this.items_per_page * this.current_page));
             else this.page_of_items = this.$store.getters['producers/items'].slice(this.items_per_page * (this.current_page - 1), (this.items_per_page * this.current_page));
         },
 
@@ -131,18 +137,29 @@ export default {
 
 
         switch_filter() {
+
             this.filter_visible = !this.filter_visible;
         },
 
 
         filter() {
             this.filter_state = true;
-            this.items = this.$store.getters['producers/filter'](this.name_str, this.country_str)
-            this.page_count = Math.ceil(this.items.length / this.items_per_page);
-            this.onChangePage()
+            axios.get('/api/producer/filter', {
+                params: {
+                    name: this.filter_fields.name_str,
+                    country: this.filter_fields.country_str
+                }
+            }).then((response) => {
+                this.page_of_items = [];
+                //оборачиваем каждый элемент пришедших данных в модель модуля
+                response.data.forEach(item => this.page_of_items.push(new Producer(item.id, item.name, item.country, item.created_at, item.updated_at, item.deleted_at)))
+
+            }).catch((error) => {
+                //если не ок - асинхронный ответ с кодом ошибки
+                console.log(`Что то пошло не так. Код ответа - ${error}`)
+            })
+
         },
-
-
 
         deleteSelected() {
             console.log(`удалится элемент с id ${this.selected_item}`)
