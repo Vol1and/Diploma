@@ -81,9 +81,9 @@ class ProducerController extends OriginController
         $result = $item->fill($data)->save();
         //todo: подумать над кодом ошибки
         //Что должно вовзращать при ошибке сохранения
-        if (!$result) {
-            return response(null, 404);
-        } else  return response(null, 200);
+        if (!$result) return response(null, 404);
+
+        return response(null, 200);
     }
 
     /**
@@ -94,7 +94,11 @@ class ProducerController extends OriginController
      */
     public function destroy($id)
     {
-        //
+        $result = Producer::destroy($id);
+
+        if (!$result) return response(null, 404);
+
+        return response(null, 200);
     }
 
 

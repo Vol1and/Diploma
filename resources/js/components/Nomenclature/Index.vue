@@ -4,7 +4,7 @@
         <div v-if="choosing_state === 0 " class="center-75">
             <h1 class="text-center">Номенклатура</h1>
             <div class="row">
-                <router-link :to="{name: 'nomenclatures.create'}" style=" float:left "
+                <router-link :to="{name: 'nomenclature.create'}" style=" float:left "
                              class="btn btn-in-bar text-center btn-primary">
                     Добавить
                 </router-link>
@@ -42,7 +42,7 @@
                     <div class="input-group ">
                         <input type="text" disabled name="price_type_input" :value="filter_fields.producer.name"
                                id="producer_input"
-                              class="form-control "/>
+                               class="form-control "/>
 
                         <div class="input-group-append">
                             <button @click="selectingProducer()" type="button" class="btn btn-primary">>></button>
@@ -56,7 +56,7 @@
                     <div class="input-group ">
                         <input type="text" disabled name="price_type_input" :value="filter_fields.price_type.name"
                                id="price_type_input"
-                                class="form-control "/>
+                               class="form-control "/>
 
                         <div class="input-group-append">
                             <button @click="selectingPriceType()" type="button" class="btn btn-primary">>></button>
@@ -93,22 +93,22 @@
             </table>
             <div class="centered">
                 <paginate v-if="!filter_state"
-                    v-model="current_page"
-                    :page-count="page_count"
-                    :page-range="3"
-                    :click-handler="onChangePage"
-                    :prev-text="'<<'"
-                    :next-text="'>>'"
-                    :container-class="'pagination'"
-                    :active-class="'pagination-active'"
+                          v-model="current_page"
+                          :page-count="page_count"
+                          :page-range="3"
+                          :click-handler="onChangePage"
+                          :prev-text="'<<'"
+                          :next-text="'>>'"
+                          :container-class="'pagination'"
+                          :active-class="'pagination-active'"
                 >
                 </paginate>
             </div>
 
         </div>
-        <producer-choose-component @back="onBack" v-if="choosing_state ===1"
+        <producer-choose-component @back="onBack" v-if="choosing_state === 1"
                                    @selected="onSelectedProducer"></producer-choose-component>
-        <price-type-choose-component @back="onBack" v-if="choosing_state ===2"
+        <price-type-choose-component @back="onBack" v-if="choosing_state === 2"
                                      @selected="onSelectedPriceType"></price-type-choose-component>
     </div>
 </template>
@@ -118,10 +118,12 @@
 import Producer from "../../code/models/Producer";
 import Nomenclature from "../../code/models/Nomenclature";
 import PriceType from "../../code/models/PriceType";
+import mixin_index from "../../code/mixins/mixin_index";
 
 export default {
     name: "NomenclatureIndex",
 
+    mixins: [mixin_index],
     data: function () {
         return {
 
@@ -131,42 +133,26 @@ export default {
                 price_type: {name: ""},
 
             },
-            filter_state : false,
             choosing_state: 0,
-            filter_visible: false,
-            current_page: 1,
-            items_per_page: 10,
-            page_count: 1,
-            items: [],
-            selected_item: null,
-            page_of_items: [],
-            is_reload: false,
+            action_namespace : "nomenclature"
 
         };
     },
-    mounted() {
-
-        this.update();
-    },
     methods: {
-        rowSelected(id) {
-
-            this.selected_item = id;
-        },
 
         update: function () {
             this.filter_state = false
-            this.filter_fields=  {
+            this.filter_fields = {
                 name_str: "",
-                    producer: {name: "", id : null},
-                price_type: {name: "",id : null},
+                producer: {name: "", id: null},
+                price_type: {name: "", id: null},
             }
             this.is_reload = true;
             this.$store.dispatch('nomenclature/update').then(() => {
                 this.is_reload = false;
                 this.page_count = this.$store.getters['nomenclature/items_length'](this.items_per_page);
                 this.current_page = 1;
-                this.onChangePage();
+                this.onChangePage('nomenclature/items');
 
             }, (reason => {
                 console.log(`Что то пошло не так. Код ответа - ${reason}`)
@@ -175,10 +161,7 @@ export default {
 
             //console.log(this.$store.getters['nomenclature/last_updated']);
         },
-        onChangePage() {
-            // update page of items
-            this.page_of_items = this.$store.getters['nomenclature/items'].slice(this.items_per_page * (this.current_page - 1), (this.items_per_page * this.current_page));
-        },
+
         filter() {
             this.filter_state = true;
             axios.get('/api/nomenclature/filter', {
@@ -204,9 +187,7 @@ export default {
             })
 
         },
-        toEdit(id) {
-            this.$router.push({name: 'nomenclatures.edit', params: {id: id}});
-        },
+
         switch_filter() {
             this.filter_visible = !this.filter_visible;
         },

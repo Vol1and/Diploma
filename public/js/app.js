@@ -2839,6 +2839,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _code_models_Producer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../code/models/Producer */ "./resources/js/code/models/Producer.js");
 /* harmony import */ var _code_models_Nomenclature__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../code/models/Nomenclature */ "./resources/js/code/models/Nomenclature.js");
 /* harmony import */ var _code_models_PriceType__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../code/models/PriceType */ "./resources/js/code/models/PriceType.js");
+/* harmony import */ var _code_mixins_mixin_index__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../code/mixins/mixin_index */ "./resources/js/code/mixins/mixin_index.js");
 //
 //
 //
@@ -2955,11 +2956,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "NomenclatureIndex",
+  mixins: [_code_mixins_mixin_index__WEBPACK_IMPORTED_MODULE_3__["default"]],
   data: function data() {
     return {
       filter_fields: {
@@ -2971,25 +2974,11 @@ __webpack_require__.r(__webpack_exports__);
           name: ""
         }
       },
-      filter_state: false,
       choosing_state: 0,
-      filter_visible: false,
-      current_page: 1,
-      items_per_page: 10,
-      page_count: 1,
-      items: [],
-      selected_item: null,
-      page_of_items: [],
-      is_reload: false
+      action_namespace: "nomenclature"
     };
   },
-  mounted: function mounted() {
-    this.update();
-  },
   methods: {
-    rowSelected: function rowSelected(id) {
-      this.selected_item = id;
-    },
     update: function update() {
       var _this = this;
 
@@ -3011,15 +3000,11 @@ __webpack_require__.r(__webpack_exports__);
         _this.page_count = _this.$store.getters['nomenclature/items_length'](_this.items_per_page);
         _this.current_page = 1;
 
-        _this.onChangePage();
+        _this.onChangePage('nomenclature/items');
       }, function (reason) {
         console.log("\u0427\u0442\u043E \u0442\u043E \u043F\u043E\u0448\u043B\u043E \u043D\u0435 \u0442\u0430\u043A. \u041A\u043E\u0434 \u043E\u0442\u0432\u0435\u0442\u0430 - ".concat(reason));
         _this.is_reload = false;
       }); //console.log(this.$store.getters['nomenclature/last_updated']);
-    },
-    onChangePage: function onChangePage() {
-      // update page of items
-      this.page_of_items = this.$store.getters['nomenclature/items'].slice(this.items_per_page * (this.current_page - 1), this.items_per_page * this.current_page);
     },
     filter: function filter() {
       var _this2 = this;
@@ -3040,14 +3025,6 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         //если не ок - асинхронный ответ с кодом ошибки
         console.log("\u0427\u0442\u043E \u0442\u043E \u043F\u043E\u0448\u043B\u043E \u043D\u0435 \u0442\u0430\u043A. \u041A\u043E\u0434 \u043E\u0442\u0432\u0435\u0442\u0430 - ".concat(error));
-      });
-    },
-    toEdit: function toEdit(id) {
-      this.$router.push({
-        name: 'nomenclatures.edit',
-        params: {
-          id: id
-        }
       });
     },
     switch_filter: function switch_filter() {
@@ -3407,6 +3384,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _code_mixins_mixin_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../code/mixins/mixin_index */ "./resources/js/code/mixins/mixin_index.js");
 //
 //
 //
@@ -3451,26 +3429,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PriceTypeIndex",
+  mixins: [_code_mixins_mixin_index__WEBPACK_IMPORTED_MODULE_0__["default"]],
   data: function data() {
     return {
-      current_page: 1,
-      items_per_page: 10,
-      page_count: 1,
-      items: [],
-      selected_item: null,
-      page_of_items: [],
-      is_reload: false
+      action_namespace: "pricetypes"
     };
   },
-  mounted: function mounted() {
-    this.update();
-  },
   methods: {
-    rowSelected: function rowSelected(id) {
-      this.selected_item = id;
-    },
     update: function update() {
       var _this = this;
 
@@ -3478,24 +3448,12 @@ __webpack_require__.r(__webpack_exports__);
       this.$store.dispatch('pricetypes/update').then(function () {
         _this.page_count = _this.$store.getters['pricetypes/items_length'](_this.items_per_page);
 
-        _this.onChangePage();
+        _this.onChangePage('pricetypes/items');
 
         _this.is_reload = false;
       }, function (reason) {
         console.log("\u0427\u0442\u043E \u0442\u043E \u043F\u043E\u0448\u043B\u043E \u043D\u0435 \u0442\u0430\u043A. \u041A\u043E\u0434 \u043E\u0442\u0432\u0435\u0442\u0430 - ".concat(reason));
         _this.is_reload = false;
-      });
-    },
-    onChangePage: function onChangePage() {
-      // update page of items
-      this.page_of_items = this.$store.getters['pricetypes/items'].slice(this.items_per_page * (this.current_page - 1), this.items_per_page * this.current_page);
-    },
-    toEdit: function toEdit(id) {
-      this.$router.push({
-        name: 'price-types.edit',
-        params: {
-          id: id
-        }
       });
     }
   }
@@ -3859,6 +3817,8 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _code_models_Producer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../code/models/Producer */ "./resources/js/code/models/Producer.js");
+/* harmony import */ var _code_mixins_mixin_index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../code/mixins/mixin_index */ "./resources/js/code/mixins/mixin_index.js");
+//
 //
 //
 //
@@ -3936,32 +3896,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ProducerIndex",
+  mixins: [_code_mixins_mixin_index__WEBPACK_IMPORTED_MODULE_1__["default"]],
   data: function data() {
     return {
       filter_fields: {
         name_str: "",
         country_str: ""
       },
-      filter_visible: false,
-      current_page: 1,
-      items_per_page: 10,
-      page_count: 1,
-      items: [],
-      page_of_items: [],
-      is_reload: false,
-      selected_item: -1,
-      filter_state: false
+      //читать об этом в mixin_index
+      action_namespace: "producers"
     };
   },
-  mounted: function mounted() {
-    this.update();
-  },
   methods: {
-    rowSelected: function rowSelected(id) {
-      this.selected_item = id;
-    },
     update: function update() {
       var _this = this;
 
@@ -3974,22 +3923,6 @@ __webpack_require__.r(__webpack_exports__);
       }, function (reason) {
         console.log("\u0427\u0442\u043E \u0442\u043E \u043F\u043E\u0448\u043B\u043E \u043D\u0435 \u0442\u0430\u043A. \u041A\u043E\u0434 \u043E\u0442\u0432\u0435\u0442\u0430 - ".concat(reason));
       });
-    },
-    onChangePage: function onChangePage() {
-      // update page of items
-      if (this.filter_state) this.page_of_items = this.items.slice(this.items_per_page * (this.current_page - 1), this.items_per_page * this.current_page);else this.page_of_items = this.$store.getters['producers/items'].slice(this.items_per_page * (this.current_page - 1), this.items_per_page * this.current_page);
-    },
-    //по дабл-клику - переходим на строку с изменением выбраного объекта
-    toEdit: function toEdit(id) {
-      this.$router.push({
-        name: 'producers.edit',
-        params: {
-          id: id
-        }
-      });
-    },
-    switch_filter: function switch_filter() {
-      this.filter_visible = !this.filter_visible;
     },
     filter: function filter() {
       var _this2 = this;
@@ -4012,16 +3945,28 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     deleteSelected: function deleteSelected() {
+      var _this3 = this;
+
       console.log("\u0443\u0434\u0430\u043B\u0438\u0442\u0441\u044F \u044D\u043B\u0435\u043C\u0435\u043D\u0442 \u0441 id ".concat(this.selected_item));
       this.$modal.show('dialog', {
         title: 'Вы уверены',
         text: 'Удалить выбранный объект?',
         buttons: [{
           title: 'Да',
-          handler: function handler() {}
+          handler: function handler() {//  axios.delete(`/api/producers/${this.selected_item.id}`).then((response) => {
+            //      this.page_of_items = [];
+            //      //оборачиваем каждый элемент пришедших данных в модель модуля
+            //      response.data.forEach(item => this.page_of_items.push(new Producer(item.id, item.name, item.country, item.created_at, item.updated_at, item.deleted_at)))
+            //  }).catch((error) => {
+            //      //если не ок - асинхронный ответ с кодом ошибки
+            //      console.log(`Что то пошло не так. Код ответа - ${error}`)
+            //  })
+          }
         }, {
           title: 'Нет',
-          handler: function handler() {}
+          handler: function handler() {
+            _this3.$modal.hide();
+          }
         }]
       });
     }
@@ -40591,7 +40536,7 @@ var render = function() {
             "router-link",
             {
               staticClass: "nav-link",
-              attrs: { to: { name: "price-types.index" } }
+              attrs: { to: { name: "pricetypes.index" } }
             },
             [_vm._v("Типы цен")]
           )
@@ -40607,7 +40552,7 @@ var render = function() {
             "router-link",
             {
               staticClass: "nav-link",
-              attrs: { to: { name: "nomenclatures.index" } }
+              attrs: { to: { name: "nomenclature.index" } }
             },
             [_vm._v("Номенклатура")]
           )
@@ -41204,7 +41149,7 @@ var render = function() {
                   {
                     staticClass: "btn btn-in-bar text-center btn-primary",
                     staticStyle: { float: "left" },
-                    attrs: { to: { name: "nomenclatures.create" } }
+                    attrs: { to: { name: "nomenclature.create" } }
                   },
                   [_vm._v("\n                Добавить\n            ")]
                 ),
@@ -42010,9 +41955,9 @@ var render = function() {
           {
             staticClass: "btn btn-in-bar  btn-primary",
             staticStyle: { float: "left" },
-            attrs: { to: { name: "price-types.create" } }
+            attrs: { to: { name: "pricetypes.create" } }
           },
-          [_vm._v("Добавить")]
+          [_vm._v("\n            Добавить\n        ")]
         )
       ],
       1
@@ -42686,6 +42631,8 @@ var render = function() {
     },
     [
       _c("v-dialog"),
+      _vm._v(" "),
+      _c("error-component", { attrs: { errors: _vm.errors } }),
       _vm._v(" "),
       _c("h1", { staticClass: "text-center" }, [_vm._v("Производители")]),
       _vm._v(" "),
@@ -59614,6 +59561,85 @@ Vue.component('HomeComponent', _components_Home__WEBPACK_IMPORTED_MODULE_11__["d
 
 /***/ }),
 
+/***/ "./resources/js/code/mixins/mixin_index.js":
+/*!*************************************************!*\
+  !*** ./resources/js/code/mixins/mixin_index.js ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//данный код будет включен во все Index-компоненты (например, ProducerIndex)
+//хранит данные, которые используются в каждых компонентах
+//подробнее почитать можно https://ru.vuejs.org/v2/guide/mixins.html
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      //массив с ошибками - инициализируется везде
+      errors: [],
+      //булево значение - показывает, видна ли панель с фильтрами поиска
+      filter_visible: false,
+      //текущая страница пагинации - изначально 1, в зависимости от действий меняется
+      current_page: 1,
+      //кол-во страниц пагинации - вычисляется в коде при запросе данных
+      page_count: 1,
+      //массив с итемами - для каждого компонента свой - в него будут занесены данные с сервера
+      items: [],
+      //этот массив будет хранить элементы текущей страницы пагинации - при изменении страницы - меняется
+      //меняется в функции onChangePage
+      page_of_items: [],
+      //показывает - происходит ли запрос у сервера данных - чтобы заблокировать в этот момент некоторые элементы
+      is_reload: false,
+      //когда клик по строке таблицы, сюда помещается выбранный объект, выбор происходит в функции rowSelected
+      selected_item: -1,
+      //этот булл отвечает за отображение пагинации во время запроса фильтра
+      //я посчитал, что данные по фильтру должны отображаться сразу полностью, а не с пагинацией
+      //к тому же такая реализация проще
+      filter_state: false,
+      //сколько элементов будет на одной странице пагинации - можно реинициализировать
+      items_per_page: 10,
+      //интересная вещь - в каждой компоненте используется свой набор запросов или команд в хранилище
+      //все они работают по схеме [текущий модуль]/[действие] (например producers/update)
+      //чтобы можно было чуть больше унифицировать компоненты, в данную строку будет помещаться значение [текущий модуль]
+      //и некоторые методы можно вынести сюда, следовательно, упростить дальнейшую разработку кода
+      action_namespace: ""
+    };
+  },
+  //при создании каждого Index-компонента первым делом происходит вызов update-метода - в кажом компоненте она своя
+  created: function created() {
+    this.update();
+  },
+  methods: {
+    //вызывается при клике по строке
+    rowSelected: function rowSelected(item) {
+      this.selected_item = item;
+    },
+    //обычный тоггл булева значения - при клике по кнопке ФИЛЬТР в компоненте
+    switch_filter: function switch_filter() {
+      this.filter_visible = !this.filter_visible;
+    },
+    // функция - в ней для page_of_items присваивается новый кусок основного массива с элементами - какой кусок - зависит от выбранной страницы
+    onChangePage: function onChangePage() {
+      this.page_of_items = //this.$store.getters - тут происходит вызов данных из общего хранилища на ВСЁ клиентское приложение
+      this.$store.getters["".concat(this.action_namespace, "/items")] //здесь мы вырезаем из него кусок в зависимости от количества элементов на странице И текущей страницы
+      //ПРИМЕР: страница 3, по 10 элементов на страницу - слайсим начиная от 20(10 * 3-1) до 30(10*3)
+      .slice(this.items_per_page * (this.current_page - 1), this.items_per_page * this.current_page);
+    },
+    //по дабл-клику - переходим на строку с изменением выбраного объекта
+    toEdit: function toEdit(id) {
+      this.$router.push({
+        name: "".concat(this.action_namespace, ".edit"),
+        params: {
+          id: id
+        }
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./resources/js/code/models/Nomenclature.js":
 /*!**************************************************!*\
   !*** ./resources/js/code/models/Nomenclature.js ***!
@@ -59811,31 +59837,31 @@ var routes = [{
   component: _components_Agents_Edit__WEBPACK_IMPORTED_MODULE_6__["default"]
 }, {
   path: '/price-types',
-  name: "price-types.index",
+  name: "pricetypes.index",
   component: _components_PriceType_Index__WEBPACK_IMPORTED_MODULE_7__["default"]
 }, {
   path: '/price-types/create',
-  name: "price-types.create",
+  name: "pricetypes.create",
   component: _components_PriceType_Create__WEBPACK_IMPORTED_MODULE_8__["default"]
 }, {
   path: '/price-types/:id',
-  name: "price-types.edit",
+  name: "pricetypes.edit",
   component: _components_PriceType_Edit__WEBPACK_IMPORTED_MODULE_9__["default"]
 }, {
   path: '/nomenclatures',
-  name: "nomenclatures.index",
+  name: "nomenclature.index",
   component: _components_Nomenclature_Index__WEBPACK_IMPORTED_MODULE_10__["default"]
 }, {
   path: '/nomenclatures/create',
-  name: "nomenclatures.create",
+  name: "nomenclature.create",
   component: _components_Nomenclature_Create__WEBPACK_IMPORTED_MODULE_11__["default"]
 }, {
   path: '/nomenclatures/:id',
-  name: "nomenclatures.edit",
+  name: "nomenclature.edit",
   component: _components_Nomenclature_Edit__WEBPACK_IMPORTED_MODULE_12__["default"]
 }, {
   path: '/nomenclatures/:id/characteristics',
-  name: "nomenclatures.characteristics",
+  name: "nomenclature.characteristics",
   component: _components_Characteristic_ForNomenclature__WEBPACK_IMPORTED_MODULE_13__["default"]
 }, {
   path: '/',
@@ -59860,15 +59886,15 @@ var routes = [{
   component: _components_Producer_Edit__WEBPACK_IMPORTED_MODULE_3__["default"]
 }, {
   path: '/adm/price-types',
-  name: "admin.price-types.index",
+  name: "admin.pricetypes.index",
   component: _components_PriceType_Index__WEBPACK_IMPORTED_MODULE_7__["default"]
 }, {
   path: '/adm/price-types/create',
-  name: "admin.price-types.create",
+  name: "admin.pricetypes.create",
   component: _components_PriceType_Create__WEBPACK_IMPORTED_MODULE_8__["default"]
 }, {
   path: '/adm/price-types/:id',
-  name: "admin.price-types.edit",
+  name: "admin.pricetypes.edit",
   component: _components_PriceType_Edit__WEBPACK_IMPORTED_MODULE_9__["default"]
 }, {
   path: '/adm/agents',
@@ -59884,19 +59910,19 @@ var routes = [{
   component: _components_PriceType_Edit__WEBPACK_IMPORTED_MODULE_9__["default"]
 }, {
   path: '/adm/nomenclatures',
-  name: "admin.nomenclatures.index",
+  name: "admin.nomenclature.index",
   component: _components_Nomenclature_Index__WEBPACK_IMPORTED_MODULE_10__["default"]
 }, {
   path: '/adm/nomenclatures/create',
-  name: "admin.nomenclatures.create",
+  name: "admin.nomenclature.create",
   component: _components_Nomenclature_Create__WEBPACK_IMPORTED_MODULE_11__["default"]
 }, {
   path: '/adm/nomenclatures/:id',
-  name: "admin.nomenclatures.edit",
+  name: "admin.nomenclature.edit",
   component: _components_Nomenclature_Edit__WEBPACK_IMPORTED_MODULE_12__["default"]
 }, {
   path: '/adm/nomenclatures/:id/characteristics',
-  name: "admin.nomenclatures.characteristics",
+  name: "admin.nomenclature.characteristics",
   component: _components_Characteristic_ForNomenclature__WEBPACK_IMPORTED_MODULE_13__["default"]
 }, {
   path: '/adm/home',

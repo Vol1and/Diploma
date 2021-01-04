@@ -3,7 +3,9 @@
     <div class="center-50">
         <h1 class="text-center">Ценовые группы</h1>
         <div class="row">
-            <router-link :to="{name: 'price-types.create'}" style=" float:left " class="btn btn-in-bar  btn-primary">Добавить</router-link>
+            <router-link :to="{name: 'pricetypes.create'}" style=" float:left " class="btn btn-in-bar  btn-primary">
+                Добавить
+            </router-link>
 
             <!--            <button @click="update"  v-if="!is_reload" style="float:right;" class=" btn-in-bar btn btn-primary">Обновить </button>-->
             <!--            <button disabled v-if="is_reload" style="float:right;" class=" btn-in-bar btn btn-danger"> Обновление...</button>-->
@@ -16,11 +18,12 @@
                 <th>Наценка</th>
             </tr>
             <tbody>
-            <tr v-for="item in page_of_items" class="row-hover"  :key="item.id" :class="{'highlight': (item.id === selected_item)}"
-                @click="rowSelected(item.id)"  @dblclick="toEdit(item.id)">
+            <tr v-for="item in page_of_items" class="row-hover" :key="item.id"
+                :class="{'highlight': (item.id === selected_item)}"
+                @click="rowSelected(item.id)" @dblclick="toEdit(item.id)">
                 <td>{{ item.id }}</td>
-                <td>{{ item.name}}</td>
-                <td>{{ item.margin}}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.margin }}</td>
             </tr>
             </tbody>
         </table>
@@ -41,40 +44,28 @@
 </template>
 
 
-
 <script>
+import mixin_index from "../../code/mixins/mixin_index";
+
 export default {
     name: "PriceTypeIndex",
 
+    mixins: [mixin_index],
     data: function () {
         return {
-
-            current_page : 1,
-            items_per_page : 10,
-            page_count : 1,
-            items: [],
-            selected_item : null,
-            page_of_items: [],
-            is_reload: false,
-
+            action_namespace : "pricetypes"
         };
     },
-    mounted() {
-        this.update();
-    },
-    methods: {
-        rowSelected(id) {
 
-            this.selected_item = id;
-        },
+    methods: {
+
 
         update: function () {
-
 
             this.is_reload = true;
             this.$store.dispatch('pricetypes/update').then(() => {
                 this.page_count = this.$store.getters['pricetypes/items_length'](this.items_per_page);
-                this.onChangePage();
+                this.onChangePage('pricetypes/items');
                 this.is_reload = false;
             }, (reason => {
                 console.log(`Что то пошло не так. Код ответа - ${reason}`)
@@ -82,14 +73,7 @@ export default {
             }));
 
         },
-        onChangePage(){
-            // update page of items
-            this.page_of_items = this.$store.getters['pricetypes/items'].slice(this.items_per_page*(this.current_page-1), (this.items_per_page*this.current_page));
-        },
 
-        toEdit(id){
-            this.$router.push({name: 'price-types.edit', params:{id : id}});
-        }
     }
 
 }

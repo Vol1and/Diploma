@@ -8,6 +8,8 @@ require('./code/component_init')
 require('./store')
 
 
+
+
 //npm-модуль с механикой раутинга
 import VueRouter from 'vue-router'
 

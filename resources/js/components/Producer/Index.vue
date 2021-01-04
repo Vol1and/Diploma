@@ -2,6 +2,7 @@
 
     <div v-shortkey="['del']" @shortkey="deleteSelected" class="center-75">
         <v-dialog/>
+        <error-component :errors="errors"></error-component>
         <h1 class="text-center">Производители</h1>
         <div class="row">
             <router-link :to="{name: 'producers.create'}" style=" float:left "
@@ -76,10 +77,12 @@
 
 <script>
 import Producer from "../../code/models/Producer";
+import mixin_index from "../../code/mixins/mixin_index";
 
 export default {
     name: "ProducerIndex",
 
+    mixins: [mixin_index],
     data: function () {
         return {
 
@@ -88,27 +91,12 @@ export default {
                 country_str: "",
 
             },
-            filter_visible: false,
-            current_page: 1,
-            items_per_page: 10,
-            page_count: 1,
-            items: [],
-            page_of_items: [],
-            is_reload: false,
-            selected_item: -1,
-            filter_state: false
-
+            //читать об этом в mixin_index
+            action_namespace : "producers"
         };
     },
-    mounted() {
-        this.update();
-    },
+
     methods: {
-
-        rowSelected(id) {
-
-            this.selected_item = id;
-        },
 
         update: function () {
             this.filter_state = false;
@@ -122,25 +110,6 @@ export default {
 
 
         },
-        onChangePage() {
-            // update page of items
-
-            if (this.filter_state) this.page_of_items = this.items.slice(this.items_per_page * (this.current_page - 1), (this.items_per_page * this.current_page));
-            else this.page_of_items = this.$store.getters['producers/items'].slice(this.items_per_page * (this.current_page - 1), (this.items_per_page * this.current_page));
-        },
-
-        //по дабл-клику - переходим на строку с изменением выбраного объекта
-        toEdit(id) {
-
-            this.$router.push({name: 'producers.edit', params: {id: id}});
-        },
-
-
-        switch_filter() {
-
-            this.filter_visible = !this.filter_visible;
-        },
-
 
         filter() {
             this.filter_state = true;
@@ -170,6 +139,15 @@ export default {
                     {
                         title: 'Да',
                         handler: () => {
+                            //  axios.delete(`/api/producers/${this.selected_item.id}`).then((response) => {
+                            //      this.page_of_items = [];
+                            //      //оборачиваем каждый элемент пришедших данных в модель модуля
+                            //      response.data.forEach(item => this.page_of_items.push(new Producer(item.id, item.name, item.country, item.created_at, item.updated_at, item.deleted_at)))
+
+                            //  }).catch((error) => {
+                            //      //если не ок - асинхронный ответ с кодом ошибки
+                            //      console.log(`Что то пошло не так. Код ответа - ${error}`)
+                            //  })
 
 
                         }
@@ -178,6 +156,7 @@ export default {
                         title: 'Нет',
                         handler: () => {
 
+                            this.$modal.hide()
                         }
                     }
                 ]

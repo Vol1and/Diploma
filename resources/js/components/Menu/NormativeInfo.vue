@@ -7,11 +7,11 @@
         </li>
         <li class="list-group-item">
 
-            <router-link  class="nav-link" :to="{name: 'price-types.index'}">Типы цен</router-link>
+            <router-link  class="nav-link" :to="{name: 'pricetypes.index'}">Типы цен</router-link>
         </li>
         <li class="list-group-item">
 
-            <router-link  class="nav-link" :to="{name: 'nomenclatures.index'}">Номенклатура</router-link>
+            <router-link  class="nav-link" :to="{name: 'nomenclature.index'}">Номенклатура</router-link>
         </li>
         <li class="list-group-item">
 
