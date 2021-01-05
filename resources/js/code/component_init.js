@@ -26,8 +26,7 @@ import Paginate from 'vuejs-paginate'
 Vue.component('paginate', Paginate)
 
 
-//Инициализация компонентов
-Vue.component('error-component', require('../components/Layouts/Error').default);
+
 
 Vue.component('NormativeInfo',      NormativeInfo.default);
 

@@ -2,7 +2,6 @@
     <div v-if="is_visible" class="row" style="width: 100%">
         <div class="offset-4 col-md-4">
             <div class="offset-2 col-md-8">
-                <error-component :errors="errors"></error-component>
                 <div style="margin-bottom: 10px; height: 50px" class=" form-control ">
                     <h2 class="text-center center-block">Ценовая группа #{{ item.id }}</h2>
                 </div>
@@ -22,7 +21,7 @@
                             <input type="number" name="country" id="country" v-model="item.margin"
                                    class="form-text form-control"/>
                         </div>
-                        <button @click="submit()" type="submit"
+                        <button  type="submit"
                                 style="display: block;margin-right: auto;margin-left: auto;"
                                 class="btn btn-primary center-block"
                                 :disabled="loaded === false">
@@ -39,10 +38,11 @@
 
 <script>
 import PriceType from "../../code/models/PriceType";
+import mixin_edit from "../../code/mixins/mixin_edit";
 
 export default {
     name: "PriceTypeEdit",
-
+    mixins: [mixin_edit],
     data() {
         return {
             item: new PriceType(),
@@ -63,7 +63,7 @@ export default {
 
         }).catch((error) => {
             console.log("Ошибка!");
-            this.$router.push({name: 'price-types.index'});
+            this.$router.push({name: 'pricetypes.index'});
         })
 
     },
@@ -83,19 +83,21 @@ export default {
 
                 //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
                 this.loaded = true;
+                this.$notify({
+                    group: 'my',
+                    type: 'success',
+                    title: 'Элемент добавлен!',
+                    text: `Элемент с Id=${this.item.id} успешно изменен!`,
+                })
+                this.$router.push({name: 'pricetypes.index'});
 
-                console.log("Ответ получен!");
-                this.$router.push({name: 'price-types.index'});
-
-                //if (response.status >= 400) {
-
-                //    this.errors.push(response.statusText);
-
-                //} else
             }).catch((error) => {
-                console.log("Ошибка!")
-                //this.$router.push({name: 'producers.index'});
-                this.errors.push(error.response.data.message);
+                this.$notify({
+                    group: 'my',
+                    type: 'success',
+                    title: 'Ошибка!',
+                    text: "Сообщение ошибки - " + error.response.data.message,
+                })
                 this.loaded = true;
             })
         },
@@ -106,6 +108,7 @@ export default {
             if (this.item.margin < 0) this.errors.push("Поле \"Наценка\" не должно быть отрицательным");
             if (this.item.margin > 255) this.errors.push("Превышено максимально допустимое значение поля \"Наценка\"");
 
+            this.showErrors()
 
             return this.errors.length === 0;
         }

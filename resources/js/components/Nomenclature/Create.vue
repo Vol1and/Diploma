@@ -3,7 +3,7 @@
         <div v-if="choosing_state === 0 " class="row" style="width: 100%">
             <div class="offset-4 col-md-4">
                 <div class="offset-2 col-md-8">
-                    <error-component :errors="errors"></error-component>
+
                     <div style="margin-bottom: 10px; height: 50px" class=" form-control ">
                         <h2 class="text-center center-block">Новая номенклатура</h2>
                     </div>
@@ -38,7 +38,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <button @click="submit()" type="submit"
+                            <button type="submit"
                                     style="display: block;margin-right: auto;margin-left: auto;"
                                     class="btn btn-primary center-block"
                                     :disabled="loaded === false">
@@ -51,17 +51,22 @@
             </div>
 
         </div>
-        <producer-choose-component   @back="onBack" v-if="choosing_state ===1" @selected="onSelectedProducer"></producer-choose-component>
-        <price-type-choose-component @back="onBack" v-if="choosing_state ===2" @selected="onSelectedPriceType"></price-type-choose-component>
+        <producer-choose-component @back="onBack" v-if="choosing_state ===1"
+                                   @selected="onSelectedProducer"></producer-choose-component>
+        <price-type-choose-component @back="onBack" v-if="choosing_state ===2"
+                                     @selected="onSelectedPriceType"></price-type-choose-component>
     </div>
 </template>
 
 <script>
 import Nomenclature from "../../code/models/Nomenclature";
 
+import mixin_create from "../../code/mixins/mixin_create";
+
+
 export default {
     name: "NomenclatureCreate",
-
+    mixins: [mixin_create],
     data() {
         return {
             item: new Nomenclature(),
@@ -83,27 +88,39 @@ export default {
             axios.post(`/api/nomenclatures`, this.item.getDataForServer()).then(response => {
 
                 //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
-                this.loaded = true;
 
-                console.log("Ответ получен!");
-                this.$router.push({name: 'nomenclatures.index'});
+                this.$notify({
+                    group: 'my',
+                    type: 'success',
+                    title: 'Элемент добавлен!',
+                    text: "Элемент успешно добавлен",
+                })
+                this.$router.push({name: 'nomenclature.index'});
+
 
             }).catch((error) => {
                 console.log("Ошибка!")
                 //this.$router.push({name: 'producers.index'});
-                this.errors.push(error.response.data.message);
+                this.$notify({
+                    group: 'my',
+                    type: 'success',
+                    title: 'Ошибка!',
+                    text: "Сообщение ошибки - " + error.response.data.message,
+                })
                 this.loaded = true;
             })
         },
         validateFields() {
             this.errors = [];
-            console.log(this.item)
             if (this.item.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
             if (this.item.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
             if (!this.item.price_type.id) this.errors.push("Ошибка в поле \"Ценовая группа\"");
             if (!this.item.producer.id) this.errors.push("Ошибка в поле \"Производитель\"");
             if (this.item.price_type.id <= 0) this.errors.push("Ошибка в поле \"Ценовая группа\"");
             if (this.item.producer.id <= 0) this.errors.push("Ошибка в поле \"Производитель\"");
+
+
+            this.showErrors()
 
             return this.errors.length === 0;
         },
@@ -122,7 +139,7 @@ export default {
             this.item.price_type = data.price_type;
             this.choosing_state = 0;
         },
-        onBack(){
+        onBack() {
             this.choosing_state = 0;
         }
 

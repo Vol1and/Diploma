@@ -2,7 +2,7 @@
     <div class="row" style="width: 100%">
         <div class="offset-4 col-md-4">
             <div class="offset-2 col-md-8">
-                <error-component :errors="errors"></error-component>
+
                 <div style="margin-bottom: 10px; height: 50px" class=" form-control">
                     <h2 class="text-center center-block">Новая ценовая группа</h2>
                 </div>
@@ -22,7 +22,7 @@
                             <input type="number" name="country" id="country" v-model="item.margin"
                                    class="form-text form-control"/>
                         </div>
-                        <button @click="submit()" type="submit"
+                        <button type="submit"
                                 style="display: block;margin-right: auto;margin-left: auto;"
                                 class="btn btn-primary center-block"
                                 :disabled="loaded === false">
@@ -39,13 +39,14 @@
 
 <script>
 import PriceType from "../../code/models/PriceType";
+import mixin_create from "../../code/mixins/mixin_create";
 
 export default {
     name: "PriceTypeCreate",
-
+    mixins: [mixin_create],
     data() {
         return {
-            item: new PriceType(),
+            item: new PriceType(-1, "", 0),
 
             loaded: true,
             errors: [],
@@ -59,7 +60,7 @@ export default {
 
         submit: function () {
 
-            if(!this.validateFields()) return;
+            if (!this.validateFields()) return;
 
             this.loaded = false;
 
@@ -68,28 +69,33 @@ export default {
 
                 //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
                 this.loaded = true;
-                //console.log(response.data);
+                this.$notify({
+                    group: 'my',
+                    type: 'success',
+                    title: 'Элемент добавлен!',
+                    text: "Элемент успешно добавлен",
+                })
 
-                console.log("Ответ получен!")
-                if (response.status >= 400) {
-
-                    this.errors.push(response.statusText);
-
-                } else this.$router.push({name: 'price-types.index'});
+                this.$router.push({name: 'pricetypes.index'});
                 // window.location.href = response.data;
             }).catch((error) => {
-                console.log("Ошибка!")
-                this.errors.push(error.response.data.message);
+                this.$notify({
+                    group: 'my',
+                    type: 'success',
+                    title: 'Ошибка!',
+                    text: "Сообщение ошибки - " + error.response.data.message,
+                })
                 this.loaded = true;
             })
         },
-        validateFields(){
+        validateFields() {
             this.errors = [];
-            if(this.item.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
-            if(this.item.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
-            if(this.item.margin < 0) this.errors.push("Поле \"Наценка\" не должно быть отрицательным");
-            if(this.item.margin > 255) this.errors.push("Превышено максимально допустимое значение поля \"Наценка\"");
+            if (this.item.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
+            if (this.item.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
+            if (this.item.margin < 0) this.errors.push("Поле \"Наценка\" не должно быть отрицательным");
+            if (this.item.margin > 255) this.errors.push("Превышено максимально допустимое значение поля \"Наценка\"");
 
+            this.showErrors();
 
             return this.errors.length === 0;
         }

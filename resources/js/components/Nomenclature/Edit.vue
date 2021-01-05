@@ -3,7 +3,6 @@
         <div v-if="is_visible && choosing_state === 0 " class="row" style="width: 100%">
             <div class="center-33">
                 <div class="">
-                    <error-component :errors="errors"></error-component>
                     <div style="margin-bottom: 10px; height: 50px" class=" form-control ">
                         <h2 class="text-center center-block">Номенклатура #{{ item.id }}</h2>
                     </div>
@@ -48,7 +47,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <button @click="submit()" type="submit"
+                            <button type="submit"
                                     style="display: block;margin-right: auto;margin-left: auto;"
                                     class="btn btn-primary center-block"
                                     :disabled="loaded === false">
@@ -80,10 +79,11 @@
 
 <script>
 import Nomenclature from "../../code/models/Nomenclature";
+import mixin_edit from "../../code/mixins/mixin_edit";
 
 export default {
     name: "NomenclatureEdit",
-
+    mixins: [mixin_edit],
     data() {
         return {
             item: new Nomenclature(),
@@ -106,7 +106,7 @@ export default {
 
         }).catch((error) => {
             console.log("Ошибка!");
-            this.$router.push({name: 'nomenclatures.index'});
+            this.$router.push({name: 'nomenclature.index'});
         })
 
     },
@@ -124,14 +124,21 @@ export default {
 
                 //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
                 this.loaded = true;
-
-                console.log("Ответ получен!");
-                this.$router.push({name: 'nomenclatures.index'});
+                this.$notify({
+                    group: 'my',
+                    type: 'success',
+                    title: 'Элемент добавлен!',
+                    text: `Элемент с Id=${this.item.id} успешно изменен!`,
+                })
+                this.$router.push({name: 'nomenclature.index'});
 
             }).catch((error) => {
-                console.log("Ошибка!")
-                //this.$router.push({name: 'producers.index'});
-                this.errors.push(error.response.data.message);
+                this.$notify({
+                    group: 'my',
+                    type: 'success',
+                    title: 'Ошибка!',
+                    text: "Сообщение ошибки - " + error.response.data.message,
+                })
                 this.loaded = true;
             })
         },
@@ -144,7 +151,7 @@ export default {
             if (this.item.price_type.id <= 0) this.errors.push("Ошибка в поле \"Ценовая группа\"");
             if (this.item.producer.id <= 0) this.errors.push("Ошибка в поле \"Производитель\"");
 
-
+            this.showErrors()
 
             return this.errors.length === 0;
         },

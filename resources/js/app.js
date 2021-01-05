@@ -1,13 +1,11 @@
 
-
+import Vue from 'vue'
 require('./code/bootstrap');
 window.Vue = require('vue');
 require('./code/component_init')
 
 
 require('./store')
-
-
 
 
 //npm-модуль с механикой раутинга
@@ -20,6 +18,15 @@ Vue.use(require('vue-shortkey'))
 import VModal from 'vue-js-modal'
 Vue.use(VModal, {dialog: true})
 
+
+import Notifications from 'vue-notification'
+
+/*
+or for SSR:
+import Notifications from 'vue-notification/dist/ssr.js'
+*/
+
+Vue.use(Notifications)
 
 //Инициализация раутов
 

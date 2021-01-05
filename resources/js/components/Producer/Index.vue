@@ -2,7 +2,7 @@
 
     <div v-shortkey="['del']" @shortkey="deleteSelected" class="center-75">
         <v-dialog/>
-        <error-component :errors="errors"></error-component>
+
         <h1 class="text-center">Производители</h1>
         <div class="row">
             <router-link :to="{name: 'producers.create'}" style=" float:left "
@@ -92,7 +92,7 @@ export default {
 
             },
             //читать об этом в mixin_index
-            action_namespace : "producers"
+            action_namespace: "producers"
         };
     },
 
@@ -139,24 +139,30 @@ export default {
                     {
                         title: 'Да',
                         handler: () => {
-                            //  axios.delete(`/api/producers/${this.selected_item.id}`).then((response) => {
-                            //      this.page_of_items = [];
-                            //      //оборачиваем каждый элемент пришедших данных в модель модуля
-                            //      response.data.forEach(item => this.page_of_items.push(new Producer(item.id, item.name, item.country, item.created_at, item.updated_at, item.deleted_at)))
+                            axios.delete(`/api/producers/${this.selected_item.id}`).then((response) => {
 
-                            //  }).catch((error) => {
-                            //      //если не ок - асинхронный ответ с кодом ошибки
-                            //      console.log(`Что то пошло не так. Код ответа - ${error}`)
-                            //  })
+                                this.update()
+                                this.$notify({
+                                    group: 'my',
+                                    type: 'success',
+                                    title: 'Успешно!',
+                                    text: `Элемент с Id = ${this.selected_item.id} успешно удален!`,
 
+                                })
 
+                            }).catch((error) => {
+                                //если не ок - асинхронный ответ с кодом ошибки
+                                console.log(`Что то пошло не так. Ошибка - ${error}`)
+                            })
+
+                            this.$modal.hide('dialog')
                         }
                     },
                     {
                         title: 'Нет',
                         handler: () => {
 
-                            this.$modal.hide()
+                            this.$modal.hide('dialog')
                         }
                     }
                 ]
