@@ -45,6 +45,9 @@ Vue.component('price-type-choose-component',
 Vue.component('NomenclatureIndex',    NomenclatureIndex.default);
 Vue.component('NomenclatureCreate',   NomenclatureCreate.default);
 Vue.component('NomenclatureEdit',     NomenclatureEdit.default);
+Vue.component('nomenclature-choose-component',
+    require('../components/Nomenclature/Choose').default);
+
 
 Vue.component('CharacteristicForNomenclature',     CharacteristicForNomenclature.default);
 

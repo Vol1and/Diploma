@@ -30,7 +30,7 @@ Route::get('/nomenclature/filter', [App\Http\Controllers\NomenclatureController:
 Route::apiResource('/nomenclatures', "App\Http\Controllers\NomenclatureController");
 
 
-
+Route::post('/wares' , [\App\Http\Controllers\WareController::class, 'index']);
 
 
 

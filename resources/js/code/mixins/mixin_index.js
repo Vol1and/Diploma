@@ -41,6 +41,7 @@ export default {
 
         //вызывается при клике по строке
         rowSelected(item) {
+
             this.selected_item = item;
         },
         //обычный тоггл булева значения - при клике по кнопке ФИЛЬТР в компоненте
@@ -58,8 +59,9 @@ export default {
                     .slice(this.items_per_page * (this.current_page - 1), (this.items_per_page * this.current_page));
         },
         //по дабл-клику - переходим на строку с изменением выбраного объекта
-        toEdit(id) {
-            this.$router.push({name: `${this.action_namespace}.edit`, params: {id: id}});
+        toEdit() {
+
+            this.$router.push({name: `${this.action_namespace}.edit`, params: {id: this.selected_item.id}});
         },
     }
 }
