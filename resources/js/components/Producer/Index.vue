@@ -41,7 +41,7 @@
             </div>
 
         </div>
-        <table class="table ">
+        <el-table class="table ">
             <tr class="bordered">
                 <th>#</th>
                 <th>Название</th>
@@ -56,7 +56,7 @@
                 <td>{{ item.country }}</td>
             </tr>
             </tbody>
-        </table>
+        </el-table>
         <div v-if="!filter_state" class="centered">
             <!--            <jw-pagination :items="items" @changePage="onChangePage"></jw-pagination>-->
             <paginate
