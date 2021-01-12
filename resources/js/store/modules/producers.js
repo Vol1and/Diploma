@@ -52,7 +52,6 @@ const actions = {
             //запрашивает данные с сервера
             axios.post('/api/producers', data.fields).then(response => {
 
-                this.commit
                 resolve();
 
                 //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
@@ -61,7 +60,24 @@ const actions = {
                 reject(error.response.data.message);
             })
         });
-    }
+    },
+    deleteItem(context, data){
+        return new Promise((resolve, reject) => {
+            //запрашивает данные с сервера
+            axios.delete(`/api/producers/${data.id}` ).then(response => {
+
+                context.dispatch('update').then(()=>{
+                    resolve();
+                });
+
+
+                //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
+            }).catch((error) => {
+                console.log("Ошибка!")
+                reject(error.response.data.message);
+            })
+        });
+    },
 
 
 }

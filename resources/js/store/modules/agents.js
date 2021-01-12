@@ -1,4 +1,4 @@
-import PriceType from "../../code/models/PriceType";
+import Agent from "../../code/models/Agent";
 
 
 //содержит переменные, которые будут помещены в модуль хранилища
@@ -25,10 +25,10 @@ const actions = {
     update(context) {
         return new Promise((resolve, reject) => {
             //запрашивает данные с сервера
-            axios.get('/api/price-types').then((response) => {
+            axios.get('/api/agents').then((response) => {
                     let result = [];
                     //оборачиваем каждый элемент пришедших данных в модель модуля
-                    response.data.forEach(item => result.push(new PriceType(item.id, item.name, item.margin, item.created_at, item.updated_at, item.deleted_at)))
+                    response.data.forEach(item => result.push(new Agent(item.id, item.name, item.billing, item.address, item.description, item.created_at, item.updated_at, item.deleted_at)))
 
                     //дергаем мутатор
                     context.commit('setItems', result);
@@ -45,7 +45,7 @@ const actions = {
     deleteItem(context, data){
         return new Promise((resolve, reject) => {
             //запрашивает данные с сервера
-            axios.delete(`/api/price-types/${data.id}` ).then(response => {
+            axios.delete(`/api/agents/${data.id}` ).then(response => {
 
                 context.dispatch('update').then(()=>{
                     resolve();

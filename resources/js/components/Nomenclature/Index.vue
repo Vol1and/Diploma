@@ -1,9 +1,9 @@
 <template>
     <div>
-        <el-row v-shortkey="['del']" v-if="choosing_state === 0 " @shortkey="deleteSelected" class="center-75">
-            <v-dialog/>
+        <el-row  v-if="choosing_state === 0 " class="center-75">
 
-            <h1 class="text-center">Номенклатура</h1>
+
+            <h1 v-shortkey="['del']" @shortkey="deleteSelected" class="text-center">Номенклатура</h1>
 
             <el-row>
                 <el-col :span="8">

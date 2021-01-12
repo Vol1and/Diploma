@@ -17,7 +17,7 @@
 
 
                     <el-form-item>
-                        <el-button type="primary" @click="submit" >Изменить</el-button>
+                        <el-button type="primary" @click="submit" >Добавить</el-button>
                         <el-button @click="()=>{this.$router.go(-1)}">Отмена</el-button>
                     </el-form-item>
                 </el-form>
@@ -64,7 +64,7 @@ export default {
                     title: 'Элемент добавлен!',
                     message: `Элемент  успешно добавлен!`,
                 })
-                this.$router.push({name: 'nomenclature.index'});
+                this.$router.push({name: 'pricetypes.index'});
 
             }).catch((error) => {
                 this.$notify.error({

@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import producers from './modules/producers'
 import pricetypes from './modules/pricetypes'
 import nomenclature from './modules/nomenclature'
-
+import agents from "./modules/agents";
 Vue.use(Vuex)
 
 
@@ -13,6 +13,7 @@ export default new Vuex.Store({
     modules: {
         producers,
         pricetypes,
-        nomenclature
+        nomenclature,
+        agents
     },
 })

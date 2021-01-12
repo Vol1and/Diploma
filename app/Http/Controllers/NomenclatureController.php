@@ -115,7 +115,11 @@ class NomenclatureController extends OriginController
      */
     public function destroy($id)
     {
-        //
+        $result = Nomenclature::destroy($id);
+
+        if (!$result) return response(null, 404);
+
+        return response(null, 200);
     }
 
 

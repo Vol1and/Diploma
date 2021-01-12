@@ -1,19 +1,20 @@
 <template>
 
-    <el-row v-shortkey="['del']" @shortkey="deleteSelected" class="center-75">
-        <v-dialog/>
+    <el-row class="center-75">
 
-        <h1 class="text-center">Производители</h1>
+
+        <h1 v-shortkey="['del']" @shortkey="deleteSelected" class="text-center">Производители</h1>
 
         <el-row>
             <el-col :span="8">
-                    <router-link tag="button" class="el-button" :to="{name: 'producers.create'}" style=" float:left ">
-                        Добавить
-                    </router-link>
+                <router-link tag="button" class="el-button" :to="{name: 'producers.create'}" style=" float:left ">
+                    Добавить
+                </router-link>
             </el-col>
             <el-col justify="center" :span="8">
                 <el-col :span="8" :offset="8">
-                    <el-button icon="el-icon-s-operation"  style="width: 100%" @click="switch_filter()" v-if="!filter_visible">
+                    <el-button icon="el-icon-s-operation" style="width: 100%" @click="switch_filter()"
+                               v-if="!filter_visible">
                         Фильтры
                     </el-button>
                     <el-button @click="switch_filter()" style="width: 100%" v-else type="danger">Закрыть</el-button>
@@ -29,15 +30,15 @@
         </el-row>
 
         <el-row v-if="filter_visible">
-            <el-divider ></el-divider>
+            <el-divider></el-divider>
             <el-form :inline="true" class="demo-form-inline">
-                <el-form-item   style="   margin-bottom: 0;"  label="Название:">
-                    <el-input v-model="filter_fields.name_str"  placeholder="Название"></el-input>
+                <el-form-item style="   margin-bottom: 0;" label="Название:">
+                    <el-input v-model="filter_fields.name_str" placeholder="Название"></el-input>
                 </el-form-item>
-                <el-form-item  style="   margin-bottom: 0;"  label="Страна:">
+                <el-form-item style="   margin-bottom: 0;" label="Страна:">
                     <el-input v-model="filter_fields.country_str" placeholder="Страна"></el-input>
                 </el-form-item>
-                <el-form-item  style="   margin-bottom: 0;" >
+                <el-form-item style="   margin-bottom: 0;">
                     <el-button type="primary" @click="filter">Поиск</el-button>
                 </el-form-item>
             </el-form>
@@ -47,7 +48,8 @@
         <el-table :data="page_of_items"
                   highlight-current-row
                   @row-dblclick="toEdit"
-                  @current-change="rowSelected">
+                  @current-change="rowSelected"
+        >
             <el-table-column
                 prop="id"
                 label="#"
@@ -138,44 +140,7 @@ export default {
 
         },
 
-        deleteSelected() {
-            console.log(`удалится элемент с id ${this.selected_item}`)
-            //this.$modal.show('dialog', {
-            //    title: 'Вы уверены',
-            //    text: 'Удалить выбранный объект?',
-            //    buttons: [
-            //        {
-            //            title: 'Да',
-            //            handler: () => {
-            //                axios.delete(`/api/producers/${this.selected_item.id}`).then((response) => {
-//
-            //                    this.update()
-            //                    this.$notify({
-            //                        group: 'my',
-            //                        type: 'success',
-            //                        title: 'Успешно!',
-            //                        text: `Элемент с Id = ${this.selected_item.id} успешно удален!`,
-//
-            //                    })
-//
-            //                }).catch((error) => {
-            //                    //если не ок - асинхронный ответ с кодом ошибки
-            //                    console.log(`Что то пошло не так. Ошибка - ${error}`)
-            //                })
-//
-            //                this.$modal.hide('dialog')
-            //            }
-            //        },
-            //        {
-            //            title: 'Нет',
-            //            handler: () => {
-//
-            //                this.$modal.hide('dialog')
-            //            }
-            //        }
-            //    ]
-            //})
-        }
+
 
     }
 

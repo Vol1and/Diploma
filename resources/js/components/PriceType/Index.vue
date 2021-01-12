@@ -1,8 +1,8 @@
 <template>
-    <el-row v-shortkey="['del']" @shortkey="deleteSelected" class="center-75">
-        <v-dialog/>
+    <el-row class="center-75">
 
-        <h1 class="text-center">Ценовые группы</h1>
+
+        <h1 v-shortkey="['del']" @shortkey="deleteSelected" class="text-center">Ценовые группы</h1>
 
         <el-row>
             <el-col :span="8">
@@ -68,7 +68,7 @@ export default {
     mixins: [mixin_index],
     data: function () {
         return {
-            action_namespace : "pricetypes"
+            action_namespace: "pricetypes"
         };
     },
 
@@ -88,7 +88,7 @@ export default {
             }));
 
         },
-        deleteSelected() {}
+
     }
 
 }

@@ -37,6 +37,7 @@ const actions = {
             //запрашивает данные с сервера
             axios.get('/api/nomenclatures').then((response) => {
 
+                console.log(response.data)
                 let result = [];
                 //оборачиваем каждый элемент пришедших данных в модель модуля
                 response.data.forEach(item => result.push(new Nomenclature(item.id,
@@ -54,10 +55,28 @@ const actions = {
 
             }).catch((error) => {
                 //если не ок - асинхронный ответ с кодом ошибки
-                reject(error.response.data.message);
+                reject()
+                //reject(error.response.data.message);
             })
         });
 
+    },
+    deleteItem(context, data){
+        return new Promise((resolve, reject) => {
+            //запрашивает данные с сервера
+            axios.delete(`/api/nomenclatures/${data.id}` ).then(response => {
+
+                context.dispatch('update').then(()=>{
+                    resolve();
+                });
+
+
+                //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
+            }).catch((error) => {
+                console.log("Ошибка!")
+                reject(error.response.data.message);
+            })
+        });
     },
     //updateIfChanged(context) {
     //    return new Promise((resolve, reject) => {

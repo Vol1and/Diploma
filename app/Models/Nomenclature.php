@@ -21,13 +21,13 @@ class Nomenclature extends Model
     public function price_type()
     {
 
-        return $this->belongsTo(PriceType::class);
+        return $this->belongsTo(PriceType::class)->withTrashed();
     }
 
     public function producer()
     {
 
-        return $this->belongsTo(Producer::class);
+        return $this->belongsTo(Producer::class)->withTrashed();
     }
 
     public function med_form()

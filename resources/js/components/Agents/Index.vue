@@ -1,8 +1,8 @@
 <template>
     <el-row style="margin-bottom: 50px" v-shortkey="['del']" @shortkey="deleteSelected" class="center-75">
-        <v-dialog/>
 
-        <h1 class="text-center">Контрагенты</h1>
+
+        <h1 v-shortkey="['del']" @shortkey="deleteSelected" class="text-center">Контрагенты</h1>
 
         <el-row>
             <el-col :span="8">
@@ -92,19 +92,18 @@ export default {
         },
 
         update: function () {
-            axios.get('/api/agents').then((response) => {
-                this.is_reload = true;
-
-
-                this.items = response.data;
-                this.page_count = Math.ceil(this.items.length / this.items_per_page);
-                this.onChangePage();
+            this.is_reload = true;
+            this.$store.dispatch('agents/update').then(() => {
                 this.is_reload = false;
-            });
-        },
-        onChangePage() {
-            // update page of items
-            this.page_of_items = this.items.slice(this.items_per_page * (this.current_page - 1), (this.items_per_page * this.current_page));
+                this.page_count = this.$store.getters['agents/items_length'](this.items_per_page);
+                this.current_page = 1;
+                this.onChangePage();
+
+            }, (reason => {
+                console.log(`Что то пошло не так. Код ответа - ${reason}`)
+                this.is_reload = false;
+            }));
+
         }
 
     }

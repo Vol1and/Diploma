@@ -13,7 +13,8 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
-Vue.use(require('vue-shortkey'))
+import vue_shortkey from "vue-shortkey";
+Vue.use(vue_shortkey)
 
 import ElementUI from 'element-ui';
 

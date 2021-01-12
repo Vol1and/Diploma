@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import Agent from "../../code/models/Agent";
+
 export default {
     name: "AgentsEdit",
 
@@ -50,7 +52,9 @@ export default {
     beforeCreate() {
 
         axios.get(`/api/agents/${this.$route.params.id}`).then(response => {
-            this.item = response.data;
+            this.item = new Agent(response.data.id, response.data.name, response.data.billing,
+                response.data.address, response.data.description, response.data.created_at,
+                response.data.updated_at, response.data.deleted_at)
             this.is_visible = true;
 
         }).catch((error) => {
@@ -59,7 +63,6 @@ export default {
         })
 
     },
-
 
 
     methods: {
@@ -72,16 +75,20 @@ export default {
             axios.patch(`/api/agents/${this.item.id}`, this.item).then(response => {
 
                 this.loaded = true;
+                this.$notify({
 
-                console.log("Ответ получен!");
+                    type: 'success',
+                    title: 'Успешно!',
+                    message: `Элемент с Id=${this.item.id} успешно изменен!`,
+                })
                 this.$router.push({name: 'agents.index'});
 
-
             }).catch((error) => {
-                console.log("Ошибка!")
+                this.$notify.error({
 
-
-                this.errors.push(error.response.data.message);
+                    title: 'Ошибка!',
+                    message: "Сообщение ошибки - " + error.response.data.message,
+                })
                 this.loaded = true;
             })
         },

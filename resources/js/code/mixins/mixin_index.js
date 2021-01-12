@@ -63,6 +63,38 @@ export default {
 
             this.$router.push({name: `${this.action_namespace}.edit`, params: {id: this.selected_item.id}});
         },
-        deleteSelected(){}
+        deleteSelected() {
+
+            if(this.selected_item.id === undefined) return;
+
+            this.$confirm(`Вы действительно хотите удалить элмент с Id=${this.selected_item.id}?`, 'Внимание!', {
+                confirmButtonText: 'Удалить',
+                cancelButtonText: 'Отмена',
+                type: 'warning'
+            }).then(() => {
+
+
+                this.$store.dispatch(`${this.action_namespace}/deleteItem`, {id : this.selected_item.id}).then(() => {
+                    this.selected_item = null;
+                    this.onChangePage();
+                    this.$message({
+                        type: 'success',
+                        title: "Успешно",
+                        message: 'Элемент был успешно удален!'
+                    });
+                }, (reason => {
+                    console.log(`Что то пошло не так. Код ответа - ${reason}`)
+                }))
+
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    title: 'Отмена',
+                    message: 'Удаление было отмненено'
+                });
+            });
+
+
+        }
     }
 }

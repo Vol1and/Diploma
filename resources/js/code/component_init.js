@@ -21,9 +21,7 @@ import CharacteristicForNomenclature from "../components/Characteristic/ForNomen
 
 import Home from "../components/Home";
 
-//npm-модуль с пагинацией
-import Paginate from 'vuejs-paginate'
-Vue.component('paginate', Paginate)
+
 
 
 

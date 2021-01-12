@@ -91,6 +91,10 @@ class AgentController extends OriginController
      */
     public function destroy($id)
     {
-        //
+        $result = Agent::destroy($id);
+
+        if (!$result) return response(null, 404);
+
+        return response(null, 200);
     }
 }

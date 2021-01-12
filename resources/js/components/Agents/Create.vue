@@ -32,12 +32,14 @@
 </template>
 
 <script>
+import Agent from "../../code/models/Agent";
+
 export default {
     name: "AgentsCreate",
 
     data() {
         return {
-            item: {name: "", billing: "", address: "", description: ""},
+            item: new Agent(),
 
             loaded: true,
             errors: [],
@@ -56,21 +58,29 @@ export default {
             this.loaded = false;
 
 
-            axios.post('/api/agents', this.fields).then(response => {
+            axios.post('/api/agents', this.item).then(response => {
                 this.loaded = true;
+                this.$notify({
+
+                    type: 'success',
+                    title: 'Элемент добавлен!',
+                    message: `Элемент  успешно добавлен!`,
+                })
                 this.$router.push({name: 'agents.index'});
 
-
             }).catch((error) => {
-                console.log("Ошибка!")
-                this.errors.push(error.response.data.message);
+                this.$notify.error({
+
+                    title: 'Ошибка!',
+                    message: "Сообщение ошибки - " + error.response.data.message,
+                })
                 this.loaded = true;
             })
         },
         validateFields() {
             this.errors = [];
-            if (this.fields.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
-            if (this.fields.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
+            if (this.item.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
+            if (this.item.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
 
             return this.errors.length === 0;
         }
