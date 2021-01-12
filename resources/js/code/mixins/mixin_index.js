@@ -63,5 +63,6 @@ export default {
 
             this.$router.push({name: `${this.action_namespace}.edit`, params: {id: this.selected_item.id}});
         },
+        deleteSelected(){}
     }
 }

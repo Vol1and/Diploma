@@ -1,83 +1,103 @@
 <template>
+    <el-row  class="center-75">
+        <v-dialog/>
 
-    <div class="center-50">
-        <div>
-            <button @click="back()" class="btn  btn-primary"><--</button>
-            <h1 class="text-center">Выбор производителя</h1>
-        </div>
-        <div class="row">
-            <router-link :to="{name: 'producers.create'}" style=" float:left " class="btn btn-in-bar  btn-primary">
-                Добавить
-            </router-link>
-            <button @click="switch_filter()" v-if="!filter_visible" class="btn btn-in-bar center-block  btn-primary">Фильтры</button>
-            <button @click="switch_filter()" v-else class="btn btn-in-bar center-block  btn-danger" >Закрыть</button>
+        <h1 class="text-center">Выбор производителя</h1>
 
+        <el-row>
+            <el-col :span="8">
+                <router-link tag="button" class="el-button" :to="{name: 'producers.create'}" style=" float:left ">
+                    Добавить
+                </router-link>
+            </el-col>
+            <el-col justify="center" :span="8">
+                <el-col :span="8" :offset="8">
+                    <el-button icon="el-icon-s-operation"  style="width: 100%" @click="switch_filter()" v-if="!filter_visible">
+                        Фильтры
+                    </el-button>
+                    <el-button @click="switch_filter()" style="width: 100%" v-else type="danger">Закрыть</el-button>
+                </el-col>
 
-                       <button @click="update" :disabled="is_reload" style="float:right;"  class=" btn-in-bar btn btn-primary">Обновить </button>
-        </div>
+            </el-col>
 
-        <div class="row" v-if="filter_visible">
+            <el-col :span="8">
+                <el-button icon="el-icon-refresh" @click="update" :disabled="is_reload" style="float:right;">
+                    Обновить
+                </el-button>
+            </el-col>
+        </el-row>
 
-            <div class=" no-padding" style="float:right">
-                <label class="col-form-label-lg" style="float: left" for="filter_input">
-                    Поиск:
-                </label>
-                <input id="filter_input" v-model="filter_str" class=" form-control form-group btn-in-bar "
-                       style="float:left; margin-left: 10px"/>
-                <button @click="filter" style="float:right; margin-left: 20px" class=" btn-in-bar btn btn-primary">Поиск</button>
+        <el-row v-if="filter_visible">
+            <el-divider ></el-divider>
+            <el-form :inline="true" class="demo-form-inline">
+                <el-form-item   style="   margin-bottom: 0;"  label="Название:">
+                    <el-input v-model="filter_fields.name_str"  placeholder="Название"></el-input>
+                </el-form-item>
+                <el-form-item  style="   margin-bottom: 0;"  label="Страна:">
+                    <el-input v-model="filter_fields.country_str" placeholder="Страна"></el-input>
+                </el-form-item>
+                <el-form-item  style="   margin-bottom: 0;" >
+                    <el-button type="primary" @click="filter">Поиск</el-button>
+                </el-form-item>
+            </el-form>
 
-            </div>
-
-        </div>
-        <table class="table ">
-            <tr class="bordered">
-                <th>#</th>
-                <th>Название</th>
-                <th>Страна</th>
-            </tr>
-            <tbody>
-            <tr v-for="item in page_of_items" class="row-hover" :key="item.id" :class="{'highlight': (item.id === selected_item)}"
-                @click="rowSelected(item.id)" @dblclick="selected(item)">
-                <td>{{ item.id }}</td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.country }}</td>
-            </tr>
-            </tbody>
-        </table>
-        <div class="centered">
-            <!--            <jw-pagination :items="items" @changePage="onChangePage"></jw-pagination>-->
-            <paginate
-                v-model="current_page"
-                :page-count="page_count"
-                :page-range="3"
-                :click-handler="onChangePage"
-                :prev-text="'<<'"
-                :next-text="'>>'"
-                :container-class="'pagination'"
-                :active-class="'pagination-active'"
+        </el-row>
+        <el-divider></el-divider>
+        <el-table :data="page_of_items"
+                  highlight-current-row
+                  @row-dblclick="selected"
+                  @current-change="rowSelected">
+            <el-table-column
+                prop="id"
+                label="#"
+                min-width="15"
             >
-            </paginate>
+            </el-table-column>
+            <el-table-column
+                prop="name"
+                label="Наименование"
+            >
+            </el-table-column>
+            <el-table-column
+                prop="country"
+                label="Страна"
+                width="150"
+            >
+            </el-table-column>
+        </el-table>
+        <div v-if="!filter_state" class="centered">
+            <!--            <jw-pagination :items="items" @changePage="onChangePage"></jw-pagination>-->
+
+            <el-pagination
+                height="250"
+                @current-change="onChangePage"
+                :current-page.sync="current_page"
+                :page-size="items_per_page"
+                layout="prev, pager, next, jumper"
+                :page-count="page_count"
+            >
+            </el-pagination>
         </div>
-    </div>
+    </el-row>
 </template>
 
 
 <script>
+import mixin_index from "../../code/mixins/mixin_index";
+import Producer from "../../code/models/Producer";
+
 export default {
     name: "ProducerChoose",
 
+    mixins: [mixin_index],
     data: function () {
         return {
+            filter_fields: {
+                name_str: "",
+                country_str: "",
 
-            filter_str : "",
-            filter_visible : false,
-            current_page: 1,
-            items_per_page: 10,
-            page_count: 1,
-            items: [],
-            page_of_items: [],
-            is_reload: false,
-            selected_item: -1
+            },
+            action_namespace: "producers"
 
         };
     },
@@ -92,28 +112,41 @@ export default {
         },
 
         update: function () {
-            axios.get('/api/producers').then((response) => {
-                this.is_reload = true;
+            this.filter_state = false;
+            this.filter_fields.country_str = this.filter_fields.name_str = ""
+            this.$store.dispatch('producers/update').then(() => {
+                this.page_count = this.$store.getters['producers/items_length'](this.items_per_page);
+                this.onChangePage(1);
+            }, (reason => {
+                console.log(`Что то пошло не так. Код ответа - ${reason}`)
+            }))
 
 
-                this.items = response.data;
-                this.page_count = Math.ceil(this.items.length / this.items_per_page);
-                this.onChangePage();
-                this.is_reload = false;
-            });
         },
-        onChangePage() {
-            // update page of items
-            this.page_of_items = this.items.slice(this.items_per_page * (this.current_page - 1), (this.items_per_page * this.current_page) - 1);
+
+        filter() {
+            this.filter_state = true;
+            axios.get('/api/producer/filter', {
+                params: {
+                    name: this.filter_fields.name_str,
+                    country: this.filter_fields.country_str
+                }
+            }).then((response) => {
+                this.page_of_items = [];
+                //оборачиваем каждый элемент пришедших данных в модель модуля
+                response.data.forEach(item => this.page_of_items.push(new Producer(item.id, item.name, item.country, item.created_at, item.updated_at, item.deleted_at)))
+
+            }).catch((error) => {
+                //если не ок - асинхронный ответ с кодом ошибки
+                console.log(`Что то пошло не так. Код ответа - ${error}`)
+            })
+
         },
 
         //по дабл-клику - переходим на строку с изменением выбраного объекта
-        selected(selected_item){
+        selected(){
 
-            this.$emit("selected", {producer: selected_item});
-        },
-        switch_filter(){
-            this.filter_visible = !this.filter_visible;
+            this.$emit("selected", {producer: this.selected_item});
         },
         back(){
             this.$emit("back");

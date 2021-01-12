@@ -15,22 +15,13 @@ Vue.use(VueRouter)
 
 Vue.use(require('vue-shortkey'))
 
-import VModal from 'vue-js-modal'
-Vue.use(VModal, {dialog: true})
-
 import ElementUI from 'element-ui';
+
 import 'element-ui/lib/theme-chalk/index.css';
+//import 'element-ui/lib/theme-chalk/reset.css'
+
 import locale from 'element-ui/lib/locale/lang/ru-RU'
 Vue.use(ElementUI, {locale});
-
-import Notifications from 'vue-notification'
-
-/*
-or for SSR:
-import Notifications from 'vue-notification/dist/ssr.js'
-*/
-
-Vue.use(Notifications)
 
 //Инициализация раутов
 

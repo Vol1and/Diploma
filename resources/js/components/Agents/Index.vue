@@ -1,65 +1,84 @@
 <template>
+    <el-row style="margin-bottom: 50px" v-shortkey="['del']" @shortkey="deleteSelected" class="center-75">
+        <v-dialog/>
 
-    <div class="center-75">
         <h1 class="text-center">Контрагенты</h1>
-        <div class="row">
-            <router-link :to="{name: 'agents.create'}" style=" float:left " class="btn btn-in-bar  btn-primary">Добавить</router-link>
 
-            <!--            <button @click="update"  v-if="!is_reload" style="float:right;" class=" btn-in-bar btn btn-primary">Обновить </button>-->
-            <!--            <button disabled v-if="is_reload" style="float:right;" class=" btn-in-bar btn btn-danger"> Обновление...</button>-->
-        </div>
+        <el-row>
+            <el-col :span="8">
+                <router-link tag="button" class="el-button" :to="{name: 'agents.create'}" style=" float:left ">
+                    Добавить
+                </router-link>
+            </el-col>
 
-        <table class="table">
-            <tr>
-                <th>#</th>
-                <th>Название</th>
-                <th>Биллинг</th>
-                <th>Адрес</th>
-                <th>Доп. информация</th>
-            </tr>
-            <tbody>
-            <tr v-for="item in page_of_items" class="row-hover"  :key="item.id" :class="{'highlight': (item.id === selected_item)}"
-                @click="rowSelected(item.id)"  @dblclick="toEdit(item.id)">
-                <td>{{ item.id }}</td>
-                <td>{{ item.name}}</td>
-                <td>{{ item.billing}}</td>
-                <td>{{ item.address}}</td>
-                <td>{{ item.description}}</td>
-            </tr>
-            </tbody>
-        </table>
-        <div class="centered">
-            <paginate
-                v-model="current_page"
-                :page-count="page_count"
-                :page-range="3"
-                :click-handler="onChangePage"
-                :prev-text="'<<'"
-                :next-text="'>>'"
-                :container-class="'pagination'"
-                :active-class="'pagination-active'"
+            <el-col :span="8" :offset="8">
+                <el-button icon="el-icon-refresh" @click="update" :disabled="is_reload" style="float:right;">
+                    Обновить
+                </el-button>
+            </el-col>
+        </el-row>
+
+        <el-divider></el-divider>
+        <el-table :data="page_of_items"
+                  highlight-current-row
+                  @row-dblclick="toEdit"
+                  @current-change="rowSelected">
+
+            <el-table-column
+                prop="id"
+                label="#"
+                min-width="15"
             >
-            </paginate>
+            </el-table-column>
+            <el-table-column
+                prop="name"
+                label="Наименование"
+            >
+            </el-table-column>
+            <el-table-column
+                prop="billing"
+                label="Биллинг"
+                width="550">
+            </el-table-column>
+            <el-table-column
+                prop="address"
+                label="Адрес"
+                width="350">
+            </el-table-column>
+            <el-table-column
+                prop="description"
+                label="Доп. информация"
+                width="350">
+            </el-table-column>
+        </el-table>
+        <div v-if="!filter_state" class="centered">
+            <!--            <jw-pagination :items="items" @changePage="onChangePage"></jw-pagination>-->
+
+            <el-pagination
+                height="250"
+                @current-change="onChangePage"
+                :current-page.sync="current_page"
+                :page-size="items_per_page"
+                layout="prev, pager, next, jumper"
+                :page-count="page_count"
+            >
+            </el-pagination>
         </div>
-    </div>
+    </el-row>
 </template>
 
 
-
 <script>
+import mixin_index from "../../code/mixins/mixin_index";
+
 export default {
     name: "AgentsIndex",
 
+    mixins: [mixin_index],
     data: function () {
         return {
 
-            current_page : 1,
-            items_per_page : 10,
-            page_count : 1,
-            items: [],
-            selected_item : null,
-            page_of_items: [],
-            is_reload: false,
+            action_namespace: "agents"
 
         };
     },
@@ -78,19 +97,16 @@ export default {
 
 
                 this.items = response.data;
-                this.page_count = Math.ceil(this.items.length/this.items_per_page);
+                this.page_count = Math.ceil(this.items.length / this.items_per_page);
                 this.onChangePage();
                 this.is_reload = false;
             });
         },
-        onChangePage(){
+        onChangePage() {
             // update page of items
-            this.page_of_items = this.items.slice(this.items_per_page*(this.current_page-1), (this.items_per_page*this.current_page));
-        },
-
-        toEdit(id){
-            this.$router.push({name: 'agents.edit', params:{id : id}});
+            this.page_of_items = this.items.slice(this.items_per_page * (this.current_page - 1), (this.items_per_page * this.current_page));
         }
+
     }
 
 }

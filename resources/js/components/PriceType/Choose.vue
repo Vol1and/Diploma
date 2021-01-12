@@ -1,100 +1,101 @@
 <template>
+    <el-row v-shortkey="['del']" @shortkey="deleteSelected" class="center-75">
+        <v-dialog/>
 
-    <div class="center-50">
-        <div>
-            <button @click="back()" class="btn  btn-primary"><--</button>
-            <h1 class="text-center">Выбор ценовой группы </h1>
-        </div>
+        <h1 class="text-center">Ценовые группы</h1>
 
-        <div class="row">
-            <router-link :to="{name: 'price-types.create'}" style=" float:left " class="btn btn-in-bar  btn-primary">Добавить</router-link>
+        <el-row>
+            <el-col :span="8">
+                <router-link tag="button" class="el-button" :to="{name: 'pricetypes.create'}" style=" float:left ">
+                    Добавить
+                </router-link>
+            </el-col>
 
-            <!--            <button @click="update"  v-if="!is_reload" style="float:right;" class=" btn-in-bar btn btn-primary">Обновить </button>-->
-            <!--            <button disabled v-if="is_reload" style="float:right;" class=" btn-in-bar btn btn-danger"> Обновление...</button>-->
-        </div>
+            <el-col :span="8" :offset="8">
+                <el-button icon="el-icon-refresh" @click="update" :disabled="is_reload" style="float:right;">
+                    Обновить
+                </el-button>
+            </el-col>
+        </el-row>
 
-        <table class="table">
-            <tr>
-                <th>#</th>
-                <th>Название</th>
-                <th>Наценка</th>
-            </tr>
-            <tbody>
-            <tr v-for="item in page_of_items" class="row-hover"  :key="item.id" :class="{'highlight': (item.id === selected_item)}"
-                @click="rowSelected(item.id)"  @dblclick="selected(item)">
-                <td>{{ item.id }}</td>
-                <td>{{item.name}}</td>
-                <td>{{ item.margin}}</td>
-            </tr>
-            </tbody>
-        </table>
-        <div class="centered">
-            <paginate
-                v-model="current_page"
-                :page-count="page_count"
-                :page-range="3"
-                :click-handler="onChangePage"
-                :prev-text="'<<'"
-                :next-text="'>>'"
-                :container-class="'pagination'"
-                :active-class="'pagination-active'"
+        <el-divider></el-divider>
+        <el-table :data="page_of_items"
+                  highlight-current-row
+                  @row-dblclick="selected"
+                  @current-change="rowSelected">
+
+            <el-table-column
+                prop="id"
+                label="#"
+                min-width="15"
             >
-            </paginate>
+            </el-table-column>
+            <el-table-column
+                prop="name"
+                label="Наименование"
+            >
+            </el-table-column>
+            <el-table-column
+                prop="margin"
+                label="Наценка"
+                width="150"
+            >
+            </el-table-column>
+        </el-table>
+        <div v-if="!filter_state" class="centered">
+            <!--            <jw-pagination :items="items" @changePage="onChangePage"></jw-pagination>-->
+
+            <el-pagination
+                height="250"
+                @current-change="onChangePage"
+                :current-page.sync="current_page"
+                :page-size="items_per_page"
+                layout="prev, pager, next, jumper"
+                :page-count="page_count"
+            >
+            </el-pagination>
         </div>
-    </div>
+    </el-row>
 </template>
 
 
 
 <script>
+import mixin_index from "../../code/mixins/mixin_index";
+
 export default {
     name: "PriceTypeChoose",
 
+    mixins :[mixin_index],
     data: function () {
         return {
-
-            current_page : 1,
-            items_per_page : 10,
-            page_count : 1,
-            items: [],
-            selected_item : null,
-            page_of_items: [],
-            is_reload: false,
-
+            action_namespace : "pricetypes"
         };
     },
     mounted() {
         this.update();
     },
     methods: {
-        rowSelected(id) {
-
-            this.selected_item = id;
-        },
-
         update: function () {
-            axios.get('/api/price-types').then((response) => {
-                console.log(response.data)
-                this.is_reload = true;
 
-
-                this.items = response.data;
-                this.page_count = Math.ceil(this.items.length/this.items_per_page);
+            this.is_reload = true;
+            this.$store.dispatch('pricetypes/update').then(() => {
+                this.page_count = this.$store.getters['pricetypes/items_length'](this.items_per_page);
                 this.onChangePage();
                 this.is_reload = false;
-            });
-        },
-        onChangePage(){
-            // update page of items
-            this.page_of_items = this.items.slice(this.items_per_page*(this.current_page-1), (this.items_per_page*this.current_page) -1);
-        },
+            }, (reason => {
+                console.log(`Что то пошло не так. Код ответа - ${reason}`)
+                this.is_reload = false;
+            }));
 
+        },
         selected(selected_item){
             this.$emit("selected", {price_type: selected_item});
         },
         back(){
             this.$emit("back");
-        }
+        },
+        deleteSelected() {}
     }
 
 }

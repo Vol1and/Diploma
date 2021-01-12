@@ -1,111 +1,102 @@
 <template>
-
     <div>
-        <div v-if="choosing_state === 0 " class="center-75">
+        <el-row v-shortkey="['del']" v-if="choosing_state === 0 " @shortkey="deleteSelected" class="center-75">
+            <v-dialog/>
+
             <h1 class="text-center">Номенклатура</h1>
-            <div class="row">
-                <router-link :to="{name: 'nomenclature.create'}" style=" float:left "
-                             class="btn btn-in-bar text-center btn-primary">
-                    Добавить
-                </router-link>
-                <button @click="switch_filter()" v-if="!filter_visible"
-                        class="btn btn-in-bar center-block  btn-primary">
-                    Фильтры
-                </button>
-                <button @click="switch_filter()" v-else class="btn btn-in-bar center-block  btn-danger">Закрыть</button>
 
+            <el-row>
+                <el-col :span="8">
+                    <router-link tag="button" class="el-button" :to="{name: 'nomenclature.create'}"
+                                 style=" float:left ">
+                        Добавить
+                    </router-link>
+                </el-col>
+                <el-col justify="center" :span="8">
+                    <el-col :span="8" :offset="8">
+                        <el-button icon="el-icon-s-operation" style="width: 100%" @click="switch_filter()"
+                                   v-if="!filter_visible">
+                            Фильтры
+                        </el-button>
+                        <el-button @click="switch_filter()" style="width: 100%" v-else type="danger">Закрыть</el-button>
+                    </el-col>
 
-                <button @click="update" :disabled="is_reload" style="float:right;" class=" btn-in-bar btn btn-primary">
-                    Обновить
-                </button>
-            </div>
-            <div class="row" style="margin-bottom: 10px" v-if="filter_visible">
+                </el-col>
 
+                <el-col :span="8">
+                    <el-button icon="el-icon-refresh" @click="update" :disabled="is_reload" style="float:right;">
+                        Обновить
+                    </el-button>
+                </el-col>
+            </el-row>
 
-                <div class="col-md-3">
-                    <label class="col-form-label-lg" for="name_input">
-                        Поиск:
-                    </label>
-                    <div class="input-group ">
-                        <input id="name_input" v-model="filter_fields.name_str"
-                               class=" form-control "/>
+            <el-row v-if="filter_visible">
+                <el-divider></el-divider>
+                <el-form :inline="true" class="demo-form-inline">
+                    <el-form-item style="   margin-bottom: 0;" label="Название:">
+                        <el-input v-model="filter_fields.name_str" placeholder="Название"></el-input>
+                    </el-form-item>
+                    <el-form-item style="   margin-bottom: 0;" label="Производитель:">
+                        <el-input readonly v-model="filter_fields.producer.name" placeholder="">
+                            <el-button type="primary" @click="selectingProducer" slot="append"
+                                       icon="el-icon-d-arrow-right"></el-button>
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item style="   margin-bottom: 0;" label="Ценовая группа:">
+                        <el-input readonly v-model="filter_fields.price_type.name" placeholder="">
+                            <el-button type="primary" @click="selectingPriceType" slot="append"
+                                       icon="el-icon-d-arrow-right"></el-button>
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item style="   margin-bottom: 0;">
+                        <el-button type="primary" @click="filter">Поиск</el-button>
+                    </el-form-item>
+                </el-form>
 
-                    </div>
-
-                </div>
-
-
-                <div class="col-md-3">
-                    <label class="col-form-label-lg" for="producer_input">
-                        Производитель:
-                    </label>
-                    <div class="input-group ">
-                        <input type="text" disabled name="price_type_input" :value="filter_fields.producer.name"
-                               id="producer_input"
-                               class="form-control "/>
-
-                        <div class="input-group-append">
-                            <button @click="selectingProducer()" type="button" class="btn btn-primary">>></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <label class="col-form-label-lg" style="float: left" for="price_type_input">
-                        Ценовая группа:
-                    </label>
-                    <div class="input-group ">
-                        <input type="text" disabled name="price_type_input" :value="filter_fields.price_type.name"
-                               id="price_type_input"
-                               class="form-control "/>
-
-                        <div class="input-group-append">
-                            <button @click="selectingPriceType()" type="button" class="btn btn-primary">>></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <button @click="filter" style="float: right" class="  btn btn btn-in-bar btn-primary">
-                        Поиск
-                    </button>
-                </div>
-
-
-            </div>
-
-
-            <table class="table">
-                <tr>
-                    <th>#</th>
-                    <th>Название</th>
-                    <th>Производитель</th>
-                    <th>Ценовая группа</th>
-                </tr>
-                <tbody>
-                <tr v-for="item in page_of_items" class="row-hover" :key="item.id"
-                    :class="{'highlight': (item.id === selected_item)}"
-                    @click="rowSelected(item.id)" @dblclick="toEdit(item.id)">
-                    <td> {{ item.id }}</td>
-                    <td> {{ item.name }}</td>
-                    <td> {{ item.producer.name }}</td>
-                    <td> {{ item.price_type.name }}</td>
-                </tr>
-                </tbody>
-            </table>
-            <div class="centered">
-                <paginate v-if="!filter_state"
-                          v-model="current_page"
-                          :page-count="page_count"
-                          :page-range="3"
-                          :click-handler="onChangePage"
-                          :prev-text="'<<'"
-                          :next-text="'>>'"
-                          :container-class="'pagination'"
-                          :active-class="'pagination-active'"
+            </el-row>
+            <el-divider></el-divider>
+            <el-table :data="page_of_items"
+                      highlight-current-row
+                      @row-dblclick="toEdit"
+                      @current-change="rowSelected">
+                <el-table-column
+                    prop="id"
+                    label="#"
+                    min-width="15"
                 >
-                </paginate>
-            </div>
+                </el-table-column>
+                <el-table-column
+                    prop="name"
+                    label="Наименование"
+                >
+                </el-table-column>
+                <el-table-column
+                    prop="producer.name"
+                    label="Производитель"
+                    width="400"
+                >
+                </el-table-column>
+                <el-table-column
+                    prop="price_type.name"
+                    label="Ценовая группа"
+                    width="200"
+                >
+                </el-table-column>
+            </el-table>
+            <div v-if="!filter_state" class="centered">
+                <!--            <jw-pagination :items="items" @changePage="onChangePage"></jw-pagination>-->
 
-        </div>
+                <el-pagination
+                    height="250"
+                    @current-change="onChangePage"
+                    :current-page.sync="current_page"
+                    :page-size="items_per_page"
+                    layout="prev, pager, next, jumper"
+                    :page-count="page_count"
+                >
+                </el-pagination>
+            </div>
+        </el-row>
         <producer-choose-component @back="onBack" v-if="choosing_state === 1"
                                    @selected="onSelectedProducer"></producer-choose-component>
         <price-type-choose-component @back="onBack" v-if="choosing_state === 2"
@@ -134,7 +125,7 @@ export default {
 
             },
             choosing_state: 0,
-            action_namespace : "nomenclature"
+            action_namespace: "nomenclature"
 
         };
     },
@@ -152,7 +143,7 @@ export default {
                 this.is_reload = false;
                 this.page_count = this.$store.getters['nomenclature/items_length'](this.items_per_page);
                 this.current_page = 1;
-                this.onChangePage('nomenclature/items');
+                this.onChangePage();
 
             }, (reason => {
                 console.log(`Что то пошло не так. Код ответа - ${reason}`)

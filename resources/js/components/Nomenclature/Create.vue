@@ -1,56 +1,41 @@
 <template>
     <div>
-        <div v-if="choosing_state === 0 " class="row" style="width: 100%">
-            <div class="offset-4 col-md-4">
-                <div class="offset-2 col-md-8">
+        <el-row v-if=" choosing_state === 0 ">
+            <el-col :span="6" :offset="9">
+                <el-card class="box-card">
 
-                    <div style="margin-bottom: 10px; height: 50px" class=" form-control ">
-                        <h2 class="text-center center-block">Новая номенклатура</h2>
+                    <div slot="header">
+                        <h2 class="text-center">Новая номенклатура</h2>
                     </div>
-                </div>
-                <div class="  row offset-2 col-md-8">
-                    <div class="col-md-12 no-padding" style="padding: 0">
-                        <form class="form-control" style=":170px; height: 100%"
-                              @submit.prevent="submit">
+                    <el-form label-position="top">
+                        <el-form-item label="Наименование: ">
+                            <el-input type="text" v-model="item.name"></el-input>
+                        </el-form-item>
 
-                            <div class=" form-group col-md-11">
-                                <label class="col-form-label" for="name">Наименование</label>
-                                <input type="text" name="name" id="name" v-model="item.name"
-                                       class="form-text form-control"/>
-                            </div>
-                            <div class="form-group  col-md-11">
-                                <label class="col-form-label" for="guest_id">Производитель</label>
-                                <div class="form-inline">
-                                    <input type="text" disabled name="days_count" :value="item.producer.name"
-                                           id="producer_id"
-                                           style="margin-top: 0" class="form-text form-control col-md-10"/>
-                                    <button @click="selectingProducer()" type="button" class="btn  btn-primary">>>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="form-group  col-md-11">
-                                <label class="col-form-label" for="guest_id">Ценова группа</label>
-                                <div class="form-inline">
-                                    <input type="text" disabled name="days_count" :value="item.price_type.name"
-                                           id="guest_id"
-                                           style="margin-top: 0" class="form-text form-control col-md-10"/>
-                                    <button @click="selectingPriceType()" type="button" class="btn  btn-primary">>>
-                                    </button>
-                                </div>
-                            </div>
-                            <button type="submit"
-                                    style="display: block;margin-right: auto;margin-left: auto;"
-                                    class="btn btn-primary center-block"
-                                    :disabled="loaded === false">
-                                Записать
-                            </button>
-                        </form>
-                    </div>
+                        <el-form-item  label="Производитель:">
+                            <el-input readonly v-model="item.producer.name" placeholder="">
+                                <el-button type="primary" @click="selectingProducer" slot="append"
+                                           icon="el-icon-d-arrow-right"></el-button>
+                            </el-input>
+                        </el-form-item>
 
-                </div>
-            </div>
 
-        </div>
+                        <el-form-item  label="Ценовая группа:">
+                            <el-input readonly v-model="item.price_type.name" placeholder="">
+                                <el-button type="primary" @click="selectingPriceType" slot="append"
+                                           icon="el-icon-d-arrow-right"></el-button>
+                            </el-input>
+                        </el-form-item>
+
+                        <el-form-item>
+                            <el-button type="primary" @click="submit">Добавить</el-button>
+                            <el-button @click="()=>{this.$router.go(-1)}">Отмена</el-button>
+                        </el-form-item>
+
+                    </el-form>
+                </el-card>
+            </el-col>
+        </el-row>
         <producer-choose-component @back="onBack" v-if="choosing_state ===1"
                                    @selected="onSelectedProducer"></producer-choose-component>
         <price-type-choose-component @back="onBack" v-if="choosing_state ===2"
@@ -90,22 +75,18 @@ export default {
                 //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
 
                 this.$notify({
-                    group: 'my',
+
                     type: 'success',
                     title: 'Элемент добавлен!',
-                    text: "Элемент успешно добавлен",
+                    message: `Элемент  успешно добавлен!`,
                 })
                 this.$router.push({name: 'nomenclature.index'});
 
-
             }).catch((error) => {
-                console.log("Ошибка!")
-                //this.$router.push({name: 'producers.index'});
-                this.$notify({
-                    group: 'my',
-                    type: 'success',
+                this.$notify.error({
+
                     title: 'Ошибка!',
-                    text: "Сообщение ошибки - " + error.response.data.message,
+                    message: "Сообщение ошибки - " + error.response.data.message,
                 })
                 this.loaded = true;
             })

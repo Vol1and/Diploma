@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Nunito);@charset "UTF-8";
+@charset "UTF-8";
 
 /*!
  * Bootstrap v4.5.3 (https://getbootstrap.com/)
@@ -10903,42 +10903,6 @@ a.text-dark:focus {
   }
 }
 
-.pagination {
-  float: left;
-  display: flex;
-  border: darkgrey 1px solid;
-  font-size: 15px;
-  font-weight: 545;
-}
-
-.pagination > li {
-  color: black;
-  float: left;
-  border: darkgrey 0.5px solid;
-  text-decoration: none;
-}
-
-.pagination > li > a {
-  color: black;
-  float: left;
-  padding: 6px 12px;
-  text-decoration: none;
-}
-
-.pagination-active {
-  background-color: lightblue;
-  color: white;
-}
-
-.pagination > li:hover:not(.pagination-active) {
-  background-color: #ddd;
-}
-
-.pagination > li:focus {
-  background-color: #d6d8d9;
-  border: black 0.5px solid;
-}
-
 .center-90 {
   width: 90%;
   float: left;
@@ -10984,12 +10948,6 @@ a.text-dark:focus {
 
 .no-padding {
   padding: 0;
-}
-
-.center-block {
-  display: block;
-  margin-right: auto;
-  margin-left: auto;
 }
 
 .btn-in-bar {

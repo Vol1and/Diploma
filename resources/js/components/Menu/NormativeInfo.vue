@@ -1,24 +1,33 @@
 <template>
-<div class="center-50">
-    <ul class="list-group">
-        <li class="list-group-item">
-            <router-link  class="nav-link" :to="{name: 'producers.index'}">Производители</router-link>
+    <div class="center-50">
 
-        </li>
-        <li class="list-group-item">
+        <el-row>
+            <el-col :span="8">
+                <el-card class="box-card">
+                    <div slot="header" class="clearfix">
+                        <span>Нормативно-справочная информация</span>
+                    </div>
 
-            <router-link  class="nav-link" :to="{name: 'pricetypes.index'}">Типы цен</router-link>
-        </li>
-        <li class="list-group-item">
 
-            <router-link  class="nav-link" :to="{name: 'nomenclature.index'}">Номенклатура</router-link>
-        </li>
-        <li class="list-group-item">
 
-            <router-link  class="nav-link" :to="{name: 'agents.index'}">Контрагенты</router-link>
-        </li>
-    </ul>
-</div>
+
+                        <div class="text item">
+                            <router-link class="el-link--default el-link" :to="{name: 'producers.index'}">Производители</router-link>
+                        </div>
+                        <div class="text item">
+                            <router-link class="el-link--default el-link" :to="{name: 'pricetypes.index'}">Типы цен</router-link>
+                        </div>
+                        <div class="text item">
+                            <router-link class="el-link--default el-link" :to="{name: 'nomenclature.index'}">Номенклатура</router-link>
+                        </div>
+                        <div class="text item">
+                            <router-link class="el-link--default el-link" :to="{name: 'agents.index'}">Контрагенты</router-link>
+                        </div>
+
+                </el-card>
+            </el-col>
+        </el-row>
+    </div>
 </template>
 
 <script>

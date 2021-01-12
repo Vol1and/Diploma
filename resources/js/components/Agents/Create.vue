@@ -1,50 +1,34 @@
 <template>
-    <div class="row" style="width: 100%">
-        <div class="offset-4 col-md-4">
-            <div class="offset-2 col-md-8">
-                <error-component :errors="errors"></error-component>
-                <div style="margin-bottom: 10px; height: 50px" class=" form-control">
-                    <h2 class="text-center center-block">Новый контрагент</h2>
+    <el-row>
+        <el-col :span="6" :offset="9">
+            <el-card class="box-card">
+
+                <div slot="header">
+                    <h2 class="text-center">Новый контрагент</h2>
                 </div>
-            </div>
-            <div class="row offset-2 col-md-8">
-                <div class="col-md-12 no-padding" style="padding: 0">
-                    <form class="form-control" style=":170px; height: 100%"
-                          @submit.prevent="submit">
+                <el-form label-position="top">
+                    <el-form-item label="Наименование: ">
+                        <el-input type="text" v-model="item.name"></el-input>
+                    </el-form-item>
 
-                        <div class=" form-group col-md-11">
-                            <label class="col-form-label" for="name">Наименование</label>
-                            <input type="text" name="name" id="name" v-model="fields.name"
-                                   class="form-text form-control"/>
-                        </div>
-                        <div class=" form-group col-md-11">
-                            <label class="col-form-label" for="billing">Биллинг</label>
-                            <input type="text" name="country" id="billing" v-model="fields.billing"
-                                   class="form-text form-control"/>
-                        </div>
-                        <div class=" form-group col-md-11">
-                            <label class="col-form-label" for="address">Адрес</label>
-                            <input type="text" name="country" id="address" v-model="fields.address"
-                                   class="form-text form-control"/>
-                        </div>
-                        <div class=" form-group col-md-11">
-                            <label class="col-form-label" for="description">Доп. инфо</label>
-                            <input type="text" name="country" id="description" v-model="fields.description"
-                                   class="form-text form-control"/>
-                        </div>
-                        <button @click="submit()" type="submit"
-                                style="display: block;margin-right: auto;margin-left: auto;"
-                                class="btn btn-primary center-block"
-                                :disabled="loaded === false">
-                            Добавить
-                        </button>
-                    </form>
-                </div>
+                    <el-form-item label="Биллинг: ">
+                        <el-input type="textarea" autosize v-model="item.billing"></el-input>
+                    </el-form-item>
+                    <el-form-item label="Адрес: ">
+                        <el-input type="textarea" autosize v-model="item.address"></el-input>
+                    </el-form-item>
 
-            </div>
-        </div>
-
-    </div>
+                    <el-form-item label="Дополнительная информация: ">
+                        <el-input type="textarea" autosize v-model="item.description"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="submit">Добавить</el-button>
+                        <el-button @click="()=>{this.$router.go(-1)}">Отмена</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-card>
+        </el-col>
+    </el-row>
 </template>
 
 <script>
@@ -53,7 +37,7 @@ export default {
 
     data() {
         return {
-            fields: {name: "", billing: "", address: "", description: ""},
+            item: {name: "", billing: "", address: "", description: ""},
 
             loaded: true,
             errors: [],

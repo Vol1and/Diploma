@@ -14,11 +14,9 @@ export default {
     methods: {
 
         showErrors(){
-           this.errors.forEach(item => this.$notify({
-                group: 'my',
-                type: 'error',
+            this.errors.forEach(item => this.$notify.error({
                 title: 'Ошибка!',
-                text: item,
+                message: item,
             }));
         }
     }

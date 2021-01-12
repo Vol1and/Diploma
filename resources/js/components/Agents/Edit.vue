@@ -1,50 +1,34 @@
 <template>
-    <div v-if="is_visible" class="row" style="width: 100%">
-        <div class="offset-4 col-md-4">
-            <div class="offset-2 col-md-8">
-                <error-component :errors="errors"></error-component>
-                <div style="margin-bottom: 10px; height: 50px" class=" form-control ">
-                    <h2 class="text-center center-block">Контрагент #{{ fields.id }}</h2>
+    <el-row v-if="is_visible">
+        <el-col :span="6" :offset="9">
+            <el-card class="box-card">
+
+                <div slot="header">
+                    <h2 class="text-center">Контрагент #{{ item.id }}</h2>
                 </div>
-            </div>
-            <div class="row offset-2 col-md-8">
-                <div class="col-md-12 no-padding" style="padding: 0">
-                    <form class="form-control" style=":170px; height: 100%"
-                          @submit.prevent="submit">
+                <el-form label-position="top">
+                    <el-form-item label="Наименование: ">
+                        <el-input type="text" v-model="item.name"></el-input>
+                    </el-form-item>
 
-                        <div class=" form-group col-md-11">
-                            <label class="col-form-label" for="name">Наименование</label>
-                            <input type="text" name="name" id="name" v-model="fields.name"
-                                   class="form-text form-control"/>
-                        </div>
-                        <div class=" form-group col-md-11">
-                            <label class="col-form-label" for="billing">Биллинг</label>
-                            <input type="text" name="country" id="billing" v-model="fields.billing"
-                                   class="form-text form-control"/>
-                        </div>
-                        <div class=" form-group col-md-11">
-                            <label class="col-form-label" for="address">Адрес</label>
-                            <input type="text" name="country" id="address" v-model="fields.address"
-                                   class="form-text form-control"/>
-                        </div>
-                        <div class=" form-group col-md-11">
-                            <label class="col-form-label" for="description">Доп. инфо</label>
-                            <input type="text" name="country" id="description" v-model="fields.description"
-                                   class="form-text form-control"/>
-                        </div>
-                        <button @click="submit()" type="submit"
-                                style="display: block;margin-right: auto;margin-left: auto;"
-                                class="btn btn-primary center-block"
-                                :disabled="loaded === false">
-                            Изменить
-                        </button>
-                    </form>
-                </div>
+                    <el-form-item label="Биллинг: ">
+                        <el-input type="textarea" autosize v-model="item.billing"></el-input>
+                    </el-form-item>
+                    <el-form-item label="Адрес: ">
+                        <el-input type="textarea" autosize v-model="item.address"></el-input>
+                    </el-form-item>
 
-            </div>
-        </div>
-
-    </div>
+                    <el-form-item label="Дополнительная информация: ">
+                        <el-input type="textarea" autosize v-model="item.description"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="submit">Изменить</el-button>
+                        <el-button @click="()=>{this.$router.go(-1)}">Отмена</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-card>
+        </el-col>
+    </el-row>
 </template>
 
 <script>
@@ -53,7 +37,7 @@ export default {
 
     data() {
         return {
-            fields: {id: -1, name: "", margin: ""},
+            item: {name: "", billing: "", address: "", description: ""},
 
             is_visible: false,
             loaded: true,
@@ -66,7 +50,7 @@ export default {
     beforeCreate() {
 
         axios.get(`/api/agents/${this.$route.params.id}`).then(response => {
-            this.fields = response.data;
+            this.item = response.data;
             this.is_visible = true;
 
         }).catch((error) => {
@@ -77,6 +61,7 @@ export default {
     },
 
 
+
     methods: {
 
         submit: function () {
@@ -84,7 +69,7 @@ export default {
 
             this.loaded = false;
 
-            axios.patch(`/api/agents/${this.fields.id}`, this.fields).then(response => {
+            axios.patch(`/api/agents/${this.item.id}`, this.item).then(response => {
 
                 this.loaded = true;
 
@@ -102,9 +87,8 @@ export default {
         },
         validateFields() {
             this.errors = [];
-            if (this.fields.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
-            if (this.fields.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
-
+            if (this.item.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
+            if (this.item.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
 
 
             return this.errors.length === 0;

@@ -1,39 +1,29 @@
 <template>
-    <div v-if="is_visible" class="row" style="width: 100%">
-        <div class="offset-4 col-md-4">
-            <div class="offset-2 col-md-8">
-                <div style="margin-bottom: 10px; height: 50px" class=" form-control ">
-                    <h2 class="text-center center-block">Ценовая группа #{{ item.id }}</h2>
+    <el-row v-if="is_visible">
+        <el-col :span="6" :offset="9">
+            <el-card class="box-card">
+
+                <div slot="header" >
+                    <h2 class="text-center">Ценовая группа #{{ item.id }}</h2>
                 </div>
-            </div>
-            <div class="  row offset-2 col-md-8">
-                <div class="col-md-12 no-padding" style="padding: 0">
-                    <form class="form-control" style=":170px; height: 100%"
-                          @submit.prevent="submit">
+                <el-form label-position="top">
+                    <el-form-item label="Наименование">
+                        <el-input type="text" v-model="item.name"></el-input>
+                    </el-form-item>
 
-                        <div class=" form-group col-md-11">
-                            <label class="col-form-label" for="name">Наименование</label>
-                            <input type="text" name="name" id="name" v-model="item.name"
-                                   class="form-text form-control"/>
-                        </div>
-                        <div class=" form-group col-md-11">
-                            <label class="col-form-label" for="country">Наценка</label>
-                            <input type="number" name="country" id="country" v-model="item.margin"
-                                   class="form-text form-control"/>
-                        </div>
-                        <button  type="submit"
-                                style="display: block;margin-right: auto;margin-left: auto;"
-                                class="btn btn-primary center-block"
-                                :disabled="loaded === false">
-                            Изменить
-                        </button>
-                    </form>
-                </div>
+                    <el-form-item label="Наценка">
+                        <el-input type="number" v-model="item.margin"></el-input>
+                    </el-form-item>
 
-            </div>
-        </div>
 
-    </div>
+                    <el-form-item>
+                        <el-button type="primary" @click="submit" >Изменить</el-button>
+                        <el-button @click="()=>{this.$router.go(-1)}">Отмена</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-card>
+        </el-col>
+    </el-row>
 </template>
 
 <script>
@@ -84,19 +74,18 @@ export default {
                 //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
                 this.loaded = true;
                 this.$notify({
-                    group: 'my',
+
                     type: 'success',
-                    title: 'Элемент добавлен!',
-                    text: `Элемент с Id=${this.item.id} успешно изменен!`,
+                    title: 'Успешно!',
+                    message: `Элемент с Id=${this.item.id} успешно изменен!`,
                 })
-                this.$router.push({name: 'pricetypes.index'});
+                this.$router.push({name: 'nomenclature.index'});
 
             }).catch((error) => {
-                this.$notify({
-                    group: 'my',
-                    type: 'success',
+                this.$notify.error({
+
                     title: 'Ошибка!',
-                    text: "Сообщение ошибки - " + error.response.data.message,
+                    message: "Сообщение ошибки - " + error.response.data.message,
                 })
                 this.loaded = true;
             })

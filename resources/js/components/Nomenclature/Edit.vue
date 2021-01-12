@@ -1,75 +1,41 @@
 <template>
     <div>
-        <div v-if="is_visible && choosing_state === 0 " class="row" style="width: 100%">
-            <div class="center-33">
-                <div class="">
-                    <div style="margin-bottom: 10px; height: 50px" class=" form-control ">
-                        <h2 class="text-center center-block">Номенклатура #{{ item.id }}</h2>
+        <el-row v-if="is_visible && choosing_state === 0 ">
+            <el-col :span="6" :offset="9">
+                <el-card class="box-card">
+
+                    <div slot="header">
+                        <h2 class="text-center">Номенклатура #{{ item.id }}</h2>
                     </div>
-                </div>
+                    <el-form label-position="top">
+                        <el-form-item label="Наименование: ">
+                            <el-input type="text" v-model="item.name"></el-input>
+                        </el-form-item>
 
-                <div class="row " style="padding: 0 15px 15px 15px; height: 100%">
-                    <div class="col-md-3 form-control no-padding" style="  height: 100%">
+                        <el-form-item  label="Производитель:">
+                            <el-input readonly v-model="item.producer.name" placeholder="">
+                                <el-button type="primary" @click="selectingProducer" slot="append"
+                                           icon="el-icon-d-arrow-right"></el-button>
+                            </el-input>
+                        </el-form-item>
 
-                        <h4 class="text-center">Ссылки</h4>
-                        <router-link class=" center-block btn btn-link"
-                                     :to="{name: 'nomenclatures.characteristics', params: {id : this.item.id}}">
-                            Характеристики
-                        </router-link>
 
-                    </div>
-                    <div class=" col-md-6 no-padding ">
-                        <form class="form-control" style="height: 100%"
-                              @submit.prevent="submit">
+                        <el-form-item  label="Ценовая группа:">
+                            <el-input readonly v-model="item.price_type.name" placeholder="">
+                                <el-button type="primary" @click="selectingPriceType" slot="append"
+                                           icon="el-icon-d-arrow-right"></el-button>
+                            </el-input>
+                        </el-form-item>
 
-                            <div class=" form-group col-md-12">
-                                <label class="col-form-label" for="name">Наименование</label>
-                                <input type="text" name="name" id="name" v-model="item.name"
-                                       class="form-text form-control"/>
-                            </div>
-                            <div class="form-group  col-md-11">
-                                <label class="col-form-label" for="guest_id">Производитель</label>
-                                <div class="form-inline">
-                                    <input type="text" disabled name="days_count" :value="item.producer.name"
-                                           id="producer_id"
-                                           style="margin-top: 0" class="form-text form-control col-md-10"/>
-                                    <button @click="selectingProducer()" type="button" class="btn  btn-primary">>>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="form-group  col-md-11">
-                                <label class="col-form-label" for="guest_id">Ценова группа</label>
-                                <div class="form-inline">
-                                    <input type="text" disabled name="days_count" :value="item.price_type.name"
-                                           id="guest_id"
-                                           style="margin-top: 0" class="form-text form-control col-md-10"/>
-                                    <button @click="selectingPriceType()" type="button" class="btn  btn-primary">>>
-                                    </button>
-                                </div>
-                            </div>
-                            <button type="submit"
-                                    style="display: block;margin-right: auto;margin-left: auto;"
-                                    class="btn btn-primary center-block"
-                                    :disabled="loaded === false">
-                                Изменить
-                            </button>
-                        </form>
+                        <el-form-item>
+                            <el-button type="primary" @click="submit">Изменить</el-button>
+                            <el-button @click="()=>{this.$router.go(-1)}">Отмена</el-button>
+                        </el-form-item>
 
-                    </div>
-                    <div class="col-md-3 form-control no-padding" style="  height: 100%">
-
-                        <h4 class="text-center">Ссылки</h4>
-                        <router-link class=" center-block btn btn-link"
-                                     :to="{name: 'nomenclatures.characteristics', params: {id : this.item.id}}">
-                            Характеристики
-                        </router-link>
-
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
+                    </el-form>
+                </el-card>
+            </el-col>
+        </el-row>
         <producer-choose-component @back="onBack" v-if="choosing_state ===1"
                                    @selected="onSelectedProducer"></producer-choose-component>
         <price-type-choose-component @back="onBack" v-if="choosing_state ===2"
@@ -120,24 +86,23 @@ export default {
             this.loaded = false;
 
             //todo:костыль; поправить отправляемые данные
-            axios.patch(`/api/nomenclatures/${this.item.id}`, this.item.getDataForServer() ).then(response => {
+            axios.patch(`/api/nomenclatures/${this.item.id}`, this.item.getDataForServer()).then(response => {
 
                 //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
                 this.loaded = true;
                 this.$notify({
-                    group: 'my',
+
                     type: 'success',
-                    title: 'Элемент добавлен!',
-                    text: `Элемент с Id=${this.item.id} успешно изменен!`,
+                    title: 'Успешно!',
+                    message: `Элемент с Id=${this.item.id} успешно изменен!`,
                 })
                 this.$router.push({name: 'nomenclature.index'});
 
             }).catch((error) => {
-                this.$notify({
-                    group: 'my',
-                    type: 'success',
+                this.$notify.error({
+
                     title: 'Ошибка!',
-                    text: "Сообщение ошибки - " + error.response.data.message,
+                    message: "Сообщение ошибки - " + error.response.data.message,
                 })
                 this.loaded = true;
             })
