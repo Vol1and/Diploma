@@ -17,11 +17,13 @@ class DocumentSeeder extends Seeder
         $data = [
             [
                 'date' => date("Y-m-d", mktime(0, 0, 0, date("m"),   date("d") - 1,   date("Y"))),
+                'is_set'  => true,
                 'doc_type_id'  => 1,
                 'agent_id' => 2
             ],
             [
                 'date' => date("Y-m-d", mktime(0, 0, 0, date("m"),   date("d") - 1,   date("Y"))),
+                'is_set'  => true,
                 'doc_type_id'  => 1,
                 'agent_id' => 1
             ]

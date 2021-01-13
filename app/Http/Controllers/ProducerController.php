@@ -17,6 +17,8 @@ class ProducerController extends OriginController
 
     public function __construct()
     {
+        //вызов констракт у родителя
+        parent::__construct();
 
         //инициализация хранилища
         $this->producerRepository = app(ProducersRepository::class);

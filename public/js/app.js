@@ -5979,7 +5979,7 @@ __webpack_require__.r(__webpack_exports__);
       console.log(this.items);
     },
     send: function send() {
-      axios.post("/api/wares", {
+      axios.post("/api/income", {
         items: this.items
       }).then(function (response) {
         console.log(response.data);
@@ -106008,7 +106008,7 @@ var render = function() {
                     {
                       staticClass: "col-form-label-lg",
                       staticStyle: { float: "left" },
-                      attrs: { for: "price_type_input" }
+                      attrs: { for: "nomenclature_input" }
                     },
                     [_vm._v("\n                Номенклатура:\n            ")]
                   ),
@@ -106019,8 +106019,8 @@ var render = function() {
                       attrs: {
                         type: "text",
                         disabled: "",
-                        name: "price_type_input",
-                        id: "price_type_input"
+                        name: "nomenclature_input",
+                        id: "nomenclature_input"
                       },
                       domProps: { value: _vm.nomenclature.name }
                     }),
@@ -106044,7 +106044,7 @@ var render = function() {
                     "label",
                     {
                       staticClass: "col-form-label-lg",
-                      attrs: { for: "name_input" }
+                      attrs: { for: "serial_input" }
                     },
                     [_vm._v("\n                Серия:\n            ")]
                   ),
@@ -106060,7 +106060,7 @@ var render = function() {
                         }
                       ],
                       staticClass: " form-control ",
-                      attrs: { id: "name_input" },
+                      attrs: { id: "serial_input" },
                       domProps: { value: _vm.serial },
                       on: {
                         input: function($event) {
@@ -106079,7 +106079,7 @@ var render = function() {
                     "label",
                     {
                       staticClass: "col-form-label-lg",
-                      attrs: { for: "name_input" }
+                      attrs: { for: "serial_input" }
                     },
                     [_vm._v("\n                Дата:\n            ")]
                   ),
@@ -106090,7 +106090,7 @@ var render = function() {
                     [
                       _c("el-date-picker", {
                         attrs: {
-                          id: "name_input",
+                          id: "expiry_input",
                           format: "yyyy/MM/dd",
                           "value-format": "yyyy-MM-dd"
                         },
@@ -106112,7 +106112,7 @@ var render = function() {
                     "label",
                     {
                       staticClass: "col-form-label-lg",
-                      attrs: { for: "name_input" }
+                      attrs: { for: "income_input" }
                     },
                     [_vm._v("\n                Цена закупки:\n            ")]
                   ),
@@ -106128,7 +106128,7 @@ var render = function() {
                         }
                       ],
                       staticClass: "form-control",
-                      attrs: { id: "price_input", type: "number" },
+                      attrs: { id: "income_input", type: "number" },
                       domProps: { value: _vm.income_price },
                       on: {
                         input: function($event) {
@@ -106147,7 +106147,7 @@ var render = function() {
                     "label",
                     {
                       staticClass: "col-form-label-lg",
-                      attrs: { for: "name_input" }
+                      attrs: { for: "count_input" }
                     },
                     [_vm._v("\n                Количество:\n            ")]
                   ),
@@ -125288,8 +125288,8 @@ var mutations = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\vol1a\PhpstormProjects\Diploma\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\vol1a\PhpstormProjects\Diploma\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\dithr\PhpstormProjects\Diploma_Slav\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\dithr\PhpstormProjects\Diploma_Slav\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

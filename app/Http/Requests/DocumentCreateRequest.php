@@ -17,4 +17,20 @@ class DocumentCreateRequest extends FormRequest
     {
         return true;
     }
+
+    // правила
+    public function rules()
+    {
+        return [
+            'date'        =>  'date'
+        ];
+    } // rules
+
+    // сообщения - реакция на несоблюдение правил
+    public function messages()
+    {
+        return [
+            'date.date'    =>  'Не указана дата документа!'
+        ];
+    } // messages
 }

@@ -6,12 +6,12 @@
         <div class="row" style="margin-bottom: 10px" >
 
             <div class="col-md-2">
-                <label class="col-form-label-lg" style="float: left" for="price_type_input">
+                <label class="col-form-label-lg" style="float: left" for="nomenclature_input">
                     Номенклатура:
                 </label>
                 <div class="input-group ">
-                    <input type="text" disabled name="price_type_input" :value="nomenclature.name"
-                           id="price_type_input"
+                    <input type="text" disabled name="nomenclature_input" :value="nomenclature.name"
+                           id="nomenclature_input"
                            class="form-control "/>
 
                     <div class="input-group-append">
@@ -20,11 +20,11 @@
                 </div>
             </div>
             <div class="col-md-2">
-                <label class="col-form-label-lg" for="name_input">
+                <label class="col-form-label-lg" for="serial_input">
                     Серия:
                 </label>
                 <div class="input-group ">
-                    <input id="name_input" v-model="serial"
+                    <input id="serial_input" v-model="serial"
                            class=" form-control "/>
 
                 </div>
@@ -32,11 +32,11 @@
             </div>
 
             <div class="col-md-2">
-                <label class="col-form-label-lg" for="name_input">
+                <label class="col-form-label-lg" for="serial_input">
                     Дата:
                 </label>
                 <div class="input-group ">
-                    <el-date-picker id="name_input" v-model="expiry_date" format="yyyy/MM/dd"
+                    <el-date-picker id="expiry_input" v-model="expiry_date" format="yyyy/MM/dd"
                                     value-format="yyyy-MM-dd"/>
 
                 </div>
@@ -45,18 +45,18 @@
 
 
             <div class="col-md-2">
-                <label class="col-form-label-lg" for="name_input">
+                <label class="col-form-label-lg" for="income_input">
                     Цена закупки:
                 </label>
                 <div class="input-group ">
-                    <input id="price_input" type="number"  class="form-control" v-model="income_price"/>
+                    <input id="income_input" type="number"  class="form-control" v-model="income_price"/>
 
                 </div>
 
 
             </div>
             <div class="col-md-2">
-                <label class="col-form-label-lg" for="name_input">
+                <label class="col-form-label-lg" for="count_input">
                     Количество:
                 </label>
                 <div class="input-group ">
@@ -147,7 +147,7 @@ name: "Income",
         },
         send(){
 
-            axios.post("/api/wares", {items : this.items}).then((response) => {
+            axios.post("/api/income", {items : this.items}).then((response) => {
 
 
                 console.log(response.data);

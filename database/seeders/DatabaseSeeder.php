@@ -2,7 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Agent;
+
+use App\Models\WareConnection;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -25,7 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(DocumentSeeder::class);
         $this->call(DocConnectionSeeder::class);
         $this->call(WareSeeder::class);
-
+        $this->call(WareConnectionSeeder::class);
         // \App\Models\User::factory(10)->create();
     }
 }

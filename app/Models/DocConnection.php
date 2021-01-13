@@ -13,4 +13,14 @@ class DocConnection extends Model
         'amount',
         'price'
     ];
+
+    public function characteristic()
+    {
+        return $this->belongsTo(Characteristic::class);
+    }
+
+    public function document()
+    {
+        return $this->belongsTo(Document::class);
+    }
 }
