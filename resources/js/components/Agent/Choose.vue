@@ -21,8 +21,8 @@
         <el-divider></el-divider>
         <el-table :data="page_of_items"
                   highlight-current-row
-                  @row-dblclick="toEdit"
-                  @current-change="rowSelected">
+                  @row-dblclick=""
+                  @current-change="selected">
 
             <el-table-column
                 prop="id"
@@ -72,7 +72,7 @@
 import mixin_index from "../../code/mixins/mixin_index";
 
 export default {
-    name: "AgentsIndex",
+    name: "AgentChoose",
 
     mixins: [mixin_index],
     data: function () {
@@ -104,6 +104,12 @@ export default {
                 this.is_reload = false;
             }));
 
+        },
+        selected(selected_item) {
+            this.$emit("selected", {agent: selected_item});
+        },
+        back() {
+            this.$emit("back");
         }
 
     }

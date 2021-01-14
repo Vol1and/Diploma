@@ -140,7 +140,7 @@ name: "Income",
         },
         add(){
 
-            this.items.push({nomenclature: this.nomenclature, serial : this.serial, expiry_date: this.expiry_date, income_price : this.income_price, count: this.income_price});
+            this.items.push({nomenclature_id: this.nomenclature, serial : this.serial, expiry_date: this.expiry_date, income_price : this.income_price, count: this.income_price});
 
 
             console.log(this.items)

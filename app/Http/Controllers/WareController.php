@@ -11,5 +11,6 @@ class WareController extends OriginController
     public function index(Request $request)
     {
         return $request->input('items');
+
     }
 }

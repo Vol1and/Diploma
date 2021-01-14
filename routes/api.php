@@ -32,6 +32,7 @@ Route::apiResource('/nomenclatures', "App\Http\Controllers\NomenclatureControlle
 
 Route::post('/income' , [\App\Http\Controllers\DocumentController::class, 'incomeCreate']);
 
+Route::post('/test' , [\App\Http\Controllers\WareController::class, 'index']);
 
 
 

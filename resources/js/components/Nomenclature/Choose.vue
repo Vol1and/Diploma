@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-row v-shortkey="['del']" v-if="choosing_state === 0 " @shortkey="deleteSelected" class="center-75">
-            <v-dialog/>
+
 
             <h1 class="text-center">Выбор номенклатуры</h1>
 

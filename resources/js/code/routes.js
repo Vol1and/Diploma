@@ -4,9 +4,9 @@ import ProducerIndex from "../components/Producer/Index";
 import ProducerCreate from "../components/Producer/Create";
 import ProducerEdit from "../components/Producer/Edit";
 
-import AgentIndex from "../components/Agents/Index";
-import AgentCreate from "../components/Agents/Create";
-import AgentEdit from "../components/Agents/Edit";
+import AgentIndex from "../components/Agent/Index";
+import AgentCreate from "../components/Agent/Create";
+import AgentEdit from "../components/Agent/Edit";
 
 import PriceTypeIndex from "../components/PriceType/Index";
 import PriceTypeCreate from "../components/PriceType/Create";
@@ -16,6 +16,8 @@ import NomenclatureIndex from "../components/Nomenclature/Index";
 import NomenclatureCreate from "../components/Nomenclature/Create";
 import NomenclatureEdit from "../components/Nomenclature/Edit";
 
+
+import IncomeCreate from "../components/Documents/Income/Create";
 import CharacteristicForNomenclature from "../components/Characteristic/ForNomenclature";
 
 import Test from "../components/Test/Income"
@@ -32,7 +34,10 @@ const routes = [
     { path: '/producers/create',name: "producers.create", component: ProducerCreate },
     { path: '/producers/:id',name: "producers.edit", component: ProducerEdit },
 
-    { path: '/test/income',          name: "test.income", component: Test },
+    { path: '/test/income',          name: "test.income", component: IncomeCreate },
+
+
+
     { path: '/agents',          name: "agents.index", component: AgentIndex },
     { path: '/agents/create',   name: "agents.create", component: AgentCreate },
     { path: '/agents/:id',      name: "agents.edit", component: AgentEdit },

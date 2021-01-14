@@ -4,6 +4,7 @@ import Producer from "./Producer";
 class Nomenclature {
     constructor(id, name, producer, price_type, created_at, updated_at, deleted_at) {
 
+        this.characteristic = {expiry_date: "2024/12/12", serial : "123"};
         if(!arguments.length) {
             this.id = -1;
             this.name = '';
