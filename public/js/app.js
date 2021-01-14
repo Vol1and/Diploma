@@ -4372,6 +4372,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -4381,38 +4383,54 @@ __webpack_require__.r(__webpack_exports__);
   mixins: [_code_mixins_mixin_index__WEBPACK_IMPORTED_MODULE_0__["default"]],
   data: function data() {
     return {
+      //модель, в которой будут находиться данные
       item: new _code_models_IncomeDocument__WEBPACK_IMPORTED_MODULE_2__["default"](),
+      //переменная, которая помогает отображать компоненты выбора (например, NomenclatureChoose или ProducerChoose)
       choosing_state: 0,
+      //показывает, получены ли данные с сервера - при loaded - false не доступна submit-кнопка
       loaded: true,
+      //массив с ошибками
       errors: [],
-      selectingCell: {
-        col: null,
-        item: new _code_models_DocumentTableRow__WEBPACK_IMPORTED_MODULE_3__["default"](),
-        cell: null
-      }
+      //выбранная строка - в табличной части идет проверка - id_строки - id_selectingRow
+      //если true, то строка переходит в editable
+      selectingRow: new _code_models_DocumentTableRow__WEBPACK_IMPORTED_MODULE_3__["default"]()
     };
   },
+  //ивент, срабатывающий при created стадии компонента - в поле дата закидывает текущую дату
+  created: function created() {
+    this.item.date = Date.now();
+  },
   methods: {
+    //метод-заглушка
     update: function update() {},
+    //метод добавляет новую пустую строку в массив table_data, и, соответственно в табличную часть формы
     addToTable: function addToTable() {
-      this.item.table_data.push(new _code_models_DocumentTableRow__WEBPACK_IMPORTED_MODULE_3__["default"](-1, this.item.table_data.length + 1));
+      //id = -1, table_id используется чтобы нумерация строк происходила с 1 и дальше
+      //TODO: при реализации удаления строки из таблицы, переделать нумерацию, чтобы было max_id + 1
+      this.item.table_data.push(new _code_models_DocumentTableRow__WEBPACK_IMPORTED_MODULE_3__["default"](-1, this.item.table_data.length + 1)); //console.log(this.item.table_data)
     },
+    //обработчик события cell-dblclick - обрабатывает двойной щелчок по выбраной клетке
+    //чисто технически, его можно переделать в rowEdit, но пока не горит
     cellEdit: function cellEdit(row, column, cell, event) {
-      this.selectingCell.item = row;
-      this.selectingCell.cell = cell;
-      this.selectingCell.col = column;
+      //присваивает выбранную строку в selectingRow - читать выше
+      this.selectingRow = row;
     },
+    //сабмит - отправляет данные
     submit: function submit() {
       var _this = this;
 
+      //не проходит валидацию - возвращаем
       //if (!this.validateFields()) return;
-      this.loaded = false;
-      console.log(this.item.getDataForServer());
+      //блокируем кнопку submit
+      this.loaded = false; //пост-запрос
+      //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
+
       axios.post("/api/test", {
         items: this.item.getDataForServer()
       }).then(function (response) {
         console.log(response.data);
       })["catch"](function (error) {
+        //ошибка - выводим
         _this.$notify.error({
           title: 'Ошибка!',
           message: "Сообщение ошибки - " + error.response.data.message
@@ -4421,15 +4439,18 @@ __webpack_require__.r(__webpack_exports__);
         _this.loaded = true;
       });
     },
-    validateFields: function validateFields() {// this.errors = [];
-      // if (this.item.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
-      // if (this.item.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
-      // if (!this.item.price_type.id) this.errors.push("Ошибка в поле \"Ценовая группа\"");
-      // if (!this.item.producer.id) this.errors.push("Ошибка в поле \"Производитель\"");
-      // if (this.item.price_type.id <= 0) this.errors.push("Ошибка в поле \"Ценовая группа\"");
-      // if (this.item.producer.id <= 0) this.errors.push("Ошибка в поле \"Производитель\"");
-      // this.showErrors()
-      // return this.errors.length === 0;
+    validateFields: function validateFields() {//this.errors = [];
+      //if (this.item.agent.id == null) this.errors.push("Поле \"Контрагент\" должно быть заполнено");
+      //if (this.item.store.id == null) this.errors.push("Поле \"Склад\" должно быть заполнено");
+      //if (!this.item.price_type.id) this.errors.push("Ошибка в поле \"Ценовая группа\"");
+      //if (!this.item.producer.id) this.errors.push("Ошибка в поле \"Производитель\"");
+      //if (this.item.price_type.id <= 0) this.errors.push("Ошибка в поле \"Ценовая группа\"");
+      //if (this.item.producer.id <= 0) this.errors.push("Ошибка в поле \"Производитель\"");
+      //
+      //
+      //this.showErrors()
+      //
+      //return this.errors.length === 0;
     },
     selectingStore: function selectingStore() {
       this.choosing_state = 3;
@@ -4449,7 +4470,7 @@ __webpack_require__.r(__webpack_exports__);
       this.choosing_state = 0;
     },
     onSelectedNomenclature: function onSelectedNomenclature(data) {
-      this.selectingCell.item.nomenclature = data.nomenclature;
+      this.selectingRow.nomenclature = data.nomenclature;
       this.choosing_state = 0;
     },
     onBack: function onBack() {
@@ -104134,8 +104155,8 @@ var render = function() {
                                           key: "default",
                                           fn: function(scope) {
                                             return [
-                                              _vm.selectingCell.item.id ===
-                                              scope.row.id
+                                              _vm.selectingRow.table_id ===
+                                              scope.row.table_id
                                                 ? _c(
                                                     "el-input",
                                                     {
@@ -104193,7 +104214,7 @@ var render = function() {
                                       ],
                                       null,
                                       false,
-                                      1990452448
+                                      3537308311
                                     )
                                   }),
                                   _vm._v(" "),
@@ -104220,8 +104241,8 @@ var render = function() {
                                           key: "default",
                                           fn: function(scope) {
                                             return [
-                                              _vm.selectingCell.item.id ===
-                                              scope.row.id
+                                              _vm.selectingRow.table_id ===
+                                              scope.row.table_id
                                                 ? _c("el-input", {
                                                     attrs: { placeholder: "" },
                                                     model: {
@@ -104256,7 +104277,7 @@ var render = function() {
                                       ],
                                       null,
                                       false,
-                                      2911983904
+                                      1291027287
                                     )
                                   }),
                                   _vm._v(" "),
@@ -104274,8 +104295,8 @@ var render = function() {
                                           key: "default",
                                           fn: function(scope) {
                                             return [
-                                              _vm.selectingCell.item.id ===
-                                              scope.row.id
+                                              _vm.selectingRow.table_id ===
+                                              scope.row.table_id
                                                 ? _c("el-date-picker", {
                                                     staticStyle: {
                                                       width: "100%"
@@ -104317,7 +104338,7 @@ var render = function() {
                                       ],
                                       null,
                                       false,
-                                      4180082701
+                                      1881064762
                                     )
                                   }),
                                   _vm._v(" "),
@@ -104334,8 +104355,8 @@ var render = function() {
                                           key: "default",
                                           fn: function(scope) {
                                             return [
-                                              _vm.selectingCell.item.id ===
-                                              scope.row.id
+                                              _vm.selectingRow.table_id ===
+                                              scope.row.table_id
                                                 ? _c(
                                                     "el-input",
                                                     {
@@ -104382,7 +104403,7 @@ var render = function() {
                                       ],
                                       null,
                                       false,
-                                      1621698471
+                                      1936977744
                                     )
                                   }),
                                   _vm._v(" "),
@@ -104399,8 +104420,8 @@ var render = function() {
                                           key: "default",
                                           fn: function(scope) {
                                             return [
-                                              _vm.selectingCell.item.id ===
-                                              scope.row.id
+                                              _vm.selectingRow.table_id ===
+                                              scope.row.table_id
                                                 ? _c(
                                                     "el-input",
                                                     {
@@ -104449,7 +104470,7 @@ var render = function() {
                                       ],
                                       null,
                                       false,
-                                      4240941927
+                                      1780205200
                                     )
                                   }),
                                   _vm._v(" "),
@@ -104466,8 +104487,8 @@ var render = function() {
                                           key: "default",
                                           fn: function(scope) {
                                             return [
-                                              _vm.selectingCell.item.id ===
-                                              scope.row.id
+                                              _vm.selectingRow.table_id ===
+                                              scope.row.table_id
                                                 ? _c(
                                                     "el-input",
                                                     {
@@ -104515,7 +104536,7 @@ var render = function() {
                                       ],
                                       null,
                                       false,
-                                      3844756999
+                                      1993590192
                                     )
                                   })
                                 ],
@@ -124475,7 +124496,8 @@ var DocumentTableRow = /*#__PURE__*/function () {
     this.count = count;
     this.income_price = income_price;
     this.sell_price = sell_price;
-  }
+  } //возвращает ассоциативный массив, который можно отправлять на сервер - в нем нет лишних полей, и тяжелых объектов - только id
+
 
   _createClass(DocumentTableRow, [{
     key: "getDataForServer",
@@ -124510,11 +124532,13 @@ var DocumentTableRow = /*#__PURE__*/function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Producer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Producer */ "./resources/js/code/models/Producer.js");
 /* harmony import */ var _PriceType__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PriceType */ "./resources/js/code/models/PriceType.js");
+/* harmony import */ var _DocumentTableRow__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DocumentTableRow */ "./resources/js/code/models/DocumentTableRow.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 
 
 
@@ -124544,7 +124568,8 @@ var IncomeDocument = /*#__PURE__*/function () {
     this.created_at = created_at;
     this.updated_at = updated_at;
     this.deleted_at = deleted_at;
-  }
+  } //возвращает ассоциативный массив, который можно отправлять на сервер - в нем нет лишних полей, и тяжелых объектов - только id
+
 
   _createClass(IncomeDocument, [{
     key: "getDataForServer",
@@ -124556,7 +124581,8 @@ var IncomeDocument = /*#__PURE__*/function () {
         date: this.date,
         table_data: this.prepareTableDataToServer()
       };
-    }
+    } //подгатавливает данные табличной части - каждый из элементов возращает подготовленные данные
+
   }, {
     key: "prepareTableDataToServer",
     value: function prepareTableDataToServer() {

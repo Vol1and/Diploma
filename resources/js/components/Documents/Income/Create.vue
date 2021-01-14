@@ -17,7 +17,7 @@
 
                                 <el-form-item label="Дата: ">
                                     <el-date-picker id="name_input" style="width: 100%" v-model="item.date"
-                                                     type="datetime"/>
+                                                    type="datetime"/>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="6" :offset="1">
@@ -66,7 +66,7 @@
                                 >
                                     <template slot-scope="scope">
 
-                                        <el-input v-if="selectingCell.item.id === scope.row.id" readonly
+                                        <el-input v-if="selectingRow.table_id === scope.row.table_id" readonly
                                                   v-model="scope.row.nomenclature.name" placeholder="">
                                             <el-button type="primary" @click="selectingNomenclature" slot="append"
                                                        icon="el-icon-d-arrow-right">
@@ -90,7 +90,7 @@
                                 >
                                     <template slot-scope="scope">
 
-                                        <el-input v-if="selectingCell.item.id === scope.row.id"
+                                        <el-input v-if="selectingRow.table_id === scope.row.table_id"
                                                   v-model="scope.row.characteristic.serial" placeholder="">
 
                                         </el-input>
@@ -105,9 +105,11 @@
                                     :index="5"
                                 >
                                     <template slot-scope="scope">
-                                        <el-date-picker v-if="selectingCell.item.id === scope.row.id" style="width: 100%"  v-model="scope.row.characteristic.expiry_date"
-                                        format="yyyy/MM/dd"
-                                        value-format="yyyy-MM-dd" />
+                                        <el-date-picker v-if="selectingRow.table_id === scope.row.table_id"
+                                                        style="width: 100%"
+                                                        v-model="scope.row.characteristic.expiry_date"
+                                                        format="yyyy/MM/dd"
+                                                        value-format="yyyy-MM-dd"/>
 
                                         <div v-else> {{ scope.row.characteristic.expiry_date }}</div>
                                     </template>
@@ -120,7 +122,7 @@
                                 >
                                     <template slot-scope="scope">
 
-                                        <el-input v-if="selectingCell.item.id === scope.row.id" type="number"
+                                        <el-input v-if="selectingRow.table_id === scope.row.table_id" type="number"
                                                   v-model="scope.row.count" placeholder="">
                                             <template slot="append">шт.</template>
                                         </el-input>
@@ -135,7 +137,7 @@
                                 >
                                     <template slot-scope="scope">
 
-                                        <el-input v-if="selectingCell.item.id === scope.row.id" type="number"
+                                        <el-input v-if="selectingRow.table_id === scope.row.table_id" type="number"
                                                   v-model="scope.row.income_price" placeholder="">
                                             <template slot="append">руб.</template>
                                         </el-input>
@@ -150,7 +152,7 @@
                                 >
                                     <template slot-scope="scope">
 
-                                        <el-input v-if="selectingCell.item.id === scope.row.id" type="number"
+                                        <el-input v-if="selectingRow.table_id === scope.row.table_id" type="number"
                                                   v-model="scope.row.sell_price" placeholder="">
                                             <template slot="append">руб.</template>
                                         </el-input>
@@ -194,67 +196,79 @@ export default {
     mixins: [mixin_index],
     data() {
         return {
+            //модель, в которой будут находиться данные
             item: new IncomeDocument(),
+            //переменная, которая помогает отображать компоненты выбора (например, NomenclatureChoose или ProducerChoose)
             choosing_state: 0,
+            //показывает, получены ли данные с сервера - при loaded - false не доступна submit-кнопка
             loaded: true,
+            //массив с ошибками
             errors: [],
-            selectingCell: {
-                col: null,
-                item: new DocumentTableRow(),
-                cell: null
-            }
-
+            //выбранная строка - в табличной части идет проверка - id_строки - id_selectingRow
+            //если true, то строка переходит в editable
+            selectingRow: new DocumentTableRow()
         }
     },
 
+    //ивент, срабатывающий при created стадии компонента - в поле дата закидывает текущую дату
+    created() {
+        this.item.date = Date.now();
+    },
+
     methods: {
+        //метод-заглушка
+        update() {},
+        //метод добавляет новую пустую строку в массив table_data, и, соответственно в табличную часть формы
+        addToTable() {
+            //id = -1, table_id используется чтобы нумерация строк происходила с 1 и дальше
+            //TODO: при реализации удаления строки из таблицы, переделать нумерацию, чтобы было max_id + 1
 
-        update() {
-        },
-        addToTable(){
-            this.item.table_data.push( new DocumentTableRow(-1,this.item.table_data.length + 1));
+            this.item.table_data.push(new DocumentTableRow(-1, this.item.table_data.length + 1));
 
+            //console.log(this.item.table_data)
         },
+        //обработчик события cell-dblclick - обрабатывает двойной щелчок по выбраной клетке
+        //чисто технически, его можно переделать в rowEdit, но пока не горит
         cellEdit(row, column, cell, event) {
-
-            this.selectingCell.item = row;
-            this.selectingCell.cell = cell;
-            this.selectingCell.col = column;
+            //присваивает выбранную строку в selectingRow - читать выше
+            this.selectingRow = row;
         },
+        //сабмит - отправляет данные
         submit: function () {
-        //if (!this.validateFields()) return;
+            //не проходит валидацию - возвращаем
+            //if (!this.validateFields()) return;
 
-        this.loaded = false;
+            //блокируем кнопку submit
+            this.loaded = false;
 
-        console.log(this.item.getDataForServer())
-
-            axios.post("/api/test", {items : this.item.getDataForServer()}).then((response) => {
-
-
+            //пост-запрос
+            //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
+            axios.post("/api/test", {items: this.item.getDataForServer()}).then((response) => {
                 console.log(response.data);
             }).catch((error) => {
-            this.$notify.error({
+                //ошибка - выводим
+                this.$notify.error({
 
-                title: 'Ошибка!',
-                message: "Сообщение ошибки - " + error.response.data.message,
+                    title: 'Ошибка!',
+                    message: "Сообщение ошибки - " + error.response.data.message,
+                })
+                this.loaded = true;
             })
-            this.loaded = true;
-        })
         }
         ,
         validateFields() {
-            // this.errors = [];
-            // if (this.item.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
-            // if (this.item.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
-            // if (!this.item.price_type.id) this.errors.push("Ошибка в поле \"Ценовая группа\"");
-            // if (!this.item.producer.id) this.errors.push("Ошибка в поле \"Производитель\"");
-            // if (this.item.price_type.id <= 0) this.errors.push("Ошибка в поле \"Ценовая группа\"");
-            // if (this.item.producer.id <= 0) this.errors.push("Ошибка в поле \"Производитель\"");
-
-
-            // this.showErrors()
-
-            // return this.errors.length === 0;
+             //this.errors = [];
+             //if (this.item.agent.id == null) this.errors.push("Поле \"Контрагент\" должно быть заполнено");
+             //if (this.item.store.id == null) this.errors.push("Поле \"Склад\" должно быть заполнено");
+             //if (!this.item.price_type.id) this.errors.push("Ошибка в поле \"Ценовая группа\"");
+             //if (!this.item.producer.id) this.errors.push("Ошибка в поле \"Производитель\"");
+             //if (this.item.price_type.id <= 0) this.errors.push("Ошибка в поле \"Ценовая группа\"");
+             //if (this.item.producer.id <= 0) this.errors.push("Ошибка в поле \"Производитель\"");
+//
+//
+             //this.showErrors()
+//
+             //return this.errors.length === 0;
         }
         ,
         selectingStore() {
@@ -280,7 +294,7 @@ export default {
         }
         ,
         onSelectedNomenclature(data) {
-            this.selectingCell.item.nomenclature = data.nomenclature;
+            this.selectingRow.nomenclature = data.nomenclature;
             this.choosing_state = 0;
         }
         ,

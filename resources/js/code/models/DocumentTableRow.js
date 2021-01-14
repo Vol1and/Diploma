@@ -13,6 +13,8 @@ class DocumentTableRow {
             this.sell_price = sell_price;
 
     }
+
+    //возвращает ассоциативный массив, который можно отправлять на сервер - в нем нет лишних полей, и тяжелых объектов - только id
     getDataForServer(){
         return {id: this.id,table_id: this.table_id, nomenclature_id:  this.nomenclature.id,characteristic_id: this.characteristic.id,
             count: this.count, income_price: this.income_price, sell_price : this.sell_price}
