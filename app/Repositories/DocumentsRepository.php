@@ -14,4 +14,10 @@ class DocumentsRepository extends BaseRepository
     {
         return Model::class;
     }
+
+
+    public function getLatestId()
+    {
+        return $this->startConditions()->max('id');
+    }
 }

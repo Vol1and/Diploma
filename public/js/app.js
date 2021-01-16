@@ -4425,7 +4425,7 @@ __webpack_require__.r(__webpack_exports__);
       this.loaded = false; //пост-запрос
       //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
 
-      axios.post("/api/test", {
+      axios.post("/api/income", {
         items: this.item.getDataForServer()
       }).then(function (response) {
         console.log(response.data);
@@ -124493,6 +124493,8 @@ var DocumentTableRow = /*#__PURE__*/function () {
     this.table_id = table_id;
     this.nomenclature = nomenclature;
     this.characteristic = characteristic;
+    this.serial = characteristic.serial;
+    this.expiry_date = characteristic.expiry_date;
     this.count = count;
     this.income_price = income_price;
     this.sell_price = sell_price;
@@ -124507,6 +124509,8 @@ var DocumentTableRow = /*#__PURE__*/function () {
         table_id: this.table_id,
         nomenclature_id: this.nomenclature.id,
         characteristic_id: this.characteristic.id,
+        serial: this.characteristic.serial,
+        expiry_date: this.characteristic.expiry_date,
         count: this.count,
         income_price: this.income_price,
         sell_price: this.sell_price
@@ -126883,8 +126887,8 @@ var mutations = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\vol1a\PhpstormProjects\Diploma\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\vol1a\PhpstormProjects\Diploma\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\dithr\PhpstormProjects\Diploma_Slav\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\dithr\PhpstormProjects\Diploma_Slav\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

@@ -243,7 +243,7 @@ export default {
 
             //пост-запрос
             //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
-            axios.post("/api/test", {items: this.item.getDataForServer()}).then((response) => {
+            axios.post("/api/income", {items: this.item.getDataForServer()}).then((response) => {
                 console.log(response.data);
             }).catch((error) => {
                 //ошибка - выводим

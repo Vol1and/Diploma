@@ -8,6 +8,8 @@ class DocumentTableRow {
             this.table_id = table_id;
             this.nomenclature = nomenclature;
             this.characteristic = characteristic;
+            this.serial = characteristic.serial;
+            this.expiry_date = characteristic.expiry_date;
             this.count = count;
             this.income_price = income_price;
             this.sell_price = sell_price;
@@ -17,6 +19,7 @@ class DocumentTableRow {
     //возвращает ассоциативный массив, который можно отправлять на сервер - в нем нет лишних полей, и тяжелых объектов - только id
     getDataForServer(){
         return {id: this.id,table_id: this.table_id, nomenclature_id:  this.nomenclature.id,characteristic_id: this.characteristic.id,
+            serial: this.characteristic.serial, expiry_date: this.characteristic.expiry_date,
             count: this.count, income_price: this.income_price, sell_price : this.sell_price}
     }
 
