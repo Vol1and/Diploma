@@ -42,7 +42,7 @@ class DocumentController extends OriginController
 
 
 
-    //принимает реквест ProducerCreateRequest
+    //принимает реквест DocumentCreateRequest
     public function store(DocumentCreateRequest $request)
     {
         //получение данных из реквеста

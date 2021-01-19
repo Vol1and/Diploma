@@ -131,28 +131,14 @@ export default {
     },
     methods: {
 
-        update: function () {
+        filterClear: function(){
             this.filter_state = false
             this.filter_fields = {
                 name_str: "",
                 producer: {name: "", id: null},
                 price_type: {name: "", id: null},
             }
-            this.is_reload = true;
-            this.$store.dispatch('nomenclature/update').then(() => {
-                this.is_reload = false;
-                this.page_count = this.$store.getters['nomenclature/items_length'](this.items_per_page);
-                this.current_page = 1;
-                this.onChangePage();
-
-            }, (reason => {
-                console.log(`Что то пошло не так. Код ответа - ${reason}`)
-                this.is_reload = false;
-            }));
-
-            //console.log(this.$store.getters['nomenclature/last_updated']);
         },
-
         filter() {
             this.filter_state = true;
             axios.get('/api/nomenclature/filter', {

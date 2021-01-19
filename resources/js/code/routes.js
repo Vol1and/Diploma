@@ -12,15 +12,22 @@ import PriceTypeIndex from "../components/PriceType/Index";
 import PriceTypeCreate from "../components/PriceType/Create";
 import PriceTypeEdit from "../components/PriceType/Edit";
 
+import StorageIndex from "../components/Storage/Index";
+import StorageCreate from "../components/Storage/Create";
+import StorageEdit from "../components/Storage/Edit";
+
+
 import NomenclatureIndex from "../components/Nomenclature/Index";
 import NomenclatureCreate from "../components/Nomenclature/Create";
 import NomenclatureEdit from "../components/Nomenclature/Edit";
 
 
 import IncomeCreate from "../components/Documents/Income/Create";
+import IncomeIndex from "../components/Documents/Income/Index";
+
+
 import CharacteristicForNomenclature from "../components/Characteristic/ForNomenclature";
 
-import Test from "../components/Test/Income"
 
 import Home from "../components/Home";
 
@@ -34,14 +41,18 @@ const routes = [
     { path: '/producers/create',name: "producers.create", component: ProducerCreate },
     { path: '/producers/:id',name: "producers.edit", component: ProducerEdit },
 
-    { path: '/test/income',          name: "test.income", component: IncomeCreate },
 
+    { path: '/income-documents',          name: "income.index", component: IncomeIndex },
+    { path: '/income-documents/create',          name: "income.create", component: IncomeCreate },
 
 
     { path: '/agents',          name: "agents.index", component: AgentIndex },
     { path: '/agents/create',   name: "agents.create", component: AgentCreate },
     { path: '/agents/:id',      name: "agents.edit", component: AgentEdit },
 
+    { path: '/storages',          name: "storages.index", component:    StorageIndex },
+    { path: '/storages/create',   name: "storages.create", component:   StorageCreate },
+    { path: '/storages/:id',      name: "storages.edit", component:     StorageEdit },
 
     { path: '/price-types',name: "pricetypes.index", component:  PriceTypeIndex},
     { path: '/price-types/create',name: "pricetypes.create", component: PriceTypeCreate },

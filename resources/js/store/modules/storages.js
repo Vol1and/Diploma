@@ -1,4 +1,4 @@
-import Producer from "../../code/models/Producer";
+import PriceType from "../../code/models/PriceType";
 
 
 //содержит переменные, которые будут помещены в модуль хранилища
@@ -16,8 +16,7 @@ const getters = {
     items_length: state => items_per_page => {
 
         return Math.ceil(state.items.length / items_per_page);
-    },
-
+    }
 }
 
 // actions - операции-обертки для мутаций - могут быть асинхронными
@@ -26,41 +25,27 @@ const actions = {
     update(context) {
         return new Promise((resolve, reject) => {
             //запрашивает данные с сервера
-            axios.get('/api/producers').then((response) => {
-                let result = [];
-                //оборачиваем каждый элемент пришедших данных в модель модуля
-                response.data.forEach(item => result.push(new Producer(item.id, item.name, item.country, item.created_at, item.updated_at, item.deleted_at)))
+            axios.get('/api/storages').then((response) => {
+                    let result = [];
+                    //оборачиваем каждый элемент пришедших данных в модель модуля
+                    response.data.forEach(item => result.push(new PriceType(item.id, item.name, item.margin, item.created_at, item.updated_at, item.deleted_at)))
 
-                //дергаем мутатор
-                context.commit('setItems', result);
-                //асинхронный ответ - все ок
-                resolve();
+                    //дергаем мутатор
+                    context.commit('setItems', result);
+                    //асинхронный ответ - все ок
+                    resolve();
 
-            }).catch((error) => {
+                }).catch((error) => {
                 //если не ок - асинхронный ответ с кодом ошибки
                 reject(error.response.data.message);
             })
         });
 
     },
-    sendNewItem(context, data){
-        return new Promise((resolve, reject) => {
-            //запрашивает данные с сервера
-            axios.post('/api/producers', data.fields).then(response => {
-
-                resolve();
-
-                //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
-            }).catch((error) => {
-                console.log("Ошибка!")
-                reject(error.response.data.message);
-            })
-        });
-    },
     deleteItem(context, data){
         return new Promise((resolve, reject) => {
             //запрашивает данные с сервера
-            axios.delete(`/api/producers/${data.id}` ).then(response => {
+            axios.delete(`/api/storages/${data.id}` ).then(response => {
 
                 context.dispatch('update').then(()=>{
                     resolve();
@@ -74,8 +59,6 @@ const actions = {
             })
         });
     },
-
-
 }
 
 // мутации - СИНХРОННЫЕ операции которые меняют данные в хранилищах

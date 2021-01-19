@@ -4,6 +4,9 @@ import producers from './modules/producers'
 import pricetypes from './modules/pricetypes'
 import nomenclature from './modules/nomenclature'
 import agents from "./modules/agents";
+import incomeDocuments from "./modules/incomeDocuments";
+import storages from "./modules/storages";
+
 Vue.use(Vuex)
 
 
@@ -14,6 +17,8 @@ export default new Vuex.Store({
         producers,
         pricetypes,
         nomenclature,
-        agents
+        agents,
+        incomeDocuments,
+        storages
     },
 })

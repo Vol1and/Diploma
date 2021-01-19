@@ -1,41 +1,45 @@
 <template>
     <div>
         <el-row v-if=" choosing_state === 0 ">
+
             <el-col :span="20" :offset="2">
                 <el-card class="box-card">
-
                     <div slot="header">
                         <h2 class="text-center">Новое поступление товаров</h2>
                     </div>
-                    <el-form label-position="left">
+                    <el-form label-width="100px" label-position="right">
+
+
                         <el-row>
-                            <el-col :span="6">
+                            <el-col :span="4">
                                 <el-form-item label="Id документа: ">
                                     <el-input readonly v-model="item.id" placeholder="">
                                     </el-input>
                                 </el-form-item>
+                            </el-col>
+                            <el-col :span="5">
 
                                 <el-form-item label="Дата: ">
                                     <el-date-picker id="name_input" style="width: 100%" v-model="item.date"
                                                     type="datetime"/>
                                 </el-form-item>
                             </el-col>
-                            <el-col :span="6" :offset="1">
-                                <el-form-item label="Контрагент: ">
+
+                            <el-col :span="5">
+                                <el-form-item label="Поставщик: ">
                                     <el-input readonly v-model="item.agent.name" placeholder="">
                                         <el-button type="primary" @click="selectingAgent" slot="append"
                                                    icon="el-icon-d-arrow-right"></el-button>
                                     </el-input>
                                 </el-form-item>
+                            </el-col>
+                            <el-col :span="5">
                                 <el-form-item label="Склад: ">
-                                    <el-input readonly v-model="item.store.name" placeholder="">
-                                        <el-button type="primary" @click="selectingStore" slot="append"
+                                    <el-input readonly v-model="item.storage.name" placeholder="">
+                                        <el-button type="primary" @click="selectingStorage" slot="append"
                                                    icon="el-icon-d-arrow-right"></el-button>
                                     </el-input>
                                 </el-form-item>
-                            </el-col>
-
-                            <el-col :span="6" :offset="1">
                             </el-col>
                         </el-row>
 
@@ -46,7 +50,6 @@
                             <el-table :data="item.table_data"
                                       highlight-current-cell
                                       @cell-dblclick="cellEdit"
-                                      @current-change="rowSelected"
                                       border
                                       show-summary
                                       sum-text="  "
@@ -166,17 +169,18 @@
                             <el-button type="primary" @click="submit">Добавить</el-button>
                             <el-button @click="()=>{this.$router.go(-1)}">Отмена</el-button>
                         </el-form-item>
-
                     </el-form>
+
                 </el-card>
 
 
             </el-col>
+
         </el-row>
         <agent-choose-component @back="onBack" v-if="choosing_state ===1"
                                 @selected="onSelectedAgent"></agent-choose-component>
-        <agent-choose-component @back="onBack" v-if="choosing_state ===3"
-                                @selected="onSelectedStore"></agent-choose-component>
+        <storage-choose-component @back="onBack" v-if="choosing_state ===3"
+                                @selected="onSelectedStorage"></storage-choose-component>
         <nomenclature-choose-component @back="onBack" v-if="choosing_state ===2"
                                        @selected="onSelectedNomenclature"></nomenclature-choose-component>
     </div>
@@ -185,25 +189,22 @@
 <script>
 
 
-import mixin_index from "../../../code/mixins/mixin_index";
-import nomenclature from "../../../store/modules/nomenclature";
 import IncomeDocument from "../../../code/models/IncomeDocument";
 import DocumentTableRow from "../../../code/models/DocumentTableRow";
+import mixin_create from "../../../code/mixins/mixin_create";
 
 export default {
     name: "IncomeCreate",
 
-    mixins: [mixin_index],
+    mixins: [mixin_create],
     data() {
         return {
             //модель, в которой будут находиться данные
-            item: new IncomeDocument(),
+            item: new IncomeDocument(null),
             //переменная, которая помогает отображать компоненты выбора (например, NomenclatureChoose или ProducerChoose)
             choosing_state: 0,
             //показывает, получены ли данные с сервера - при loaded - false не доступна submit-кнопка
             loaded: true,
-            //массив с ошибками
-            errors: [],
             //выбранная строка - в табличной части идет проверка - id_строки - id_selectingRow
             //если true, то строка переходит в editable
             selectingRow: new DocumentTableRow()
@@ -217,13 +218,14 @@ export default {
 
     methods: {
         //метод-заглушка
-        update() {},
+        update() {
+        },
         //метод добавляет новую пустую строку в массив table_data, и, соответственно в табличную часть формы
         addToTable() {
             //id = -1, table_id используется чтобы нумерация строк происходила с 1 и дальше
             //TODO: при реализации удаления строки из таблицы, переделать нумерацию, чтобы было max_id + 1
 
-            this.item.table_data.push(new DocumentTableRow(-1, this.item.table_data.length + 1));
+            this.item.table_data.push(new DocumentTableRow(null, this.item.table_data.length + 1));
 
             //console.log(this.item.table_data)
         },
@@ -236,7 +238,7 @@ export default {
         //сабмит - отправляет данные
         submit: function () {
             //не проходит валидацию - возвращаем
-            //if (!this.validateFields()) return;
+            if (!this.validateFields()) return;
 
             //блокируем кнопку submit
             this.loaded = false;
@@ -257,21 +259,25 @@ export default {
         }
         ,
         validateFields() {
-             //this.errors = [];
-             //if (this.item.agent.id == null) this.errors.push("Поле \"Контрагент\" должно быть заполнено");
-             //if (this.item.store.id == null) this.errors.push("Поле \"Склад\" должно быть заполнено");
-             //if (!this.item.price_type.id) this.errors.push("Ошибка в поле \"Ценовая группа\"");
-             //if (!this.item.producer.id) this.errors.push("Ошибка в поле \"Производитель\"");
-             //if (this.item.price_type.id <= 0) this.errors.push("Ошибка в поле \"Ценовая группа\"");
-             //if (this.item.producer.id <= 0) this.errors.push("Ошибка в поле \"Производитель\"");
-//
-//
-             //this.showErrors()
-//
-             //return this.errors.length === 0;
+            this.errors = [];
+            if (this.item.agent.id === -1) this.errors.push("Поле \"Поставщик\" должно быть заполнено");
+            if (this.item.storage.id === -1) this.errors.push("Поле \"Склад\" должно быть заполнено");
+
+            this.item.table_data.forEach(p => {
+                if (p.nomenclature.id === -1) this.errors.push(`Строка № ${p.table_id}. Поле \"Номенклатура\" должно быть заполнено`);
+                if (p.nomenclature.characteristic.serial === "") this.errors.push(`Строка № ${p.table_id}. Поле \"Серия\" должно быть заполнено`);
+                if (p.nomenclature.characteristic.expiry_date === "") this.errors.push(`Строка № ${p.table_id}. Поле \"Срок годности\" должно быть заполнено`);
+                if (p.income_price <= 0) this.errors.push(`Строка № ${p.table_id}. Поле \"Цена поступления\" должно быть больше 0`);
+                if (p.sell_price <= 0) this.errors.push(`Строка № ${p.table_id}. Поле \"Цена продажи\" должно быть больше 0`);
+                if (p.count <= 0) this.errors.push(`Строка № ${p.table_id}. Поле \"Количество\" должно быть больше 0`);
+            })
+
+            this.showErrors()
+
+            return this.errors.length === 0;
         }
         ,
-        selectingStore() {
+        selectingStorage() {
             this.choosing_state = 3;
         },
 
@@ -288,8 +294,8 @@ export default {
             this.choosing_state = 0;
         }
         ,
-        onSelectedStore(data) {
-            this.item.store = data.agent;
+        onSelectedStorage(data) {
+            this.item.storage = data.storage;
             this.choosing_state = 0;
         }
         ,

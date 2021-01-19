@@ -1,23 +1,18 @@
 <template>
-    <el-row v-if="is_visible">
+    <el-row >
         <el-col :span="6" :offset="9">
             <el-card class="box-card">
 
                 <div slot="header" >
-                    <h2 class="text-center">Ценовая группа #{{ item.id }}</h2>
+                    <h2 class="text-center">Новый склад</h2>
                 </div>
                 <el-form label-position="top">
                     <el-form-item label="Наименование">
                         <el-input type="text" v-model="item.name"></el-input>
                     </el-form-item>
 
-                    <el-form-item label="Наценка">
-                        <el-input type="number" v-model="item.margin"></el-input>
-                    </el-form-item>
-
-
                     <el-form-item>
-                        <el-button type="primary" @click="submit" >Изменить</el-button>
+                        <el-button type="primary" @click="submit" >Добавить</el-button>
                         <el-button @click="()=>{this.$router.go(-1)}">Отмена</el-button>
                     </el-form-item>
                 </el-form>
@@ -28,16 +23,15 @@
 
 <script>
 import PriceType from "../../code/models/PriceType";
-import mixin_edit from "../../code/mixins/mixin_edit";
+import mixin_create from "../../code/mixins/mixin_create";
 
 export default {
-    name: "PriceTypeEdit",
-    mixins: [mixin_edit],
+    name: "StorageCreate",
+    mixins: [mixin_create],
     data() {
         return {
-            item: new PriceType(),
+            item: new PriceType(-1, "", 0),
 
-            is_visible: false,
             loaded: true,
             errors: [],
             success: true
@@ -45,41 +39,27 @@ export default {
         };
     },
 
-    beforeCreate() {
-
-        axios.get(`/api/price-types/${this.$route.params.id}`).then(response => {
-            this.item = new PriceType(response.data.id, response.data.name, response.data.margin, response.data.created_at, response.data.updated_at, response.data.deleted_at);
-            this.is_visible = true;
-
-        }).catch((error) => {
-            console.log("Ошибка!");
-            this.$router.push({name: 'pricetypes.index'});
-        })
-
-    },
-
 
     methods: {
 
         submit: function () {
-            this.item.margin = this.item.margin.replace(',', '.');
-            console.log(this.item.margin);
+
             if (!this.validateFields()) return;
 
-            this.item.margin = parseFloat(this.item.margin);
             this.loaded = false;
 
-            axios.patch(`/api/price-types/${this.item.id}`, this.item).then(response => {
+
+            axios.post('/api/storages', this.item).then(response => {
 
                 //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
                 this.loaded = true;
                 this.$notify({
 
                     type: 'success',
-                    title: 'Успешно!',
-                    message: `Элемент с Id=${this.item.id} успешно изменен!`,
+                    title: 'Элемент добавлен!',
+                    message: `Элемент  успешно добавлен!`,
                 })
-                this.$router.push({name: 'pricetypes.index'});
+                this.$router.push({name: 'storages.index'});
 
             }).catch((error) => {
                 this.$notify.error({
@@ -97,11 +77,10 @@ export default {
             if (this.item.margin < 0) this.errors.push("Поле \"Наценка\" не должно быть отрицательным");
             if (this.item.margin > 255) this.errors.push("Превышено максимально допустимое значение поля \"Наценка\"");
 
-            this.showErrors()
+            this.showErrors();
 
             return this.errors.length === 0;
         }
-
 
     }
 

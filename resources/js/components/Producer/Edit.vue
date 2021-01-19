@@ -75,7 +75,7 @@ export default {
                         title: 'Успешно!',
                     message: `Элемент с Id=${this.item.id} успешно изменен!`,
                 })
-                this.$router.push({name: 'producer.index'});
+                this.$router.push({name: 'producers.index'});
 
             }).catch((error) => {
                 this.$notify.error({

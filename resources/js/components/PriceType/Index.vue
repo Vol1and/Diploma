@@ -75,19 +75,6 @@ export default {
     methods: {
 
 
-        update: function () {
-
-            this.is_reload = true;
-            this.$store.dispatch('pricetypes/update').then(() => {
-                this.page_count = this.$store.getters['pricetypes/items_length'](this.items_per_page);
-                this.onChangePage();
-                this.is_reload = false;
-            }, (reason => {
-                console.log(`Что то пошло не так. Код ответа - ${reason}`)
-                this.is_reload = false;
-            }));
-
-        },
 
     }
 

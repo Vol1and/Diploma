@@ -108,18 +108,11 @@ export default {
 
     methods: {
 
-        update: function () {
+        filterClear: function (){
             this.filter_state = false;
-            this.filter_fields.country_str = this.filter_fields.name_str = ""
-            this.$store.dispatch('producers/update').then(() => {
-                this.page_count = this.$store.getters['producers/items_length'](this.items_per_page);
-                this.onChangePage(1);
-            }, (reason => {
-                console.log(`Что то пошло не так. Код ответа - ${reason}`)
-            }))
-
-
+            this.filter_fields.country_str = this.filter_fields.name_str = "";
         },
+
 
         filter() {
             this.filter_state = true;

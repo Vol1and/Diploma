@@ -95,6 +95,28 @@ export default {
             });
 
 
+        },
+
+
+        update: function () {
+            this.filterClear();
+
+            this.is_reload = true;
+            this.$store.dispatch(`${this.action_namespace}/update`).then(() => {
+                this.is_reload = false;
+                this.page_count = this.$store.getters[`${this.action_namespace}/items_length`](this.items_per_page);
+                this.current_page = 1;
+                this.onChangePage();
+
+            }, (reason => {
+                console.log(`Что то пошло не так. Код ответа - ${reason}`)
+                this.is_reload = false;
+            }));
+
+            //console.log(this.$store.getters['nomenclature/last_updated']);
+        },
+        filterClear(){
+
         }
     }
 }

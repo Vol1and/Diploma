@@ -11,6 +11,9 @@ import PriceTypeIndex from "../components/PriceType/Index";
 import PriceTypeCreate from "../components/PriceType/Create";
 import PriceTypeEdit from "../components/PriceType/Edit";
 
+import StorageIndex from "../components/Storage/Index";
+import StorageCreate from "../components/Storage/Create";
+import StorageEdit from "../components/Storage/Edit";
 
 import AgentIndex from "../components/Agent/Index";
 import AgentCreate from "../components/Agent/Create";
@@ -45,6 +48,12 @@ Vue.component('PriceTypeCreate',    PriceTypeCreate.default);
 Vue.component('PriceTypeEdit',      PriceTypeEdit.default);
 Vue.component('price-type-choose-component',
     require('../components/PriceType/Choose').default);
+
+Vue.component('Storagendex',     StorageIndex.default);
+Vue.component('Storagereate',    StorageCreate.default);
+Vue.component('Storagedit',      StorageEdit.default);
+Vue.component('storage-choose-component',
+    require('../components/Storage/Choose').default);
 
 Vue.component('AgentIndex',     AgentIndex.default);
 Vue.component('AgentCreate',    AgentCreate.default);

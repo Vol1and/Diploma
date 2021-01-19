@@ -19,6 +19,7 @@ class DocConnection extends Model
         return $this->belongsTo(Characteristic::class);
     }
 
+
     public function document()
     {
         return $this->belongsTo(Document::class);

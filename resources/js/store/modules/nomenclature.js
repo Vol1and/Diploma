@@ -20,13 +20,6 @@ const getters = {
         return Math.ceil(state.items.length / items_per_page);
     },
 
-
-
-   //when_last_updated: state => {
-   //    return state.when_last_updated;
-   //}
-
-
 }
 
 // actions - операции-обертки для мутаций - могут быть асинхронными

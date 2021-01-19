@@ -1,14 +1,16 @@
 import Producer from "./Producer";
 import PriceType from "./PriceType";
 import DocumentTableRow from "./DocumentTableRow";
+import Storage from "./Storage";
+import Agent from "./Agent";
 
 class IncomeDocument {
-    constructor(id = null, agent = {name: ""}, store = {name: ""},
+    constructor(id = -1, agent = new Agent(), storage = new Storage(),
                 date = "", table_data = [], created_at = null, updated_at = null, deleted_at = null) {
 
         this.id = id;
         this.agent = agent;
-        this.store = store;
+        this.storage = storage;
         this.date = date;
         this.table_data = table_data;
         this.created_at = created_at;
@@ -17,7 +19,7 @@ class IncomeDocument {
     }
     //возвращает ассоциативный массив, который можно отправлять на сервер - в нем нет лишних полей, и тяжелых объектов - только id
     getDataForServer(){
-        return {id: this.id,agent_id: this.agent.id, store_id:  this.store.id,date: this.date, table_data:  this.prepareTableDataToServer()}
+        return {id: this.id,agent_id: this.agent.id, storage_id:  this.storage.id,date: this.date, table_data:  this.prepareTableDataToServer()}
     }
 
     //подгатавливает данные табличной части - каждый из элементов возращает подготовленные данные

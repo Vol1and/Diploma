@@ -1,12 +1,12 @@
 <template>
-    <el-row style="margin-bottom: 50px" v-shortkey="['del']" @shortkey="deleteSelected" class="center-75">
+    <el-row v-shortkey="['del']" @shortkey="deleteSelected" class="center-75">
+        <v-dialog/>
 
-
-        <h1 v-shortkey="['del']" @shortkey="deleteSelected" class="text-center">Контрагенты</h1>
+        <h1 class="text-center">Выбрать склад</h1>
 
         <el-row>
             <el-col :span="8">
-                <router-link tag="button" class="el-button" :to="{name: 'agents.create'}" style=" float:left ">
+                <router-link tag="button" class="el-button" :to="{name: 'pricetypes.create'}" style=" float:left ">
                     Добавить
                 </router-link>
             </el-col>
@@ -21,7 +21,7 @@
         <el-divider></el-divider>
         <el-table :data="page_of_items"
                   highlight-current-row
-                  @row-dblclick="toEdit"
+                  @row-dblclick="selected"
                   @current-change="rowSelected">
 
             <el-table-column
@@ -35,21 +35,7 @@
                 label="Наименование"
             >
             </el-table-column>
-            <el-table-column
-                prop="billing"
-                label="Биллинг"
-                width="550">
-            </el-table-column>
-            <el-table-column
-                prop="address"
-                label="Адрес"
-                width="350">
-            </el-table-column>
-            <el-table-column
-                prop="description"
-                label="Доп. информация"
-                width="350">
-            </el-table-column>
+
         </el-table>
         <div v-if="!filter_state" class="centered">
             <!--            <jw-pagination :items="items" @changePage="onChangePage"></jw-pagination>-->
@@ -68,24 +54,31 @@
 </template>
 
 
+
 <script>
 import mixin_index from "../../code/mixins/mixin_index";
 
 export default {
-    name: "AgentIndex",
+    name: "StorageChoose",
 
-    mixins: [mixin_index],
+    mixins :[mixin_index],
     data: function () {
         return {
-
-            action_namespace: "agents"
-
+            action_namespace : "storages"
         };
     },
     mounted() {
         this.update();
     },
-    methods: {}
+    methods: {
+
+        selected(selected_item){
+            this.$emit("selected", {storage: selected_item});
+        },
+        back(){
+            this.$emit("back");
+        }
+    }
 
 }
 </script>

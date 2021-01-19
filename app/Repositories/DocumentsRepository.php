@@ -15,6 +15,22 @@ class DocumentsRepository extends BaseRepository
         return Model::class;
     }
 
+    public function getTable(){
+        $columns = [
+            'id',
+            'date',
+            'is_set',
+            'doc_type_id',
+            'agent_id',
+            'storage_id'
+        ];
+        $result = $this->startConditions()
+            ->select($columns)
+            ->with(['storage', 'agent'])
+            ->get();
+
+        return $result;
+    }
 
     public function getLatestId()
     {

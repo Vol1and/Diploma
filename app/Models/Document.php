@@ -11,12 +11,17 @@ class Document extends Model
         'date',
         'is_set',
         'doc_type_id',
-        'agent_id'
+        'agent_id',
+        'storage_id'
     ];
 
     public function agent()
     {
         return $this->belongsTo(Agent::class);
+    }
+    public function storage()
+    {
+        return $this->belongsTo(Storage::class);
     }
 
     public function doc_type()

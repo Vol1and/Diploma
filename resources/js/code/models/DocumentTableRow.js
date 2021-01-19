@@ -1,15 +1,13 @@
 import Nomenclature from "./Nomenclature";
 
 class DocumentTableRow {
-    constructor(id= null, table_id = null, nomenclature= new Nomenclature(),
+    constructor(id= -1, table_id = null, nomenclature= new Nomenclature(),
         characteristic = {serial: "", expiry_date: ""},count= 0,income_price= 0, sell_price= 0) {
 
             this.id = id;
             this.table_id = table_id;
             this.nomenclature = nomenclature;
             this.characteristic = characteristic;
-            this.serial = characteristic.serial;
-            this.expiry_date = characteristic.expiry_date;
             this.count = count;
             this.income_price = income_price;
             this.sell_price = sell_price;

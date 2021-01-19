@@ -21,24 +21,21 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //прописание API-маршрутов для контроллеров
 Route::apiResource('/producers', "App\Http\Controllers\ProducerController");
 Route::apiResource('/price-types', "App\Http\Controllers\PriceTypeController");
+Route::apiResource('/characteristics', "App\Http\Controllers\CharacteristicController");
+Route::apiResource('/agents', "App\Http\Controllers\AgentController");
+Route::apiResource('/nomenclatures', "App\Http\Controllers\NomenclatureController");
+Route::apiResource('/storages', "App\Http\Controllers\StorageController");
+Route::apiResource('/income-documents', "App\Http\Controllers\DocumentController");
 
-//todo: продумать функционал для апдейта хранилища только в случае изменения таблицы
-//Route::get('/nomenclature/last-updated', [App\Http\Controllers\NomenclatureController::class, 'whenLastUpdate']);
+
+
 Route::get('/producer/filter', [App\Http\Controllers\ProducerController::class, 'filter']);
 Route::get('/nomenclature/filter', [App\Http\Controllers\NomenclatureController::class, 'filter']);
-
-Route::apiResource('/nomenclatures', "App\Http\Controllers\NomenclatureController");
-
 
 Route::post('/income' , [\App\Http\Controllers\DocumentController::class, 'incomeCreate']);
 
 Route::post('/test' , [\App\Http\Controllers\WareController::class, 'index']);
 
-
-
-
-Route::apiResource('/characteristics', "App\Http\Controllers\CharacteristicController");
-Route::apiResource('/agents', "App\Http\Controllers\AgentController");
 
 Route::get('/characteristic/for-nomenclature/{id}', [App\Http\Controllers\CharacteristicController::class, 'forNomenclature']);
 
