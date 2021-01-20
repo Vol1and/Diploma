@@ -25,14 +25,14 @@ Route::apiResource('/characteristics', "App\Http\Controllers\CharacteristicContr
 Route::apiResource('/agents', "App\Http\Controllers\AgentController");
 Route::apiResource('/nomenclatures', "App\Http\Controllers\NomenclatureController");
 Route::apiResource('/storages', "App\Http\Controllers\StorageController");
-Route::apiResource('/income-documents', "App\Http\Controllers\DocumentController");
+Route::apiResource('/income-documents', "App\Http\Controllers\FinanceDocumentController");
 
 
 
 Route::get('/producer/filter', [App\Http\Controllers\ProducerController::class, 'filter']);
 Route::get('/nomenclature/filter', [App\Http\Controllers\NomenclatureController::class, 'filter']);
 
-Route::post('/income' , [\App\Http\Controllers\DocumentController::class, 'incomeCreate']);
+Route::post('/income' , [\App\Http\Controllers\FinanceDocumentController::class, 'incomeCreate']);
 
 Route::post('/test' , [\App\Http\Controllers\WareController::class, 'index']);
 

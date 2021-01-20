@@ -2,12 +2,10 @@
 
 
 namespace App\Repositories;
+use App\Models\FinanceDocument as Model;
 
-use App\Models\Document as Model;
-
-class DocumentsRepository extends BaseRepository
+class FinanceDocumentsRepository extends BaseRepository
 {
-
     /**
      * @inheritDoc
      */
@@ -56,4 +54,5 @@ class DocumentsRepository extends BaseRepository
     {
         return $this->startConditions()->max('id');
     }
+
 }

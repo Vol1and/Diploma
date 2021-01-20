@@ -2,17 +2,17 @@
 
 
 namespace App\Repositories;
-use App\Models\DocConnection as Model;
+use App\Models\FinanceDocumentTableRow as Model;
 
-class DocConnectionsRepository extends BaseRepository
+
+class FinanceDocumentTableRowsRepository extends BaseRepository
 {
 
     /**
-     * @return string
+     * @inheritDoc
      */
     public function getModelClass()
     {
         return Model::class;
     }
-
 }

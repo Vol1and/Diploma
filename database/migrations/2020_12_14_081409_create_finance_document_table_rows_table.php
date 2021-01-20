@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDocConnectionsTable extends Migration
+class CreateFinanceDocumentTableRowsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateDocConnectionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('doc_connections', function (Blueprint $table) {
+        Schema::create('finance_document_table_rows', function (Blueprint $table) {
             $table->id();
             $table->integer('table_id')->unsigned();
             $table->bigInteger('characteristic_id')->unsigned();
@@ -23,7 +23,7 @@ class CreateDocConnectionsTable extends Migration
             $table->foreign('characteristic_id')->references('id')
                 ->on('characteristics');
             $table->foreign('document_id')->references('id')
-                ->on('documents');
+                ->on('finance_documents');
             //вычисляемый столбец
             $table->double('income_sum')->virtualAs('count * price')->nullable();
             $table->timestamps();
@@ -37,6 +37,6 @@ class CreateDocConnectionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('doc_connections');
+        Schema::dropIfExists('finance_document_table_rows');
     }
 }

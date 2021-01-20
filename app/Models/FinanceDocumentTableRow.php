@@ -4,14 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class DocConnection extends Model
+class FinanceDocumentTableRow extends Model
 {
     protected $fillable = [
         'count',
         'table_id',
         'characteristic_id',
         'document_id',
-
         'price'
     ];
 
@@ -35,7 +34,7 @@ class DocConnection extends Model
 
     public function document()
     {
-        return $this->belongsTo(Document::class);
+        return $this->belongsTo(FinanceDocument::class);
     }
 
     public function income_sum()

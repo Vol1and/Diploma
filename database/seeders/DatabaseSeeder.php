@@ -23,8 +23,8 @@ class DatabaseSeeder extends Seeder
         $this->call(CharacteristicPriceSeeder::class);
         $this->call(NomenclatureSeeder::class);
         $this->call(CharacteristicSeeder::class);
-        $this->call(DocumentSeeder::class);
-        $this->call(DocConnectionSeeder::class);
+        $this->call(FinanceDocumentSeeder::class);
+        $this->call(FinanceDocumentTableRowSeeder::class);
         $this->call(WareSeeder::class);
         $this->call(WareConnectionSeeder::class);
         // \App\Models\User::factory(10)->create();

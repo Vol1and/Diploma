@@ -4,7 +4,7 @@
 namespace App\Http\Requests;
 
 
-class DocConnectionCreateRequest
+class FinanceDocumentTableRowCreateRequest
 {
     /**
      * Determine if the user is authorized to make this request.

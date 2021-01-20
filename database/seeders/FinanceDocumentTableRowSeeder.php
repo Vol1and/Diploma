@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use DB;
 use Illuminate\Database\Seeder;
 
-class DocConnectionSeeder extends Seeder
+class FinanceDocumentTableRowSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -52,6 +52,6 @@ class DocConnectionSeeder extends Seeder
             ]
         ];
 
-        DB::table('doc_connections')->insert($data);
+        DB::table('finance_document_table_rows')->insert($data);
     }
 }
