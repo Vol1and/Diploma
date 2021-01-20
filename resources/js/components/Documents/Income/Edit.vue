@@ -1,5 +1,6 @@
 <template>
     <div>
+
         <el-row v-if=" choosing_state === 0 ">
 
             <el-col :span="20" :offset="2">
@@ -21,7 +22,7 @@
 
                                 <el-form-item label="Дата: ">
                                     <el-date-picker id="name_input" style="width: 100%" v-model="item.date"
-                                                    type="datetime" value-format="yyyy-MM-dd HH:mm:ss"/>
+                                                    type="datetime" format="yyyy-MM-dd HH:mm:ss" />
                                 </el-form-item>
                             </el-col>
 
@@ -106,15 +107,16 @@
                                     label="Срок годности"
                                     min-width="100"
                                     :index="5"
+
                                 >
                                     <template slot-scope="scope">
                                         <el-date-picker v-if="selectingRow.table_id === scope.row.table_id"
                                                         style="width: 100%"
                                                         v-model="scope.row.characteristic.expiry_date"
                                                         format="yyyy/MM/dd"
-                                                        value-format=""/>
+                                                        value-format="yyyy/MM/dd"/>
 
-                                        <div v-else> {{ scope.row.characteristic.expiry_date }}</div>
+                                        <div v-else> {{ scope.row.characteristic.expiry_date  }}</div>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
@@ -148,7 +150,7 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column
-                                    prop="sell_price"
+                                    prop="characteristic.characteristic_price.price"
                                     label="Цена продажи"
                                     min-width="100"
                                     :index="7"
@@ -156,19 +158,19 @@
                                     <template slot-scope="scope">
 
                                         <el-input v-if="selectingRow.table_id === scope.row.table_id" type="number"
-                                                  v-model="scope.row.sell_price" placeholder="">
+                                                  v-model="scope.row.characteristic.characteristic_price.price" placeholder="">
                                             <template slot="append">руб.</template>
                                         </el-input>
-                                        <div v-else> {{ scope.row.sell_price }} руб.</div>
+                                        <div v-else> {{ scope.row.characteristic.characteristic_price.price }} руб.</div>
                                     </template>
                                 </el-table-column>
                             </el-table>
                         </el-card>
 
-                        <el-form-item>
-                            <el-button type="primary" @click="submit">Добавить</el-button>
+
+                            <el-button type="primary" @click="submit">Редактировать</el-button>
                             <el-button @click="()=>{this.$router.go(-1)}">Отмена</el-button>
-                        </el-form-item>
+
                     </el-form>
 
                 </el-card>
@@ -194,6 +196,10 @@ import DocumentTableRow from "../../../code/models/DocumentTableRow";
 import mixin_create from "../../../code/mixins/mixin_create";
 import Agent from "../../../code/models/Agent";
 import Storage from "../../../code/models/Storage";
+import Nomenclature from "../../../code/models/Nomenclature";
+import Producer from "../../../code/models/Producer";
+import Characteristic from "../../../code/models/Characteristic";
+import CharacteristicPrice from "../../../code/models/CharacteristicPrice";
 
 export default {
     name: "IncomeEdit",
@@ -213,26 +219,39 @@ export default {
         }
     },
 
-    //ивент, срабатывающий при created стадии компонента - в поле дата закидывает текущую дату
-    created() {
-        this.item.date = Date.now();
-    },
-
     beforeCreate() {
 
         axios.get(`/api/income-documents/${this.$route.params.id}`).then(response => {
             console.log(response)
                 this.is_visible = true;
                 let table_data = [];
-                if (response.data.doc_connections !== undefined && response.data.doc_connections.length > 0) response.data.doc_connections.forEach(row => table_data.push(new DocumentTableRow(row.id, row.table_id,
-                    row.nomenclature,
-                    row.characteristic, row.count, row.income_price, row.sell_price)));
+                if (response.data.doc_connections !== undefined && response.data.doc_connections.length > 0) response.data.doc_connections.forEach(row => table_data.push(
+                    new DocumentTableRow(row.id,
+                        row.table_id,
+                        new Nomenclature(row.nomenclature.id,
+                            row.nomenclature.name,
+                            new Producer(row.nomenclature.producer.id, row.nomenclature.producer.name, row.nomenclature.producer.country),
+                         ),
+                        new Characteristic(
+                            row.characteristic.id,
+                            row.characteristic.serial,
+                            row.characteristic.expiry_date,
+                            new CharacteristicPrice(row.characteristic.characteristic_price.id,row.characteristic.characteristic_price.price)
+                        ),
+                        row.count,
+                        row.price,
+                        )));
+
                 this.item = new IncomeDocument(response.data.id,
                     new Agent(response.data.agent.id, response.data.agent.name, response.data.agent.billing, response.data.agent.address, response.data.agent.description, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at),
                     new Storage(response.data.storage.id, response.data.storage.name, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at),
                     response.data.date,
-                    table_data, response.data.created_at, response.data.updated_at, response.data.deleted_at);
+                    table_data,
+                    response.data.created_at,
+                    response.data.updated_at,
+                    response.data.deleted_at);
 
+                console.log(this.item)
 
             }
         ).catch((error) => {
@@ -295,10 +314,10 @@ export default {
 
             this.item.doc_connections.forEach(p => {
                 if (p.nomenclature.id === -1) this.errors.push(`Строка № ${p.table_id}. Поле \"Номенклатура\" должно быть заполнено`);
-                if (p.nomenclature.characteristic.serial === "") this.errors.push(`Строка № ${p.table_id}. Поле \"Серия\" должно быть заполнено`);
-                if (p.nomenclature.characteristic.expiry_date === "") this.errors.push(`Строка № ${p.table_id}. Поле \"Срок годности\" должно быть заполнено`);
+                if (p.characteristic.serial === "") this.errors.push(`Строка № ${p.table_id}. Поле \"Серия\" должно быть заполнено`);
+                if (p.characteristic.expiry_date === "") this.errors.push(`Строка № ${p.table_id}. Поле \"Срок годности\" должно быть заполнено`);
                 if (p.income_price <= 0) this.errors.push(`Строка № ${p.table_id}. Поле \"Цена поступления\" должно быть больше 0`);
-                if (p.sell_price <= 0) this.errors.push(`Строка № ${p.table_id}. Поле \"Цена продажи\" должно быть больше 0`);
+                //if (p.sell_price <= 0) this.errors.push(`Строка № ${p.table_id}. Поле \"Цена продажи\" должно быть больше 0`);
                 if (p.count <= 0) this.errors.push(`Строка № ${p.table_id}. Поле \"Количество\" должно быть больше 0`);
             })
 

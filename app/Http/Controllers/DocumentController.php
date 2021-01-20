@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+
 class DocumentController extends OriginController
 {
 //ссылка на хранилище модели Producer
@@ -35,7 +36,6 @@ class DocumentController extends OriginController
     }
 
 
-
     //принимает реквест DocumentCreateRequest
     public function store(DocumentCreateRequest $request)
     {
@@ -47,23 +47,22 @@ class DocumentController extends OriginController
         $item->save();
 
         //если все ок - возвращаем ответ со статусом 201
-        if($item)
+        if ($item)
             return response(null, 201);
         //либо можно передавать айди созданного элемента
         //return response($item->id, 201);
 
         //если нет - отправляем ошибку (статус возмонжо стоит поменять)
-        return response(null,500);
+        return response(null, 500);
 
     }
-
 
 
     public function show($id)
     {
         $result = $this->documentRepository->find($id);
 
-        if(empty($result) || !$result){
+        if (empty($result) || !$result) {
 
             return response(null, 404);
         }
@@ -75,7 +74,7 @@ class DocumentController extends OriginController
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param  int  $id
+     * @param int $id
      * @return Response
      */
     public function update(DocumentCreateRequest $request)
@@ -90,14 +89,13 @@ class DocumentController extends OriginController
         //Что должно вовзращать при ошибке сохранения
         if (!$result) {
             return response(null, 404);
-        }
-        else  return response(null, 200);
+        } else  return response(null, 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return Response
      */
     public function destroy($id)
@@ -115,11 +113,9 @@ class DocumentController extends OriginController
         $meds = $data['doc_connections'];
 
 
-
         //TODO: реализовать вывод ошибки, если массив медикаментов пуст
-
         // добавление нового документа
-        $doc = (new Document())->create(['agent_id' => $data['agent_id'],'date' => new Carbon($data['date']) ,'is_set' => true, 'doc_type_id' => 1, 'storage_id'=> $data['storage_id'] ]);
+        $doc = (new Document())->create(['agent_id' => $data['agent_id'], 'date' => new Carbon($data['date']), 'is_set' => true, 'doc_type_id' => 1, 'storage_id' => $data['storage_id']]);
 
         // получение id последнего добавленного документа
         $idDoc = $this->documentRepository->getLatestId();
@@ -139,7 +135,7 @@ class DocumentController extends OriginController
                 'count' => $med['count'], 'price' => $med['income_price'], 'table_id' => $med['table_id']]);
 
             //создание проводки для регистр накопления
-            $wc = (new WareConnection())->create(['characteristic_id' => $characteristic->id,'change' => $med['count']]);
+            $wc = (new WareConnection())->create(['characteristic_id' => $characteristic->id, 'change' => $med['count']]);
 
             // создание записи в остатках, внесение изменений в остатки
             $ware = (new Ware())->create(['characteristic_id' => $characteristic->id, 'stock' => $wc->change]);

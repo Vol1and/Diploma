@@ -16,7 +16,8 @@ class Characteristic extends Model
         'characteristic_price_id'
     ];
     //автоматом при подтягивании характеристики, подтягивает номенклатуру
-    protected $with = ['nomenclature'];
+    protected $with = ['nomenclature','characteristic_price' ];
+
 
 
     public function nomenclature()
@@ -25,14 +26,11 @@ class Characteristic extends Model
         return $this->belongsTo(Nomenclature::class);
     }
 
-    public function prices()
+    public function characteristic_price()
     {
-        return $this->hasMany(CharacteristicPrice::class);
+        return $this->belongsTo(CharacteristicPrice::class);
     }
 
-    public function getLastPriceAttribute(){
-        return $this->prices[0];
-    }
 
 
 }

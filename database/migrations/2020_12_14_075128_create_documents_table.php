@@ -15,7 +15,7 @@ class CreateDocumentsTable extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
+            $table->dateTime('date');
             $table->boolean('is_set');
             $table->bigInteger('doc_type_id')->unsigned();
             $table->bigInteger('agent_id')->unsigned();

@@ -16,6 +16,11 @@ class Nomenclature extends Model
         'med_form_id'
     ];
 
+    protected  $with = [
+        'producer',
+
+    ];
+
     public function price_type()
     {
 

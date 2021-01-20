@@ -1,8 +1,9 @@
 import Nomenclature from "./Nomenclature";
+import Characteristic from "./Characteristic";
 
 class DocumentTableRow {
     constructor(id = -1, table_id = null, nomenclature = new Nomenclature(),
-                characteristic = {serial: "", expiry_date: ""}, count = 0, income_price = 0, sell_price = 0) {
+                characteristic = new Characteristic(), count = 0, income_price = 0) {
 
         this.id = id;
         this.table_id = table_id;
@@ -10,7 +11,7 @@ class DocumentTableRow {
         this.characteristic = characteristic;
         this.count = count;
         this.income_price = income_price;
-        this.sell_price = sell_price;
+
 
     }
 
@@ -25,7 +26,7 @@ class DocumentTableRow {
             expiry_date: this.characteristic.expiry_date,
             count: this.count,
             income_price: this.income_price,
-            sell_price: this.sell_price
+            sell_price : this.characteristic.characteristic_price.price
         }
     }
 

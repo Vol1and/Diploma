@@ -17,6 +17,7 @@ class CreateCharacteristicPricesTable extends Migration
             $table->id();
             $table->decimal('price');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Carbon\Carbon;
 use DB;
 use Illuminate\Database\Seeder;
 
@@ -16,14 +17,14 @@ class DocumentSeeder extends Seeder
     {
         $data = [
             [
-                'date' => date("Y-m-d", mktime(0, 0, 0, date("m"),   date("d") - 1,   date("Y"))),
+                'date' =>  Carbon::now(),
                 'is_set'  => true,
                 'doc_type_id'  => 1,
                 'agent_id' => 2,
                 'storage_id' => 1
             ],
             [
-                'date' => date("Y-m-d", mktime(0, 0, 0, date("m"),   date("d") - 1,   date("Y"))),
+                'date' => Carbon::now(),
                 'is_set'  => true,
                 'doc_type_id'  => 1,
                 'agent_id' => 1,

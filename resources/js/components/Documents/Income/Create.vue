@@ -21,7 +21,7 @@
 
                                 <el-form-item label="Дата: ">
                                     <el-date-picker id="name_input" style="width: 100%" v-model="item.date"
-                                                    type="datetime" value-format="yyyy/MM/dd HH:mm:ss"/>
+                                                    type="datetime" format="yyyy-MM-dd HH:mm:ss" />
                                 </el-form-item>
                             </el-col>
 
@@ -106,15 +106,16 @@
                                     label="Срок годности"
                                     min-width="100"
                                     :index="5"
+
                                 >
                                     <template slot-scope="scope">
                                         <el-date-picker v-if="selectingRow.table_id === scope.row.table_id"
                                                         style="width: 100%"
                                                         v-model="scope.row.characteristic.expiry_date"
                                                         format="yyyy/MM/dd"
-                                                        value-format="yyyy-MM-dd"/>
+                                                        value-format="yyyy/MM/dd"/>
 
-                                        <div v-else> {{ scope.row.characteristic.expiry_date }}</div>
+                                        <div v-else> {{ scope.row.characteristic.expiry_date  }}</div>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
@@ -148,7 +149,7 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column
-                                    prop="sell_price"
+                                    prop="characteristic.characteristic_price.price"
                                     label="Цена продажи"
                                     min-width="100"
                                     :index="7"
@@ -156,19 +157,19 @@
                                     <template slot-scope="scope">
 
                                         <el-input v-if="selectingRow.table_id === scope.row.table_id" type="number"
-                                                  v-model="scope.row.sell_price" placeholder="">
+                                                  v-model="scope.row.characteristic.characteristic_price.price" placeholder="">
                                             <template slot="append">руб.</template>
                                         </el-input>
-                                        <div v-else> {{ scope.row.sell_price }} руб.</div>
+                                        <div v-else> {{ scope.row.characteristic.characteristic_price.price }} руб.</div>
                                     </template>
                                 </el-table-column>
                             </el-table>
                         </el-card>
 
-                        <el-form-item>
-                            <el-button type="primary" @click="submit">Добавить</el-button>
-                            <el-button @click="()=>{this.$router.go(-1)}">Отмена</el-button>
-                        </el-form-item>
+
+                        <el-button type="primary" @click="submit">Добавить</el-button>
+                        <el-button @click="()=>{this.$router.go(-1)}">Отмена</el-button>
+
                     </el-form>
 
                 </el-card>
@@ -247,6 +248,13 @@ export default {
             //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
             axios.post("/api/income", {item: this.item.getDataForServer()}).then((response) => {
                 console.log(response.data);
+                this.$notify({
+
+                    type: 'success',
+                    title: 'Успешно!',
+                    message: `Поступление успешно добавлено!`,
+                })
+                this.$router.push({name: 'income.index'})
             }).catch((error) => {
                 //ошибка - выводим
                 this.$notify.error({
@@ -265,10 +273,10 @@ export default {
 
             this.item.doc_connections.forEach(p => {
                 if (p.nomenclature.id === -1) this.errors.push(`Строка № ${p.table_id}. Поле \"Номенклатура\" должно быть заполнено`);
-                if (p.nomenclature.characteristic.serial === "") this.errors.push(`Строка № ${p.table_id}. Поле \"Серия\" должно быть заполнено`);
-                if (p.nomenclature.characteristic.expiry_date === "") this.errors.push(`Строка № ${p.table_id}. Поле \"Срок годности\" должно быть заполнено`);
+                if (p.characteristic.serial === "") this.errors.push(`Строка № ${p.table_id}. Поле \"Серия\" должно быть заполнено`);
+                if (p.characteristic.expiry_date === "") this.errors.push(`Строка № ${p.table_id}. Поле \"Срок годности\" должно быть заполнено`);
                 if (p.income_price <= 0) this.errors.push(`Строка № ${p.table_id}. Поле \"Цена поступления\" должно быть больше 0`);
-                if (p.sell_price <= 0) this.errors.push(`Строка № ${p.table_id}. Поле \"Цена продажи\" должно быть больше 0`);
+                if (p.characteristic.characteristic_price.price <= 0) this.errors.push(`Строка № ${p.table_id}. Поле \"Цена продажи\" должно быть больше 0`);
                 if (p.count <= 0) this.errors.push(`Строка № ${p.table_id}. Поле \"Количество\" должно быть больше 0`);
             })
 

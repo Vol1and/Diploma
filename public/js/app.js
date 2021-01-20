@@ -4358,6 +4358,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -4410,6 +4411,16 @@ __webpack_require__.r(__webpack_exports__);
         item: this.item.getDataForServer()
       }).then(function (response) {
         console.log(response.data);
+
+        _this.$notify({
+          type: 'success',
+          title: 'Успешно!',
+          message: "\u041F\u043E\u0441\u0442\u0443\u043F\u043B\u0435\u043D\u0438\u0435 \u0443\u0441\u043F\u0435\u0448\u043D\u043E \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u043E!"
+        });
+
+        _this.$router.push({
+          name: 'income.index'
+        });
       })["catch"](function (error) {
         //ошибка - выводим
         _this.$notify.error({
@@ -4428,10 +4439,10 @@ __webpack_require__.r(__webpack_exports__);
       if (this.item.storage.id === -1) this.errors.push("Поле \"Склад\" должно быть заполнено");
       this.item.doc_connections.forEach(function (p) {
         if (p.nomenclature.id === -1) _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u041D\u043E\u043C\u0435\u043D\u043A\u043B\u0430\u0442\u0443\u0440\u0430\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
-        if (p.nomenclature.characteristic.serial === "") _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0421\u0435\u0440\u0438\u044F\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
-        if (p.nomenclature.characteristic.expiry_date === "") _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0421\u0440\u043E\u043A \u0433\u043E\u0434\u043D\u043E\u0441\u0442\u0438\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
+        if (p.characteristic.serial === "") _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0421\u0435\u0440\u0438\u044F\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
+        if (p.characteristic.expiry_date === "") _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0421\u0440\u043E\u043A \u0433\u043E\u0434\u043D\u043E\u0441\u0442\u0438\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
         if (p.income_price <= 0) _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0426\u0435\u043D\u0430 \u043F\u043E\u0441\u0442\u0443\u043F\u043B\u0435\u043D\u0438\u044F\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0431\u043E\u043B\u044C\u0448\u0435 0"));
-        if (p.sell_price <= 0) _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0426\u0435\u043D\u0430 \u043F\u0440\u043E\u0434\u0430\u0436\u0438\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0431\u043E\u043B\u044C\u0448\u0435 0"));
+        if (p.characteristic.characteristic_price.price <= 0) _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0426\u0435\u043D\u0430 \u043F\u0440\u043E\u0434\u0430\u0436\u0438\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0431\u043E\u043B\u044C\u0448\u0435 0"));
         if (p.count <= 0) _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0431\u043E\u043B\u044C\u0448\u0435 0"));
       });
       this.showErrors();
@@ -4478,11 +4489,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _code_models_IncomeDocument__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../code/models/IncomeDocument */ "./resources/js/code/models/IncomeDocument.js");
 /* harmony import */ var _code_models_DocumentTableRow__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../code/models/DocumentTableRow */ "./resources/js/code/models/DocumentTableRow.js");
 /* harmony import */ var _code_mixins_mixin_create__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../code/mixins/mixin_create */ "./resources/js/code/mixins/mixin_create.js");
-/* harmony import */ var _code_models_Nomenclature__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../code/models/Nomenclature */ "./resources/js/code/models/Nomenclature.js");
-/* harmony import */ var _code_models_Agent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../code/models/Agent */ "./resources/js/code/models/Agent.js");
-/* harmony import */ var _code_models_Storage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../code/models/Storage */ "./resources/js/code/models/Storage.js");
+/* harmony import */ var _code_models_Agent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../code/models/Agent */ "./resources/js/code/models/Agent.js");
+/* harmony import */ var _code_models_Storage__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../code/models/Storage */ "./resources/js/code/models/Storage.js");
+/* harmony import */ var _code_models_Nomenclature__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../code/models/Nomenclature */ "./resources/js/code/models/Nomenclature.js");
 /* harmony import */ var _code_models_Producer__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../code/models/Producer */ "./resources/js/code/models/Producer.js");
-/* harmony import */ var _code_models_PriceType__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../code/models/PriceType */ "./resources/js/code/models/PriceType.js");
+/* harmony import */ var _code_models_Characteristic__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../code/models/Characteristic */ "./resources/js/code/models/Characteristic.js");
+/* harmony import */ var _code_models_CharacteristicPrice__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../code/models/CharacteristicPrice */ "./resources/js/code/models/CharacteristicPrice.js");
 //
 //
 //
@@ -4671,6 +4683,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+
 
 
 
@@ -4695,10 +4710,6 @@ __webpack_require__.r(__webpack_exports__);
       selectingRow: new _code_models_DocumentTableRow__WEBPACK_IMPORTED_MODULE_1__["default"]()
     };
   },
-  //ивент, срабатывающий при created стадии компонента - в поле дата закидывает текущую дату
-  created: function created() {
-    this.item.date = Date.now();
-  },
   beforeCreate: function beforeCreate() {
     var _this = this;
 
@@ -4707,9 +4718,10 @@ __webpack_require__.r(__webpack_exports__);
       _this.is_visible = true;
       var table_data = [];
       if (response.data.doc_connections !== undefined && response.data.doc_connections.length > 0) response.data.doc_connections.forEach(function (row) {
-        return table_data.push(new _code_models_DocumentTableRow__WEBPACK_IMPORTED_MODULE_1__["default"](row.id, row.table_id, row.nomenclature, row.characteristic, row.count, row.income_price, row.sell_price));
+        return table_data.push(new _code_models_DocumentTableRow__WEBPACK_IMPORTED_MODULE_1__["default"](row.id, row.table_id, new _code_models_Nomenclature__WEBPACK_IMPORTED_MODULE_5__["default"](row.nomenclature.id, row.nomenclature.name, new _code_models_Producer__WEBPACK_IMPORTED_MODULE_6__["default"](row.nomenclature.producer.id, row.nomenclature.producer.name, row.nomenclature.producer.country)), new _code_models_Characteristic__WEBPACK_IMPORTED_MODULE_7__["default"](row.characteristic.id, row.characteristic.serial, row.characteristic.expiry_date, new _code_models_CharacteristicPrice__WEBPACK_IMPORTED_MODULE_8__["default"](row.characteristic.characteristic_price.id, row.characteristic.characteristic_price.price)), row.count, row.price));
       });
-      _this.item = new _code_models_IncomeDocument__WEBPACK_IMPORTED_MODULE_0__["default"](response.data.id, new _code_models_Agent__WEBPACK_IMPORTED_MODULE_4__["default"](response.data.agent.id, response.data.agent.name, response.data.agent.billing, response.data.agent.address, response.data.agent.description, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at), new _code_models_Storage__WEBPACK_IMPORTED_MODULE_5__["default"](response.data.storage.id, response.data.storage.name, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at), response.data.date, table_data, response.data.created_at, response.data.updated_at, response.data.deleted_at);
+      _this.item = new _code_models_IncomeDocument__WEBPACK_IMPORTED_MODULE_0__["default"](response.data.id, new _code_models_Agent__WEBPACK_IMPORTED_MODULE_3__["default"](response.data.agent.id, response.data.agent.name, response.data.agent.billing, response.data.agent.address, response.data.agent.description, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at), new _code_models_Storage__WEBPACK_IMPORTED_MODULE_4__["default"](response.data.storage.id, response.data.storage.name, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at), response.data.date, table_data, response.data.created_at, response.data.updated_at, response.data.deleted_at);
+      console.log(_this.item);
     })["catch"](function (error) {
       console.log(error); ///this.$router.push({name: 'income.index'});
     });
@@ -4761,10 +4773,10 @@ __webpack_require__.r(__webpack_exports__);
       if (this.item.storage.id === -1) this.errors.push("Поле \"Склад\" должно быть заполнено");
       this.item.doc_connections.forEach(function (p) {
         if (p.nomenclature.id === -1) _this3.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u041D\u043E\u043C\u0435\u043D\u043A\u043B\u0430\u0442\u0443\u0440\u0430\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
-        if (p.nomenclature.characteristic.serial === "") _this3.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0421\u0435\u0440\u0438\u044F\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
-        if (p.nomenclature.characteristic.expiry_date === "") _this3.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0421\u0440\u043E\u043A \u0433\u043E\u0434\u043D\u043E\u0441\u0442\u0438\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
-        if (p.income_price <= 0) _this3.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0426\u0435\u043D\u0430 \u043F\u043E\u0441\u0442\u0443\u043F\u043B\u0435\u043D\u0438\u044F\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0431\u043E\u043B\u044C\u0448\u0435 0"));
-        if (p.sell_price <= 0) _this3.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0426\u0435\u043D\u0430 \u043F\u0440\u043E\u0434\u0430\u0436\u0438\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0431\u043E\u043B\u044C\u0448\u0435 0"));
+        if (p.characteristic.serial === "") _this3.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0421\u0435\u0440\u0438\u044F\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
+        if (p.characteristic.expiry_date === "") _this3.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0421\u0440\u043E\u043A \u0433\u043E\u0434\u043D\u043E\u0441\u0442\u0438\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
+        if (p.income_price <= 0) _this3.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0426\u0435\u043D\u0430 \u043F\u043E\u0441\u0442\u0443\u043F\u043B\u0435\u043D\u0438\u044F\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0431\u043E\u043B\u044C\u0448\u0435 0")); //if (p.sell_price <= 0) this.errors.push(`Строка № ${p.table_id}. Поле \"Цена продажи\" должно быть больше 0`);
+
         if (p.count <= 0) _this3.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0431\u043E\u043B\u044C\u0448\u0435 0"));
       });
       this.showErrors();
@@ -104694,7 +104706,7 @@ var render = function() {
                                         attrs: {
                                           id: "name_input",
                                           type: "datetime",
-                                          "value-format": "yyyy/MM/dd HH:mm:ss"
+                                          format: "yyyy-MM-dd HH:mm:ss"
                                         },
                                         model: {
                                           value: _vm.item.date,
@@ -105011,7 +105023,7 @@ var render = function() {
                                                     attrs: {
                                                       format: "yyyy/MM/dd",
                                                       "value-format":
-                                                        "yyyy-MM-dd"
+                                                        "yyyy/MM/dd"
                                                     },
                                                     model: {
                                                       value:
@@ -105045,7 +105057,7 @@ var render = function() {
                                       ],
                                       null,
                                       false,
-                                      1881064762
+                                      1370417658
                                     )
                                   }),
                                   _vm._v(" "),
@@ -105183,7 +105195,8 @@ var render = function() {
                                   _vm._v(" "),
                                   _c("el-table-column", {
                                     attrs: {
-                                      prop: "sell_price",
+                                      prop:
+                                        "characteristic.characteristic_price.price",
                                       label: "Цена продажи",
                                       "min-width": "100",
                                       index: 7
@@ -105205,18 +105218,23 @@ var render = function() {
                                                       },
                                                       model: {
                                                         value:
-                                                          scope.row.sell_price,
+                                                          scope.row
+                                                            .characteristic
+                                                            .characteristic_price
+                                                            .price,
                                                         callback: function(
                                                           $$v
                                                         ) {
                                                           _vm.$set(
-                                                            scope.row,
-                                                            "sell_price",
+                                                            scope.row
+                                                              .characteristic
+                                                              .characteristic_price,
+                                                            "price",
                                                             $$v
                                                           )
                                                         },
                                                         expression:
-                                                          "scope.row.sell_price"
+                                                          "scope.row.characteristic.characteristic_price.price"
                                                       }
                                                     },
                                                     [
@@ -105232,7 +105250,10 @@ var render = function() {
                                                     _vm._v(
                                                       " " +
                                                         _vm._s(
-                                                          scope.row.sell_price
+                                                          scope.row
+                                                            .characteristic
+                                                            .characteristic_price
+                                                            .price
                                                         ) +
                                                         " руб."
                                                     )
@@ -105243,7 +105264,7 @@ var render = function() {
                                       ],
                                       null,
                                       false,
-                                      1993590192
+                                      1746373200
                                     )
                                   })
                                 ],
@@ -105254,30 +105275,24 @@ var render = function() {
                           ),
                           _vm._v(" "),
                           _c(
-                            "el-form-item",
-                            [
-                              _c(
-                                "el-button",
-                                {
-                                  attrs: { type: "primary" },
-                                  on: { click: _vm.submit }
-                                },
-                                [_vm._v("Добавить")]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "el-button",
-                                {
-                                  on: {
-                                    click: function() {
-                                      this$1.$router.go(-1)
-                                    }
-                                  }
-                                },
-                                [_vm._v("Отмена")]
-                              )
-                            ],
-                            1
+                            "el-button",
+                            {
+                              attrs: { type: "primary" },
+                              on: { click: _vm.submit }
+                            },
+                            [_vm._v("Добавить")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "el-button",
+                            {
+                              on: {
+                                click: function() {
+                                  this$1.$router.go(-1)
+                                }
+                              }
+                            },
+                            [_vm._v("Отмена")]
                           )
                         ],
                         1
@@ -105411,7 +105426,7 @@ var render = function() {
                                         attrs: {
                                           id: "name_input",
                                           type: "datetime",
-                                          "value-format": "yyyy-MM-dd HH:mm:ss"
+                                          format: "yyyy-MM-dd HH:mm:ss"
                                         },
                                         model: {
                                           value: _vm.item.date,
@@ -105727,7 +105742,8 @@ var render = function() {
                                                     },
                                                     attrs: {
                                                       format: "yyyy/MM/dd",
-                                                      "value-format": ""
+                                                      "value-format":
+                                                        "yyyy/MM/dd"
                                                     },
                                                     model: {
                                                       value:
@@ -105761,7 +105777,7 @@ var render = function() {
                                       ],
                                       null,
                                       false,
-                                      3988295162
+                                      1370417658
                                     )
                                   }),
                                   _vm._v(" "),
@@ -105899,7 +105915,8 @@ var render = function() {
                                   _vm._v(" "),
                                   _c("el-table-column", {
                                     attrs: {
-                                      prop: "sell_price",
+                                      prop:
+                                        "characteristic.characteristic_price.price",
                                       label: "Цена продажи",
                                       "min-width": "100",
                                       index: 7
@@ -105921,18 +105938,23 @@ var render = function() {
                                                       },
                                                       model: {
                                                         value:
-                                                          scope.row.sell_price,
+                                                          scope.row
+                                                            .characteristic
+                                                            .characteristic_price
+                                                            .price,
                                                         callback: function(
                                                           $$v
                                                         ) {
                                                           _vm.$set(
-                                                            scope.row,
-                                                            "sell_price",
+                                                            scope.row
+                                                              .characteristic
+                                                              .characteristic_price,
+                                                            "price",
                                                             $$v
                                                           )
                                                         },
                                                         expression:
-                                                          "scope.row.sell_price"
+                                                          "scope.row.characteristic.characteristic_price.price"
                                                       }
                                                     },
                                                     [
@@ -105948,7 +105970,10 @@ var render = function() {
                                                     _vm._v(
                                                       " " +
                                                         _vm._s(
-                                                          scope.row.sell_price
+                                                          scope.row
+                                                            .characteristic
+                                                            .characteristic_price
+                                                            .price
                                                         ) +
                                                         " руб."
                                                     )
@@ -105959,7 +105984,7 @@ var render = function() {
                                       ],
                                       null,
                                       false,
-                                      1993590192
+                                      1746373200
                                     )
                                   })
                                 ],
@@ -105970,30 +105995,24 @@ var render = function() {
                           ),
                           _vm._v(" "),
                           _c(
-                            "el-form-item",
-                            [
-                              _c(
-                                "el-button",
-                                {
-                                  attrs: { type: "primary" },
-                                  on: { click: _vm.submit }
-                                },
-                                [_vm._v("Добавить")]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "el-button",
-                                {
-                                  on: {
-                                    click: function() {
-                                      this$1.$router.go(-1)
-                                    }
-                                  }
-                                },
-                                [_vm._v("Отмена")]
-                              )
-                            ],
-                            1
+                            "el-button",
+                            {
+                              attrs: { type: "primary" },
+                              on: { click: _vm.submit }
+                            },
+                            [_vm._v("Редактировать")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "el-button",
+                            {
+                              on: {
+                                click: function() {
+                                  this$1.$router.go(-1)
+                                }
+                              }
+                            },
+                            [_vm._v("Отмена")]
                           )
                         ],
                         1
@@ -126349,6 +126368,75 @@ var Agent = function Agent() {
 
 /***/ }),
 
+/***/ "./resources/js/code/models/Characteristic.js":
+/*!****************************************************!*\
+  !*** ./resources/js/code/models/Characteristic.js ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _CharacteristicPrice__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CharacteristicPrice */ "./resources/js/code/models/CharacteristicPrice.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+var Characteristic = function Characteristic() {
+  var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : -1;
+  var serial = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+  var expiry_date = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "";
+  var characteristic_price = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : new _CharacteristicPrice__WEBPACK_IMPORTED_MODULE_0__["default"]();
+  var created_at = arguments.length > 4 ? arguments[4] : undefined;
+  var updated_at = arguments.length > 5 ? arguments[5] : undefined;
+  var deleted_at = arguments.length > 6 ? arguments[6] : undefined;
+
+  _classCallCheck(this, Characteristic);
+
+  this.id = id;
+  this.serial = serial;
+  this.expiry_date = expiry_date;
+  this.characteristic_price = characteristic_price;
+  this.created_at = created_at;
+  this.updated_at = updated_at;
+  this.deleted_at = deleted_at;
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Characteristic);
+
+/***/ }),
+
+/***/ "./resources/js/code/models/CharacteristicPrice.js":
+/*!*********************************************************!*\
+  !*** ./resources/js/code/models/CharacteristicPrice.js ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var CharacteristicPrice = function CharacteristicPrice() {
+  var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : -1;
+  var price = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+  var created_at = arguments.length > 2 ? arguments[2] : undefined;
+  var updated_at = arguments.length > 3 ? arguments[3] : undefined;
+  var deleted_at = arguments.length > 4 ? arguments[4] : undefined;
+
+  _classCallCheck(this, CharacteristicPrice);
+
+  this.id = id;
+  this.price = price;
+  this.created_at = created_at;
+  this.updated_at = updated_at;
+  this.deleted_at = deleted_at;
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (CharacteristicPrice);
+
+/***/ }),
+
 /***/ "./resources/js/code/models/DocumentTableRow.js":
 /*!******************************************************!*\
   !*** ./resources/js/code/models/DocumentTableRow.js ***!
@@ -126359,6 +126447,7 @@ var Agent = function Agent() {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Nomenclature__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Nomenclature */ "./resources/js/code/models/Nomenclature.js");
+/* harmony import */ var _Characteristic__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Characteristic */ "./resources/js/code/models/Characteristic.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -126367,18 +126456,15 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 
+
 var DocumentTableRow = /*#__PURE__*/function () {
   function DocumentTableRow() {
     var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : -1;
     var table_id = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
     var nomenclature = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : new _Nomenclature__WEBPACK_IMPORTED_MODULE_0__["default"]();
-    var characteristic = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {
-      serial: "",
-      expiry_date: ""
-    };
+    var characteristic = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : new _Characteristic__WEBPACK_IMPORTED_MODULE_1__["default"]();
     var count = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
     var income_price = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 0;
-    var sell_price = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : 0;
 
     _classCallCheck(this, DocumentTableRow);
 
@@ -126388,7 +126474,6 @@ var DocumentTableRow = /*#__PURE__*/function () {
     this.characteristic = characteristic;
     this.count = count;
     this.income_price = income_price;
-    this.sell_price = sell_price;
   } //возвращает ассоциативный массив, который можно отправлять на сервер - в нем нет лишних полей, и тяжелых объектов - только id
 
 
@@ -126404,7 +126489,7 @@ var DocumentTableRow = /*#__PURE__*/function () {
         expiry_date: this.characteristic.expiry_date,
         count: this.count,
         income_price: this.income_price,
-        sell_price: this.sell_price
+        sell_price: this.characteristic.characteristic_price.price
       };
     }
   }, {
