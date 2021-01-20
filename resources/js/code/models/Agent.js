@@ -1,5 +1,5 @@
 class Agent {
-    constructor(id = -1,name = " ", billing= " ",address = "",description = "", created_at, updated_at, deleted_at) {
+    constructor(id = -1, name = " ", billing = " ", address = "", description = "", created_at, updated_at, deleted_at) {
 
         this.id = id;
         this.name = name;

@@ -5,7 +5,7 @@
             <el-col :span="20" :offset="2">
                 <el-card class="box-card">
                     <div slot="header">
-                        <h2 class="text-center">Новое поступление товаров</h2>
+                        <h2 class="text-center">Поступление #{{ item.id }}</h2>
                     </div>
                     <el-form label-width="100px" label-position="right">
 
@@ -21,7 +21,7 @@
 
                                 <el-form-item label="Дата: ">
                                     <el-date-picker id="name_input" style="width: 100%" v-model="item.date"
-                                                    type="datetime" value-format="yyyy/MM/dd HH:mm:ss"/>
+                                                    type="datetime" value-format="yyyy-MM-dd HH:mm:ss"/>
                                 </el-form-item>
                             </el-col>
 
@@ -112,7 +112,7 @@
                                                         style="width: 100%"
                                                         v-model="scope.row.characteristic.expiry_date"
                                                         format="yyyy/MM/dd"
-                                                        value-format="yyyy-MM-dd"/>
+                                                        value-format=""/>
 
                                         <div v-else> {{ scope.row.characteristic.expiry_date }}</div>
                                     </template>
@@ -192,9 +192,11 @@
 import IncomeDocument from "../../../code/models/IncomeDocument";
 import DocumentTableRow from "../../../code/models/DocumentTableRow";
 import mixin_create from "../../../code/mixins/mixin_create";
+import Agent from "../../../code/models/Agent";
+import Storage from "../../../code/models/Storage";
 
 export default {
-    name: "IncomeCreate",
+    name: "IncomeEdit",
 
     mixins: [mixin_create],
     data() {
@@ -216,10 +218,36 @@ export default {
         this.item.date = Date.now();
     },
 
+    beforeCreate() {
+
+        axios.get(`/api/income-documents/${this.$route.params.id}`).then(response => {
+            console.log(response)
+                this.is_visible = true;
+                let table_data = [];
+                if (response.data.doc_connections !== undefined && response.data.doc_connections.length > 0) response.data.doc_connections.forEach(row => table_data.push(new DocumentTableRow(row.id, row.table_id,
+                    row.nomenclature,
+                    row.characteristic, row.count, row.income_price, row.sell_price)));
+                this.item = new IncomeDocument(response.data.id,
+                    new Agent(response.data.agent.id, response.data.agent.name, response.data.agent.billing, response.data.agent.address, response.data.agent.description, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at),
+                    new Storage(response.data.storage.id, response.data.storage.name, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at),
+                    response.data.date,
+                    table_data, response.data.created_at, response.data.updated_at, response.data.deleted_at);
+
+
+            }
+        ).catch((error) => {
+            console.log(error);
+            ///this.$router.push({name: 'income.index'});
+        })
+    },
     methods: {
+
         //метод-заглушка
         update() {
-        },
+
+
+        }
+        ,
         //метод добавляет новую пустую строку в массив doc_connections, и, соответственно в табличную часть формы
         addToTable() {
             //id = -1, table_id используется чтобы нумерация строк происходила с 1 и дальше
@@ -228,13 +256,15 @@ export default {
             this.item.doc_connections.push(new DocumentTableRow(null, this.item.doc_connections.length + 1));
 
             //console.log(this.item.doc_connections)
-        },
+        }
+        ,
         //обработчик события cell-dblclick - обрабатывает двойной щелчок по выбраной клетке
         //чисто технически, его можно переделать в rowEdit, но пока не горит
         cellEdit(row, column, cell, event) {
             //присваивает выбранную строку в selectingRow - читать выше
             this.selectingRow = row;
-        },
+        }
+        ,
         //сабмит - отправляет данные
         submit: function () {
             //не проходит валидацию - возвращаем
@@ -245,7 +275,7 @@ export default {
 
             //пост-запрос
             //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
-            axios.post("/api/income", {item: this.item.getDataForServer()}).then((response) => {
+            axios.post("/api/income", {items: this.item.getDataForServer()}).then((response) => {
                 console.log(response.data);
             }).catch((error) => {
                 //ошибка - выводим
@@ -279,7 +309,8 @@ export default {
         ,
         selectingStorage() {
             this.choosing_state = 3;
-        },
+        }
+        ,
 
         selectingAgent() {
             this.choosing_state = 1;

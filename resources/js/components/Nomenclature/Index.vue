@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-row  v-if="choosing_state === 0 " class="center-75">
+        <el-row v-if="choosing_state === 0 " class="center-75">
 
 
             <h1 v-shortkey="['del']" @shortkey="deleteSelected" class="text-center">Номенклатура</h1>
@@ -131,7 +131,7 @@ export default {
     },
     methods: {
 
-        filterClear: function(){
+        filterClear: function () {
             this.filter_state = false
             this.filter_fields = {
                 name_str: "",

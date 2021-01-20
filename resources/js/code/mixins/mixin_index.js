@@ -65,7 +65,7 @@ export default {
         },
         deleteSelected() {
 
-            if(this.selected_item.id === undefined) return;
+            if (this.selected_item.id === undefined) return;
 
             this.$confirm(`Вы действительно хотите удалить элмент с Id=${this.selected_item.id}?`, 'Внимание!', {
                 confirmButtonText: 'Удалить',
@@ -74,7 +74,7 @@ export default {
             }).then(() => {
 
 
-                this.$store.dispatch(`${this.action_namespace}/deleteItem`, {id : this.selected_item.id}).then(() => {
+                this.$store.dispatch(`${this.action_namespace}/deleteItem`, {id: this.selected_item.id}).then(() => {
                     this.selected_item = null;
                     this.onChangePage();
                     this.$message({
@@ -115,7 +115,7 @@ export default {
 
             //console.log(this.$store.getters['nomenclature/last_updated']);
         },
-        filterClear(){
+        filterClear() {
 
         }
     }

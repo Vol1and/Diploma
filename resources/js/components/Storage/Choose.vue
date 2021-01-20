@@ -1,6 +1,5 @@
 <template>
     <el-row v-shortkey="['del']" @shortkey="deleteSelected" class="center-75">
-        <v-dialog/>
 
         <h1 class="text-center">Выбрать склад</h1>
 
@@ -54,17 +53,16 @@
 </template>
 
 
-
 <script>
 import mixin_index from "../../code/mixins/mixin_index";
 
 export default {
     name: "StorageChoose",
 
-    mixins :[mixin_index],
+    mixins: [mixin_index],
     data: function () {
         return {
-            action_namespace : "storages"
+            action_namespace: "storages"
         };
     },
     mounted() {
@@ -72,10 +70,10 @@ export default {
     },
     methods: {
 
-        selected(selected_item){
+        selected(selected_item) {
             this.$emit("selected", {storage: selected_item});
         },
-        back(){
+        back() {
             this.$emit("back");
         }
     }

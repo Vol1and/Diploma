@@ -15,14 +15,17 @@ class CreateDocConnectionsTable extends Migration
     {
         Schema::create('doc_connections', function (Blueprint $table) {
             $table->id();
+            $table->integer('table_id')->unsigned();
             $table->bigInteger('characteristic_id')->unsigned();
             $table->bigInteger('document_id')->unsigned();
-            $table->integer('amount');
+            $table->integer('count');
             $table->decimal('price');
             $table->foreign('characteristic_id')->references('id')
                 ->on('characteristics');
             $table->foreign('document_id')->references('id')
                 ->on('documents');
+            //вычисляемый столбец
+            $table->double('income_sum')->virtualAs('count * price')->nullable();
             $table->timestamps();
         });
     }

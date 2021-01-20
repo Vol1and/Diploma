@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DocumentCreateRequest;
-use App\Models\Agent;
 use App\Models\Characteristic;
 use App\Models\CharacteristicPrice;
 use App\Models\DocConnection;
@@ -12,13 +11,8 @@ use App\Models\Ware;
 use App\Models\WareConnection;
 use App\Repositories\DocumentsRepository;
 use Carbon\Carbon;
-use Carbon\CarbonInterval;
-use DateTime;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\View\View;
 
 class DocumentController extends OriginController
 {
@@ -117,14 +111,15 @@ class DocumentController extends OriginController
     public function incomeCreate(DocumentCreateRequest $request)
     {
         // получение данных
-        $data = $request->input('items');
-        $meds = $data['table_data'];
+        $data = $request->input('item');
+        $meds = $data['doc_connections'];
+
 
 
         //TODO: реализовать вывод ошибки, если массив медикаментов пуст
 
         // добавление нового документа
-        $doc = (new Document())->create(['agent_id' => $data['agent_id'],'date' => Carbon::createFromTimestamp($data['date'])->format('Y-m-d') ,'is_set' => true, 'doc_type_id' => 1, ]);
+        $doc = (new Document())->create(['agent_id' => $data['agent_id'],'date' => new Carbon($data['date']) ,'is_set' => true, 'doc_type_id' => 1, 'storage_id'=> $data['storage_id'] ]);
 
         // получение id последнего добавленного документа
         $idDoc = $this->documentRepository->getLatestId();
@@ -134,14 +129,14 @@ class DocumentController extends OriginController
         foreach ($meds as $med) {
 
             // создание цены для характеристики
-            $cp = (new CharacteristicPrice())->create(['characteristic_price' => $med['sell_price']]);
+            $cp = (new CharacteristicPrice())->create(['price' => $med['sell_price']]);
 
             // добавление новой характеристики
             $characteristic = (new Characteristic())->create($med + ['characteristic_price_id' => $cp->id]);
 
             // добавление новой проводки документа
             $dc = (new DocConnection())->create(['characteristic_id' => $characteristic->id, 'document_id' => $doc->id,
-                'amount' => $med['count'], 'price' => $med['income_price']]);
+                'count' => $med['count'], 'price' => $med['income_price'], 'table_id' => $med['table_id']]);
 
             //создание проводки для регистр накопления
             $wc = (new WareConnection())->create(['characteristic_id' => $characteristic->id,'change' => $med['count']]);

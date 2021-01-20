@@ -4384,11 +4384,11 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     //метод-заглушка
     update: function update() {},
-    //метод добавляет новую пустую строку в массив table_data, и, соответственно в табличную часть формы
+    //метод добавляет новую пустую строку в массив doc_connections, и, соответственно в табличную часть формы
     addToTable: function addToTable() {
       //id = -1, table_id используется чтобы нумерация строк происходила с 1 и дальше
       //TODO: при реализации удаления строки из таблицы, переделать нумерацию, чтобы было max_id + 1
-      this.item.table_data.push(new _code_models_DocumentTableRow__WEBPACK_IMPORTED_MODULE_1__["default"](null, this.item.table_data.length + 1)); //console.log(this.item.table_data)
+      this.item.doc_connections.push(new _code_models_DocumentTableRow__WEBPACK_IMPORTED_MODULE_1__["default"](null, this.item.doc_connections.length + 1)); //console.log(this.item.doc_connections)
     },
     //обработчик события cell-dblclick - обрабатывает двойной щелчок по выбраной клетке
     //чисто технически, его можно переделать в rowEdit, но пока не горит
@@ -4407,7 +4407,7 @@ __webpack_require__.r(__webpack_exports__);
       //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
 
       axios.post("/api/income", {
-        items: this.item.getDataForServer()
+        item: this.item.getDataForServer()
       }).then(function (response) {
         console.log(response.data);
       })["catch"](function (error) {
@@ -4426,13 +4426,346 @@ __webpack_require__.r(__webpack_exports__);
       this.errors = [];
       if (this.item.agent.id === -1) this.errors.push("Поле \"Поставщик\" должно быть заполнено");
       if (this.item.storage.id === -1) this.errors.push("Поле \"Склад\" должно быть заполнено");
-      this.item.table_data.forEach(function (p) {
+      this.item.doc_connections.forEach(function (p) {
         if (p.nomenclature.id === -1) _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u041D\u043E\u043C\u0435\u043D\u043A\u043B\u0430\u0442\u0443\u0440\u0430\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
         if (p.nomenclature.characteristic.serial === "") _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0421\u0435\u0440\u0438\u044F\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
         if (p.nomenclature.characteristic.expiry_date === "") _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0421\u0440\u043E\u043A \u0433\u043E\u0434\u043D\u043E\u0441\u0442\u0438\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
         if (p.income_price <= 0) _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0426\u0435\u043D\u0430 \u043F\u043E\u0441\u0442\u0443\u043F\u043B\u0435\u043D\u0438\u044F\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0431\u043E\u043B\u044C\u0448\u0435 0"));
         if (p.sell_price <= 0) _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0426\u0435\u043D\u0430 \u043F\u0440\u043E\u0434\u0430\u0436\u0438\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0431\u043E\u043B\u044C\u0448\u0435 0"));
         if (p.count <= 0) _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0431\u043E\u043B\u044C\u0448\u0435 0"));
+      });
+      this.showErrors();
+      return this.errors.length === 0;
+    },
+    selectingStorage: function selectingStorage() {
+      this.choosing_state = 3;
+    },
+    selectingAgent: function selectingAgent() {
+      this.choosing_state = 1;
+    },
+    selectingNomenclature: function selectingNomenclature() {
+      this.choosing_state = 2;
+    },
+    onSelectedAgent: function onSelectedAgent(data) {
+      this.item.agent = data.agent;
+      this.choosing_state = 0;
+    },
+    onSelectedStorage: function onSelectedStorage(data) {
+      this.item.storage = data.storage;
+      this.choosing_state = 0;
+    },
+    onSelectedNomenclature: function onSelectedNomenclature(data) {
+      this.selectingRow.nomenclature = data.nomenclature;
+      this.choosing_state = 0;
+    },
+    onBack: function onBack() {
+      this.choosing_state = 0;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Documents/Income/Edit.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Documents/Income/Edit.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _code_models_IncomeDocument__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../code/models/IncomeDocument */ "./resources/js/code/models/IncomeDocument.js");
+/* harmony import */ var _code_models_DocumentTableRow__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../code/models/DocumentTableRow */ "./resources/js/code/models/DocumentTableRow.js");
+/* harmony import */ var _code_mixins_mixin_create__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../code/mixins/mixin_create */ "./resources/js/code/mixins/mixin_create.js");
+/* harmony import */ var _code_models_Nomenclature__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../code/models/Nomenclature */ "./resources/js/code/models/Nomenclature.js");
+/* harmony import */ var _code_models_Agent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../code/models/Agent */ "./resources/js/code/models/Agent.js");
+/* harmony import */ var _code_models_Storage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../code/models/Storage */ "./resources/js/code/models/Storage.js");
+/* harmony import */ var _code_models_Producer__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../code/models/Producer */ "./resources/js/code/models/Producer.js");
+/* harmony import */ var _code_models_PriceType__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../code/models/PriceType */ "./resources/js/code/models/PriceType.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "IncomeEdit",
+  mixins: [_code_mixins_mixin_create__WEBPACK_IMPORTED_MODULE_2__["default"]],
+  data: function data() {
+    return {
+      //модель, в которой будут находиться данные
+      item: new _code_models_IncomeDocument__WEBPACK_IMPORTED_MODULE_0__["default"](null),
+      //переменная, которая помогает отображать компоненты выбора (например, NomenclatureChoose или ProducerChoose)
+      choosing_state: 0,
+      //показывает, получены ли данные с сервера - при loaded - false не доступна submit-кнопка
+      loaded: true,
+      //выбранная строка - в табличной части идет проверка - id_строки - id_selectingRow
+      //если true, то строка переходит в editable
+      selectingRow: new _code_models_DocumentTableRow__WEBPACK_IMPORTED_MODULE_1__["default"]()
+    };
+  },
+  //ивент, срабатывающий при created стадии компонента - в поле дата закидывает текущую дату
+  created: function created() {
+    this.item.date = Date.now();
+  },
+  beforeCreate: function beforeCreate() {
+    var _this = this;
+
+    axios.get("/api/income-documents/".concat(this.$route.params.id)).then(function (response) {
+      console.log(response);
+      _this.is_visible = true;
+      var table_data = [];
+      if (response.data.doc_connections !== undefined && response.data.doc_connections.length > 0) response.data.doc_connections.forEach(function (row) {
+        return table_data.push(new _code_models_DocumentTableRow__WEBPACK_IMPORTED_MODULE_1__["default"](row.id, row.table_id, row.nomenclature, row.characteristic, row.count, row.income_price, row.sell_price));
+      });
+      _this.item = new _code_models_IncomeDocument__WEBPACK_IMPORTED_MODULE_0__["default"](response.data.id, new _code_models_Agent__WEBPACK_IMPORTED_MODULE_4__["default"](response.data.agent.id, response.data.agent.name, response.data.agent.billing, response.data.agent.address, response.data.agent.description, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at), new _code_models_Storage__WEBPACK_IMPORTED_MODULE_5__["default"](response.data.storage.id, response.data.storage.name, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at), response.data.date, table_data, response.data.created_at, response.data.updated_at, response.data.deleted_at);
+    })["catch"](function (error) {
+      console.log(error); ///this.$router.push({name: 'income.index'});
+    });
+  },
+  methods: {
+    //метод-заглушка
+    update: function update() {},
+    //метод добавляет новую пустую строку в массив doc_connections, и, соответственно в табличную часть формы
+    addToTable: function addToTable() {
+      //id = -1, table_id используется чтобы нумерация строк происходила с 1 и дальше
+      //TODO: при реализации удаления строки из таблицы, переделать нумерацию, чтобы было max_id + 1
+      this.item.doc_connections.push(new _code_models_DocumentTableRow__WEBPACK_IMPORTED_MODULE_1__["default"](null, this.item.doc_connections.length + 1)); //console.log(this.item.doc_connections)
+    },
+    //обработчик события cell-dblclick - обрабатывает двойной щелчок по выбраной клетке
+    //чисто технически, его можно переделать в rowEdit, но пока не горит
+    cellEdit: function cellEdit(row, column, cell, event) {
+      //присваивает выбранную строку в selectingRow - читать выше
+      this.selectingRow = row;
+    },
+    //сабмит - отправляет данные
+    submit: function submit() {
+      var _this2 = this;
+
+      //не проходит валидацию - возвращаем
+      if (!this.validateFields()) return; //блокируем кнопку submit
+
+      this.loaded = false; //пост-запрос
+      //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
+
+      axios.post("/api/income", {
+        items: this.item.getDataForServer()
+      }).then(function (response) {
+        console.log(response.data);
+      })["catch"](function (error) {
+        //ошибка - выводим
+        _this2.$notify.error({
+          title: 'Ошибка!',
+          message: "Сообщение ошибки - " + error.response.data.message
+        });
+
+        _this2.loaded = true;
+      });
+    },
+    validateFields: function validateFields() {
+      var _this3 = this;
+
+      this.errors = [];
+      if (this.item.agent.id === -1) this.errors.push("Поле \"Поставщик\" должно быть заполнено");
+      if (this.item.storage.id === -1) this.errors.push("Поле \"Склад\" должно быть заполнено");
+      this.item.doc_connections.forEach(function (p) {
+        if (p.nomenclature.id === -1) _this3.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u041D\u043E\u043C\u0435\u043D\u043A\u043B\u0430\u0442\u0443\u0440\u0430\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
+        if (p.nomenclature.characteristic.serial === "") _this3.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0421\u0435\u0440\u0438\u044F\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
+        if (p.nomenclature.characteristic.expiry_date === "") _this3.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0421\u0440\u043E\u043A \u0433\u043E\u0434\u043D\u043E\u0441\u0442\u0438\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
+        if (p.income_price <= 0) _this3.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0426\u0435\u043D\u0430 \u043F\u043E\u0441\u0442\u0443\u043F\u043B\u0435\u043D\u0438\u044F\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0431\u043E\u043B\u044C\u0448\u0435 0"));
+        if (p.sell_price <= 0) _this3.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0426\u0435\u043D\u0430 \u043F\u0440\u043E\u0434\u0430\u0436\u0438\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0431\u043E\u043B\u044C\u0448\u0435 0"));
+        if (p.count <= 0) _this3.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0431\u043E\u043B\u044C\u0448\u0435 0"));
       });
       this.showErrors();
       return this.errors.length === 0;
@@ -4475,10 +4808,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _code_models_Producer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../code/models/Producer */ "./resources/js/code/models/Producer.js");
-/* harmony import */ var _code_models_Nomenclature__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../code/models/Nomenclature */ "./resources/js/code/models/Nomenclature.js");
-/* harmony import */ var _code_models_PriceType__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../code/models/PriceType */ "./resources/js/code/models/PriceType.js");
-/* harmony import */ var _code_mixins_mixin_index__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../code/mixins/mixin_index */ "./resources/js/code/mixins/mixin_index.js");
+/* harmony import */ var _code_mixins_mixin_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../code/mixins/mixin_index */ "./resources/js/code/mixins/mixin_index.js");
 //
 //
 //
@@ -4597,13 +4927,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
-
-
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "IncomeIndex",
-  mixins: [_code_mixins_mixin_index__WEBPACK_IMPORTED_MODULE_3__["default"]],
+  mixins: [_code_mixins_mixin_index__WEBPACK_IMPORTED_MODULE_0__["default"]],
   data: function data() {
     return {
       filter_fields: {
@@ -4616,36 +4944,10 @@ __webpack_require__.r(__webpack_exports__);
         }
       },
       choosing_state: 0,
-      action_namespace: "incomeDocuments"
+      action_namespace: "income"
     };
   },
-  methods: {
-    update: function update() {
-      var _this = this;
-
-      this.filter_state = false;
-      this.filter_fields = {
-        name_str: "",
-        producer: {
-          name: "",
-          id: null
-        },
-        price_type: {
-          name: "",
-          id: null
-        }
-      };
-      this.is_reload = true;
-      this.$store.dispatch('incomeDocuments/update').then(function () {
-        _this.is_reload = false;
-        _this.page_count = _this.$store.getters['incomeDocuments/items_length'](_this.items_per_page);
-
-        _this.onChangePage(1);
-      }, function (reason) {
-        console.log("\u0427\u0442\u043E \u0442\u043E \u043F\u043E\u0448\u043B\u043E \u043D\u0435 \u0442\u0430\u043A. \u041A\u043E\u0434 \u043E\u0442\u0432\u0435\u0442\u0430 - ".concat(reason));
-        _this.is_reload = false;
-      }); //console.log(this.$store.getters['nomenclature/last_updated']);
-    } // filter() {
+  methods: {// filter() {
     //     this.filter_state = true;
     //     axios.get('/api/nomenclature/filter', {
     //         params: {
@@ -4693,7 +4995,6 @@ __webpack_require__.r(__webpack_exports__);
     // onBack() {
     //     this.choosing_state = 0;
     // }
-
   }
 });
 
@@ -4708,6 +5009,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -4790,6 +5092,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
 //
 //
 //
@@ -5542,7 +5846,6 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _code_mixins_mixin_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../code/mixins/mixin_index */ "./resources/js/code/mixins/mixin_index.js");
-//
 //
 //
 //
@@ -6457,8 +6760,6 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _code_mixins_mixin_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../code/mixins/mixin_index */ "./resources/js/code/mixins/mixin_index.js");
-//
-//
 //
 //
 //
@@ -104392,7 +104693,8 @@ var render = function() {
                                         staticStyle: { width: "100%" },
                                         attrs: {
                                           id: "name_input",
-                                          type: "datetime"
+                                          type: "datetime",
+                                          "value-format": "yyyy/MM/dd HH:mm:ss"
                                         },
                                         model: {
                                           value: _vm.item.date,
@@ -104529,7 +104831,7 @@ var render = function() {
                                 "el-table",
                                 {
                                   attrs: {
-                                    data: _vm.item.table_data,
+                                    data: _vm.item.doc_connections,
                                     "highlight-current-cell": "",
                                     border: "",
                                     "show-summary": "",
@@ -105019,6 +105321,722 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Documents/Income/Edit.vue?vue&type=template&id=2bb55ffe&scoped=true&":
+/*!************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Documents/Income/Edit.vue?vue&type=template&id=2bb55ffe&scoped=true& ***!
+  \************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var this$1 = this
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _vm.choosing_state === 0
+        ? _c(
+            "el-row",
+            [
+              _c(
+                "el-col",
+                { attrs: { span: 20, offset: 2 } },
+                [
+                  _c(
+                    "el-card",
+                    { staticClass: "box-card" },
+                    [
+                      _c("div", { attrs: { slot: "header" }, slot: "header" }, [
+                        _c("h2", { staticClass: "text-center" }, [
+                          _vm._v("Поступление #" + _vm._s(_vm.item.id))
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "el-form",
+                        {
+                          attrs: {
+                            "label-width": "100px",
+                            "label-position": "right"
+                          }
+                        },
+                        [
+                          _c(
+                            "el-row",
+                            [
+                              _c(
+                                "el-col",
+                                { attrs: { span: 4 } },
+                                [
+                                  _c(
+                                    "el-form-item",
+                                    { attrs: { label: "Id документа: " } },
+                                    [
+                                      _c("el-input", {
+                                        attrs: {
+                                          readonly: "",
+                                          placeholder: ""
+                                        },
+                                        model: {
+                                          value: _vm.item.id,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.item, "id", $$v)
+                                          },
+                                          expression: "item.id"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "el-col",
+                                { attrs: { span: 5 } },
+                                [
+                                  _c(
+                                    "el-form-item",
+                                    { attrs: { label: "Дата: " } },
+                                    [
+                                      _c("el-date-picker", {
+                                        staticStyle: { width: "100%" },
+                                        attrs: {
+                                          id: "name_input",
+                                          type: "datetime",
+                                          "value-format": "yyyy-MM-dd HH:mm:ss"
+                                        },
+                                        model: {
+                                          value: _vm.item.date,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.item, "date", $$v)
+                                          },
+                                          expression: "item.date"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "el-col",
+                                { attrs: { span: 5 } },
+                                [
+                                  _c(
+                                    "el-form-item",
+                                    { attrs: { label: "Поставщик: " } },
+                                    [
+                                      _c(
+                                        "el-input",
+                                        {
+                                          attrs: {
+                                            readonly: "",
+                                            placeholder: ""
+                                          },
+                                          model: {
+                                            value: _vm.item.agent.name,
+                                            callback: function($$v) {
+                                              _vm.$set(
+                                                _vm.item.agent,
+                                                "name",
+                                                $$v
+                                              )
+                                            },
+                                            expression: "item.agent.name"
+                                          }
+                                        },
+                                        [
+                                          _c("el-button", {
+                                            attrs: {
+                                              slot: "append",
+                                              type: "primary",
+                                              icon: "el-icon-d-arrow-right"
+                                            },
+                                            on: { click: _vm.selectingAgent },
+                                            slot: "append"
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "el-col",
+                                { attrs: { span: 5 } },
+                                [
+                                  _c(
+                                    "el-form-item",
+                                    { attrs: { label: "Склад: " } },
+                                    [
+                                      _c(
+                                        "el-input",
+                                        {
+                                          attrs: {
+                                            readonly: "",
+                                            placeholder: ""
+                                          },
+                                          model: {
+                                            value: _vm.item.storage.name,
+                                            callback: function($$v) {
+                                              _vm.$set(
+                                                _vm.item.storage,
+                                                "name",
+                                                $$v
+                                              )
+                                            },
+                                            expression: "item.storage.name"
+                                          }
+                                        },
+                                        [
+                                          _c("el-button", {
+                                            attrs: {
+                                              slot: "append",
+                                              type: "primary",
+                                              icon: "el-icon-d-arrow-right"
+                                            },
+                                            on: { click: _vm.selectingStorage },
+                                            slot: "append"
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "el-card",
+                            { staticStyle: { "margin-bottom": "40px" } },
+                            [
+                              _c(
+                                "el-divider",
+                                { attrs: { "content-position": "left" } },
+                                [_c("h2", [_vm._v("Товары")])]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "el-button",
+                                {
+                                  staticStyle: { "margin-bottom": "20px" },
+                                  on: { click: _vm.addToTable }
+                                },
+                                [_vm._v("Добавить")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "el-table",
+                                {
+                                  attrs: {
+                                    data: _vm.item.doc_connections,
+                                    "highlight-current-cell": "",
+                                    border: "",
+                                    "show-summary": "",
+                                    "sum-text": "  "
+                                  },
+                                  on: { "cell-dblclick": _vm.cellEdit }
+                                },
+                                [
+                                  _c("el-table-column", {
+                                    attrs: {
+                                      prop: "table_id",
+                                      label: "№",
+                                      "min-width": "45",
+                                      index: 1
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("el-table-column", {
+                                    attrs: {
+                                      prop: "nomenclature.name",
+                                      label: "Наименование",
+                                      "min-width": "200",
+                                      index: 2
+                                    },
+                                    scopedSlots: _vm._u(
+                                      [
+                                        {
+                                          key: "default",
+                                          fn: function(scope) {
+                                            return [
+                                              _vm.selectingRow.table_id ===
+                                              scope.row.table_id
+                                                ? _c(
+                                                    "el-input",
+                                                    {
+                                                      attrs: {
+                                                        readonly: "",
+                                                        placeholder: ""
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          scope.row.nomenclature
+                                                            .name,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            scope.row
+                                                              .nomenclature,
+                                                            "name",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "scope.row.nomenclature.name"
+                                                      }
+                                                    },
+                                                    [
+                                                      _c("el-button", {
+                                                        attrs: {
+                                                          slot: "append",
+                                                          type: "primary",
+                                                          icon:
+                                                            "el-icon-d-arrow-right"
+                                                        },
+                                                        on: {
+                                                          click:
+                                                            _vm.selectingNomenclature
+                                                        },
+                                                        slot: "append"
+                                                      })
+                                                    ],
+                                                    1
+                                                  )
+                                                : _c("div", [
+                                                    _vm._v(
+                                                      " " +
+                                                        _vm._s(
+                                                          scope.row.nomenclature
+                                                            .name
+                                                        )
+                                                    )
+                                                  ])
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      null,
+                                      false,
+                                      3537308311
+                                    )
+                                  }),
+                                  _vm._v(" "),
+                                  _c("el-table-column", {
+                                    attrs: {
+                                      prop: "nomenclature.producer.name",
+                                      label: "Производитель",
+                                      "min-width": "200",
+                                      index: 3
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("el-table-column", {
+                                    attrs: {
+                                      prop:
+                                        "nomenclature.characteristic.serial",
+                                      label: "Серия",
+                                      "min-width": "100",
+                                      index: 4
+                                    },
+                                    scopedSlots: _vm._u(
+                                      [
+                                        {
+                                          key: "default",
+                                          fn: function(scope) {
+                                            return [
+                                              _vm.selectingRow.table_id ===
+                                              scope.row.table_id
+                                                ? _c("el-input", {
+                                                    attrs: { placeholder: "" },
+                                                    model: {
+                                                      value:
+                                                        scope.row.characteristic
+                                                          .serial,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          scope.row
+                                                            .characteristic,
+                                                          "serial",
+                                                          $$v
+                                                        )
+                                                      },
+                                                      expression:
+                                                        "scope.row.characteristic.serial"
+                                                    }
+                                                  })
+                                                : _c("div", [
+                                                    _vm._v(
+                                                      " " +
+                                                        _vm._s(
+                                                          scope.row
+                                                            .characteristic
+                                                            .serial
+                                                        )
+                                                    )
+                                                  ])
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      null,
+                                      false,
+                                      1291027287
+                                    )
+                                  }),
+                                  _vm._v(" "),
+                                  _c("el-table-column", {
+                                    attrs: {
+                                      prop:
+                                        "nomenclature.characteristic.expiry_date",
+                                      label: "Срок годности",
+                                      "min-width": "100",
+                                      index: 5
+                                    },
+                                    scopedSlots: _vm._u(
+                                      [
+                                        {
+                                          key: "default",
+                                          fn: function(scope) {
+                                            return [
+                                              _vm.selectingRow.table_id ===
+                                              scope.row.table_id
+                                                ? _c("el-date-picker", {
+                                                    staticStyle: {
+                                                      width: "100%"
+                                                    },
+                                                    attrs: {
+                                                      format: "yyyy/MM/dd",
+                                                      "value-format": ""
+                                                    },
+                                                    model: {
+                                                      value:
+                                                        scope.row.characteristic
+                                                          .expiry_date,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          scope.row
+                                                            .characteristic,
+                                                          "expiry_date",
+                                                          $$v
+                                                        )
+                                                      },
+                                                      expression:
+                                                        "scope.row.characteristic.expiry_date"
+                                                    }
+                                                  })
+                                                : _c("div", [
+                                                    _vm._v(
+                                                      " " +
+                                                        _vm._s(
+                                                          scope.row
+                                                            .characteristic
+                                                            .expiry_date
+                                                        )
+                                                    )
+                                                  ])
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      null,
+                                      false,
+                                      3988295162
+                                    )
+                                  }),
+                                  _vm._v(" "),
+                                  _c("el-table-column", {
+                                    attrs: {
+                                      prop: "count",
+                                      label: "Кол-во",
+                                      "min-width": "100",
+                                      index: 6
+                                    },
+                                    scopedSlots: _vm._u(
+                                      [
+                                        {
+                                          key: "default",
+                                          fn: function(scope) {
+                                            return [
+                                              _vm.selectingRow.table_id ===
+                                              scope.row.table_id
+                                                ? _c(
+                                                    "el-input",
+                                                    {
+                                                      attrs: {
+                                                        type: "number",
+                                                        placeholder: ""
+                                                      },
+                                                      model: {
+                                                        value: scope.row.count,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            scope.row,
+                                                            "count",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "scope.row.count"
+                                                      }
+                                                    },
+                                                    [
+                                                      _c(
+                                                        "template",
+                                                        { slot: "append" },
+                                                        [_vm._v("шт.")]
+                                                      )
+                                                    ],
+                                                    2
+                                                  )
+                                                : _c("div", [
+                                                    _vm._v(
+                                                      " " +
+                                                        _vm._s(
+                                                          scope.row.count
+                                                        ) +
+                                                        " шт."
+                                                    )
+                                                  ])
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      null,
+                                      false,
+                                      1936977744
+                                    )
+                                  }),
+                                  _vm._v(" "),
+                                  _c("el-table-column", {
+                                    attrs: {
+                                      prop: "income_price",
+                                      label: "Цена закупки",
+                                      "min-width": "100",
+                                      index: 7
+                                    },
+                                    scopedSlots: _vm._u(
+                                      [
+                                        {
+                                          key: "default",
+                                          fn: function(scope) {
+                                            return [
+                                              _vm.selectingRow.table_id ===
+                                              scope.row.table_id
+                                                ? _c(
+                                                    "el-input",
+                                                    {
+                                                      attrs: {
+                                                        type: "number",
+                                                        placeholder: ""
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          scope.row
+                                                            .income_price,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            scope.row,
+                                                            "income_price",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "scope.row.income_price"
+                                                      }
+                                                    },
+                                                    [
+                                                      _c(
+                                                        "template",
+                                                        { slot: "append" },
+                                                        [_vm._v("руб.")]
+                                                      )
+                                                    ],
+                                                    2
+                                                  )
+                                                : _c("div", [
+                                                    _vm._v(
+                                                      " " +
+                                                        _vm._s(
+                                                          scope.row.income_price
+                                                        ) +
+                                                        " руб."
+                                                    )
+                                                  ])
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      null,
+                                      false,
+                                      1780205200
+                                    )
+                                  }),
+                                  _vm._v(" "),
+                                  _c("el-table-column", {
+                                    attrs: {
+                                      prop: "sell_price",
+                                      label: "Цена продажи",
+                                      "min-width": "100",
+                                      index: 7
+                                    },
+                                    scopedSlots: _vm._u(
+                                      [
+                                        {
+                                          key: "default",
+                                          fn: function(scope) {
+                                            return [
+                                              _vm.selectingRow.table_id ===
+                                              scope.row.table_id
+                                                ? _c(
+                                                    "el-input",
+                                                    {
+                                                      attrs: {
+                                                        type: "number",
+                                                        placeholder: ""
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          scope.row.sell_price,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            scope.row,
+                                                            "sell_price",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "scope.row.sell_price"
+                                                      }
+                                                    },
+                                                    [
+                                                      _c(
+                                                        "template",
+                                                        { slot: "append" },
+                                                        [_vm._v("руб.")]
+                                                      )
+                                                    ],
+                                                    2
+                                                  )
+                                                : _c("div", [
+                                                    _vm._v(
+                                                      " " +
+                                                        _vm._s(
+                                                          scope.row.sell_price
+                                                        ) +
+                                                        " руб."
+                                                    )
+                                                  ])
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      null,
+                                      false,
+                                      1993590192
+                                    )
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "el-form-item",
+                            [
+                              _c(
+                                "el-button",
+                                {
+                                  attrs: { type: "primary" },
+                                  on: { click: _vm.submit }
+                                },
+                                [_vm._v("Добавить")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "el-button",
+                                {
+                                  on: {
+                                    click: function() {
+                                      this$1.$router.go(-1)
+                                    }
+                                  }
+                                },
+                                [_vm._v("Отмена")]
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.choosing_state === 1
+        ? _c("agent-choose-component", {
+            on: { back: _vm.onBack, selected: _vm.onSelectedAgent }
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.choosing_state === 3
+        ? _c("storage-choose-component", {
+            on: { back: _vm.onBack, selected: _vm.onSelectedStorage }
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.choosing_state === 2
+        ? _c("nomenclature-choose-component", {
+            on: { back: _vm.onBack, selected: _vm.onSelectedNomenclature }
+          })
+        : _vm._e()
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Documents/Income/Index.vue?vue&type=template&id=e6a34ce4&scoped=true&":
 /*!*************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Documents/Income/Index.vue?vue&type=template&id=e6a34ce4&scoped=true& ***!
@@ -105073,12 +106091,12 @@ var render = function() {
                           staticStyle: { float: "left" },
                           attrs: {
                             tag: "button",
-                            to: { name: "nomenclature.create" }
+                            to: { name: "income.create" }
                           }
                         },
                         [
                           _vm._v(
-                            "\n                        Добавить\n                    "
+                            "\n                    Добавить\n                "
                           )
                         ]
                       )
@@ -105102,7 +106120,7 @@ var render = function() {
                         },
                         [
                           _vm._v(
-                            "\n                        Обновить\n                    "
+                            "\n                    Обновить\n                "
                           )
                         ]
                       )
@@ -105153,7 +106171,11 @@ var render = function() {
                   }),
                   _vm._v(" "),
                   _c("el-table-column", {
-                    attrs: { label: "Сумма документа", "min-width": "100" }
+                    attrs: {
+                      prop: "income_sum",
+                      label: "Сумма документа",
+                      "min-width": "100"
+                    }
                   }),
                   _vm._v(" "),
                   _c("el-table-column", {
@@ -105369,7 +106391,11 @@ var render = function() {
                         staticClass: "el-link--default el-link",
                         attrs: { to: { name: "income.index" } }
                       },
-                      [_vm._v("Поступления\n                        товаров")]
+                      [
+                        _vm._v(
+                          "Поступления\n                        товаров\n                    "
+                        )
+                      ]
                     )
                   ],
                   1
@@ -105473,7 +106499,7 @@ var render = function() {
                         staticClass: "el-link--default el-link",
                         attrs: { to: { name: "producers.index" } }
                       },
-                      [_vm._v("Производители")]
+                      [_vm._v("Производители\n                    ")]
                     )
                   ],
                   1
@@ -105489,7 +106515,7 @@ var render = function() {
                         staticClass: "el-link--default el-link",
                         attrs: { to: { name: "pricetypes.index" } }
                       },
-                      [_vm._v("Типы цен")]
+                      [_vm._v("Типы цен\n                    ")]
                     )
                   ],
                   1
@@ -105505,7 +106531,7 @@ var render = function() {
                         staticClass: "el-link--default el-link",
                         attrs: { to: { name: "nomenclature.index" } }
                       },
-                      [_vm._v("Номенклатура")]
+                      [_vm._v("Номенклатура\n                    ")]
                     )
                   ],
                   1
@@ -105521,7 +106547,7 @@ var render = function() {
                         staticClass: "el-link--default el-link",
                         attrs: { to: { name: "agents.index" } }
                       },
-                      [_vm._v("Контрагенты")]
+                      [_vm._v("Контрагенты\n                    ")]
                     )
                   ],
                   1
@@ -106692,8 +107718,6 @@ var render = function() {
       on: { shortkey: _vm.deleteSelected }
     },
     [
-      _c("v-dialog"),
-      _vm._v(" "),
       _c("h1", { staticClass: "text-center" }, [_vm._v("Ценовые группы")]),
       _vm._v(" "),
       _c(
@@ -107198,8 +108222,6 @@ var render = function() {
     "el-row",
     { staticClass: "center-75" },
     [
-      _c("v-dialog"),
-      _vm._v(" "),
       _c("h1", { staticClass: "text-center" }, [_vm._v("Выбор производителя")]),
       _vm._v(" "),
       _c(
@@ -107957,8 +108979,6 @@ var render = function() {
       on: { shortkey: _vm.deleteSelected }
     },
     [
-      _c("v-dialog"),
-      _vm._v(" "),
       _c("h1", { staticClass: "text-center" }, [_vm._v("Выбрать склад")]),
       _vm._v(" "),
       _c(
@@ -124940,6 +125960,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var element_ui_lib_locale_lang_ru_RU__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(element_ui_lib_locale_lang_ru_RU__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _code_routes_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./code/routes.js */ "./resources/js/code/routes.js");
 /* harmony import */ var _store_index__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./store/index */ "./resources/js/store/index.js");
+ //npm-модуль с механикой раутинга
+
+
+
+
+ //import 'element-ui/lib/theme-chalk/reset.css'
+
+
+ //импортируем хранилище из соответствующего модуля
+
 
 
 __webpack_require__(/*! ./code/bootstrap */ "./resources/js/code/bootstrap.js");
@@ -124948,30 +125978,20 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 
 __webpack_require__(/*! ./code/component_init */ "./resources/js/code/component_init.js");
 
-__webpack_require__(/*! ./store */ "./resources/js/store/index.js"); //npm-модуль с механикой раутинга
-
-
+__webpack_require__(/*! ./store */ "./resources/js/store/index.js");
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);
-
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_shortkey__WEBPACK_IMPORTED_MODULE_2___default.a);
-
- //import 'element-ui/lib/theme-chalk/reset.css'
-
-
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(element_ui__WEBPACK_IMPORTED_MODULE_3___default.a, {
   locale: element_ui_lib_locale_lang_ru_RU__WEBPACK_IMPORTED_MODULE_5___default.a
 }); //Инициализация раутов
-
 
 var routes = _code_routes_js__WEBPACK_IMPORTED_MODULE_6__["default"].routes;
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   routes: routes,
   // сокращённая запись для `routes: routes`,
   mode: 'history'
-}); //импортируем хранилище из соответствующего модуля
-
-
+});
 var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   router: router,
   store: _store_index__WEBPACK_IMPORTED_MODULE_7__["default"]
@@ -125387,6 +126407,11 @@ var DocumentTableRow = /*#__PURE__*/function () {
         sell_price: this.sell_price
       };
     }
+  }, {
+    key: "isValid",
+    value: function isValid() {
+      return !(this.nomenclature.id === -1 || this.nomenclature.characteristic.serial === "" || this.nomenclature.characteristic.expiry_date === "" || this.income_price <= 0 || this.sell_price <= 0 || this.count <= 0);
+    }
   }]);
 
   return DocumentTableRow;
@@ -125405,11 +126430,8 @@ var DocumentTableRow = /*#__PURE__*/function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Producer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Producer */ "./resources/js/code/models/Producer.js");
-/* harmony import */ var _PriceType__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PriceType */ "./resources/js/code/models/PriceType.js");
-/* harmony import */ var _DocumentTableRow__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DocumentTableRow */ "./resources/js/code/models/DocumentTableRow.js");
-/* harmony import */ var _Storage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Storage */ "./resources/js/code/models/Storage.js");
-/* harmony import */ var _Agent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Agent */ "./resources/js/code/models/Agent.js");
+/* harmony import */ var _Storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Storage */ "./resources/js/code/models/Storage.js");
+/* harmony import */ var _Agent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Agent */ "./resources/js/code/models/Agent.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -125419,19 +126441,17 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 
-
-
-
 var IncomeDocument = /*#__PURE__*/function () {
   function IncomeDocument() {
     var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : -1;
-    var agent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new _Agent__WEBPACK_IMPORTED_MODULE_4__["default"]();
-    var storage = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : new _Storage__WEBPACK_IMPORTED_MODULE_3__["default"]();
+    var agent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new _Agent__WEBPACK_IMPORTED_MODULE_1__["default"]();
+    var storage = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : new _Storage__WEBPACK_IMPORTED_MODULE_0__["default"]();
     var date = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "";
-    var table_data = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : [];
-    var created_at = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : null;
-    var updated_at = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : null;
-    var deleted_at = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : null;
+    var doc_connections = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : [];
+    var income_sum = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : null;
+    var created_at = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : null;
+    var updated_at = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : null;
+    var deleted_at = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : null;
 
     _classCallCheck(this, IncomeDocument);
 
@@ -125439,7 +126459,8 @@ var IncomeDocument = /*#__PURE__*/function () {
     this.agent = agent;
     this.storage = storage;
     this.date = date;
-    this.table_data = table_data;
+    this.doc_connections = doc_connections;
+    this.income_sum = income_sum;
     this.created_at = created_at;
     this.updated_at = updated_at;
     this.deleted_at = deleted_at;
@@ -125449,12 +126470,13 @@ var IncomeDocument = /*#__PURE__*/function () {
   _createClass(IncomeDocument, [{
     key: "getDataForServer",
     value: function getDataForServer() {
+      var doc_connections = this.prepareTableDataToServer();
       return {
         id: this.id,
         agent_id: this.agent.id,
         storage_id: this.storage.id,
         date: this.date,
-        table_data: this.prepareTableDataToServer()
+        doc_connections: doc_connections
       };
     } //подгатавливает данные табличной части - каждый из элементов возращает подготовленные данные
 
@@ -125462,8 +126484,8 @@ var IncomeDocument = /*#__PURE__*/function () {
     key: "prepareTableDataToServer",
     value: function prepareTableDataToServer() {
       var items = [];
-      this.table_data.forEach(function (p) {
-        if (p.id != null) items.push(p.getDataForServer());
+      this.doc_connections.forEach(function (p) {
+        if (p.isValid()) items.push(p.getDataForServer());
       });
       return items;
     }
@@ -125582,10 +126604,7 @@ var PriceType = function PriceType() {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _PriceType__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PriceType */ "./resources/js/code/models/PriceType.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-
 
 var Producer = function Producer() {
   var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : -1;
@@ -125667,9 +126686,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Nomenclature_Edit__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../components/Nomenclature/Edit */ "./resources/js/components/Nomenclature/Edit.vue");
 /* harmony import */ var _components_Documents_Income_Create__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../components/Documents/Income/Create */ "./resources/js/components/Documents/Income/Create.vue");
 /* harmony import */ var _components_Documents_Income_Index__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../components/Documents/Income/Index */ "./resources/js/components/Documents/Income/Index.vue");
-/* harmony import */ var _components_Characteristic_ForNomenclature__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../components/Characteristic/ForNomenclature */ "./resources/js/components/Characteristic/ForNomenclature.vue");
-/* harmony import */ var _components_Home__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../components/Home */ "./resources/js/components/Home.vue");
-/* harmony import */ var _components_Admin_Main__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../components/Admin/Main */ "./resources/js/components/Admin/Main.vue");
+/* harmony import */ var _components_Documents_Income_Edit__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../components/Documents/Income/Edit */ "./resources/js/components/Documents/Income/Edit.vue");
+/* harmony import */ var _components_Characteristic_ForNomenclature__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../components/Characteristic/ForNomenclature */ "./resources/js/components/Characteristic/ForNomenclature.vue");
+/* harmony import */ var _components_Home__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../components/Home */ "./resources/js/components/Home.vue");
+/* harmony import */ var _components_Admin_Main__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../components/Admin/Main */ "./resources/js/components/Admin/Main.vue");
+
 
 
 
@@ -125715,6 +126736,10 @@ var routes = [{
   path: '/income-documents/create',
   name: "income.create",
   component: _components_Documents_Income_Create__WEBPACK_IMPORTED_MODULE_16__["default"]
+}, {
+  path: '/income-documents/:id',
+  name: "income.edit",
+  component: _components_Documents_Income_Edit__WEBPACK_IMPORTED_MODULE_18__["default"]
 }, {
   path: '/agents',
   name: "agents.index",
@@ -125766,11 +126791,11 @@ var routes = [{
 }, {
   path: '/nomenclatures/:id/characteristics',
   name: "nomenclature.characteristics",
-  component: _components_Characteristic_ForNomenclature__WEBPACK_IMPORTED_MODULE_18__["default"]
+  component: _components_Characteristic_ForNomenclature__WEBPACK_IMPORTED_MODULE_19__["default"]
 }, {
   path: '/',
   name: "home.index",
-  component: _components_Home__WEBPACK_IMPORTED_MODULE_19__["default"]
+  component: _components_Home__WEBPACK_IMPORTED_MODULE_20__["default"]
 }, //админские роуты
 {
   path: '/adm/info',
@@ -125827,11 +126852,11 @@ var routes = [{
 }, {
   path: '/adm/nomenclatures/:id/characteristics',
   name: "admin.nomenclature.characteristics",
-  component: _components_Characteristic_ForNomenclature__WEBPACK_IMPORTED_MODULE_18__["default"]
+  component: _components_Characteristic_ForNomenclature__WEBPACK_IMPORTED_MODULE_19__["default"]
 }, {
   path: '/adm/home',
   name: "admin.home.index",
-  component: _components_Admin_Main__WEBPACK_IMPORTED_MODULE_20__["default"]
+  component: _components_Admin_Main__WEBPACK_IMPORTED_MODULE_21__["default"]
 }];
 /* harmony default export */ __webpack_exports__["default"] = ({
   routes: routes
@@ -126317,6 +127342,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_30d122f0_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_30d122f0_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Documents/Income/Edit.vue":
+/*!***********************************************************!*\
+  !*** ./resources/js/components/Documents/Income/Edit.vue ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Edit_vue_vue_type_template_id_2bb55ffe_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Edit.vue?vue&type=template&id=2bb55ffe&scoped=true& */ "./resources/js/components/Documents/Income/Edit.vue?vue&type=template&id=2bb55ffe&scoped=true&");
+/* harmony import */ var _Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Edit.vue?vue&type=script&lang=js& */ "./resources/js/components/Documents/Income/Edit.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Edit_vue_vue_type_template_id_2bb55ffe_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Edit_vue_vue_type_template_id_2bb55ffe_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "2bb55ffe",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Documents/Income/Edit.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Documents/Income/Edit.vue?vue&type=script&lang=js&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/components/Documents/Income/Edit.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Edit.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Documents/Income/Edit.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Documents/Income/Edit.vue?vue&type=template&id=2bb55ffe&scoped=true&":
+/*!******************************************************************************************************!*\
+  !*** ./resources/js/components/Documents/Income/Edit.vue?vue&type=template&id=2bb55ffe&scoped=true& ***!
+  \******************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_2bb55ffe_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Edit.vue?vue&type=template&id=2bb55ffe&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Documents/Income/Edit.vue?vue&type=template&id=2bb55ffe&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_2bb55ffe_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_2bb55ffe_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -127649,7 +128743,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_pricetypes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/pricetypes */ "./resources/js/store/modules/pricetypes.js");
 /* harmony import */ var _modules_nomenclature__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/nomenclature */ "./resources/js/store/modules/nomenclature.js");
 /* harmony import */ var _modules_agents__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/agents */ "./resources/js/store/modules/agents.js");
-/* harmony import */ var _modules_incomeDocuments__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/incomeDocuments */ "./resources/js/store/modules/incomeDocuments.js");
+/* harmony import */ var _modules_income__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/income */ "./resources/js/store/modules/income.js");
 /* harmony import */ var _modules_storages__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/storages */ "./resources/js/store/modules/storages.js");
 
 
@@ -127667,7 +128761,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
     pricetypes: _modules_pricetypes__WEBPACK_IMPORTED_MODULE_3__["default"],
     nomenclature: _modules_nomenclature__WEBPACK_IMPORTED_MODULE_4__["default"],
     agents: _modules_agents__WEBPACK_IMPORTED_MODULE_5__["default"],
-    incomeDocuments: _modules_incomeDocuments__WEBPACK_IMPORTED_MODULE_6__["default"],
+    income: _modules_income__WEBPACK_IMPORTED_MODULE_6__["default"],
     storages: _modules_storages__WEBPACK_IMPORTED_MODULE_7__["default"]
   }
 }));
@@ -127758,20 +128852,18 @@ var mutations = {
 
 /***/ }),
 
-/***/ "./resources/js/store/modules/incomeDocuments.js":
-/*!*******************************************************!*\
-  !*** ./resources/js/store/modules/incomeDocuments.js ***!
-  \*******************************************************/
+/***/ "./resources/js/store/modules/income.js":
+/*!**********************************************!*\
+  !*** ./resources/js/store/modules/income.js ***!
+  \**********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _code_models_IncomeDocument__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../code/models/IncomeDocument */ "./resources/js/code/models/IncomeDocument.js");
-/* harmony import */ var _code_models_DocumentTableRow__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../code/models/DocumentTableRow */ "./resources/js/code/models/DocumentTableRow.js");
-/* harmony import */ var _code_models_Agent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../code/models/Agent */ "./resources/js/code/models/Agent.js");
-/* harmony import */ var _code_models_Storage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../code/models/Storage */ "./resources/js/code/models/Storage.js");
-
+/* harmony import */ var _code_models_Agent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../code/models/Agent */ "./resources/js/code/models/Agent.js");
+/* harmony import */ var _code_models_Storage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../code/models/Storage */ "./resources/js/code/models/Storage.js");
 
 
  //содержит переменные, которые будут помещены в модуль хранилища
@@ -127808,10 +128900,7 @@ var actions = {
         var table_data = []; //оборачиваем каждый элемент пришедших данных в модель модуля
 
         response.data.forEach(function (item) {
-          if (item.table_data !== undefined && item.table_data.length > 0) item.table_data.forEach(function (row) {
-            return table_data.push(new _code_models_DocumentTableRow__WEBPACK_IMPORTED_MODULE_1__["default"](row.id, row.table_id, row.nomenclature, row.characteristic, row.count, row.income_price, row.sell_price));
-          });
-          result.push(new _code_models_IncomeDocument__WEBPACK_IMPORTED_MODULE_0__["default"](item.id, new _code_models_Agent__WEBPACK_IMPORTED_MODULE_2__["default"](item.agent.id, item.agent.name, item.agent.billing, item.agent.address, item.agent.description, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at), new _code_models_Storage__WEBPACK_IMPORTED_MODULE_3__["default"](item.storage.id, item.storage.name, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at), item.date, table_data, item.created_at, item.updated_at, item.deleted_at));
+          result.push(new _code_models_IncomeDocument__WEBPACK_IMPORTED_MODULE_0__["default"](item.id, new _code_models_Agent__WEBPACK_IMPORTED_MODULE_1__["default"](item.agent.id, item.agent.name, item.agent.billing, item.agent.address, item.agent.description, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at), new _code_models_Storage__WEBPACK_IMPORTED_MODULE_2__["default"](item.storage.id, item.storage.name, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at), item.date, table_data, item.income_sum, item.created_at, item.updated_at, item.deleted_at));
         });
         console.log(result); //дергаем мутатор
 

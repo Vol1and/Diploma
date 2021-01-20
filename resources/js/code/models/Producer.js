@@ -1,5 +1,3 @@
-import PriceType from "./PriceType";
-
 class Producer {
     constructor(id = -1, name = "", country = "", created_at, updated_at, deleted_at) {
 

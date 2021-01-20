@@ -126,7 +126,7 @@ export default {
 
             },
             choosing_state: 0,
-            action_namespace : "nomenclature"
+            action_namespace: "nomenclature"
 
         };
     },

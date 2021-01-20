@@ -54,12 +54,12 @@ const actions = {
         });
 
     },
-    deleteItem(context, data){
+    deleteItem(context, data) {
         return new Promise((resolve, reject) => {
             //запрашивает данные с сервера
-            axios.delete(`/api/nomenclatures/${data.id}` ).then(response => {
+            axios.delete(`/api/nomenclatures/${data.id}`).then(response => {
 
-                context.dispatch('update').then(()=>{
+                context.dispatch('update').then(() => {
                     resolve();
                 });
 
@@ -94,16 +94,16 @@ const actions = {
     //    });
 //
     //},
-   //updateWhenLastUpdated(context) {
-   //    axios.get('/api/nomenclature/last_updated').then((response) => {
-   //        context.commit('setWhenLastUpdated', response.data);
-   //        //асинхронный ответ - все ок
-   //        resolve();
-   //    }).catch((error) => {
-   //        //если не ок - асинхронный ответ с кодом ошибки
-   //        reject(error.response.data.message);
-   //    })
-   //}
+    //updateWhenLastUpdated(context) {
+    //    axios.get('/api/nomenclature/last_updated').then((response) => {
+    //        context.commit('setWhenLastUpdated', response.data);
+    //        //асинхронный ответ - все ок
+    //        resolve();
+    //    }).catch((error) => {
+    //        //если не ок - асинхронный ответ с кодом ошибки
+    //        reject(error.response.data.message);
+    //    })
+    //}
 }
 
 // мутации - СИНХРОННЫЕ операции которые меняют данные в хранилищах
@@ -111,10 +111,10 @@ const mutations = {
     setItems(state, items) {
         state.items = items;
     },
-   //setWhenLastUpdated(state, item) {
+    //setWhenLastUpdated(state, item) {
 
-   //    state.when_last_updated = item;
-   //}
+    //    state.when_last_updated = item;
+    //}
 }
 
 export default {

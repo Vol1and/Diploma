@@ -4,9 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Characteristic;
 use App\Models\Model;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 class CharacteristicFactory extends Factory
 {

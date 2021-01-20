@@ -15,7 +15,7 @@ class CreateCharacteristicPricesTable extends Migration
     {
         Schema::create('characteristic_prices', function (Blueprint $table) {
             $table->id();
-            $table->decimal('characteristic_price');
+            $table->decimal('price');
             $table->timestamps();
         });
     }

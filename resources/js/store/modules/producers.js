@@ -43,7 +43,7 @@ const actions = {
         });
 
     },
-    sendNewItem(context, data){
+    sendNewItem(context, data) {
         return new Promise((resolve, reject) => {
             //запрашивает данные с сервера
             axios.post('/api/producers', data.fields).then(response => {
@@ -57,12 +57,12 @@ const actions = {
             })
         });
     },
-    deleteItem(context, data){
+    deleteItem(context, data) {
         return new Promise((resolve, reject) => {
             //запрашивает данные с сервера
-            axios.delete(`/api/producers/${data.id}` ).then(response => {
+            axios.delete(`/api/producers/${data.id}`).then(response => {
 
-                context.dispatch('update').then(()=>{
+                context.dispatch('update').then(() => {
                     resolve();
                 });
 

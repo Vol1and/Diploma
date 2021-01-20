@@ -42,7 +42,8 @@
 
                     <div class="text item">
                         <router-link class="el-link--default el-link" :to="{name: 'income.index'}">Поступления
-                            товаров</router-link>
+                            товаров
+                        </router-link>
                     </div>
 
                 </el-card>

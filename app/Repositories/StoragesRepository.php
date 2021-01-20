@@ -5,8 +5,6 @@ namespace App\Repositories;
 
 use App\Models\Storage as Model;
 
-use Faker\Provider\Base;
-
 class StoragesRepository extends BaseRepository
 {
 

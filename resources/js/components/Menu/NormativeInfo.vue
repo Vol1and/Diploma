@@ -9,20 +9,22 @@
                     </div>
 
 
-
-
-                        <div class="text item">
-                            <router-link class="el-link--default el-link" :to="{name: 'producers.index'}">Производители</router-link>
-                        </div>
-                        <div class="text item">
-                            <router-link class="el-link--default el-link" :to="{name: 'pricetypes.index'}">Типы цен</router-link>
-                        </div>
-                        <div class="text item">
-                            <router-link class="el-link--default el-link" :to="{name: 'nomenclature.index'}">Номенклатура</router-link>
-                        </div>
-                        <div class="text item">
-                            <router-link class="el-link--default el-link" :to="{name: 'agents.index'}">Контрагенты</router-link>
-                        </div>
+                    <div class="text item">
+                        <router-link class="el-link--default el-link" :to="{name: 'producers.index'}">Производители
+                        </router-link>
+                    </div>
+                    <div class="text item">
+                        <router-link class="el-link--default el-link" :to="{name: 'pricetypes.index'}">Типы цен
+                        </router-link>
+                    </div>
+                    <div class="text item">
+                        <router-link class="el-link--default el-link" :to="{name: 'nomenclature.index'}">Номенклатура
+                        </router-link>
+                    </div>
+                    <div class="text item">
+                        <router-link class="el-link--default el-link" :to="{name: 'agents.index'}">Контрагенты
+                        </router-link>
+                    </div>
 
                 </el-card>
             </el-col>

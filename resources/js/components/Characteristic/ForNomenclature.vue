@@ -1,7 +1,7 @@
 <template>
     <div class="center-50">
         <h1 class="text-center">Характеристики</h1>
-        <h4 class="text-center">Номенклатуры: {{this.items[0].nomenclature.name}}</h4>
+        <h4 class="text-center">Номенклатуры: {{ this.items[0].nomenclature.name }}</h4>
         <div class="row">
             <router-link :to="{name: 'nomenclatures.create'}" style=" float:left " class="btn btn-in-bar  btn-primary">
                 Добавить

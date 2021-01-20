@@ -16,19 +16,19 @@ class CharacteristicPriceSeeder extends Seeder
     {
         $data = [
             [
-                'characteristic_price'  => 100
+                'price'  => 100
             ],
             [
-                'characteristic_price'  => 120
+                'price'  => 120
             ],
             [
-                'characteristic_price'  => 650
+                'price'  => 650
             ],
             [
-                'characteristic_price'  => 380
+                'price'  => 380
             ],
             [
-                'characteristic_price'  => 295
+                'price'  => 295
             ]
         ];
 

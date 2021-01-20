@@ -1,32 +1,39 @@
-import Producer from "./Producer";
-import PriceType from "./PriceType";
-import DocumentTableRow from "./DocumentTableRow";
 import Storage from "./Storage";
 import Agent from "./Agent";
 
 class IncomeDocument {
     constructor(id = -1, agent = new Agent(), storage = new Storage(),
-                date = "", table_data = [], created_at = null, updated_at = null, deleted_at = null) {
+                date = "", doc_connections = [],income_sum = null, created_at = null, updated_at = null, deleted_at = null) {
 
         this.id = id;
         this.agent = agent;
         this.storage = storage;
         this.date = date;
-        this.table_data = table_data;
+        this.doc_connections = doc_connections;
+        this.income_sum = income_sum;
         this.created_at = created_at;
         this.updated_at = updated_at;
         this.deleted_at = deleted_at;
     }
+
     //возвращает ассоциативный массив, который можно отправлять на сервер - в нем нет лишних полей, и тяжелых объектов - только id
-    getDataForServer(){
-        return {id: this.id,agent_id: this.agent.id, storage_id:  this.storage.id,date: this.date, table_data:  this.prepareTableDataToServer()}
+    getDataForServer() {
+        let doc_connections = this.prepareTableDataToServer();
+        return {
+            id: this.id,
+            agent_id: this.agent.id,
+            storage_id: this.storage.id,
+            date: this.date,
+            doc_connections: doc_connections
+        }
     }
 
     //подгатавливает данные табличной части - каждый из элементов возращает подготовленные данные
-    prepareTableDataToServer(){
+    prepareTableDataToServer() {
         let items = [];
-        this.table_data.forEach(p=> {
-            if(p.id != null) items.push(p.getDataForServer());
+
+        this.doc_connections.forEach(p => {
+            if (p.isValid()) items.push(p.getDataForServer());
 
         })
         return items;

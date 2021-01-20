@@ -1,9 +1,9 @@
 <template>
-    <el-row >
+    <el-row>
         <el-col :span="6" :offset="9">
             <el-card class="box-card">
 
-                <div slot="header" >
+                <div slot="header">
                     <h2 class="text-center">Новая ценовая группа</h2>
                 </div>
                 <el-form label-position="top">
@@ -17,7 +17,7 @@
 
 
                     <el-form-item>
-                        <el-button type="primary" @click="submit" >Добавить</el-button>
+                        <el-button type="primary" @click="submit">Добавить</el-button>
                         <el-button @click="()=>{this.$router.go(-1)}">Отмена</el-button>
                     </el-form-item>
                 </el-form>

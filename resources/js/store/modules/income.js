@@ -1,6 +1,6 @@
+import IncomeDocument from "../../code/models/IncomeDocument";
 import Agent from "../../code/models/Agent";
-
-
+import Storage from "../../code/models/Storage";
 //содержит переменные, которые будут помещены в модуль хранилища
 const state = () => ({
     items: [] //массив с моделями этого модуля
@@ -16,7 +16,9 @@ const getters = {
     items_length: state => items_per_page => {
 
         return Math.ceil(state.items.length / items_per_page);
-    }
+    },
+
+
 }
 
 // actions - операции-обертки для мутаций - могут быть асинхронными
@@ -25,11 +27,23 @@ const actions = {
     update(context) {
         return new Promise((resolve, reject) => {
             //запрашивает данные с сервера
-            axios.get('/api/agents').then((response) => {
+            axios.get('/api/income-documents').then((response) => {
                 let result = [];
-                //оборачиваем каждый элемент пришедших данных в модель модуля
-                response.data.forEach(item => result.push(new Agent(item.id, item.name, item.billing, item.address, item.description, item.created_at, item.updated_at, item.deleted_at)))
 
+                console.log(response.data)
+                let table_data = [];
+                //оборачиваем каждый элемент пришедших данных в модель модуля
+                response.data.forEach(item => {
+
+                    result.push(new IncomeDocument(item.id,
+                        new Agent(item.agent.id, item.agent.name, item.agent.billing, item.agent.address, item.agent.description, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at),
+                        new Storage(item.storage.id, item.storage.name, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at),
+                        item.date,
+                        table_data,item.income_sum, item.created_at, item.updated_at, item.deleted_at))
+
+                })
+
+                console.log(result)
                 //дергаем мутатор
                 context.commit('setItems', result);
                 //асинхронный ответ - все ок
@@ -37,28 +51,45 @@ const actions = {
 
             }).catch((error) => {
                 //если не ок - асинхронный ответ с кодом ошибки
-                reject(error.response.data.message);
+
+                console.log(error)
+                //reject(error.response.data.message);
+                reject();
             })
         });
 
     },
-    deleteItem(context, data) {
+    sendNewItem(context, data) {
         return new Promise((resolve, reject) => {
             //запрашивает данные с сервера
-            axios.delete(`/api/agents/${data.id}`).then(response => {
+            axios.post('/api/income-documents', data.fields).then(response => {
 
-                context.dispatch('update').then(() => {
-                    resolve();
-                });
+                resolve();
 
-
-                //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
             }).catch((error) => {
                 console.log("Ошибка!")
                 reject(error.response.data.message);
             })
         });
     },
+    deleteItem(context, data) {
+        return new Promise((resolve, reject) => {
+            //запрашивает данные с сервера
+            axios.delete(`/api/income-documents/${data.id}`).then(response => {
+
+                context.dispatch('update').then(() => {
+                    resolve();
+                });
+
+
+            }).catch((error) => {
+                console.log("Ошибка!")
+                reject(error.response.data.message);
+            })
+        });
+    },
+
+
 }
 
 // мутации - СИНХРОННЫЕ операции которые меняют данные в хранилищах

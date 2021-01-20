@@ -26,28 +26,28 @@ const actions = {
         return new Promise((resolve, reject) => {
             //запрашивает данные с сервера
             axios.get('/api/storages').then((response) => {
-                    let result = [];
-                    //оборачиваем каждый элемент пришедших данных в модель модуля
-                    response.data.forEach(item => result.push(new PriceType(item.id, item.name, item.margin, item.created_at, item.updated_at, item.deleted_at)))
+                let result = [];
+                //оборачиваем каждый элемент пришедших данных в модель модуля
+                response.data.forEach(item => result.push(new PriceType(item.id, item.name, item.margin, item.created_at, item.updated_at, item.deleted_at)))
 
-                    //дергаем мутатор
-                    context.commit('setItems', result);
-                    //асинхронный ответ - все ок
-                    resolve();
+                //дергаем мутатор
+                context.commit('setItems', result);
+                //асинхронный ответ - все ок
+                resolve();
 
-                }).catch((error) => {
+            }).catch((error) => {
                 //если не ок - асинхронный ответ с кодом ошибки
                 reject(error.response.data.message);
             })
         });
 
     },
-    deleteItem(context, data){
+    deleteItem(context, data) {
         return new Promise((resolve, reject) => {
             //запрашивает данные с сервера
-            axios.delete(`/api/storages/${data.id}` ).then(response => {
+            axios.delete(`/api/storages/${data.id}`).then(response => {
 
-                context.dispatch('update').then(()=>{
+                context.dispatch('update').then(() => {
                     resolve();
                 });
 

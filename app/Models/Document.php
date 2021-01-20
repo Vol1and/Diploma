@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Document extends Model
@@ -14,6 +13,10 @@ class Document extends Model
         'agent_id',
         'storage_id'
     ];
+
+    protected $with = ['storage', 'agent'];
+
+    protected $appends = ['income_sum'];
 
     public function agent()
     {
@@ -28,4 +31,14 @@ class Document extends Model
     {
         return $this->belongsTo(DocType::class);
     }
+    public function doc_connections(){
+        return $this->hasMany(DocConnection::class);
+    }
+
+    public function getIncomeSumAttribute(){
+        $result = 0;
+        foreach ($this->doc_connections as $connection) $result += $connection->income_sum;
+        return $result;
+    }
+
 }

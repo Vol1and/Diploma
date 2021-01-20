@@ -1,6 +1,6 @@
 <template>
     <el-row v-shortkey="['del']" @shortkey="deleteSelected" class="center-75">
-        <v-dialog/>
+
 
         <h1 class="text-center">Ценовые группы</h1>
 
@@ -59,17 +59,16 @@
 </template>
 
 
-
 <script>
 import mixin_index from "../../code/mixins/mixin_index";
 
 export default {
     name: "PriceTypeChoose",
 
-    mixins :[mixin_index],
+    mixins: [mixin_index],
     data: function () {
         return {
-            action_namespace : "pricetypes"
+            action_namespace: "pricetypes"
         };
     },
     mounted() {
@@ -89,13 +88,14 @@ export default {
             }));
 
         },
-        selected(selected_item){
+        selected(selected_item) {
             this.$emit("selected", {price_type: selected_item});
         },
-        back(){
+        back() {
             this.$emit("back");
         },
-        deleteSelected() {}
+        deleteSelected() {
+        }
     }
 
 }

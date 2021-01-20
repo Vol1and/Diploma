@@ -5,8 +5,6 @@ namespace App\Repositories;
 
 use App\Models\Producer as Model;
 
-use Faker\Provider\Base;
-
 class ProducersRepository extends BaseRepository
 {
 

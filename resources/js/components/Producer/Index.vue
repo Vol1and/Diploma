@@ -108,7 +108,7 @@ export default {
 
     methods: {
 
-        filterClear: function (){
+        filterClear: function () {
             this.filter_state = false;
             this.filter_fields.country_str = this.filter_fields.name_str = "";
         },
@@ -132,7 +132,6 @@ export default {
             })
 
         },
-
 
 
     }

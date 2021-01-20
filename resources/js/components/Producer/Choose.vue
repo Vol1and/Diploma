@@ -1,6 +1,5 @@
 <template>
-    <el-row  class="center-75">
-        <v-dialog/>
+    <el-row class="center-75">
 
         <h1 class="text-center">Выбор производителя</h1>
 
@@ -12,7 +11,8 @@
             </el-col>
             <el-col justify="center" :span="8">
                 <el-col :span="8" :offset="8">
-                    <el-button icon="el-icon-s-operation"  style="width: 100%" @click="switch_filter()" v-if="!filter_visible">
+                    <el-button icon="el-icon-s-operation" style="width: 100%" @click="switch_filter()"
+                               v-if="!filter_visible">
                         Фильтры
                     </el-button>
                     <el-button @click="switch_filter()" style="width: 100%" v-else type="danger">Закрыть</el-button>
@@ -28,15 +28,15 @@
         </el-row>
 
         <el-row v-if="filter_visible">
-            <el-divider ></el-divider>
+            <el-divider></el-divider>
             <el-form :inline="true" class="demo-form-inline">
-                <el-form-item   style="   margin-bottom: 0;"  label="Название:">
-                    <el-input v-model="filter_fields.name_str"  placeholder="Название"></el-input>
+                <el-form-item style="   margin-bottom: 0;" label="Название:">
+                    <el-input v-model="filter_fields.name_str" placeholder="Название"></el-input>
                 </el-form-item>
-                <el-form-item  style="   margin-bottom: 0;"  label="Страна:">
+                <el-form-item style="   margin-bottom: 0;" label="Страна:">
                     <el-input v-model="filter_fields.country_str" placeholder="Страна"></el-input>
                 </el-form-item>
-                <el-form-item  style="   margin-bottom: 0;" >
+                <el-form-item style="   margin-bottom: 0;">
                     <el-button type="primary" @click="filter">Поиск</el-button>
                 </el-form-item>
             </el-form>
@@ -144,11 +144,11 @@ export default {
         },
 
         //по дабл-клику - переходим на строку с изменением выбраного объекта
-        selected(){
+        selected() {
 
             this.$emit("selected", {producer: this.selected_item});
         },
-        back(){
+        back() {
             this.$emit("back");
         }
 

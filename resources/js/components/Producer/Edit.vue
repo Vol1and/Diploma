@@ -3,7 +3,7 @@
         <el-col :span="6" :offset="9">
             <el-card class="box-card">
 
-                <div slot="header" >
+                <div slot="header">
                     <h2 class="text-center">Производитель #{{ item.id }}</h2>
                 </div>
                 <el-form label-position="top">
@@ -17,7 +17,7 @@
 
 
                     <el-form-item>
-                        <el-button type="primary" @click="submit" >Изменить</el-button>
+                        <el-button type="primary" @click="submit">Изменить</el-button>
                         <el-button @click="()=>{this.$router.go(-1)}">Отмена</el-button>
                     </el-form-item>
                 </el-form>
@@ -72,7 +72,7 @@ export default {
                 this.$notify({
 
                     type: 'success',
-                        title: 'Успешно!',
+                    title: 'Успешно!',
                     message: `Элемент с Id=${this.item.id} успешно изменен!`,
                 })
                 this.$router.push({name: 'producers.index'});

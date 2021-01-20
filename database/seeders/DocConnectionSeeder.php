@@ -17,33 +17,38 @@ class DocConnectionSeeder extends Seeder
         $data = [
             [
                 'characteristic_id'  => 1,
+                'table_id'=> 1,
                 'document_id'  => 1,
                 'price'  => 80,
-                'amount' => 140
+                'count' => 140
             ],
             [
                 'characteristic_id'  => 2,
+                'table_id'=> 2,
                 'document_id'  => 1,
                 'price'  => 45,
-                'amount' => 200
+                'count' => 200
             ],
             [
                 'characteristic_id'  => 3,
+                'table_id'=> 3,
                 'document_id'  => 2,
                 'price'  => 95,
-                'amount' => 24
+                'count' => 24
             ],
             [
                 'characteristic_id'  => 4,
+                'table_id'=> 1,
                 'document_id'  => 2,
                 'price'  => 75,
-                'amount' => 50
+                'count' => 50
             ],
             [
                 'characteristic_id'  => 5,
+                'table_id'=> 2,
                 'document_id'  => 2,
                 'price'  => 99,
-                'amount' => 48
+                'count' => 48
             ]
         ];
 

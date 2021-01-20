@@ -7,13 +7,13 @@ export default {
     data: function () {
         return {
 
-            errors : []
+            errors: []
 
         };
     },
     methods: {
 
-        showErrors(){
+        showErrors() {
             this.errors.forEach(item => this.$notify.error({
                 title: 'Ошибка!',
                 message: item,

@@ -12,7 +12,7 @@
                             <el-input type="text" v-model="item.name"></el-input>
                         </el-form-item>
 
-                        <el-form-item  label="Производитель:">
+                        <el-form-item label="Производитель:">
                             <el-input readonly v-model="item.producer.name" placeholder="">
                                 <el-button type="primary" @click="selectingProducer" slot="append"
                                            icon="el-icon-d-arrow-right"></el-button>
@@ -20,7 +20,7 @@
                         </el-form-item>
 
 
-                        <el-form-item  label="Ценовая группа:">
+                        <el-form-item label="Ценовая группа:">
                             <el-input readonly v-model="item.price_type.name" placeholder="">
                                 <el-button type="primary" @click="selectingPriceType" slot="append"
                                            icon="el-icon-d-arrow-right"></el-button>
