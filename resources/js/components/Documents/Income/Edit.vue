@@ -48,7 +48,7 @@
                             <el-divider content-position="left"><h2>Товары</h2></el-divider>
 
                             <el-button @click="addToTable" style="margin-bottom: 20px">Добавить</el-button>
-                            <el-table :data="item.doc_connections"
+                            <el-table :data="item.table_rows"
                                       highlight-current-cell
                                       @cell-dblclick="cellEdit"
                                       border
@@ -192,7 +192,7 @@
 
 
 import IncomeDocument from "../../../code/models/IncomeDocument";
-import DocumentTableRow from "../../../code/models/DocumentTableRow";
+import FinanceDocumentTableRow from "../../../code/models/FinanceDocumentTableRow";
 import mixin_create from "../../../code/mixins/mixin_create";
 import Agent from "../../../code/models/Agent";
 import Storage from "../../../code/models/Storage";
@@ -215,7 +215,7 @@ export default {
             loaded: true,
             //выбранная строка - в табличной части идет проверка - id_строки - id_selectingRow
             //если true, то строка переходит в editable
-            selectingRow: new DocumentTableRow()
+            selectingRow: new FinanceDocumentTableRow()
         }
     },
 
@@ -225,8 +225,8 @@ export default {
             console.log(response)
                 this.is_visible = true;
                 let table_data = [];
-                if (response.data.doc_connections !== undefined && response.data.doc_connections.length > 0) response.data.doc_connections.forEach(row => table_data.push(
-                    new DocumentTableRow(row.id,
+                if (response.data.table_rows !== undefined && response.data.table_rows.length > 0) response.data.table_rows.forEach(row => table_data.push(
+                    new FinanceDocumentTableRow(row.id,
                         row.table_id,
                         new Nomenclature(row.nomenclature.id,
                             row.nomenclature.name,
@@ -267,14 +267,14 @@ export default {
 
         }
         ,
-        //метод добавляет новую пустую строку в массив doc_connections, и, соответственно в табличную часть формы
+        //метод добавляет новую пустую строку в массив table_rows, и, соответственно в табличную часть формы
         addToTable() {
             //id = -1, table_id используется чтобы нумерация строк происходила с 1 и дальше
             //TODO: при реализации удаления строки из таблицы, переделать нумерацию, чтобы было max_id + 1
 
-            this.item.doc_connections.push(new DocumentTableRow(null, this.item.doc_connections.length + 1));
+            this.item.table_rows.push(new FinanceDocumentTableRow(null, this.item.table_rows.length + 1));
 
-            //console.log(this.item.doc_connections)
+            //console.log(this.item.table_rows)
         }
         ,
         //обработчик события cell-dblclick - обрабатывает двойной щелчок по выбраной клетке
@@ -312,7 +312,7 @@ export default {
             if (this.item.agent.id === -1) this.errors.push("Поле \"Поставщик\" должно быть заполнено");
             if (this.item.storage.id === -1) this.errors.push("Поле \"Склад\" должно быть заполнено");
 
-            this.item.doc_connections.forEach(p => {
+            this.item.table_rows.forEach(p => {
                 if (p.nomenclature.id === -1) this.errors.push(`Строка № ${p.table_id}. Поле \"Номенклатура\" должно быть заполнено`);
                 if (p.characteristic.serial === "") this.errors.push(`Строка № ${p.table_id}. Поле \"Серия\" должно быть заполнено`);
                 if (p.characteristic.expiry_date === "") this.errors.push(`Строка № ${p.table_id}. Поле \"Срок годности\" должно быть заполнено`);

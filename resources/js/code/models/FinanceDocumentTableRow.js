@@ -1,7 +1,7 @@
 import Nomenclature from "./Nomenclature";
 import Characteristic from "./Characteristic";
 
-class DocumentTableRow {
+class FinanceDocumentTableRow {
     constructor(id = -1, table_id = null, nomenclature = new Nomenclature(),
                 characteristic = new Characteristic(), count = 0, income_price = 0) {
 
@@ -44,4 +44,4 @@ class DocumentTableRow {
 
 }
 
-export default DocumentTableRow
+export default FinanceDocumentTableRow

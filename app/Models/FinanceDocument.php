@@ -17,7 +17,7 @@ class FinanceDocument extends Model
 
     protected $with = ['storage', 'agent'];
 
-    protected $appends = ['income_sum'];
+    //protected $appends = ['income_sum'];
 
     public function agent()
     {
@@ -32,14 +32,14 @@ class FinanceDocument extends Model
     {
         return $this->belongsTo(DocType::class);
     }
-    public function doc_connections(){
-        return $this->hasMany(DocConnection::class);
+    public function table_rows(){
+        return $this->hasMany(FinanceDocumentTableRow::class);
     }
 
-    public function getIncomeSumAttribute(){
-        $result = 0;
-        foreach ($this->doc_connections as $connection) $result += $connection->income_sum;
-        return $result;
-    }
+   //public function getIncomeSumAttribute(){
+   //    $result = 0;
+   //    foreach ($this->table_rows as $connection) $result += $connection->income_sum;
+   //    return $result;
+   //}
 
 }

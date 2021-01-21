@@ -1,5 +1,5 @@
 import IncomeDocument from "../../code/models/IncomeDocument";
-import DocumentTableRow from "../../code/models/DocumentTableRow";
+import FinanceDocumentTableRow from "../../code/models/FinanceDocumentTableRow";
 import Agent from "../../code/models/Agent";
 import Storage from "../../code/models/Storage";
 //содержит переменные, которые будут помещены в модуль хранилища
@@ -32,19 +32,21 @@ const actions = {
                 let result = [];
 
                 console.log(response.data)
-                let table_data = [];
+                let table_rows = [];
                 //оборачиваем каждый элемент пришедших данных в модель модуля
                 response.data.forEach(item => {
 
 
-                    if (item.table_data !== undefined && item.table_data.length > 0) item.table_data.forEach(row => table_data.push(new DocumentTableRow(row.id, row.table_id, row.nomenclature, row.characteristic, row.count, row.income_price, row.sell_price)));
+                    if (item.table_rows !== undefined && item.table_rows.length > 0) item.table_rows.forEach(row => table_rows.push(new FinanceDocumentTableRow(row.id, row.table_id, row.nomenclature, row.characteristic, row.count, row.income_price, row.sell_price)));
+
                     result.push(new IncomeDocument(item.id,
                         new Agent(item.agent.id, item.agent.name, item.agent.billing, item.agent.address, item.agent.description, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at),
                         new Storage(item.storage.id, item.storage.name, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at),
-                        item.date,
-                        table_data, item.created_at, item.updated_at, item.deleted_at))
+                        item.date, table_rows,
+                        item.created_at, item.updated_at, item.deleted_at))
 
                 })
+
 
                 console.log(result)
                 //дергаем мутатор
@@ -74,6 +76,8 @@ const actions = {
                 reject(error.response.data.message);
             })
         });
+
+
     },
     deleteItem(context, data) {
         return new Promise((resolve, reject) => {

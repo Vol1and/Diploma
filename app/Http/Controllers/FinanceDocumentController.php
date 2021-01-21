@@ -81,18 +81,20 @@ class FinanceDocumentController extends OriginController
      */
     public function update(DocumentCreateRequest $request)
     {
-        $item = $this->financeDocumentRepository->find($request->id);
-        if (empty($item)) {
-            return response(null, 404);
-        }
-        $data = $request->all();
-        $result = $item->fill($data)->save();
-        //todo: подумать над кодом ошибки
-        //Что должно вовзращать при ошибке сохранения
-        if (!$result) {
-            return response(null, 404);
-        }
-        else  return response(null, 200);
+        //todo: реализовать логику для редактирования поступления
+      //$item = $this->financeDocumentRepository->find($request->id);
+      //if (empty($item)) {
+      //    return response(null, 404);
+      //}
+      //$data = $request->all();
+      //$result = $item->fill($data)->save();
+      ////todo: подумать над кодом ошибки
+      ////Что должно вовзращать при ошибке сохранения
+      //if (!$result) {
+      //    return response(null, 404);
+      //}
+      //else  return response(null, 200);
+        return response(null, 404);
     }
 
     /**
@@ -103,6 +105,7 @@ class FinanceDocumentController extends OriginController
      */
     public function destroy($id)
     {
+        //todo: Реализовать логику для удаления поступления
         return response(null, 404);
         //
     }
@@ -113,13 +116,14 @@ class FinanceDocumentController extends OriginController
     {
         // получение данных
         $data = $request->input('item');
-        $meds = $data['doc_connections'];
+        $meds = $data['table_rows'];
 
         //TODO: реализовать вывод ошибки, если массив медикаментов пуст
 
         // добавление нового документа
         $doc = (new FinanceDocument())->create(['agent_id' => $data['agent_id'],'date' => new Carbon($data['date']) ,'is_set' => true, 'doc_type_id' => 1, 'storage_id'=> $data['storage_id'] ]);
 
+        //todo:Останавливать процесс записи, если какой то из этапов выкидывает ошибку
         // циклический проход по массиву медикаментов
         foreach ($meds as $med) {
 
@@ -130,7 +134,7 @@ class FinanceDocumentController extends OriginController
             $characteristic = (new Characteristic())->create($med + ['characteristic_price_id' => $cp->id]);
 
             // добавление новой проводки документа
-            $tableRow = (new FinanceDocumentTableRow())->create(['characteristic_id' => $characteristic->id, 'document_id' => $doc->id,
+            $tableRow = (new FinanceDocumentTableRow())->create(['characteristic_id' => $characteristic->id, 'finance_document_id' => $doc->id,
                 'count' => $med['count'], 'price' => $med['income_price'], 'table_id' => $med['table_id']]);
 
             //создание проводки для регистр накопления

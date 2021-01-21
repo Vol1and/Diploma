@@ -10,7 +10,7 @@ class FinanceDocumentTableRow extends Model
         'count',
         'table_id',
         'characteristic_id',
-        'document_id',
+        'finance_document_id',
         'price'
     ];
 

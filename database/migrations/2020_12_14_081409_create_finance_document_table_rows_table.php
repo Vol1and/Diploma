@@ -17,12 +17,12 @@ class CreateFinanceDocumentTableRowsTable extends Migration
             $table->id();
             $table->integer('table_id')->unsigned();
             $table->bigInteger('characteristic_id')->unsigned();
-            $table->bigInteger('document_id')->unsigned();
+            $table->bigInteger('finance_document_id')->unsigned();
             $table->integer('count');
             $table->decimal('price');
             $table->foreign('characteristic_id')->references('id')
                 ->on('characteristics');
-            $table->foreign('document_id')->references('id')
+            $table->foreign('finance_document_id')->references('id')
                 ->on('finance_documents');
             //вычисляемый столбец
             $table->double('income_sum')->virtualAs('count * price')->nullable();

@@ -2,6 +2,7 @@
 
 
 namespace App\Repositories;
+
 use App\Models\FinanceDocument as Model;
 
 class FinanceDocumentsRepository extends BaseRepository
@@ -23,12 +24,12 @@ class FinanceDocumentsRepository extends BaseRepository
             'doc_type_id',
             'agent_id',
             'storage_id'
+
         ];
-        $result = $this->startConditions()
+        return $this->startConditions()
             ->select($columns)
             ->get();
 
-        return $result;
     }
 
     public function find($id)
@@ -45,7 +46,7 @@ class FinanceDocumentsRepository extends BaseRepository
         return $this->startConditions()
             ->select($columns)
             ->where('id', $id)
-            ->with(['doc_connections', 'doc_connections.characteristic'])
+            ->with(['table_rows', 'table_rows.characteristic'])
             ->get()->first();
     }
 
