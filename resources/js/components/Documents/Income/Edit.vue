@@ -61,6 +61,11 @@
                                     min-width="45"
                                     :index="1"
                                 >
+                                    <template slot-scope="scope">
+
+
+                                        <div> {{item.table_rows.indexOf(scope.row) + 1}}</div>
+                                    </template>
                                 </el-table-column>
                                 <el-table-column
                                     prop="nomenclature.name"
@@ -70,7 +75,7 @@
                                 >
                                     <template slot-scope="scope">
 
-                                        <el-input v-if="selectingRow.table_id === scope.row.table_id" readonly
+                                        <el-input v-if="selectingRow.id === scope.row.id" readonly
                                                   v-model="scope.row.nomenclature.name" placeholder="">
                                             <el-button type="primary" @click="selectingNomenclature" slot="append"
                                                        icon="el-icon-d-arrow-right">
@@ -94,7 +99,7 @@
                                 >
                                     <template slot-scope="scope">
 
-                                        <el-input v-if="selectingRow.table_id === scope.row.table_id"
+                                        <el-input v-if="selectingRow.id === scope.row.id"
                                                   v-model="scope.row.characteristic.serial" placeholder="">
 
                                         </el-input>
@@ -110,7 +115,7 @@
 
                                 >
                                     <template slot-scope="scope">
-                                        <el-date-picker v-if="selectingRow.table_id === scope.row.table_id"
+                                        <el-date-picker v-if="selectingRow.id === scope.row.id"
                                                         style="width: 100%"
                                                         v-model="scope.row.characteristic.expiry_date"
                                                         format="yyyy/MM/dd"
@@ -127,7 +132,7 @@
                                 >
                                     <template slot-scope="scope">
 
-                                        <el-input v-if="selectingRow.table_id === scope.row.table_id" type="number"
+                                        <el-input v-if="selectingRow.id === scope.row.id" type="number"
                                                   v-model="scope.row.count" placeholder="">
                                             <template slot="append">шт.</template>
                                         </el-input>
@@ -142,7 +147,7 @@
                                 >
                                     <template slot-scope="scope">
 
-                                        <el-input v-if="selectingRow.table_id === scope.row.table_id" type="number"
+                                        <el-input v-if="selectingRow.id === scope.row.id" type="number"
                                                   v-model="scope.row.income_price" placeholder="">
                                             <template slot="append">руб.</template>
                                         </el-input>
@@ -157,7 +162,7 @@
                                 >
                                     <template slot-scope="scope">
 
-                                        <el-input v-if="selectingRow.table_id === scope.row.table_id" type="number"
+                                        <el-input v-if="selectingRow.id === scope.row.id" type="number"
                                                   v-model="scope.row.characteristic.characteristic_price.price" placeholder="">
                                             <template slot="append">руб.</template>
                                         </el-input>
@@ -227,7 +232,7 @@ export default {
                 let table_data = [];
                 if (response.data.table_rows !== undefined && response.data.table_rows.length > 0) response.data.table_rows.forEach(row => table_data.push(
                     new FinanceDocumentTableRow(row.id,
-                        row.table_id,
+
                         new Nomenclature(row.nomenclature.id,
                             row.nomenclature.name,
                             new Producer(row.nomenclature.producer.id, row.nomenclature.producer.name, row.nomenclature.producer.country),
@@ -272,7 +277,7 @@ export default {
             //id = -1, table_id используется чтобы нумерация строк происходила с 1 и дальше
             //TODO: при реализации удаления строки из таблицы, переделать нумерацию, чтобы было max_id + 1
 
-            this.item.table_rows.push(new FinanceDocumentTableRow(null, this.item.table_rows.length + 1));
+            this.item.table_rows.push(new FinanceDocumentTableRow(null));
 
             //console.log(this.item.table_rows)
         }
@@ -294,8 +299,15 @@ export default {
 
             //пост-запрос
             //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
-            axios.post("/api/income", {items: this.item.getDataForServer()}).then((response) => {
+            console.log(this.item.getDataForServer());
+            axios.post(`/api/income/${this.item.id}`, {item: this.item.getDataForServer()}).then((response) => {
                 console.log(response.data);
+                this.$notify({
+
+                    type: 'success',
+                    title: 'Успешно!',
+                    message: `Поступление с Id = ${this.item.id} успешно изменено!`,
+                })
             }).catch((error) => {
                 //ошибка - выводим
                 this.$notify.error({
@@ -313,12 +325,12 @@ export default {
             if (this.item.storage.id === -1) this.errors.push("Поле \"Склад\" должно быть заполнено");
 
             this.item.table_rows.forEach(p => {
-                if (p.nomenclature.id === -1) this.errors.push(`Строка № ${p.table_id}. Поле \"Номенклатура\" должно быть заполнено`);
-                if (p.characteristic.serial === "") this.errors.push(`Строка № ${p.table_id}. Поле \"Серия\" должно быть заполнено`);
-                if (p.characteristic.expiry_date === "") this.errors.push(`Строка № ${p.table_id}. Поле \"Срок годности\" должно быть заполнено`);
-                if (p.income_price <= 0) this.errors.push(`Строка № ${p.table_id}. Поле \"Цена поступления\" должно быть больше 0`);
-                //if (p.sell_price <= 0) this.errors.push(`Строка № ${p.table_id}. Поле \"Цена продажи\" должно быть больше 0`);
-                if (p.count <= 0) this.errors.push(`Строка № ${p.table_id}. Поле \"Количество\" должно быть больше 0`);
+                if (p.nomenclature.id === -1) this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Номенклатура\" должно быть заполнено`);
+                if (p.characteristic.serial === "") this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Серия\" должно быть заполнено`);
+                if (p.characteristic.expiry_date === "") this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Срок годности\" должно быть заполнено`);
+                if (p.income_price <= 0) this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Цена поступления\" должно быть больше 0`);
+                //if (p.sell_price <= 0) this.errors.push(`Строка № ${this.item.table_rows.indexOfp}. Поле \"Цена продажи\" должно быть больше 0`);
+                if (p.count <= 0) this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Количество\" должно быть больше 0`);
             })
 
             this.showErrors()

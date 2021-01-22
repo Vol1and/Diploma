@@ -4359,6 +4359,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -4389,7 +4394,7 @@ __webpack_require__.r(__webpack_exports__);
     addToTable: function addToTable() {
       //id = -1, table_id используется чтобы нумерация строк происходила с 1 и дальше
       //TODO: при реализации удаления строки из таблицы, переделать нумерацию, чтобы было max_id + 1
-      this.item.table_rows.push(new _code_models_FinanceDocumentTableRow__WEBPACK_IMPORTED_MODULE_1__["default"](null, this.item.table_rows.length + 1)); //console.log(this.item.table_rows)
+      this.item.table_rows.push(new _code_models_FinanceDocumentTableRow__WEBPACK_IMPORTED_MODULE_1__["default"](null)); //console.log(this.item.table_rows)
     },
     //обработчик события cell-dblclick - обрабатывает двойной щелчок по выбраной клетке
     //чисто технически, его можно переделать в rowEdit, но пока не горит
@@ -4438,12 +4443,12 @@ __webpack_require__.r(__webpack_exports__);
       if (this.item.agent.id === -1) this.errors.push("Поле \"Поставщик\" должно быть заполнено");
       if (this.item.storage.id === -1) this.errors.push("Поле \"Склад\" должно быть заполнено");
       this.item.table_rows.forEach(function (p) {
-        if (p.nomenclature.id === -1) _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u041D\u043E\u043C\u0435\u043D\u043A\u043B\u0430\u0442\u0443\u0440\u0430\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
-        if (p.characteristic.serial === "") _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0421\u0435\u0440\u0438\u044F\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
-        if (p.characteristic.expiry_date === "") _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0421\u0440\u043E\u043A \u0433\u043E\u0434\u043D\u043E\u0441\u0442\u0438\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
-        if (p.income_price <= 0) _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0426\u0435\u043D\u0430 \u043F\u043E\u0441\u0442\u0443\u043F\u043B\u0435\u043D\u0438\u044F\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0431\u043E\u043B\u044C\u0448\u0435 0"));
-        if (p.characteristic.characteristic_price.price <= 0) _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0426\u0435\u043D\u0430 \u043F\u0440\u043E\u0434\u0430\u0436\u0438\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0431\u043E\u043B\u044C\u0448\u0435 0"));
-        if (p.count <= 0) _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0431\u043E\u043B\u044C\u0448\u0435 0"));
+        if (p.nomenclature.id === -1) _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(_this2.item.table_rows.indexOf(p) + 1, ". \u041F\u043E\u043B\u0435 \"\u041D\u043E\u043C\u0435\u043D\u043A\u043B\u0430\u0442\u0443\u0440\u0430\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
+        if (p.characteristic.serial === "") _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(_this2.item.table_rows.indexOf(p) + 1, ". \u041F\u043E\u043B\u0435 \"\u0421\u0435\u0440\u0438\u044F\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
+        if (p.characteristic.expiry_date === "") _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(_this2.item.table_rows.indexOf(p) + 1, ". \u041F\u043E\u043B\u0435 \"\u0421\u0440\u043E\u043A \u0433\u043E\u0434\u043D\u043E\u0441\u0442\u0438\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
+        if (p.income_price <= 0) _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(_this2.item.table_rows.indexOf(p) + 1, ". \u041F\u043E\u043B\u0435 \"\u0426\u0435\u043D\u0430 \u043F\u043E\u0441\u0442\u0443\u043F\u043B\u0435\u043D\u0438\u044F\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0431\u043E\u043B\u044C\u0448\u0435 0")); //if (p.sell_price <= 0) this.errors.push(`Строка № ${this.item.table_rows.indexOfp}. Поле \"Цена продажи\" должно быть больше 0`);
+
+        if (p.count <= 0) _this2.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(_this2.item.table_rows.indexOf(p) + 1, ". \u041F\u043E\u043B\u0435 \"\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0431\u043E\u043B\u044C\u0448\u0435 0"));
       });
       this.showErrors();
       return this.errors.length === 0;
@@ -4685,6 +4690,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -4718,7 +4728,7 @@ __webpack_require__.r(__webpack_exports__);
       _this.is_visible = true;
       var table_data = [];
       if (response.data.table_rows !== undefined && response.data.table_rows.length > 0) response.data.table_rows.forEach(function (row) {
-        return table_data.push(new _code_models_FinanceDocumentTableRow__WEBPACK_IMPORTED_MODULE_1__["default"](row.id, row.table_id, new _code_models_Nomenclature__WEBPACK_IMPORTED_MODULE_5__["default"](row.nomenclature.id, row.nomenclature.name, new _code_models_Producer__WEBPACK_IMPORTED_MODULE_6__["default"](row.nomenclature.producer.id, row.nomenclature.producer.name, row.nomenclature.producer.country)), new _code_models_Characteristic__WEBPACK_IMPORTED_MODULE_7__["default"](row.characteristic.id, row.characteristic.serial, row.characteristic.expiry_date, new _code_models_CharacteristicPrice__WEBPACK_IMPORTED_MODULE_8__["default"](row.characteristic.characteristic_price.id, row.characteristic.characteristic_price.price)), row.count, row.price));
+        return table_data.push(new _code_models_FinanceDocumentTableRow__WEBPACK_IMPORTED_MODULE_1__["default"](row.id, new _code_models_Nomenclature__WEBPACK_IMPORTED_MODULE_5__["default"](row.nomenclature.id, row.nomenclature.name, new _code_models_Producer__WEBPACK_IMPORTED_MODULE_6__["default"](row.nomenclature.producer.id, row.nomenclature.producer.name, row.nomenclature.producer.country)), new _code_models_Characteristic__WEBPACK_IMPORTED_MODULE_7__["default"](row.characteristic.id, row.characteristic.serial, row.characteristic.expiry_date, new _code_models_CharacteristicPrice__WEBPACK_IMPORTED_MODULE_8__["default"](row.characteristic.characteristic_price.id, row.characteristic.characteristic_price.price)), row.count, row.price));
       });
       _this.item = new _code_models_IncomeDocument__WEBPACK_IMPORTED_MODULE_0__["default"](response.data.id, new _code_models_Agent__WEBPACK_IMPORTED_MODULE_3__["default"](response.data.agent.id, response.data.agent.name, response.data.agent.billing, response.data.agent.address, response.data.agent.description, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at), new _code_models_Storage__WEBPACK_IMPORTED_MODULE_4__["default"](response.data.storage.id, response.data.storage.name, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at), response.data.date, table_data, response.data.created_at, response.data.updated_at, response.data.deleted_at);
       console.log(_this.item);
@@ -4733,7 +4743,7 @@ __webpack_require__.r(__webpack_exports__);
     addToTable: function addToTable() {
       //id = -1, table_id используется чтобы нумерация строк происходила с 1 и дальше
       //TODO: при реализации удаления строки из таблицы, переделать нумерацию, чтобы было max_id + 1
-      this.item.table_rows.push(new _code_models_FinanceDocumentTableRow__WEBPACK_IMPORTED_MODULE_1__["default"](null, this.item.table_rows.length + 1)); //console.log(this.item.table_rows)
+      this.item.table_rows.push(new _code_models_FinanceDocumentTableRow__WEBPACK_IMPORTED_MODULE_1__["default"](null)); //console.log(this.item.table_rows)
     },
     //обработчик события cell-dblclick - обрабатывает двойной щелчок по выбраной клетке
     //чисто технически, его можно переделать в rowEdit, но пока не горит
@@ -4751,10 +4761,17 @@ __webpack_require__.r(__webpack_exports__);
       this.loaded = false; //пост-запрос
       //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
 
-      axios.post("/api/income", {
-        items: this.item.getDataForServer()
+      console.log(this.item.getDataForServer());
+      axios.post("/api/income/".concat(this.item.id), {
+        item: this.item.getDataForServer()
       }).then(function (response) {
         console.log(response.data);
+
+        _this2.$notify({
+          type: 'success',
+          title: 'Успешно!',
+          message: "\u041F\u043E\u0441\u0442\u0443\u043F\u043B\u0435\u043D\u0438\u0435 \u0441 Id = ".concat(_this2.item.id, " \u0443\u0441\u043F\u0435\u0448\u043D\u043E \u0438\u0437\u043C\u0435\u043D\u0435\u043D\u043E!")
+        });
       })["catch"](function (error) {
         //ошибка - выводим
         _this2.$notify.error({
@@ -4772,12 +4789,12 @@ __webpack_require__.r(__webpack_exports__);
       if (this.item.agent.id === -1) this.errors.push("Поле \"Поставщик\" должно быть заполнено");
       if (this.item.storage.id === -1) this.errors.push("Поле \"Склад\" должно быть заполнено");
       this.item.table_rows.forEach(function (p) {
-        if (p.nomenclature.id === -1) _this3.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u041D\u043E\u043C\u0435\u043D\u043A\u043B\u0430\u0442\u0443\u0440\u0430\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
-        if (p.characteristic.serial === "") _this3.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0421\u0435\u0440\u0438\u044F\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
-        if (p.characteristic.expiry_date === "") _this3.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0421\u0440\u043E\u043A \u0433\u043E\u0434\u043D\u043E\u0441\u0442\u0438\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
-        if (p.income_price <= 0) _this3.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u0426\u0435\u043D\u0430 \u043F\u043E\u0441\u0442\u0443\u043F\u043B\u0435\u043D\u0438\u044F\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0431\u043E\u043B\u044C\u0448\u0435 0")); //if (p.sell_price <= 0) this.errors.push(`Строка № ${p.table_id}. Поле \"Цена продажи\" должно быть больше 0`);
+        if (p.nomenclature.id === -1) _this3.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(_this3.item.table_rows.indexOf(p) + 1, ". \u041F\u043E\u043B\u0435 \"\u041D\u043E\u043C\u0435\u043D\u043A\u043B\u0430\u0442\u0443\u0440\u0430\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
+        if (p.characteristic.serial === "") _this3.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(_this3.item.table_rows.indexOf(p) + 1, ". \u041F\u043E\u043B\u0435 \"\u0421\u0435\u0440\u0438\u044F\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
+        if (p.characteristic.expiry_date === "") _this3.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(_this3.item.table_rows.indexOf(p) + 1, ". \u041F\u043E\u043B\u0435 \"\u0421\u0440\u043E\u043A \u0433\u043E\u0434\u043D\u043E\u0441\u0442\u0438\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u043E"));
+        if (p.income_price <= 0) _this3.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(_this3.item.table_rows.indexOf(p) + 1, ". \u041F\u043E\u043B\u0435 \"\u0426\u0435\u043D\u0430 \u043F\u043E\u0441\u0442\u0443\u043F\u043B\u0435\u043D\u0438\u044F\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0431\u043E\u043B\u044C\u0448\u0435 0")); //if (p.sell_price <= 0) this.errors.push(`Строка № ${this.item.table_rows.indexOfp}. Поле \"Цена продажи\" должно быть больше 0`);
 
-        if (p.count <= 0) _this3.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(p.table_id, ". \u041F\u043E\u043B\u0435 \"\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0431\u043E\u043B\u044C\u0448\u0435 0"));
+        if (p.count <= 0) _this3.errors.push("\u0421\u0442\u0440\u043E\u043A\u0430 \u2116 ".concat(_this3.item.table_rows.indexOf(p) + 1, ". \u041F\u043E\u043B\u0435 \"\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E\" \u0434\u043E\u043B\u0436\u043D\u043E \u0431\u044B\u0442\u044C \u0431\u043E\u043B\u044C\u0448\u0435 0"));
       });
       this.showErrors();
       return this.errors.length === 0;
@@ -104858,7 +104875,31 @@ var render = function() {
                                       label: "№",
                                       "min-width": "45",
                                       index: 1
-                                    }
+                                    },
+                                    scopedSlots: _vm._u(
+                                      [
+                                        {
+                                          key: "default",
+                                          fn: function(scope) {
+                                            return [
+                                              _c("div", [
+                                                _vm._v(
+                                                  " " +
+                                                    _vm._s(
+                                                      _vm.item.table_rows.indexOf(
+                                                        scope.row
+                                                      ) + 1
+                                                    )
+                                                )
+                                              ])
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      null,
+                                      false,
+                                      1606225749
+                                    )
                                   }),
                                   _vm._v(" "),
                                   _c("el-table-column", {
@@ -104874,8 +104915,8 @@ var render = function() {
                                           key: "default",
                                           fn: function(scope) {
                                             return [
-                                              _vm.selectingRow.table_id ===
-                                              scope.row.table_id
+                                              _vm.selectingRow.id ===
+                                              scope.row.id
                                                 ? _c(
                                                     "el-input",
                                                     {
@@ -104933,7 +104974,7 @@ var render = function() {
                                       ],
                                       null,
                                       false,
-                                      3537308311
+                                      2794602935
                                     )
                                   }),
                                   _vm._v(" "),
@@ -104960,8 +105001,8 @@ var render = function() {
                                           key: "default",
                                           fn: function(scope) {
                                             return [
-                                              _vm.selectingRow.table_id ===
-                                              scope.row.table_id
+                                              _vm.selectingRow.id ===
+                                              scope.row.id
                                                 ? _c("el-input", {
                                                     attrs: { placeholder: "" },
                                                     model: {
@@ -104996,7 +105037,7 @@ var render = function() {
                                       ],
                                       null,
                                       false,
-                                      1291027287
+                                      1132122487
                                     )
                                   }),
                                   _vm._v(" "),
@@ -105014,8 +105055,8 @@ var render = function() {
                                           key: "default",
                                           fn: function(scope) {
                                             return [
-                                              _vm.selectingRow.table_id ===
-                                              scope.row.table_id
+                                              _vm.selectingRow.id ===
+                                              scope.row.id
                                                 ? _c("el-date-picker", {
                                                     staticStyle: {
                                                       width: "100%"
@@ -105057,7 +105098,7 @@ var render = function() {
                                       ],
                                       null,
                                       false,
-                                      1370417658
+                                      680663578
                                     )
                                   }),
                                   _vm._v(" "),
@@ -105074,8 +105115,8 @@ var render = function() {
                                           key: "default",
                                           fn: function(scope) {
                                             return [
-                                              _vm.selectingRow.table_id ===
-                                              scope.row.table_id
+                                              _vm.selectingRow.id ===
+                                              scope.row.id
                                                 ? _c(
                                                     "el-input",
                                                     {
@@ -105122,7 +105163,7 @@ var render = function() {
                                       ],
                                       null,
                                       false,
-                                      1936977744
+                                      1984670448
                                     )
                                   }),
                                   _vm._v(" "),
@@ -105139,8 +105180,8 @@ var render = function() {
                                           key: "default",
                                           fn: function(scope) {
                                             return [
-                                              _vm.selectingRow.table_id ===
-                                              scope.row.table_id
+                                              _vm.selectingRow.id ===
+                                              scope.row.id
                                                 ? _c(
                                                     "el-input",
                                                     {
@@ -105189,7 +105230,7 @@ var render = function() {
                                       ],
                                       null,
                                       false,
-                                      1780205200
+                                      3611927856
                                     )
                                   }),
                                   _vm._v(" "),
@@ -105207,8 +105248,8 @@ var render = function() {
                                           key: "default",
                                           fn: function(scope) {
                                             return [
-                                              _vm.selectingRow.table_id ===
-                                              scope.row.table_id
+                                              _vm.selectingRow.id ===
+                                              scope.row.id
                                                 ? _c(
                                                     "el-input",
                                                     {
@@ -105264,7 +105305,7 @@ var render = function() {
                                       ],
                                       null,
                                       false,
-                                      1746373200
+                                      409912816
                                     )
                                   })
                                 ],
@@ -105280,7 +105321,7 @@ var render = function() {
                               attrs: { type: "primary" },
                               on: { click: _vm.submit }
                             },
-                            [_vm._v("Добавить")]
+                            [_vm._v("Редактировать")]
                           ),
                           _vm._v(" "),
                           _c(
@@ -105578,7 +105619,31 @@ var render = function() {
                                       label: "№",
                                       "min-width": "45",
                                       index: 1
-                                    }
+                                    },
+                                    scopedSlots: _vm._u(
+                                      [
+                                        {
+                                          key: "default",
+                                          fn: function(scope) {
+                                            return [
+                                              _c("div", [
+                                                _vm._v(
+                                                  " " +
+                                                    _vm._s(
+                                                      _vm.item.table_rows.indexOf(
+                                                        scope.row
+                                                      ) + 1
+                                                    )
+                                                )
+                                              ])
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      null,
+                                      false,
+                                      1606225749
+                                    )
                                   }),
                                   _vm._v(" "),
                                   _c("el-table-column", {
@@ -105594,8 +105659,8 @@ var render = function() {
                                           key: "default",
                                           fn: function(scope) {
                                             return [
-                                              _vm.selectingRow.table_id ===
-                                              scope.row.table_id
+                                              _vm.selectingRow.id ===
+                                              scope.row.id
                                                 ? _c(
                                                     "el-input",
                                                     {
@@ -105653,7 +105718,7 @@ var render = function() {
                                       ],
                                       null,
                                       false,
-                                      3537308311
+                                      2794602935
                                     )
                                   }),
                                   _vm._v(" "),
@@ -105680,8 +105745,8 @@ var render = function() {
                                           key: "default",
                                           fn: function(scope) {
                                             return [
-                                              _vm.selectingRow.table_id ===
-                                              scope.row.table_id
+                                              _vm.selectingRow.id ===
+                                              scope.row.id
                                                 ? _c("el-input", {
                                                     attrs: { placeholder: "" },
                                                     model: {
@@ -105716,7 +105781,7 @@ var render = function() {
                                       ],
                                       null,
                                       false,
-                                      1291027287
+                                      1132122487
                                     )
                                   }),
                                   _vm._v(" "),
@@ -105734,8 +105799,8 @@ var render = function() {
                                           key: "default",
                                           fn: function(scope) {
                                             return [
-                                              _vm.selectingRow.table_id ===
-                                              scope.row.table_id
+                                              _vm.selectingRow.id ===
+                                              scope.row.id
                                                 ? _c("el-date-picker", {
                                                     staticStyle: {
                                                       width: "100%"
@@ -105777,7 +105842,7 @@ var render = function() {
                                       ],
                                       null,
                                       false,
-                                      1370417658
+                                      680663578
                                     )
                                   }),
                                   _vm._v(" "),
@@ -105794,8 +105859,8 @@ var render = function() {
                                           key: "default",
                                           fn: function(scope) {
                                             return [
-                                              _vm.selectingRow.table_id ===
-                                              scope.row.table_id
+                                              _vm.selectingRow.id ===
+                                              scope.row.id
                                                 ? _c(
                                                     "el-input",
                                                     {
@@ -105842,7 +105907,7 @@ var render = function() {
                                       ],
                                       null,
                                       false,
-                                      1936977744
+                                      1984670448
                                     )
                                   }),
                                   _vm._v(" "),
@@ -105859,8 +105924,8 @@ var render = function() {
                                           key: "default",
                                           fn: function(scope) {
                                             return [
-                                              _vm.selectingRow.table_id ===
-                                              scope.row.table_id
+                                              _vm.selectingRow.id ===
+                                              scope.row.id
                                                 ? _c(
                                                     "el-input",
                                                     {
@@ -105909,7 +105974,7 @@ var render = function() {
                                       ],
                                       null,
                                       false,
-                                      1780205200
+                                      3611927856
                                     )
                                   }),
                                   _vm._v(" "),
@@ -105927,8 +105992,8 @@ var render = function() {
                                           key: "default",
                                           fn: function(scope) {
                                             return [
-                                              _vm.selectingRow.table_id ===
-                                              scope.row.table_id
+                                              _vm.selectingRow.id ===
+                                              scope.row.id
                                                 ? _c(
                                                     "el-input",
                                                     {
@@ -105984,7 +106049,7 @@ var render = function() {
                                       ],
                                       null,
                                       false,
-                                      1746373200
+                                      409912816
                                     )
                                   })
                                 ],
@@ -126460,16 +126525,14 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var FinanceDocumentTableRow = /*#__PURE__*/function () {
   function FinanceDocumentTableRow() {
     var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : -1;
-    var table_id = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-    var nomenclature = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : new _Nomenclature__WEBPACK_IMPORTED_MODULE_0__["default"]();
-    var characteristic = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : new _Characteristic__WEBPACK_IMPORTED_MODULE_1__["default"]();
-    var count = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
-    var income_price = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 0;
+    var nomenclature = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new _Nomenclature__WEBPACK_IMPORTED_MODULE_0__["default"]();
+    var characteristic = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : new _Characteristic__WEBPACK_IMPORTED_MODULE_1__["default"]();
+    var count = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+    var income_price = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
 
     _classCallCheck(this, FinanceDocumentTableRow);
 
     this.id = id;
-    this.table_id = table_id;
     this.nomenclature = nomenclature;
     this.characteristic = characteristic;
     this.count = count;
@@ -126482,9 +126545,9 @@ var FinanceDocumentTableRow = /*#__PURE__*/function () {
     value: function getDataForServer() {
       return {
         id: this.id,
-        table_id: this.table_id,
         nomenclature_id: this.nomenclature.id,
         characteristic_id: this.characteristic.id,
+        characteristic_price_id: this.characteristic.characteristic_price.id,
         serial: this.characteristic.serial,
         expiry_date: this.characteristic.expiry_date,
         count: this.count,
@@ -126495,7 +126558,7 @@ var FinanceDocumentTableRow = /*#__PURE__*/function () {
   }, {
     key: "isValid",
     value: function isValid() {
-      return !(this.nomenclature.id === -1 || this.nomenclature.characteristic.serial === "" || this.nomenclature.characteristic.expiry_date === "" || this.income_price <= 0 || this.sell_price <= 0 || this.count <= 0);
+      return !(this.nomenclature.id === -1 || this.nomenclature.characteristic.serial === "" || this.nomenclature.characteristic.expiry_date === "" || this.income_price <= 0 || this.characteristic.characteristic_price.price <= 0 || this.count <= 0);
     }
   }]);
 

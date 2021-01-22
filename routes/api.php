@@ -33,8 +33,8 @@ Route::get('/producer/filter', [App\Http\Controllers\ProducerController::class, 
 Route::get('/nomenclature/filter', [App\Http\Controllers\NomenclatureController::class, 'filter']);
 
 Route::post('/income' , [\App\Http\Controllers\FinanceDocumentController::class, 'incomeCreate']);
+Route::post('/income/{id}' , [\App\Http\Controllers\FinanceDocumentController::class, 'incomeUpdate']);
 
-Route::post('/test' , [\App\Http\Controllers\WareController::class, 'index']);
 
 
 Route::get('/characteristic/for-nomenclature/{id}', [App\Http\Controllers\CharacteristicController::class, 'forNomenclature']);

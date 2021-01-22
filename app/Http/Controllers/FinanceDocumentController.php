@@ -8,8 +8,8 @@ use App\Models\CharacteristicPrice;
 use App\Models\FinanceDocument;
 use App\Models\FinanceDocumentTableRow;
 use App\Models\WareConnection;
-use App\Repositories\FinanceDocumentsRepository;
 use App\Repositories\CharacteristicPricesRepository;
+use App\Repositories\FinanceDocumentsRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -178,10 +178,11 @@ class FinanceDocumentController extends OriginController
         foreach ($meds as $med) {
 
             // получение изменяемой характеристики
-            $characteristic = Characteristic::find($med['id']);
+            $characteristic = Characteristic::find($med['characteristic_id']);
 
+            //todo: При впервые созданном объекте реализовать логику добавления БЕЗ поиска по id
             // получение сущности цена характеристики
-            $cp = CharacteristicPrice::find($characteristic->characteristic_price_id);
+            $cp = CharacteristicPrice::find($med['characteristic_price_id']);
 
             // внесение изменений в характеристику
             $characteristic->update($med);
@@ -197,20 +198,21 @@ class FinanceDocumentController extends OriginController
 
             // TODO: если id табличной строки не требуется и он уже присутствует - использовать имеющийся
 
+
             // поиск строки
-            $tableRow = FinanceDocumentTableRow::find($med['table_row_id']);
+            $tableRow = FinanceDocumentTableRow::find($med['id']);
 
             // обновление проводки документа
             $tableRow->update(['count' => $med['count'], 'price' => $med['income_price']]);
 
-            $wc = WareConnection::find($med['ware_connection_id']);
+            //$wc = WareConnection::find($med['ware_connection_id']);
 
             //обновление проводки для регистр накопления
-            $wc->update(['change' => $med['count']]);
+           // $wc->update(['change' => $med['count']]);
 
         } // foreach
 
-        return $this->financeDocumentRepository->getTable()->toJson();
+       // return $this->financeDocumentRepository->getTable()->toJson();
     } // incomeUpdate
 
 
