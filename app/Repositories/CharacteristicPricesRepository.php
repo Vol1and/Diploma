@@ -13,4 +13,9 @@ class CharacteristicPricesRepository extends BaseRepository
     {
         return Model::class;
     }
+
+    public function getLatestPriceById()
+    {
+        return $this->startConditions()->max('id')->where();
+    }
 }

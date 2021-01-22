@@ -15,7 +15,6 @@ class CreateFinanceDocumentTableRowsTable extends Migration
     {
         Schema::create('finance_document_table_rows', function (Blueprint $table) {
             $table->id();
-            $table->integer('table_id')->unsigned();
             $table->bigInteger('characteristic_id')->unsigned();
             $table->bigInteger('finance_document_id')->unsigned();
             $table->integer('count');

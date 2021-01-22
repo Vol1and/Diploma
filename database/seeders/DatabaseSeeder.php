@@ -25,7 +25,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CharacteristicSeeder::class);
         $this->call(FinanceDocumentSeeder::class);
         $this->call(FinanceDocumentTableRowSeeder::class);
-        $this->call(WareSeeder::class);
         $this->call(WareConnectionSeeder::class);
         // \App\Models\User::factory(10)->create();
     }

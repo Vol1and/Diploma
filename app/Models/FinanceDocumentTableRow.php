@@ -8,7 +8,6 @@ class FinanceDocumentTableRow extends Model
 {
     protected $fillable = [
         'count',
-        'table_id',
         'characteristic_id',
         'finance_document_id',
         'price'

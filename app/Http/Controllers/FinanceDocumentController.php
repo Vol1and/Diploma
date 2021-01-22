@@ -5,12 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\DocumentCreateRequest;
 use App\Models\Characteristic;
 use App\Models\CharacteristicPrice;
-use App\Models\DocConnection;
 use App\Models\FinanceDocument;
 use App\Models\FinanceDocumentTableRow;
-use App\Models\Ware;
 use App\Models\WareConnection;
 use App\Repositories\FinanceDocumentsRepository;
+use App\Repositories\CharacteristicPricesRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -19,6 +18,7 @@ class FinanceDocumentController extends OriginController
 {
     //ссылка на хранилище модели Producer
     private $financeDocumentRepository;
+    private $characteristicPricesRepository;
 
     public function __construct()
     {
@@ -27,6 +27,7 @@ class FinanceDocumentController extends OriginController
 
         //инициализация хранилища
         $this->financeDocumentRepository = app(FinanceDocumentsRepository::class);
+        $this->characteristicPricesRepository = app(CharacteristicPricesRepository::class);
     }
 
 
@@ -124,6 +125,7 @@ class FinanceDocumentController extends OriginController
         $doc = (new FinanceDocument())->create(['agent_id' => $data['agent_id'],'date' => new Carbon($data['date']) ,'is_set' => true, 'doc_type_id' => 1, 'storage_id'=> $data['storage_id'] ]);
 
         //todo:Останавливать процесс записи, если какой то из этапов выкидывает ошибку
+
         // циклический проход по массиву медикаментов
         foreach ($meds as $med) {
 
@@ -135,18 +137,81 @@ class FinanceDocumentController extends OriginController
 
             // добавление новой проводки документа
             $tableRow = (new FinanceDocumentTableRow())->create(['characteristic_id' => $characteristic->id, 'finance_document_id' => $doc->id,
-                'count' => $med['count'], 'price' => $med['income_price'], 'table_id' => $med['table_id']]);
+                'count' => $med['count'], 'price' => $med['income_price']]);
 
             //создание проводки для регистр накопления
             $wc = (new WareConnection())->create(['characteristic_id' => $characteristic->id,'change' => $med['count']]);
 
             // TODO Удалить таблицу остатков, реализовать представление
             // создание записи в остатках, внесение изменений в остатки
-            $ware = (new Ware())->create(['characteristic_id' => $characteristic->id, 'stock' => $wc->change]);
+            // $ware = (new Ware())->create(['characteristic_id' => $characteristic->id, 'stock' => $wc->change]);
 
         } // foreach
-        // return view('deploy', compact('item', 'meds'));
-    }
+    } // incomeCreate
+
+
+    // метод создания приходного документа
+    public function incomeUpdate(DocumentCreateRequest $request, $id)
+    {
+        // поиск Документа найден по id
+        $doc = FinanceDocument::find($id);
+
+        // если не найден - возврат
+        if (empty($doc)) {
+            return back()
+                ->withErrors(['msg' => "Запись id=[{$id}] не найдена!"])
+                ->withInput();
+        }
+
+        // получение данных
+        $data = $request->input('item');
+        $meds = $data['table_rows'];
+
+        //TODO: реализовать вывод ошибки, если массив медикаментов пуст
+
+        // обновление информации о документе
+        $doc->update(['agent_id' => $data['agent_id'],'date' => new Carbon($data['date']) ,'is_set' => true, 'doc_type_id' => 1, 'storage_id'=> $data['storage_id'] ]);
+
+        //todo:Останавливать процесс записи, если какой то из этапов выкидывает ошибку
+
+        // циклический проход по массиву медикаментов
+        foreach ($meds as $med) {
+
+            // получение изменяемой характеристики
+            $characteristic = Characteristic::find($med['id']);
+
+            // получение сущности цена характеристики
+            $cp = CharacteristicPrice::find($characteristic->characteristic_price_id);
+
+            // внесение изменений в характеристику
+            $characteristic->update($med);
+
+            // если цена - не та что была раньше
+            if($cp->price !== $med['sell_price']) {
+                // создание новой цены для характеристики
+                $newCp = (new CharacteristicPrice())->create(['price' => $med['sell_price']]);
+
+                // обновление цены в характеристике
+                $characteristic->update(['characteristic_price_id' => $newCp->id]);
+            }
+
+            // TODO: если id табличной строки не требуется и он уже присутствует - использовать имеющийся
+
+            // поиск строки
+            $tableRow = FinanceDocumentTableRow::find($med['table_row_id']);
+
+            // обновление проводки документа
+            $tableRow->update(['count' => $med['count'], 'price' => $med['income_price']]);
+
+            $wc = WareConnection::find($med['ware_connection_id']);
+
+            //обновление проводки для регистр накопления
+            $wc->update(['change' => $med['count']]);
+
+        } // foreach
+
+        return $this->financeDocumentRepository->getTable()->toJson();
+    } // incomeUpdate
 
 
     public function filter($id)
