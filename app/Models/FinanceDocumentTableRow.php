@@ -10,6 +10,7 @@ class FinanceDocumentTableRow extends Model
         'count',
         'characteristic_id',
         'finance_document_id',
+        'ware_connection_id',
         'price'
     ];
 
@@ -30,10 +31,14 @@ class FinanceDocumentTableRow extends Model
         return $this->characteristic->nomenclature;
     }
 
-
     public function document()
     {
         return $this->belongsTo(FinanceDocument::class);
+    }
+
+    public function wareConnection()
+    {
+        return $this->belongsTo(WareConnection::class);
     }
 
     public function income_sum()

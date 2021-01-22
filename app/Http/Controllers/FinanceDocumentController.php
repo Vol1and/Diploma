@@ -135,16 +135,13 @@ class FinanceDocumentController extends OriginController
             // добавление новой характеристики
             $characteristic = (new Characteristic())->create($med + ['characteristic_price_id' => $cp->id]);
 
-            // добавление новой проводки документа
-            $tableRow = (new FinanceDocumentTableRow())->create(['characteristic_id' => $characteristic->id, 'finance_document_id' => $doc->id,
-                'count' => $med['count'], 'price' => $med['income_price']]);
-
             //создание проводки для регистр накопления
             $wc = (new WareConnection())->create(['characteristic_id' => $characteristic->id,'change' => $med['count']]);
 
-            // TODO Удалить таблицу остатков, реализовать представление
-            // создание записи в остатках, внесение изменений в остатки
-            // $ware = (new Ware())->create(['characteristic_id' => $characteristic->id, 'stock' => $wc->change]);
+            // добавление новой проводки документа
+            $tableRow = (new FinanceDocumentTableRow())->create(['characteristic_id' => $characteristic->id,
+                'ware_connection_id' =>  $wc->id, 'finance_document_id' => $doc->id,
+                'count' => $med['count'], 'price' => $med['income_price']]);
 
         } // foreach
     } // incomeCreate
@@ -180,7 +177,27 @@ class FinanceDocumentController extends OriginController
             // получение изменяемой характеристики
             $characteristic = Characteristic::find($med['characteristic_id']);
 
-            //todo: При впервые созданном объекте реализовать логику добавления БЕЗ поиска по id
+            // если не найдена характеристика - создаётся новая
+            if (empty($characteristic)) {
+
+                // создание цены для характеристики
+                $cp = (new CharacteristicPrice())->create(['price' => $med['sell_price']]);
+
+                // добавление новой характеристики
+                $characteristic = (new Characteristic())->create(['characteristic_price_id' => $cp->id] + $med);
+
+                //создание проводки для регистр накопления
+                $wc = (new WareConnection())->create(['characteristic_id' => $characteristic->id,'change' => $med['count']]);
+
+                // добавление новой проводки документа
+                $tableRow = (new FinanceDocumentTableRow())->create(['characteristic_id' => $characteristic->id,
+                    'ware_connection_id' =>  $wc->id, 'finance_document_id' => $doc->id,
+                    'count' => $med['count'], 'price' => $med['income_price']]);
+
+                continue;
+            } // if
+
+
             // получение сущности цена характеристики
             $cp = CharacteristicPrice::find($med['characteristic_price_id']);
 
@@ -205,10 +222,10 @@ class FinanceDocumentController extends OriginController
             // обновление проводки документа
             $tableRow->update(['count' => $med['count'], 'price' => $med['income_price']]);
 
-            //$wc = WareConnection::find($med['ware_connection_id']);
+            $wc = WareConnection::find($tableRow->wareConnection->id);
 
             //обновление проводки для регистр накопления
-           // $wc->update(['change' => $med['count']]);
+            $wc->update(['change' => $med['count']]);
 
         } // foreach
 
