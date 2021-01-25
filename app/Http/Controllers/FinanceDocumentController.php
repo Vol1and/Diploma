@@ -122,7 +122,7 @@ class FinanceDocumentController extends OriginController
         //TODO: реализовать вывод ошибки, если массив медикаментов пуст
 
         // добавление нового документа
-        $doc = (new FinanceDocument())->create(['agent_id' => $data['agent_id'],'date' => new Carbon($data['date']) ,'is_set' => true, 'doc_type_id' => 1, 'storage_id'=> $data['storage_id'] ]);
+        $doc = (new FinanceDocument())->create(['agent_id' => $data['agent_id'],'comment' => $data['comment'],'date' => new Carbon($data['date']) ,'is_set' => true, 'doc_type_id' => 1, 'storage_id'=> $data['storage_id'] ]);
 
         //todo:Останавливать процесс записи, если какой то из этапов выкидывает ошибку
 
@@ -130,10 +130,13 @@ class FinanceDocumentController extends OriginController
         foreach ($meds as $med) {
 
             // создание цены для характеристики
-            $cp = (new CharacteristicPrice())->create(['price' => $med['sell_price']]);
+            $cp = CharacteristicPrice::create(['price' => $med['sell_price']]);
 
+
+
+            $med['characteristic_price_id'] = $cp->id;
             // добавление новой характеристики
-            $characteristic = (new Characteristic())->create($med + ['characteristic_price_id' => $cp->id]);
+            $characteristic = (new Characteristic())->create($med);
 
             //создание проводки для регистр накопления
             $wc = (new WareConnection())->create(['characteristic_id' => $characteristic->id,'change' => $med['count']]);
@@ -167,7 +170,7 @@ class FinanceDocumentController extends OriginController
         //TODO: реализовать вывод ошибки, если массив медикаментов пуст
 
         // обновление информации о документе
-        $doc->update(['agent_id' => $data['agent_id'],'date' => new Carbon($data['date']) ,'is_set' => true, 'doc_type_id' => 1, 'storage_id'=> $data['storage_id'] ]);
+        $doc->update(['agent_id' => $data['agent_id'],'comment' => $data['comment'],'date' => new Carbon($data['date']) ,'is_set' => true, 'doc_type_id' => 1, 'storage_id'=> $data['storage_id'] ]);
 
         //todo:Останавливать процесс записи, если какой то из этапов выкидывает ошибку
 
@@ -183,8 +186,9 @@ class FinanceDocumentController extends OriginController
                 // создание цены для характеристики
                 $cp = (new CharacteristicPrice())->create(['price' => $med['sell_price']]);
 
+                $med['characteristic_price_id'] = $cp->id;
                 // добавление новой характеристики
-                $characteristic = (new Characteristic())->create(['characteristic_price_id' => $cp->id] + $med);
+                $characteristic = (new Characteristic())->create($med);
 
                 //создание проводки для регистр накопления
                 $wc = (new WareConnection())->create(['characteristic_id' => $characteristic->id,'change' => $med['count']]);
@@ -233,8 +237,15 @@ class FinanceDocumentController extends OriginController
     } // incomeUpdate
 
 
-    public function filter($id)
+    public function incomeFilter(Request $request)
     {
-        //
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
+        $agent_id = $request->input('agent_id');
+        $storage_id = $request->input('storage_id');
+
+        $result = $this->financeDocumentRepository->getFilter($start_date,$end_date, $agent_id, $storage_id);
+
+        return $result->toJson();
     }
 }

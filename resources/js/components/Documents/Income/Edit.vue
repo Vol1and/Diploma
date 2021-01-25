@@ -10,6 +10,15 @@
                     </div>
                     <el-form label-width="100px" label-position="right">
 
+                        <div style="margin-bottom: 30px">
+                        <el-button type="primary" @click="submit"><i class="el-icon-finished"></i>  Провести</el-button>
+                        <el-button  @click="submit"><i class="el-icon-folder-checked"></i>  Записать</el-button>
+                        <el-button style="float: right" type="error" @click="()=>{this.$router.go(-1)}"><i class="el-icon-close"> Выход </i></el-button>
+                        </div>
+
+
+
+
 
                         <el-row>
                             <el-col :span="4">
@@ -22,7 +31,7 @@
 
                                 <el-form-item label="Дата: ">
                                     <el-date-picker id="name_input" style="width: 100%" v-model="item.date"
-                                                    type="datetime" format="yyyy-MM-dd HH:mm:ss" />
+                                                    type="datetime" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss"/>
                                 </el-form-item>
                             </el-col>
 
@@ -56,7 +65,6 @@
                                       sum-text="  "
                             >
                                 <el-table-column
-                                    prop="table_id"
                                     label="№"
                                     min-width="45"
                                     :index="1"
@@ -64,7 +72,7 @@
                                     <template slot-scope="scope">
 
 
-                                        <div> {{item.table_rows.indexOf(scope.row) + 1}}</div>
+                                        <div> {{ item.table_rows.indexOf(scope.row) + 1 }}</div>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
@@ -72,6 +80,7 @@
                                     label="Наименование"
                                     min-width="200"
                                     :index="2"
+                                    sortable
                                 >
                                     <template slot-scope="scope">
 
@@ -89,6 +98,7 @@
                                     label="Производитель"
                                     min-width="200"
                                     :index="3"
+                                    sortable
                                 >
                                 </el-table-column>
                                 <el-table-column
@@ -96,6 +106,7 @@
                                     label="Серия"
                                     min-width="100"
                                     :index="4"
+                                    sortable
                                 >
                                     <template slot-scope="scope">
 
@@ -113,6 +124,7 @@
                                     min-width="100"
                                     :index="5"
 
+                                    sortable
                                 >
                                     <template slot-scope="scope">
                                         <el-date-picker v-if="selectingRow.id === scope.row.id"
@@ -121,7 +133,7 @@
                                                         format="yyyy/MM/dd"
                                                         value-format="yyyy/MM/dd"/>
 
-                                        <div v-else> {{ scope.row.characteristic.expiry_date  }}</div>
+                                        <div v-else> {{ scope.row.characteristic.expiry_date }}</div>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
@@ -129,6 +141,7 @@
                                     label="Кол-во"
                                     min-width="100"
                                     :index="6"
+                                    sortable
                                 >
                                     <template slot-scope="scope">
 
@@ -144,6 +157,7 @@
                                     label="Цена закупки"
                                     min-width="100"
                                     :index="7"
+                                    sortable
                                 >
                                     <template slot-scope="scope">
 
@@ -159,25 +173,29 @@
                                     label="Цена продажи"
                                     min-width="100"
                                     :index="7"
+                                    sortable
                                 >
                                     <template slot-scope="scope">
 
                                         <el-input v-if="selectingRow.id === scope.row.id" type="number"
-                                                  v-model="scope.row.characteristic.characteristic_price.price" placeholder="">
+                                                  v-model="scope.row.characteristic.characteristic_price.price"
+                                                  placeholder="">
                                             <template slot="append">руб.</template>
                                         </el-input>
-                                        <div v-else> {{ scope.row.characteristic.characteristic_price.price }} руб.</div>
+                                        <div v-else> {{ scope.row.characteristic.characteristic_price.price }} руб.
+                                        </div>
                                     </template>
                                 </el-table-column>
                             </el-table>
                         </el-card>
-
-
-                            <el-button type="primary" @click="submit">Редактировать</el-button>
-                            <el-button @click="()=>{this.$router.go(-1)}">Отмена</el-button>
-
                     </el-form>
 
+                    <el-divider content-position="left"><h4>Комментарий</h4></el-divider>
+                    <el-input  type="textarea"
+                               :rows="3"
+                               placeholder="Комментарий"
+                               v-model="item.comment"
+                    ></el-input>
                 </el-card>
 
 
@@ -224,54 +242,53 @@ export default {
         }
     },
 
-    beforeCreate() {
+    created() {
 
-        axios.get(`/api/income-documents/${this.$route.params.id}`).then(response => {
-            console.log(response)
-                this.is_visible = true;
-                let table_data = [];
-                if (response.data.table_rows !== undefined && response.data.table_rows.length > 0) response.data.table_rows.forEach(row => table_data.push(
-                    new FinanceDocumentTableRow(row.id,
-
-                        new Nomenclature(row.nomenclature.id,
-                            row.nomenclature.name,
-                            new Producer(row.nomenclature.producer.id, row.nomenclature.producer.name, row.nomenclature.producer.country),
-                         ),
-                        new Characteristic(
-                            row.characteristic.id,
-                            row.characteristic.serial,
-                            row.characteristic.expiry_date,
-                            new CharacteristicPrice(row.characteristic.characteristic_price.id,row.characteristic.characteristic_price.price)
-                        ),
-                        row.count,
-                        row.price,
-                        )));
-
-                this.item = new IncomeDocument(response.data.id,
-                    new Agent(response.data.agent.id, response.data.agent.name, response.data.agent.billing, response.data.agent.address, response.data.agent.description, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at),
-                    new Storage(response.data.storage.id, response.data.storage.name, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at),
-                    response.data.date,
-                    table_data,
-                    response.data.created_at,
-                    response.data.updated_at,
-                    response.data.deleted_at);
-
-                console.log(this.item)
-
-            }
-        ).catch((error) => {
-            console.log(error);
-            ///this.$router.push({name: 'income.index'});
-        })
+        this.update();
     },
     methods: {
 
-        //метод-заглушка
         update() {
+            axios.get(`/api/income-documents/${this.$route.params.id}`).then(response => {
+                    console.log(response)
+                    this.is_visible = true;
+                    let table_data = [];
+                    if (response.data.table_rows !== undefined && response.data.table_rows.length > 0) response.data.table_rows.forEach(row => table_data.push(
+                        new FinanceDocumentTableRow(row.id,
 
+                            new Nomenclature(row.nomenclature.id,
+                                row.nomenclature.name,
+                                new Producer(row.nomenclature.producer.id, row.nomenclature.producer.name, row.nomenclature.producer.country),
+                            ),
+                            new Characteristic(
+                                row.characteristic.id,
+                                row.characteristic.serial,
+                                row.characteristic.expiry_date,
+                                new CharacteristicPrice(row.characteristic.characteristic_price.id, row.characteristic.characteristic_price.price)
+                            ),
+                            row.count,
+                            row.price,
+                        )));
 
-        }
-        ,
+                    this.item = new IncomeDocument(response.data.id,
+                        new Agent(response.data.agent.id, response.data.agent.name, response.data.agent.billing, response.data.agent.address, response.data.agent.description, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at),
+                        new Storage(response.data.storage.id, response.data.storage.name, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at),
+                        response.data.date,
+                        table_data,
+                        null,
+                        response.data.comment,
+                        response.data.created_at,
+                        response.data.updated_at,
+                        response.data.deleted_at);
+
+                    console.log(this.item)
+
+                }
+            ).catch((error) => {
+                console.log(error);
+                ///this.$router.push({name: 'income.index'});
+            })
+        },
         //метод добавляет новую пустую строку в массив table_rows, и, соответственно в табличную часть формы
         addToTable() {
             //id = -1, table_id используется чтобы нумерация строк происходила с 1 и дальше
@@ -294,6 +311,7 @@ export default {
             //не проходит валидацию - возвращаем
             if (!this.validateFields()) return;
 
+
             //блокируем кнопку submit
             this.loaded = false;
 
@@ -301,7 +319,9 @@ export default {
             //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
             console.log(this.item.getDataForServer());
             axios.post(`/api/income/${this.item.id}`, {item: this.item.getDataForServer()}).then((response) => {
+                this.selectingRow = new FinanceDocumentTableRow(null);
                 console.log(response.data);
+                this.update();
                 this.$notify({
 
                     type: 'success',

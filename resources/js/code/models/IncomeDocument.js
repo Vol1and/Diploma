@@ -3,12 +3,13 @@ import Agent from "./Agent";
 
 class IncomeDocument {
     constructor(id = -1, agent = new Agent(), storage = new Storage(),
-                date = "",table_rows = [],income_sum = null, created_at = null, updated_at = null, deleted_at = null) {
+                date = "",table_rows = [],income_sum = null,comment = "", created_at = null, updated_at = null, deleted_at = null) {
 
         this.id = id;
         this.agent = agent;
         this.storage = storage;
         this.date = date;
+        this.comment = comment;
         this.table_rows = table_rows;
         this.income_sum = income_sum;
         this.created_at = created_at;
@@ -26,7 +27,8 @@ class IncomeDocument {
             agent_id: this.agent.id,
             storage_id: this.storage.id,
             date: this.date,
-            table_rows: table_rows
+            table_rows: table_rows,
+            comment: this.comment
         }
     }
 

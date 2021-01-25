@@ -12,48 +12,54 @@
                         Добавить
                     </router-link>
                 </el-col>
-                <!--                <el-col justify="center" :span="8">-->
-                <!--                    <el-col :span="8" :offset="8">-->
-                <!--                        <el-button icon="el-icon-s-operation" style="width: 100%" @click="switch_filter()"-->
-                <!--                                   v-if="!filter_visible">-->
-                <!--                            Фильтры-->
-                <!--                        </el-button>-->
-                <!--                        <el-button @click="switch_filter()" style="width: 100%" v-else type="danger">Закрыть</el-button>-->
-                <!--                    </el-col>-->
+                <el-col justify="center" :span="8">
+                    <el-col :span="8" :offset="8">
+                        <el-button icon="el-icon-s-operation" style="width: 100%" @click="switch_filter()"
+                                   v-if="!filter_visible">
+                            Фильтры
+                        </el-button>
+                        <el-button @click="switch_filter()" style="width: 100%" v-else type="danger">Закрыть</el-button>
+                    </el-col>
+                </el-col>
 
-                <!--                </el-col>-->
-
-                <el-col :offset="8" :span="8">
+                <el-col :span="8">
                     <el-button icon="el-icon-refresh" @click="update" :disabled="is_reload" style="float:right;">
                         Обновить
                     </el-button>
                 </el-col>
             </el-row>
 
-            <!--            <el-row v-if="filter_visible">-->
-            <!--                <el-divider></el-divider>-->
-            <!--                <el-form :inline="true" class="demo-form-inline">-->
-            <!--                    <el-form-item style="   margin-bottom: 0;" label="Название:">-->
-            <!--                        <el-input v-model="filter_fields.name_str" placeholder="Название"></el-input>-->
-            <!--                    </el-form-item>-->
-            <!--                    <el-form-item style="   margin-bottom: 0;" label="Производитель:">-->
-            <!--                        <el-input readonly v-model="filter_fields.producer.name" placeholder="">-->
-            <!--                            <el-button type="primary" @click="selectingProducer" slot="append"-->
-            <!--                                       icon="el-icon-d-arrow-right"></el-button>-->
-            <!--                        </el-input>-->
-            <!--                    </el-form-item>-->
-            <!--                    <el-form-item style="   margin-bottom: 0;" label="Ценовая группа:">-->
-            <!--                        <el-input readonly v-model="filter_fields.price_type.name" placeholder="">-->
-            <!--                            <el-button type="primary" @click="selectingPriceType" slot="append"-->
-            <!--                                       icon="el-icon-d-arrow-right"></el-button>-->
-            <!--                        </el-input>-->
-            <!--                    </el-form-item>-->
-            <!--                    <el-form-item style="   margin-bottom: 0;">-->
-            <!--                        <el-button type="primary" @click="filter">Поиск</el-button>-->
-            <!--                    </el-form-item>-->
-            <!--                </el-form>-->
-
-            <!--            </el-row>-->
+            <el-row v-if="filter_visible">
+                <el-divider></el-divider>
+                <el-form :inline="true" class="demo-form-inline">
+                    <el-form-item style="   margin-bottom: 0;" label="Дата:">
+                        <el-date-picker
+                            v-model="filter_fields.date_range"
+                            type="daterange"
+                            range-separator="-"
+                            start-placeholder="Начало"
+                            end-placeholder="Конец"
+                            :default-value="null"
+                          >
+                        </el-date-picker>
+                    </el-form-item>
+                    <el-form-item style="   margin-bottom: 0;" label="Поставщик:">
+                        <el-input readonly v-model="filter_fields.agent.name" placeholder="">
+                            <el-button type="primary" @click="selectingAgent" slot="append"
+                                       icon="el-icon-d-arrow-right"></el-button>
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item style="   margin-bottom: 0;" label="Склад:">
+                        <el-input readonly v-model="filter_fields.storage.name" placeholder="">
+                            <el-button type="primary" @click="selectingStorage" slot="append"
+                                       icon="el-icon-d-arrow-right"></el-button>
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item style="   margin-bottom: 0;">
+                        <el-button type="primary" @click="filter">Поиск</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-row>
             <el-divider></el-divider>
             <el-table :data="page_of_items"
                       highlight-current-row
@@ -92,6 +98,7 @@
                 </el-table-column>
                 <el-table-column
 
+                    prop="comment"
                     label="Комментарий"
                     min-width="200"
                 >
@@ -109,16 +116,21 @@
                 </el-pagination>
             </div>
         </el-row>
-        <!--        <producer-choose-component @back="onBack" v-if="choosing_state === 1"-->
-        <!--                                   @selected="onSelectedProducer"></producer-choose-component>-->
-        <!--        <price-type-choose-component @back="onBack" v-if="choosing_state === 2"-->
-        <!--                                     @selected="onSelectedPriceType"></price-type-choose-component>-->
+        <agent-choose-component @back="onBack" v-if="choosing_state ===1"
+                                @selected="onSelectedAgent"></agent-choose-component>
+        <storage-choose-component @back="onBack" v-if="choosing_state ===2"
+                                  @selected="onSelectedStorage"></storage-choose-component>
     </div>
 </template>
 
 
 <script>
 import mixin_index from "../../../code/mixins/mixin_index";
+import FinanceDocumentTableRow from "../../../code/models/FinanceDocumentTableRow";
+import IncomeDocument from "../../../code/models/IncomeDocument";
+import Agent from "../../../code/models/Agent";
+import Storage from "../../../code/models/Storage";
+import moment from "moment";
 
 export default {
     name: "IncomeIndex",
@@ -128,9 +140,9 @@ export default {
         return {
 
             filter_fields: {
-                name_str: "",
-                producer: {name: ""},
-                price_type: {name: ""},
+                date_range : {},
+                agent: {name: ""},
+                storage: {name: ""},
 
             },
             choosing_state: 0,
@@ -140,56 +152,86 @@ export default {
     },
     methods: {
 
+        filterClear() {
 
-        // filter() {
-        //     this.filter_state = true;
-        //     axios.get('/api/nomenclature/filter', {
-        //         params: {
-        //             name: this.filter_fields.name_str,
-        //             producer_id: this.filter_fields.producer.id,
-        //             price_type_id: this.filter_fields.price_type.id
-        //         }
-        //     }).then((response) => {
-        //         this.page_of_items = [];
-        //         //оборачиваем каждый элемент пришедших данных в модель модуля
-        //         response.data.forEach(item => this.page_of_items.push(new Nomenclature(item.id,
-        //             item.name,
-        //             new Producer(item.producer.id, item.producer.name, item.producer.country, item.producer.created_at, item.producer.updated_at, item.producer.deleted_at),
-        //             new PriceType(item.price_type.id, item.price_type.name, item.price_type.margin, item.price_type.created_at, item.price_type.updated_at, item.price_type.deleted_at),
-        //             item.created_at,
-        //             item.updated_at,
-        //             item.deleted_at)))
-//
-        //     }).catch((error) => {
-        //         //если не ок - асинхронный ответ с кодом ошибки
-        //         console.log(`Что то пошло не так. Код ответа - ${error}`)
-        //     })
-//
-        // },
-//
-        // switch_filter() {
-        //     this.filter_visible = !this.filter_visible;
-        // },
+            this.filter_fields = {
+                date_range : {},
+                agent: {name: ""},
+                storage: {name: ""}
+            }
 
-        // selectingProducer() {
-        //     this.choosing_state = 1;
-        // },
-        // selectingPriceType() {
-        //     this.choosing_state = 2;
-        // },
-//
-        // onSelectedProducer(data) {
-        //     this.filter_fields.producer = data.producer;
-        //     this.choosing_state = 0;
-        // },
-//
-        // onSelectedPriceType(data) {
-        //     this.filter_fields.price_type = data.price_type;
-        //     this.choosing_state = 0;
-        // },
-        // onBack() {
-        //     this.choosing_state = 0;
-        // }
+        },
+
+
+        filter() {
+            this.filter_state = true;
+            console.log( {
+                    start_date: this.filter_fields.date_range[0],
+                    end_date: this.filter_fields.date_range[1],
+                    agent_id: this.filter_fields.agent.id,
+                    storage_id: this.filter_fields.storage.id
+            });
+            axios.get('/api/income-document/filter', {
+
+                params: {
+                    start_date: this.filter_fields.date_range[0] === undefined ? null:    moment(this.filter_fields.date_range[0]).format("YYYY-MM-DD hh:mm:ss") ,
+                    end_date: this.filter_fields.date_range[1] === undefined ? null:  moment(this.filter_fields.date_range[1]).format("YYYY-MM-DD hh:mm:ss") ,
+                    agent_id: this.filter_fields.agent.id,
+                    storage_id: this.filter_fields.storage.id
+                }
+
+            }).then((response) => {
+
+                let result = [];
+
+
+                //console.log(response.data)
+                let table_rows = [];
+                //оборачиваем каждый элемент пришедших данных в модель модуля
+                response.data.forEach(item => {
+
+
+                    if (item.table_rows !== undefined && item.table_rows.length > 0) item.table_rows.forEach(row => table_rows.push(new FinanceDocumentTableRow(row.id, row.nomenclature, row.characteristic, row.count, row.income_price, row.sell_price)));
+
+
+                    result.push(new IncomeDocument(item.id,
+                        new Agent(item.agent.id, item.agent.name, item.agent.billing, item.agent.address, item.agent.description, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at),
+                        new Storage(item.storage.id, item.storage.name, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at),
+                        item.date, table_rows,null, item.comment,
+                        item.created_at, item.updated_at, item.deleted_at))
+
+                })
+                this.page_of_items = result;
+            }).catch((error) => {
+                //если не ок - асинхронный ответ с кодом ошибки
+                console.log(`Что то пошло не так. Код ответа - ${error}`)
+            })
+
+        },
+
+        switch_filter() {
+            this.filter_visible = !this.filter_visible;
+        },
+
+        selectingStorage() {
+            this.choosing_state = 2;
+        },
+        selectingAgent() {
+            this.choosing_state = 1;
+        },
+
+        onSelectedStorage(data) {
+            this.filter_fields.storage = data.storage;
+            this.choosing_state = 0;
+        },
+
+        onSelectedAgent(data) {
+            this.filter_fields.agent = data.agent;
+            this.choosing_state = 0;
+        },
+        onBack() {
+            this.choosing_state = 0;
+        }
 
     }
 

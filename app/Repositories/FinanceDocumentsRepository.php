@@ -23,7 +23,8 @@ class FinanceDocumentsRepository extends BaseRepository
             'is_set',
             'doc_type_id',
             'agent_id',
-            'storage_id'
+            'storage_id',
+            'comment'
 
         ];
         return $this->startConditions()
@@ -41,7 +42,8 @@ class FinanceDocumentsRepository extends BaseRepository
             'is_set',
             'doc_type_id',
             'agent_id',
-            'storage_id'
+            'storage_id',
+            'comment'
         ];
         return $this->startConditions()
             ->select($columns)
@@ -50,6 +52,40 @@ class FinanceDocumentsRepository extends BaseRepository
             ->get()->first();
     }
 
+
+
+
+    public function getFilter($start_date = null,$end_date = null, $agent = null, $storage = null)
+    {
+
+        $columns = [
+            'id',
+            'date',
+            'is_set',
+            'doc_type_id',
+            'agent_id',
+            'storage_id',
+            'comment'
+
+        ];
+
+        $query = $this->startConditions()
+            ->select($columns);
+
+        if ($start_date && $end_date)
+            $query = $query->whereBetween('date', [$start_date, $end_date]);
+
+        if ($agent)
+            $query = $query->where('agent_id', 'like', $agent);
+
+        if ($storage)
+            $query = $query->where('storage_id', 'like', $storage);
+
+
+
+        return $query->get();
+
+    }
 
     public function getLatestId()
     {

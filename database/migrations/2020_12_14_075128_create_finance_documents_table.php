@@ -27,7 +27,9 @@ class CreateFinanceDocumentsTable extends Migration
                 ->on('agents');
             $table->foreign('storage_id')->references('id')
                 ->on('storages');
+            $table->text('comment')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

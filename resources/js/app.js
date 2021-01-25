@@ -19,6 +19,7 @@ require('./code/component_init')
 require('./store')
 
 
+
 Vue.use(VueRouter)
 
 Vue.use(vue_shortkey)

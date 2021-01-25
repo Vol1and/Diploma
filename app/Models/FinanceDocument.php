@@ -12,7 +12,8 @@ class FinanceDocument extends Model
         'is_set',
         'doc_type_id',
         'agent_id',
-        'storage_id'
+        'storage_id',
+        'comment'
     ];
 
     protected $with = ['storage', 'agent'];

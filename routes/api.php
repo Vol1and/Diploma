@@ -31,6 +31,7 @@ Route::apiResource('/income-documents', "App\Http\Controllers\FinanceDocumentCon
 
 Route::get('/producer/filter', [App\Http\Controllers\ProducerController::class, 'filter']);
 Route::get('/nomenclature/filter', [App\Http\Controllers\NomenclatureController::class, 'filter']);
+Route::get('/income-document/filter', [App\Http\Controllers\FinanceDocumentController::class, 'incomeFilter']);
 
 Route::post('/income' , [\App\Http\Controllers\FinanceDocumentController::class, 'incomeCreate']);
 Route::post('/income/{id}' , [\App\Http\Controllers\FinanceDocumentController::class, 'incomeUpdate']);
