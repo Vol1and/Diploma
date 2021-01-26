@@ -24,12 +24,14 @@ import NomenclatureCreate from "../components/Nomenclature/Create";
 import NomenclatureEdit from "../components/Nomenclature/Edit";
 
 import IncomeCreate from "../components/Documents/Income/Create";
-
+import WaresIndex from "../components/Ware/Index"
 //import CharacteristicForNomenclature from "../components/Characteristic/ForNomenclature";
 import Home from "../components/Home";
 
 
 Vue.component('IncomeCreate', IncomeCreate.default);
+Vue.component('WaresIndex', WaresIndex.default);
+
 
 Vue.component('NormativeInfo', NormativeInfo.default);
 

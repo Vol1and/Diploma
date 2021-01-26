@@ -16,22 +16,27 @@ class WareConnectionSeeder extends Seeder
     {
         $data = [
             [
+                'storage_id' => 1,
                 'characteristic_id' => 1,
                 'change' => 140
             ],
             [
+                'storage_id' => 1,
                 'characteristic_id' => 2,
                 'change' => 200
             ],
             [
+                'storage_id' => 1,
                 'characteristic_id' => 3,
                 'change' => 24
             ],
             [
+                'storage_id' => 1,
                 'characteristic_id' => 4,
                 'change' => 50
             ],
             [
+                'storage_id' => 1,
                 'characteristic_id' => 5,
                 'change' => 48
             ]

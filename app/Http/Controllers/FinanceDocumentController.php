@@ -139,7 +139,7 @@ class FinanceDocumentController extends OriginController
             $characteristic = (new Characteristic())->create($med);
 
             //создание проводки для регистр накопления
-            $wc = (new WareConnection())->create(['characteristic_id' => $characteristic->id,'change' => $med['count']]);
+            $wc = (new WareConnection())->create(['storage_id'=> $doc->storage_id, 'characteristic_id' => $characteristic->id,'change' => $med['count']]);
 
             // добавление новой проводки документа
             $tableRow = (new FinanceDocumentTableRow())->create(['characteristic_id' => $characteristic->id,
@@ -191,7 +191,7 @@ class FinanceDocumentController extends OriginController
                 $characteristic = (new Characteristic())->create($med);
 
                 //создание проводки для регистр накопления
-                $wc = (new WareConnection())->create(['characteristic_id' => $characteristic->id,'change' => $med['count']]);
+                $wc = (new WareConnection())->create(['storage_id'=> $doc->storage_id, 'characteristic_id' => $characteristic->id,'change' => $med['count']]);
 
                 // добавление новой проводки документа
                 $tableRow = (new FinanceDocumentTableRow())->create(['characteristic_id' => $characteristic->id,

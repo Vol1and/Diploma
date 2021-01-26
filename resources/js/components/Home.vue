@@ -45,7 +45,10 @@
                             товаров
                         </router-link>
                     </div>
-
+                    <div class="text item">
+                        <router-link class="el-link--default el-link" :to="{name: 'wares.index'}">Остатки товаров
+                        </router-link>
+                    </div>
                 </el-card>
             </el-col>
             <el-col :span="6" :offset="2">

@@ -26,7 +26,7 @@ Route::apiResource('/agents', "App\Http\Controllers\AgentController");
 Route::apiResource('/nomenclatures', "App\Http\Controllers\NomenclatureController");
 Route::apiResource('/storages', "App\Http\Controllers\StorageController");
 Route::apiResource('/income-documents', "App\Http\Controllers\FinanceDocumentController");
-
+Route::apiResource('/wares', "App\Http\Controllers\WareController");
 
 
 Route::get('/producer/filter', [App\Http\Controllers\ProducerController::class, 'filter']);

@@ -25,6 +25,7 @@ import IncomeCreate from "../components/Documents/Income/Create";
 import IncomeIndex from "../components/Documents/Income/Index";
 import IncomeEdit from "../components/Documents/Income/Edit";
 
+import WaresIndex from "../components/Ware/Index"
 import CharacteristicForNomenclature from "../components/Characteristic/ForNomenclature";
 
 
@@ -34,7 +35,7 @@ import AdminMain from "../components/Admin/Main";
 
 const routes = [
     {path: '/info', name: "menu.info", component: NormativeInfo},
-
+    {path: '/wares', name: "wares.index", component: WaresIndex},
 
     {path: '/producers', name: "producers.index", component: ProducerIndex},
     {path: '/producers/create', name: "producers.create", component: ProducerCreate},

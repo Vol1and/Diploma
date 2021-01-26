@@ -19,6 +19,9 @@ class CreateWareConnectionsTable extends Migration
             $table->integer('change');
             $table->foreign('characteristic_id')->references('id')
                 ->on('characteristics');
+            $table->bigInteger('storage_id')->unsigned();
+            $table->foreign('storage_id')->references('id')
+                ->on('storages');
             $table->timestamps();
         });
     }
