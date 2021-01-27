@@ -32,4 +32,21 @@ class CharacteristicsRepository extends BaseRepository
             ->get();
 
     }
+
+
+    public function find($id)
+    {
+        $columns = [
+            'id',
+            'serial',
+            'nomenclature_id',
+            'expiry_date',
+            'characteristic_price_id'
+        ];
+        return $this->startConditions()
+            ->select($columns)
+            ->where('id', $id)
+            ->with(['table_rows', 'table_rows.characteristic'])
+            ->get()->first();
+    }
 }

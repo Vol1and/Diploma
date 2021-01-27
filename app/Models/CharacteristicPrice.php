@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class CharacteristicPrice extends Model
 {
     protected $fillable = [
-        'price'
+        'price',
+        'characteristic_id'
     ];
 
     use SoftDeletes;

@@ -35,7 +35,6 @@ class FinanceDocumentsRepository extends BaseRepository
 
     public function find($id)
     {
-
         $columns = [
             'id',
             'date',
@@ -48,7 +47,7 @@ class FinanceDocumentsRepository extends BaseRepository
         return $this->startConditions()
             ->select($columns)
             ->where('id', $id)
-            ->with(['table_rows', 'table_rows.characteristic'])
+            ->with(['nomenclature','characteristic_price'])
             ->get()->first();
     }
 

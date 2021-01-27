@@ -12,6 +12,9 @@ class WareConnection extends Model
         'change'
     ];
 
+
+    protected $with = ['characteristic'];
+
     public function characteristic()
     {
         return $this->belongsTo(Characteristic::class);

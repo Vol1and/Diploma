@@ -16,6 +16,7 @@ class CreateCharacteristicPricesTable extends Migration
         Schema::create('characteristic_prices', function (Blueprint $table) {
             $table->id();
             $table->decimal('price');
+            $table->bigInteger('characteristic_id')->unsigned()->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

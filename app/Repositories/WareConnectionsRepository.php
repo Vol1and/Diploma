@@ -17,4 +17,18 @@ class WareConnectionsRepository extends BaseRepository
     public function getTable(){
         return Model::all();
     }
+
+
+    public function find($id)
+    {
+        $columns = [
+            'characteristic_id',
+            'change'
+        ];
+        return $this->startConditions()
+            ->select($columns)
+            ->where('id', $id)
+            ->with(['characteristic'])
+            ->get()->first();
+    }
 }
