@@ -128,9 +128,11 @@ class FinanceDocumentController extends OriginController
         $meds = $data['table_rows'];
         if(empty($meds)) return response(null,204);
 
+
+
         // добавление нового документа
         $doc = (new FinanceDocument())->create(['agent_id' => $data['agent_id'],'comment' => $data['comment'],
-            'date' => new Carbon($data['date']) ,'is_set' => true, 'doc_type_id' => 1, 'storage_id'=> $data['storage_id'] ]);
+            'date' => Carbon::createFromTimestamp($data['date'], 'Europe/Moscow')->toDateTimeString() ,'is_set' => true, 'doc_type_id' => 1, 'storage_id'=> $data['storage_id'] ]);
 
         if($doc){
             // циклический проход по массиву медикаментов

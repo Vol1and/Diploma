@@ -46,7 +46,7 @@ class CharacteristicsRepository extends BaseRepository
         return $this->startConditions()
             ->select($columns)
             ->where('id', $id)
-            ->with(['table_rows', 'table_rows.characteristic'])
+            ->with(['nomenclature','characteristic_price'])
             ->get()->first();
     }
 }

@@ -47,7 +47,7 @@ class FinanceDocumentsRepository extends BaseRepository
         return $this->startConditions()
             ->select($columns)
             ->where('id', $id)
-            ->with(['nomenclature','characteristic_price'])
+            ->with(['table_rows', 'table_rows.characteristic'])
             ->get()->first();
     }
 
