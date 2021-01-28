@@ -3,16 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DocumentCreateRequest;
-use App\Models\Characteristic;
-use App\Models\CharacteristicPrice;
 use App\Models\FinanceDocument;
-use App\Models\FinanceDocumentTableRow;
-use App\Models\WareConnection;
-use App\Repositories\CharacteristicPricesRepository;
-use App\Repositories\CharacteristicsRepository;
 use App\Repositories\FinanceDocumentsRepository;
-use App\Repositories\WareConnectionsRepository;
-use Carbon\Carbon;
+use App\Services\CreateFinanceDocumentService;
+use App\Services\UpdateFinanceDocumentService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -20,20 +14,18 @@ class FinanceDocumentController extends OriginController
 {
     //ссылка на хранилище модели Producer
     private $financeDocumentsRepository;
-    private $characteristicPricesRepository;
-    private $characteristicsRepository;
-    private $wareConnectionsRepository;
+    private $createFinanceDocumentService;
+    private $updateFinanceDocumentService;
 
     public function __construct()
     {
         //вызов констракт у родителя
         parent::__construct();
 
-        //инициализация хранилища
+        //инициализация хранилищ и сервисов
         $this->financeDocumentsRepository = app(FinanceDocumentsRepository::class);
-        $this->characteristicPricesRepository = app(CharacteristicPricesRepository::class);
-        $this->characteristicsRepository = app(CharacteristicsRepository::class);
-        $this->wareConnectionsRepository = app(WareConnectionsRepository::class);
+        $this->createFinanceDocumentService = app(CreateFinanceDocumentService::class);
+        $this->updateFinanceDocumentService = app(UpdateFinanceDocumentService::class);
     }
 
 
@@ -123,135 +115,29 @@ class FinanceDocumentController extends OriginController
     {
         // получение данных
         $data = $request->input('item');
-        if(empty($data)) return response(null,204);
+        if(empty($data)) return response(null,400);
 
         $meds = $data['table_rows'];
-        if(empty($meds)) return response(null,204);
-
-
+        if(empty($meds)) return response(null,400);
 
         // добавление нового документа
-        $doc = (new FinanceDocument())->create(['agent_id' => $data['agent_id'],'comment' => $data['comment'],
-            'date' => Carbon::createFromTimestamp($data['date'], 'Europe/Moscow')->toDateTimeString() ,'is_set' => true, 'doc_type_id' => 1, 'storage_id'=> $data['storage_id'] ]);
-
-        if($doc){
-            // циклический проход по массиву медикаментов
-            foreach ($meds as $med) {
-
-                // создание цены для характеристики со значением характеристики по умолчанию
-                $cp = CharacteristicPrice::create(['price' => $med['sell_price']]);
-                if (!$cp) return response(null,500);
-
-                $med['characteristic_price_id'] = $cp->id;
-                // добавление новой характеристики
-                $characteristic = (new Characteristic())->create($med);
-                if (!$characteristic) return response(null,500);
-
-                //создание проводки для регистр накопления
-                $wc = (new WareConnection())->create(['storage_id'=> $data['storage_id'], 'characteristic_id' => $characteristic->id,'change' => $med['count']]);
-                if (!$wc) return response(null,500);
-
-                // добавление новой проводки документа
-                $tableRow = (new FinanceDocumentTableRow())->create(['characteristic_id' => $characteristic->id,
-                    'ware_connection_id' =>  $wc->id, 'finance_document_id' => $doc->id,
-                    'count' => $med['count'], 'price' => $med['income_price']]);
-                if (!$tableRow) return response(null,500);
-
-                // добавление значения id характеристики в таблицу Цены характеристик
-                $cp->update(['characteristic_id' => $characteristic->id]);
-
-            } // foreach
-        }
+        $doc = $this->createFinanceDocumentService->createIncome($data,$meds);
+        if(empty($doc)) return response(null,500);
     } // incomeCreate
 
 
     // метод создания приходного документа
     public function incomeUpdate(DocumentCreateRequest $request, $id)
     {
-        // поиск Документа найден по id
-        // $doc = FinanceDocument::find($id);
-        $doc = $this->financeDocumentsRepository->find($id);
-        if (empty($doc)) return response(null,204);
-
         // получение данных
         $data = $request->input('item');
-        if(empty($data)) return response(null,204);
+        if(empty($data)) return response(null,400);
 
         $meds = $data['table_rows'];
-        if(empty($meds)) return response(null,204);
+        if(empty($meds)) return response(null,400);
 
-
-        // обновление информации о документе
-        $doc->update(['agent_id' => $data['agent_id'],'comment' => $data['comment'],'date' => new Carbon($data['date']) ,'is_set' => true, 'doc_type_id' => 1, 'storage_id'=> $data['storage_id'] ]);
-
-
-        // циклический проход по массиву медикаментов
-        foreach ($meds as $med) {
-
-            // получение изменяемой характеристики
-            $characteristic = $this->characteristicsRepository->find($med['characteristic_id']);
-
-            // если не найдена характеристика - создаётся новая
-            if (empty($characteristic)) {
-
-                // создание цены для характеристики со значением характеристики по умолчанию
-                $cp = CharacteristicPrice::create(['price' => $med['sell_price']]);
-                if (!$cp) return response(null,500);
-
-                $med['characteristic_price_id'] = $cp->id;
-                // добавление новой характеристики
-                $characteristic = (new Characteristic())->create($med);
-                if (!$characteristic) return response(null,500);
-
-                // добавление значения id характеристики в таблицу Цены характеристик
-                $cp->update(['characteristic_id' => $characteristic->id]);
-
-                //создание проводки для регистр накопления
-                $wc = (new WareConnection())->create(['storage_id'=> $doc->storage_id, 'characteristic_id' => $characteristic->id,'change' => $med['count']]);
-                if (!$wc) return response(null,500);
-
-                // добавление новой проводки документа
-                $tableRow = (new FinanceDocumentTableRow())->create(['characteristic_id' => $characteristic->id,
-                    'ware_connection_id' =>  $wc->id, 'finance_document_id' => $doc->id,
-                    'count' => $med['count'], 'price' => $med['income_price']]);
-                if (!$tableRow) return response(null,500);
-
-                continue;
-            } // if
-
-            // получение сущности цена характеристики
-            $cp = $this->characteristicPricesRepository->find($med['characteristic_price_id']);
-
-            if (empty($cp)) return response(null,204);
-
-            // внесение изменений в характеристику
-            $characteristic->update($med);
-
-            // если цена - не та что была раньше
-            if($cp->price !== $med['sell_price']) {
-                // создание новой цены для характеристики
-                $newCp = (new CharacteristicPrice())->create(['price' => $med['sell_price']]);
-                if (!$newCp) return response(null,500);
-
-                // обновление цены в характеристике
-                $characteristic->update(['characteristic_price_id' => $newCp->id]);
-            }
-
-            // поиск строки
-            $tableRow = FinanceDocumentTableRow::find($med['id']);
-            if (empty($tableRow)) return response(null,204);
-
-            // обновление проводки документа
-            $tableRow->update(['count' => $med['count'], 'price' => $med['income_price']]);
-
-            $wc = $this->wareConnectionsRepository->find($tableRow->wareConnection->id);
-            if (empty($wc)) return response(null,204);
-
-            //обновление проводки для регистр накопления
-            $wc->update(['change' => $med['count']]);
-
-        } // foreach
-
+        $result = $this->updateFinanceDocumentService->updateIncome($data, $meds, $id);
+        if(empty($meds)) return response(null,500);
     } // incomeUpdate
 
 

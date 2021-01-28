@@ -9,7 +9,8 @@ class WareConnection extends Model
 {
     protected $fillable = [
         'characteristic_id',
-        'change'
+        'change',
+        'storage_id'
     ];
 
 
