@@ -4,6 +4,8 @@
 namespace App\Services;
 
 use App\Models\FinanceDocument;
+use App\Repositories\FinanceDocumentsRepository;
+use App\Repositories\FinanceDocumentTableRowsRepository;
 use Carbon\Carbon;
 
 class CreateFinanceDocumentService
@@ -23,6 +25,7 @@ class CreateFinanceDocumentService
         ]);
     }
 
+    // заполнение сущностей данными
     public function fillData($doc, $med)
     {
         $createCharacteristicPriceService= app(CreateCharacteristicPriceService::class);
@@ -38,7 +41,7 @@ class CreateFinanceDocumentService
         if (!$characteristic) return response(null,500);
 
         // добавление новой строки в документ
-        $tableRow = $createFinanceDocumentTableRowService->fill($doc, $med, $characteristic->id);
+        $tableRow = $createFinanceDocumentTableRowService->fillTableRow($doc, $med, $characteristic->id);
         if (!$tableRow) return response(null,500);
 
         // добавление значения id характеристики в таблицу Цены характеристик
@@ -47,8 +50,7 @@ class CreateFinanceDocumentService
         return $tableRow;
     }
 
-
-
+    // метод сохранения приходного документа
     public function createIncome($data, $meds)
     {
         // добавление нового документа
@@ -59,6 +61,31 @@ class CreateFinanceDocumentService
             foreach ($meds as $med) {
 
                 $result = $this->fillData($doc, $med);
+                if (!$result) return response(null,500);
+
+            } // foreach
+        }
+        return $doc;
+    }
+
+    // метод проведения документа
+    public function pushIncome($doc_id)
+    {
+        $financeDocumentTableRowsRepository = app(FinanceDocumentTableRowsRepository::class);
+        $financeDocumentsRepository = app(FinanceDocumentsRepository::class);
+        $createWareConnectionService = app(CreateWareConnectionService::class);
+
+        // получение документа
+        $doc = $financeDocumentsRepository->find($doc_id);
+
+        // получение строк документа
+        $rows = $financeDocumentTableRowsRepository->forPush($doc_id);
+
+        if($rows){
+            // циклический проход по массиву строк документа
+            foreach ($rows as $row) {
+
+                $result = $createWareConnectionService->pushWareConnection($row, $doc->storage_id);
                 if (!$result) return response(null,500);
 
             } // foreach

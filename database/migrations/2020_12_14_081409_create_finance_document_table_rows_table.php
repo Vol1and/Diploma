@@ -17,7 +17,7 @@ class CreateFinanceDocumentTableRowsTable extends Migration
             $table->id();
             $table->bigInteger('characteristic_id')->unsigned();
             $table->bigInteger('finance_document_id')->unsigned();
-            $table->bigInteger('ware_connection_id')->unsigned();
+            $table->bigInteger('ware_connection_id')->unsigned()->default(1);
             $table->integer('count');
             $table->decimal('price');
             $table->foreign('characteristic_id')->references('id')

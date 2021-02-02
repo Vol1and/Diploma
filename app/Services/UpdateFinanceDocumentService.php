@@ -55,7 +55,7 @@ class UpdateFinanceDocumentService
             // если цена - не та что была раньше
             if($cp->price != $med['sell_price']) {
                 // создание новой цены для характеристики
-                $newCp = $createCharacteristicPriceService->make(['characteristic_id' => $characteristic->id] + $med);
+                $newCp = $createCharacteristicPriceService->makeUpdate(['characteristic_id' => $characteristic->id] + $med);
                 if (!$newCp) return response(null,500);
 
                 // обновление цены в характеристике

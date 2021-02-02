@@ -18,6 +18,11 @@ class WareConnectionSeeder extends Seeder
             [
                 'storage_id' => 1,
                 'characteristic_id' => 1,
+                'change' => 0
+            ],
+            [
+                'storage_id' => 1,
+                'characteristic_id' => 1,
                 'change' => 140
             ],
             [

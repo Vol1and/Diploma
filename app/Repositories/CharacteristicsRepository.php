@@ -30,8 +30,8 @@ class CharacteristicsRepository extends BaseRepository
             ->where('nomenclature_id', $nomenclature_id)
             ->with('nomenclature')
             ->get();
-
     }
+
 
 
     public function find($id)

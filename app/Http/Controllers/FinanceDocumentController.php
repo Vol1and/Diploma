@@ -137,7 +137,7 @@ class FinanceDocumentController extends OriginController
         if(empty($meds)) return response(null,400);
 
         $result = $this->updateFinanceDocumentService->updateIncome($data, $meds, $id);
-        if(empty($meds)) return response(null,500);
+        if(empty($result)) return response(null,500);
     } // incomeUpdate
 
 
