@@ -15,6 +15,7 @@ class IncomeDocument {
         this.created_at = created_at;
         this.updated_at = updated_at;
         this.deleted_at = deleted_at;
+        this.deleted_rows = [];
     }
 
 
@@ -28,7 +29,8 @@ class IncomeDocument {
             storage_id: this.storage.id,
             date: this.date,
             table_rows: table_rows,
-            comment: this.comment
+            comment: this.comment,
+            deleted_rows : this.deleted_rows
         }
     }
 

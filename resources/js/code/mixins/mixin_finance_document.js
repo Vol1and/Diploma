@@ -1,0 +1,99 @@
+//данный код будет включен во все Document-компоненты (например, ProducerIndex)
+//хранит данные, которые используются в каждых компонентах
+//подробнее почитать можно https://ru.vuejs.org/v2/guide/mixins.html
+import IncomeDocument from "../models/IncomeDocument";
+import FinanceDocumentTableRow from "../models/FinanceDocumentTableRow";
+
+export default {
+
+
+    data: function () {
+        return {
+
+            errors: [],
+            //переменная, которая помогает отображать компоненты выбора (например, NomenclatureChoose или ProducerChoose)
+            choosing_state: 0,
+            //показывает, получены ли данные с сервера - при loaded - false не доступна submit-кнопка
+            loaded: true,
+            //модель, в которой будут находиться данные
+            item: new IncomeDocument(null),
+
+            //выбранная строка - в табличной части идет проверка - id_строки - id_selectingRow
+            //если true, то строка переходит в editable
+            selectingRow: new FinanceDocumentTableRow(),
+            hover_row :new FinanceDocumentTableRow(),
+        };
+    },
+
+    methods: {
+
+        showErrors() {
+            this.errors.forEach(item => this.$notify.error({
+                title: 'Ошибка!',
+                message: item,
+            }));
+        },
+        //обработчик события cell-dblclick - обрабатывает двойной щелчок по выбраной клетке
+        //чисто технически, его можно переделать в rowEdit, но пока не горит
+        cellEdit(row, column, cell, event) {
+            //присваивает выбранную строку в selectingRow - читать выше
+            this.selectingRow = row;
+        }
+        ,
+        deleteSelected() {
+
+            console.log(this.selectingRow)
+            if (this.selectingRow.id === -1) return;
+
+            let index = this.item.table_rows.indexOf(this.selectingRow);
+            this.item.deleted_rows.push(this.selectingRow);
+            this.item.table_rows.splice(index, 1);
+
+            this.selectingRow = new FinanceDocumentTableRow();
+
+
+        },
+        //метод добавляет новую пустую строку в массив table_rows, и, соответственно в табличную часть формы
+        addToTable() {
+            //id = -1, table_id используется чтобы нумерация строк происходила с 1 и дальше
+            //TODO: при реализации удаления строки из таблицы, переделать нумерацию, чтобы было max_id + 1
+
+            this.item.table_rows.push(new FinanceDocumentTableRow(null));
+
+            //console.log(this.item.table_rows)
+        }
+        ,
+        selectingStorage() {
+            this.choosing_state = 3;
+        },
+
+        selectingAgent() {
+            this.choosing_state = 1;
+        }
+        ,
+        selectingNomenclature() {
+            this.choosing_state = 2;
+        }
+        ,
+        onSelectedAgent(data) {
+            this.item.agent = data.agent;
+            this.choosing_state = 0;
+        }
+        ,
+        onSelectedStorage(data) {
+            this.item.storage = data.storage;
+            this.choosing_state = 0;
+        }
+        ,
+        onSelectedNomenclature(data) {
+            this.selectingRow.nomenclature = data.nomenclature;
+            this.choosing_state = 0;
+        }
+        ,
+        onBack() {
+            this.choosing_state = 0;
+        }
+    }
+
+
+}

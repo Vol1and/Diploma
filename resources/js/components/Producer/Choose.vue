@@ -1,7 +1,11 @@
 <template>
     <el-row class="center-75">
 
-        <h1 class="text-center">Выбор производителя</h1>
+        <div>
+            <el-button style="float: left"  type="danger" icon="el-icon-close" @click="back" ></el-button>
+            <h1 class="text-center">Выбор производителя</h1>
+        </div>
+
 
         <el-row>
             <el-col :span="8">

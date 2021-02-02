@@ -2,8 +2,10 @@
     <el-row v-shortkey="['del']" @shortkey="deleteSelected" class="center-75">
 
 
+        <div>
+        <el-button style="float: left"  type="danger" icon="el-icon-close" @click="back" ></el-button>
         <h1 class="text-center">Ценовые группы</h1>
-
+        </div>
         <el-row>
             <el-col :span="8">
                 <router-link tag="button" class="el-button" :to="{name: 'pricetypes.create'}" style=" float:left ">

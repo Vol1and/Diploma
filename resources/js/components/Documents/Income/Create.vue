@@ -5,18 +5,17 @@
             <el-col :span="20" :offset="2">
                 <el-card class="box-card">
                     <div slot="header">
-                        <h2 class="text-center">Новое поступление товаров</h2>
+                        <h2 v-shortkey="['del']" @shortkey="deleteSelected" class="text-center">Новое поступление товаров</h2>
                     </div>
                     <el-form label-width="100px" label-position="right">
 
                         <div style="margin-bottom: 30px">
-                            <el-button type="primary" @click="submit"><i class="el-icon-finished"></i>  Провести</el-button>
-                            <el-button  @click="submit"><i class="el-icon-folder-checked"></i>  Записать</el-button>
-                            <el-button style="float: right" type="error" @click="()=>{this.$router.go(-1)}"><i class="el-icon-close"> Выход </i></el-button>
+                            <el-button type="primary" @click="submit(true)"><i class="el-icon-finished"></i> Провести
+                            </el-button>
+                            <el-button @click="submit(false)"><i class="el-icon-folder-checked"></i> Записать</el-button>
+                            <el-button style="float: right" type="error" @click="()=>{this.$router.go(-1)}"><i
+                                class="el-icon-close"> Выход </i></el-button>
                         </div>
-
-
-
 
 
                         <el-row>
@@ -190,10 +189,10 @@
                     </el-form>
 
                     <el-divider content-position="left"><h4>Комментарий</h4></el-divider>
-                    <el-input  type="textarea"
-                               :rows="3"
-                               placeholder="Комментарий"
-                               v-model="item.comment"
+                    <el-input type="textarea"
+                              :rows="3"
+                              placeholder="Комментарий"
+                              v-model="item.comment"
                     ></el-input>
                 </el-card>
 
@@ -213,54 +212,22 @@
 <script>
 
 
-import IncomeDocument from "../../../code/models/IncomeDocument";
-import FinanceDocumentTableRow from "../../../code/models/FinanceDocumentTableRow";
-import mixin_create from "../../../code/mixins/mixin_create";
+import mixin_finance_document from "../../../code/mixins/mixin_finance_document";
 
 export default {
     name: "IncomeCreate",
 
-    mixins: [mixin_create],
+    mixins: [mixin_finance_document],
     data() {
-        return {
-            //модель, в которой будут находиться данные
-            item: new IncomeDocument(null),
-            //переменная, которая помогает отображать компоненты выбора (например, NomenclatureChoose или ProducerChoose)
-            choosing_state: 0,
-            //показывает, получены ли данные с сервера - при loaded - false не доступна submit-кнопка
-            loaded: true,
-            //выбранная строка - в табличной части идет проверка - id_строки - id_selectingRow
-            //если true, то строка переходит в editable
-            selectingRow: new FinanceDocumentTableRow()
-        }
+        return {}
     },
-
     //ивент, срабатывающий при created стадии компонента - в поле дата закидывает текущую дату
     created() {
         this.item.date = Date.now();
     },
-
     methods: {
-        //метод-заглушка
-        update() {
-        },
-        //метод добавляет новую пустую строку в массив table_rows, и, соответственно в табличную часть формы
-        addToTable() {
-            //id = -1, table_id используется чтобы нумерация строк происходила с 1 и дальше
-            //TODO: при реализации удаления строки из таблицы, переделать нумерацию, чтобы было max_id + 1
-
-            this.item.table_rows.push(new FinanceDocumentTableRow(null));
-
-            //console.log(this.item.table_rows)
-        },
-        //обработчик события cell-dblclick - обрабатывает двойной щелчок по выбраной клетке
-        //чисто технически, его можно переделать в rowEdit, но пока не горит
-        cellEdit(row, column, cell, event) {
-            //присваивает выбранную строку в selectingRow - читать выше
-            this.selectingRow = row;
-        },
         //сабмит - отправляет данные
-        submit: function () {
+        submit: function (statet) {
             //не проходит валидацию - возвращаем
             if (!this.validateFields()) return;
 
@@ -270,7 +237,7 @@ export default {
             console.log(this.item)
             //пост-запрос
             //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
-            axios.post("/api/income", {item: this.item.getDataForServer()}).then((response) => {
+            axios.post("/api/income", {item: this.item.getDataForServer(),state : statet}).then((response) => {
                 console.log(response.data);
                 this.$notify({
 
@@ -288,8 +255,7 @@ export default {
                 })
                 this.loaded = true;
             })
-        }
-        ,
+        },
         validateFields() {
             this.errors = [];
             if (this.item.agent.id === -1) this.errors.push("Поле \"Поставщик\" должно быть заполнено");
@@ -307,40 +273,7 @@ export default {
 
             return this.errors.length === 0;
         }
-        ,
-        selectingStorage() {
-            this.choosing_state = 3;
-        },
-
-        selectingAgent() {
-            this.choosing_state = 1;
-        }
-        ,
-        selectingNomenclature() {
-            this.choosing_state = 2;
-        }
-        ,
-        onSelectedAgent(data) {
-            this.item.agent = data.agent;
-            this.choosing_state = 0;
-        }
-        ,
-        onSelectedStorage(data) {
-            this.item.storage = data.storage;
-            this.choosing_state = 0;
-        }
-        ,
-        onSelectedNomenclature(data) {
-            this.selectingRow.nomenclature = data.nomenclature;
-            this.choosing_state = 0;
-        }
-        ,
-        onBack() {
-            this.choosing_state = 0;
-        }
-
     }
-
 }
 </script>
 

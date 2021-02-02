@@ -6,18 +6,20 @@
             <el-col :span="20" :offset="2">
                 <el-card class="box-card">
                     <div slot="header">
-                        <h2 class="text-center">Поступление #{{ item.id }}</h2>
+                        <h2 v-shortkey="['del']" @shortkey="deleteSelected" class="text-center">Поступление #{{
+                                item.id
+                            }}</h2>
                     </div>
                     <el-form label-width="100px" label-position="right">
 
                         <div style="margin-bottom: 30px">
-                        <el-button type="primary" @click="submit"><i class="el-icon-finished"></i>  Провести</el-button>
-                        <el-button  @click="submit"><i class="el-icon-folder-checked"></i>  Записать</el-button>
-                        <el-button style="float: right" type="error" @click="()=>{this.$router.go(-1)}"><i class="el-icon-close"> Выход </i></el-button>
+                            <el-button type="primary" @click="submit(true)"><i class="el-icon-finished"></i> Провести
+                            </el-button>
+                            <el-button @click="submit(false)"><i class="el-icon-folder-checked"></i> Записать
+                            </el-button>
+                            <el-button style="float: right" type="error" @click="()=>{this.$router.go(-1)}"><i
+                                class="el-icon-close"> Выход </i></el-button>
                         </div>
-
-
-
 
 
                         <el-row>
@@ -31,7 +33,8 @@
 
                                 <el-form-item label="Дата: ">
                                     <el-date-picker id="name_input" style="width: 100%" v-model="item.date"
-                                                    type="datetime" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss"/>
+                                                    type="datetime" format="yyyy-MM-dd HH:mm:ss"
+                                                    value-format="yyyy-MM-dd HH:mm:ss"/>
                                 </el-form-item>
                             </el-col>
 
@@ -191,10 +194,10 @@
                     </el-form>
 
                     <el-divider content-position="left"><h4>Комментарий</h4></el-divider>
-                    <el-input  type="textarea"
-                               :rows="3"
-                               placeholder="Комментарий"
-                               v-model="item.comment"
+                    <el-input type="textarea"
+                              :rows="3"
+                              placeholder="Комментарий"
+                              v-model="item.comment"
                     ></el-input>
                 </el-card>
 
@@ -216,37 +219,26 @@
 
 import IncomeDocument from "../../../code/models/IncomeDocument";
 import FinanceDocumentTableRow from "../../../code/models/FinanceDocumentTableRow";
-import mixin_create from "../../../code/mixins/mixin_create";
 import Agent from "../../../code/models/Agent";
 import Storage from "../../../code/models/Storage";
 import Nomenclature from "../../../code/models/Nomenclature";
 import Producer from "../../../code/models/Producer";
 import Characteristic from "../../../code/models/Characteristic";
 import CharacteristicPrice from "../../../code/models/CharacteristicPrice";
+import mixin_finance_document from "../../../code/mixins/mixin_finance_document";
 
 export default {
     name: "IncomeEdit",
 
-    mixins: [mixin_create],
+    mixins: [mixin_finance_document],
     data() {
-        return {
-            //модель, в которой будут находиться данные
-            item: new IncomeDocument(null),
-            //переменная, которая помогает отображать компоненты выбора (например, NomenclatureChoose или ProducerChoose)
-            choosing_state: 0,
-            //показывает, получены ли данные с сервера - при loaded - false не доступна submit-кнопка
-            loaded: true,
-            //выбранная строка - в табличной части идет проверка - id_строки - id_selectingRow
-            //если true, то строка переходит в editable
-            selectingRow: new FinanceDocumentTableRow()
-        }
+        return {}
     },
-
     created() {
-
         this.update();
     },
     methods: {
+
 
         update() {
             axios.get(`/api/income-documents/${this.$route.params.id}`).then(response => {
@@ -289,25 +281,8 @@ export default {
                 ///this.$router.push({name: 'income.index'});
             })
         },
-        //метод добавляет новую пустую строку в массив table_rows, и, соответственно в табличную часть формы
-        addToTable() {
-            //id = -1, table_id используется чтобы нумерация строк происходила с 1 и дальше
-            //TODO: при реализации удаления строки из таблицы, переделать нумерацию, чтобы было max_id + 1
-
-            this.item.table_rows.push(new FinanceDocumentTableRow(null));
-
-            //console.log(this.item.table_rows)
-        }
-        ,
-        //обработчик события cell-dblclick - обрабатывает двойной щелчок по выбраной клетке
-        //чисто технически, его можно переделать в rowEdit, но пока не горит
-        cellEdit(row, column, cell, event) {
-            //присваивает выбранную строку в selectingRow - читать выше
-            this.selectingRow = row;
-        }
-        ,
         //сабмит - отправляет данные
-        submit: function () {
+        submit: function (state) {
             //не проходит валидацию - возвращаем
             if (!this.validateFields()) return;
 
@@ -318,7 +293,10 @@ export default {
             //пост-запрос
             //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
             console.log(this.item.getDataForServer());
-            axios.post(`/api/income/${this.item.id}`, {item: this.item.getDataForServer()}).then((response) => {
+            axios.post(`/api/income/${this.item.id}`, {
+                item: this.item.getDataForServer(),
+                state: state
+            }).then((response) => {
                 this.selectingRow = new FinanceDocumentTableRow(null);
                 console.log(response.data);
                 this.update();
@@ -357,39 +335,6 @@ export default {
 
             return this.errors.length === 0;
         }
-        ,
-        selectingStorage() {
-            this.choosing_state = 3;
-        }
-        ,
-
-        selectingAgent() {
-            this.choosing_state = 1;
-        }
-        ,
-        selectingNomenclature() {
-            this.choosing_state = 2;
-        }
-        ,
-        onSelectedAgent(data) {
-            this.item.agent = data.agent;
-            this.choosing_state = 0;
-        }
-        ,
-        onSelectedStorage(data) {
-            this.item.storage = data.storage;
-            this.choosing_state = 0;
-        }
-        ,
-        onSelectedNomenclature(data) {
-            this.selectingRow.nomenclature = data.nomenclature;
-            this.choosing_state = 0;
-        }
-        ,
-        onBack() {
-            this.choosing_state = 0;
-        }
-
     }
 
 }

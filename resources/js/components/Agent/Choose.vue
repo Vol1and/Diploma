@@ -1,8 +1,12 @@
 <template>
-    <el-row style="margin-bottom: 50px" v-shortkey="['del']" @shortkey="deleteSelected" class="center-75">
+    <el-row style="margin-bottom: 50px"  @shortkey="deleteSelected" class="center-75">
 
 
-        <h1 v-shortkey="['del']" @shortkey="deleteSelected" class="text-center">Контрагенты</h1>
+
+        <div>
+            <el-button style="float: left"  type="danger" icon="el-icon-close" @click="back" ></el-button>
+            <h1 v-shortkey="['del']" @shortkey="deleteSelected" class="text-center">Контрагенты</h1>
+        </div>
 
         <el-row>
             <el-col :span="8">

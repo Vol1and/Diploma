@@ -2,8 +2,11 @@
     <div>
         <el-row v-shortkey="['del']" v-if="choosing_state === 0 " @shortkey="deleteSelected" class="center-75">
 
+            <div>
+                <el-button style="float: left"  type="danger" icon="el-icon-close" @click="back" ></el-button>
+                <h1 class="text-center">Выбор номенклатуры</h1>
+            </div>
 
-            <h1 class="text-center">Выбор номенклатуры</h1>
 
             <el-row>
                 <el-col :span="8">
