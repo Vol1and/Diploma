@@ -25,8 +25,7 @@
         <el-divider></el-divider>
         <el-table :data="page_of_items"
                   highlight-current-row
-                  @row-dblclick=""
-                  @current-change="selected">
+                  @row-dblclick="selected">
 
             <el-table-column
                 prop="id"

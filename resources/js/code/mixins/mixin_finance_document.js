@@ -21,7 +21,8 @@ export default {
             //выбранная строка - в табличной части идет проверка - id_строки - id_selectingRow
             //если true, то строка переходит в editable
             selectingRow: new FinanceDocumentTableRow(),
-            hover_row :new FinanceDocumentTableRow(),
+            hover_row :null
+
         };
     },
 
@@ -35,21 +36,34 @@ export default {
         },
         //обработчик события cell-dblclick - обрабатывает двойной щелчок по выбраной клетке
         //чисто технически, его можно переделать в rowEdit, но пока не горит
-        cellEdit(row, column, cell, event) {
+        rowEdit(row) {
             //присваивает выбранную строку в selectingRow - читать выше
             this.selectingRow = row;
         }
         ,
+        rowHover(item){
+
+            this.hover_row = item;
+        },
+        //удаление строки табличной части
         deleteSelected() {
 
-            console.log(this.selectingRow)
-            if (this.selectingRow.id === -1) return;
+            //если не выбрана ни одна строка - ничего не делаем
+            if (this.hover_row == null) return;
 
-            let index = this.item.table_rows.indexOf(this.selectingRow);
-            this.item.deleted_rows.push(this.selectingRow);
+            //удаляем строку из табличной части
+            let index = this.item.table_rows.indexOf(this.hover_row);
             this.item.table_rows.splice(index, 1);
+            //если удалена новая строка и она не сохранена на сервере - не заносим в deleted_rows
+            if (this.hover_row.id == null) return;
 
-            this.selectingRow = new FinanceDocumentTableRow();
+
+            //вносим данные в deleted_rows
+            this.item.deleted_rows.push(this.hover_row.id);
+            //чтобы сбросился выбор
+            this.hover_row = null
+
+
 
 
         },

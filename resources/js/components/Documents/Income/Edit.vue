@@ -56,16 +56,26 @@
                             </el-col>
                         </el-row>
 
+
                         <el-card style="margin-bottom: 40px">
                             <el-divider content-position="left"><h2>Товары</h2></el-divider>
 
-                            <el-button @click="addToTable" style="margin-bottom: 20px">Добавить</el-button>
+                            <el-row style="margin-bottom: 10px">
+                                <el-tooltip class="item" effect="light" content="Добавить новую строку" placement="top">
+                            <el-button @click="addToTable" circle icon="el-icon-plus"></el-button>
+                                </el-tooltip>
+                                <el-tooltip class="item" effect="light" content="Удалить выбранную строку" placement="top">
+                                    <el-button @click="deleteSelected"  circle  icon="el-icon-delete-solid"></el-button>
+                                </el-tooltip>
+                            </el-row>
                             <el-table :data="item.table_rows"
                                       highlight-current-cell
-                                      @cell-dblclick="cellEdit"
+                                      @row-dblclick="rowEdit"
                                       border
                                       show-summary
                                       sum-text="  "
+                                      highlight-current-row
+                                      @current-change="rowHover"
                             >
                                 <el-table-column
                                     label="№"
@@ -87,7 +97,7 @@
                                 >
                                     <template slot-scope="scope">
 
-                                        <el-input v-if="selectingRow.id === scope.row.id" readonly
+                                        <el-input v-if="selectingRow === scope.row" readonly
                                                   v-model="scope.row.nomenclature.name" placeholder="">
                                             <el-button type="primary" @click="selectingNomenclature" slot="append"
                                                        icon="el-icon-d-arrow-right">
@@ -113,7 +123,7 @@
                                 >
                                     <template slot-scope="scope">
 
-                                        <el-input v-if="selectingRow.id === scope.row.id"
+                                        <el-input v-if="selectingRow === scope.row"
                                                   v-model="scope.row.characteristic.serial" placeholder="">
 
                                         </el-input>
@@ -130,7 +140,7 @@
                                     sortable
                                 >
                                     <template slot-scope="scope">
-                                        <el-date-picker v-if="selectingRow.id === scope.row.id"
+                                        <el-date-picker v-if="selectingRow === scope.row"
                                                         style="width: 100%"
                                                         v-model="scope.row.characteristic.expiry_date"
                                                         format="yyyy/MM/dd"
@@ -148,7 +158,7 @@
                                 >
                                     <template slot-scope="scope">
 
-                                        <el-input v-if="selectingRow.id === scope.row.id" type="number"
+                                        <el-input v-if="selectingRow === scope.row" type="number"
                                                   v-model="scope.row.count" placeholder="">
                                             <template slot="append">шт.</template>
                                         </el-input>
@@ -164,7 +174,7 @@
                                 >
                                     <template slot-scope="scope">
 
-                                        <el-input v-if="selectingRow.id === scope.row.id" type="number"
+                                        <el-input v-if="selectingRow === scope.row" type="number"
                                                   v-model="scope.row.income_price" placeholder="">
                                             <template slot="append">руб.</template>
                                         </el-input>
@@ -180,7 +190,7 @@
                                 >
                                     <template slot-scope="scope">
 
-                                        <el-input v-if="selectingRow.id === scope.row.id" type="number"
+                                        <el-input v-if="selectingRow === scope.row" type="number"
                                                   v-model="scope.row.characteristic.characteristic_price.price"
                                                   placeholder="">
                                             <template slot="append">руб.</template>
@@ -292,9 +302,9 @@ export default {
 
             //пост-запрос
             //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
-            console.log(this.item.getDataForServer());
+            console.log(this.item.getDataForUpdate());
             axios.post(`/api/income/${this.item.id}`, {
-                item: this.item.getDataForServer(),
+                item: this.item.getDataForUpdate(),
                 state: state
             }).then((response) => {
                 this.selectingRow = new FinanceDocumentTableRow(null);
