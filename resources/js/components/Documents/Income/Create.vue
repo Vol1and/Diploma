@@ -62,7 +62,7 @@
                                     <el-button @click="deleteSelected"  circle  icon="el-icon-delete-solid"></el-button>
                                 </el-tooltip>
                             </el-row>
-                            <el-table :data="item.table_rows"
+                            <el-table :cell-style="{padding: '0', height: '50px'}"  :data="item.table_rows"
                                       highlight-current-cell
                                       @cell-dblclick="rowEdit"
                                       border
@@ -108,7 +108,7 @@
                                     sortable
                                 >
                                 </el-table-column>
-                                <el-table-column
+                              <!--  <el-table-column
                                     prop="nomenclature.characteristic.serial"
                                     label="Серия"
                                     min-width="100"
@@ -141,6 +141,22 @@
                                                         value-format="yyyy/MM/dd"/>
 
                                         <div v-else> {{ scope.row.characteristic.expiry_date }}</div>
+                                    </template>
+                                </el-table-column> -->
+                                <el-table-column
+                                    prop="characteristic.name"
+                                    label="Характеристика"
+                                    sortable
+                                >
+                                    <template slot-scope="scope">
+
+                                        <el-input v-if="selectingRow === scope.row" readonly
+                                                  v-model="scope.row.characteristic.name" placeholder="">
+                                            <el-button type="primary" @click="selectingCharacteristic" slot="append"
+                                                       icon="el-icon-d-arrow-right">
+                                            </el-button>
+                                        </el-input>
+                                        <div v-else> {{ scope.row.characteristic.name }}</div>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
@@ -212,7 +228,9 @@
         <agent-choose-component @back="onBack" v-if="choosing_state ===1"
                                 @selected="onSelectedAgent"></agent-choose-component>
         <storage-choose-component @back="onBack" v-if="choosing_state ===3"
-                                  @selected="onSelectedStorage"></storage-choose-component>
+                                  @selected="onSelectedStorage" ></storage-choose-component>
+        <characteristic-choose-with-wares-component @back="onBack" v-if="choosing_state === 4" :this.nomenclature_id="selectingRow.nomenclature.id"
+                                                    @selected="onSelectedCharacteristic"> </characteristic-choose-with-wares-component>
         <nomenclature-choose-component @back="onBack" v-if="choosing_state ===2"
                                        @selected="onSelectedNomenclature"></nomenclature-choose-component>
     </div>
@@ -222,10 +240,11 @@
 
 
 import mixin_finance_document from "../../../code/mixins/mixin_finance_document";
+import CharacteristicChooseWithWares from "../../Characteristic/ChooseWithWares";
 
 export default {
     name: "IncomeCreate",
-
+    components: {CharacteristicChooseWithWares},
     mixins: [mixin_finance_document],
     data() {
         return {}

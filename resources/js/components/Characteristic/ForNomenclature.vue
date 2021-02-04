@@ -1,48 +1,61 @@
 <template>
-    <div class="center-50">
-        <h1 class="text-center">Характеристики</h1>
-        <h4 class="text-center">Номенклатуры: {{ this.items[0].nomenclature.name }}</h4>
-        <div class="row">
-            <router-link :to="{name: 'nomenclatures.create'}" style=" float:left " class="btn btn-in-bar  btn-primary">
-                Добавить
-            </router-link>
+    <el-row class="center-75">
 
-            <!--            <button @click="update"  v-if="!is_reload" style="float:right;" class=" btn-in-bar btn btn-primary">Обновить </button>-->
-            <!--            <button disabled v-if="is_reload" style="float:right;" class=" btn-in-bar btn btn-danger"> Обновление...</button>-->
-        </div>
 
-        <table class="table">
-            <tr>
-                <th>#</th>
-                <th>Название</th>
-                <th>Производитель</th>
-                <th>Ценовая группа</th>
-            </tr>
-            <tbody>
-            <tr v-for="item in page_of_items" class="row-hover" :key="item.id"
-                :class="{'highlight': (item.id === selected_item)}"
-                @click="rowSelected(item.id)" @dblclick="toEdit(item.id)">
-                <td>{{ item.nomenclature.name }}</td>
-                <td>{{ item.serial }}</td>
-                <td>{{ item.expiry_date }}</td>
-                <td>{{ item.export }}</td>
-            </tr>
-            </tbody>
-        </table>
-        <div class="centered">
-            <paginate
-                v-model="current_page"
-                :page-count="page_count"
-                :page-range="3"
-                :click-handler="onChangePage"
-                :prev-text="'<<'"
-                :next-text="'>>'"
-                :container-class="'pagination'"
-                :active-class="'pagination-active'"
+        <h1 v-shortkey="['del']" @shortkey="deleteSelected" class="text-center">Ценовые группы</h1>
+
+        <el-row>
+            <el-col :span="8">
+                <router-link tag="button" class="el-button" :to="{name: 'pricetypes.create'}" style=" float:left ">
+                    Добавить
+                </router-link>
+            </el-col>
+
+            <el-col :span="8" :offset="8">
+                <el-button icon="el-icon-refresh" @click="update" :disabled="is_reload" style="float:right;">
+                    Обновить
+                </el-button>
+            </el-col>
+        </el-row>
+
+        <el-divider></el-divider>
+        <el-table :data="page_of_items"
+                  highlight-current-row
+                  @row-dblclick="toEdit"
+                  @current-change="rowSelected">
+
+            <el-table-column
+                prop="id"
+                label="#"
+                min-width="15"
             >
-            </paginate>
+            </el-table-column>
+            <el-table-column
+                prop="name"
+                label="Наименование"
+            >
+            </el-table-column>
+            <el-table-column
+                prop="margin"
+                label="Наценка"
+                width="150"
+            >
+            </el-table-column>
+        </el-table>
+        <div v-if="!filter_state" class="centered">
+            <!--            <jw-pagination :items="items" @changePage="onChangePage"></jw-pagination>-->
+
+            <el-pagination
+                height="250"
+                @current-change="onChangePage"
+                :current-page.sync="current_page"
+                :page-size="items_per_page"
+                layout="prev, pager, next, jumper"
+                :page-count="page_count"
+            >
+            </el-pagination>
         </div>
-    </div>
+    </el-row>
 </template>
 
 <script>

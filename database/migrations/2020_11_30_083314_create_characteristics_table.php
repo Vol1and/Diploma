@@ -20,10 +20,12 @@ class CreateCharacteristicsTable extends Migration
             $table->bigInteger('nomenclature_id')->unsigned();
             $table->bigInteger('characteristic_price_id')->unsigned();
 
+
             $table->foreign('nomenclature_id')->references('id')
                 ->on('nomenclatures');
             $table->foreign('characteristic_price_id')->references('id')
                 ->on('characteristic_prices');
+            $table->string('name')->storedAs("concat(serial, '; ' ,expiry_date)")->nullable();
 
             $table->timestamps();
             $table->softDeletes();

@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 class CreateFindCharacteristicsProcedure extends Migration
@@ -19,10 +18,11 @@ class CreateFindCharacteristicsProcedure extends Migration
             BEGIN
                  SELECT
                 `ware_connections`.`characteristic_id` AS `characteristic_id`,
-                `nomenclatures`.`name` AS `name`,
-                `characteristics`.`nomenclature_id` AS `nomenclature`,
+                `nomenclatures`.`name` AS `nomenclature_name`,
+                `characteristics`.`nomenclature_id` AS `nomenclature_id`,
                 `characteristics`.`serial` AS `serial`,
-                `characteristics`.`expiry_date` AS `expiry`,
+                `characteristics`.`name` AS `name`,
+                `characteristics`.`expiry_date` AS `expiry_date`,
                 `ware_connections`.`storage_id` AS `storage_id`,
                 SUM(`ware_connections`.`change`) AS `ware`
             FROM

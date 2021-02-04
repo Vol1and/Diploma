@@ -21,7 +21,7 @@ export default {
             //выбранная строка - в табличной части идет проверка - id_строки - id_selectingRow
             //если true, то строка переходит в editable
             selectingRow: new FinanceDocumentTableRow(),
-            hover_row :null
+            hover_row: null
 
         };
     },
@@ -41,9 +41,10 @@ export default {
             this.selectingRow = row;
         }
         ,
-        rowHover(item){
+        rowHover(item) {
 
             this.hover_row = item;
+            this.selectingRow = new FinanceDocumentTableRow();
         },
         //удаление строки табличной части
         deleteSelected() {
@@ -62,9 +63,6 @@ export default {
             this.item.deleted_rows.push(this.hover_row.id);
             //чтобы сбросился выбор
             this.hover_row = null
-
-
-
 
         },
         //метод добавляет новую пустую строку в массив table_rows, и, соответственно в табличную часть формы
@@ -89,6 +87,14 @@ export default {
             this.choosing_state = 2;
         }
         ,
+        selectingCharacteristic() {
+            this.choosing_state = 4;
+        }
+        ,
+        onSelectedCharacteristic(data) {
+            this.selectingRow.characteristic = data.characteristic;
+            this.choosing_state = 0;
+        },
         onSelectedAgent(data) {
             this.item.agent = data.agent;
             this.choosing_state = 0;

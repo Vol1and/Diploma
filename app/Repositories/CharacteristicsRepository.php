@@ -4,6 +4,7 @@
 namespace App\Repositories;
 
 use App\Models\Characteristic as Model;
+use DB;
 
 
 class CharacteristicsRepository extends BaseRepository
@@ -14,30 +15,25 @@ class CharacteristicsRepository extends BaseRepository
         return Model::class;
     }
 
-    public function getTable(){
+    public function getTable()
+    {
         return Model::all();
     }
 
-    public function forNomenclature($nomenclature_id){
-        $columns = [
-            'id',
-            'serial',
-            'expiry_date',
-            'nomenclature_id',
-         ];
-        return $this->startConditions()
-            ->select($columns)
-            ->where('nomenclature_id', $nomenclature_id)
-            ->with('nomenclature')
-            ->get();
-    }
+    public function getCharacteristicsByNomenclatureId($nomenclature_id)
+    {
 
+        return DB::select(
+            'CALL find_characteristics_procedure(' . $nomenclature_id . ')'
+        );
+    }
 
 
     public function find($id)
     {
         $columns = [
             'id',
+            'name',
             'serial',
             'nomenclature_id',
             'expiry_date',
@@ -46,7 +42,7 @@ class CharacteristicsRepository extends BaseRepository
         return $this->startConditions()
             ->select($columns)
             ->where('id', $id)
-            ->with(['nomenclature','characteristic_price'])
+            ->with(['nomenclature', 'characteristic_price'])
             ->get()->first();
     }
 

@@ -68,7 +68,7 @@
                                     <el-button @click="deleteSelected"  circle  icon="el-icon-delete-solid"></el-button>
                                 </el-tooltip>
                             </el-row>
-                            <el-table :data="item.table_rows"
+                            <el-table :cell-style="{padding: '0', height: '50px'}" :data="item.table_rows"
                                       highlight-current-cell
                                       @row-dblclick="rowEdit"
                                       border
@@ -150,6 +150,23 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column
+                                    prop="nomenclature.characteristic.name"
+                                    label="Характеристика"
+                                    min-width="150"
+                                    sortable
+                                >
+                                    <template slot-scope="scope">
+
+                                        <el-input v-if="selectingRow === scope.row" readonly
+                                                  v-model="scope.row.characteristic.name" placeholder="">
+                                            <el-button type="primary" @click="selectingCharacteristic" slot="append"
+                                                       icon="el-icon-d-arrow-right">
+                                            </el-button>
+                                        </el-input>
+                                        <div v-else> {{ scope.row.characteristic.name }}</div>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
                                     prop="count"
                                     label="Кол-во"
                                     min-width="100"
@@ -174,11 +191,13 @@
                                 >
                                     <template slot-scope="scope">
 
+                                        <div style="padding: 0">
                                         <el-input v-if="selectingRow === scope.row" type="number"
                                                   v-model="scope.row.income_price" placeholder="">
                                             <template slot="append">руб.</template>
                                         </el-input>
                                         <div v-else> {{ scope.row.income_price }} руб.</div>
+                                        </div>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
@@ -219,8 +238,11 @@
                                 @selected="onSelectedAgent"></agent-choose-component>
         <storage-choose-component @back="onBack" v-if="choosing_state ===3"
                                   @selected="onSelectedStorage"></storage-choose-component>
+        <characteristic-choose-with-wares-component @back="onBack" v-if="choosing_state === 4" :nomenclature_id="selectingRow.nomenclature.id"
+                                          @selected="onSelectedCharacteristic"> </characteristic-choose-with-wares-component>
         <nomenclature-choose-component @back="onBack" v-if="choosing_state ===2"
                                        @selected="onSelectedNomenclature"></nomenclature-choose-component>
+
     </div>
 </template>
 
@@ -264,6 +286,7 @@ export default {
                             ),
                             new Characteristic(
                                 row.characteristic.id,
+                                row.characteristic.name,
                                 row.characteristic.serial,
                                 row.characteristic.expiry_date,
                                 new CharacteristicPrice(row.characteristic.characteristic_price.id, row.characteristic.characteristic_price.price)

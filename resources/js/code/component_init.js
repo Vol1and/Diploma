@@ -47,9 +47,9 @@ Vue.component('PriceTypeEdit', PriceTypeEdit.default);
 Vue.component('price-type-choose-component',
     require('../components/PriceType/Choose').default);
 
-Vue.component('Storagendex', StorageIndex.default);
-Vue.component('Storagereate', StorageCreate.default);
-Vue.component('Storagedit', StorageEdit.default);
+Vue.component('StorageIndex', StorageIndex.default);
+Vue.component('StorageCreate', StorageCreate.default);
+Vue.component('StorageEdit', StorageEdit.default);
 Vue.component('storage-choose-component',
     require('../components/Storage/Choose').default);
 
@@ -65,6 +65,8 @@ Vue.component('NomenclatureEdit', NomenclatureEdit.default);
 Vue.component('nomenclature-choose-component',
     require('../components/Nomenclature/Choose').default);
 
+Vue.component('characteristic-choose-with-wares-component',
+    require('../components/Characteristic/ChooseWithWares').default);
 
 //Vue.component('CharacteristicForNomenclature',     CharacteristicForNomenclature.default);
 

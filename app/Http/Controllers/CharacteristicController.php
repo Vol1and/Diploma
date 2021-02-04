@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\CharacteristicsRepository;
+use App\Repositories\NomenclatureRepository;
 use Illuminate\Http\Request;
 
 class CharacteristicController extends OriginController
@@ -12,11 +13,13 @@ class CharacteristicController extends OriginController
     //ссылка на хранилище модели PriceType
     private $characteristicRepository;
 
+    private $nomenclatureRepository;
     public function __construct()
     {
 
         //инициализация хранилища
         $this->characteristicRepository = app(CharacteristicsRepository::class);
+        $this->nomenclatureRepository = app(NomenclatureRepository::class);
     }
 
 
@@ -78,8 +81,11 @@ class CharacteristicController extends OriginController
 
     public function forNomenclature($id){
 
-        $result = $this->characteristicRepository->forNomenclature($id);
 
-        return $result->toJson();
+
+        $nomenclature = $this->nomenclatureRepository->find($id);
+        $characteristics = $this->characteristicRepository->getCharacteristicsByNomenclatureId($id);
+
+        return ['nomenclature'=>$nomenclature, 'characteristics' => $characteristics];
     }
 }
