@@ -49,4 +49,23 @@ class CharacteristicsRepository extends BaseRepository
             ->with(['nomenclature','characteristic_price'])
             ->get()->first();
     }
+
+    // проверка наличия характеристики в БД для конкретной номенклатуры
+    public function findBySerial($nomenclature_id, $serial, $expiry_date)
+    {
+        $columns = [
+            'id',
+            'serial',
+            'nomenclature_id',
+            'expiry_date',
+            'characteristic_price_id'
+        ];
+        return $this->startConditions()
+            ->select($columns)
+            ->where('nomenclature_id', $nomenclature_id)
+            ->where('serial', $serial)
+            // ->where('expiry_date', $expiry_date)
+            // ->with(['nomenclature','characteristic_price'])
+            ->withTrashed()->get()->first();
+    }
 }
