@@ -35,12 +35,6 @@
 
             >
             </el-table-column>
-            <el-table-column
-                prop="ware"
-                label="Текущий остаток "
-
-            >
-            </el-table-column>
         </el-table>
         <el-drawer
             :append-to-body="true"
@@ -49,7 +43,7 @@
             custom-class="demo-drawer"
             ref="drawer"
         >
-            <characteristic-create-component :prop_nomenclature_id="nomenclature_id" v-if="create_dialog"
+            <characteristic-create-component @created="characteristicCreated" :prop_nomenclature_id="nomenclature_id" v-if="create_dialog"
                                                         :nomenclature_id="nomenclature_id"
                                                        ></characteristic-create-component>
         </el-drawer>
@@ -64,7 +58,7 @@ import Characteristic from "../../code/models/Characteristic";
 import CharacteristicPrice from "../../code/models/CharacteristicPrice";
 
 export default {
-    name: "CharacteristicChooseWithWares",
+    name: "CharacteristicChoose",
 
     mixins: [mixin_index],
 
@@ -107,20 +101,21 @@ export default {
                         row.serial,
                         row.expiry_date,
                         new CharacteristicPrice(),
-                        row.ware
                     ));
                 })
 
                 this.is_reload = false;
             });
         },
-        selected(selected_item) {
-            console.log(selected_item);
-            this.$emit("selected", {characteristic: selected_item});
+        characteristicCreated(){
+
+            this.create_dialog = false;
+            this.update();
+
         },
         back() {
             this.$emit("back");
-        }
+        },
     }
 }
 </script>

@@ -10,14 +10,14 @@ class IncomeDocument {
         this.storage = storage;
         this.date = date;
         this.comment = comment;
-        this.table_rows = table_rows;
+        this.table_rows = _.cloneDeep(table_rows);
         this.income_sum = income_sum;
         this.created_at = created_at;
         this.updated_at = updated_at;
         this.deleted_at = deleted_at;
         this.deleted_rows = [];
         this.updated_rows = [];
-        this.base_rows =  [...table_rows];
+        this.base_rows = _.cloneDeep(table_rows);
     }
 
 
@@ -54,14 +54,13 @@ class IncomeDocument {
         let items = [];
 
         rows.forEach(p => {
-            if (p.isValid()) items.push(p.getDataForServer());
+            items.push(p.getDataForServer());
+
 
         })
         return items;
 
     }
-
-
 
     //метод проходится про строкам и проверяет - были ли они изменены
     fill_updated_rows() {
@@ -69,9 +68,15 @@ class IncomeDocument {
         this.updated_rows = [];
         this.table_rows.forEach((p) => {
 
-            let result = this.base_rows.find(x => x === p );
-            console.log(result);
-            if (result == null) this.updated_rows.push(p);
+            if (p.id === -1) {
+                this.updated_rows.push(p);
+                return;
+            }
+
+
+
+            let result = this.base_rows.find(x => x.id === p.id);
+            if (result == undefined || !result.isEqual(p)) this.updated_rows.push(p);
         })
     }
 

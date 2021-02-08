@@ -20,7 +20,7 @@ class CharacteristicsRepository extends BaseRepository
         return Model::all();
     }
 
-    public function getCharacteristicsByNomenclatureId($nomenclature_id)
+    public function getAllByNomenclatureIdWithWares($nomenclature_id)
     {
 
         return DB::select(
@@ -63,5 +63,23 @@ class CharacteristicsRepository extends BaseRepository
             // ->where('expiry_date', $expiry_date)
             // ->with(['nomenclature','characteristic_price'])
             ->withTrashed()->get()->first();
+    }
+
+    // проверка наличия характеристики в БД для конкретной номенклатуры
+    public function getAllByNomenclatureId($nomenclature_id)
+    {
+        $columns = [
+            'id',
+            'serial',
+            'nomenclature_id',
+            'expiry_date',
+            'name'
+        ];
+        return $this->startConditions()
+            ->select($columns)
+            ->where('nomenclature_id', $nomenclature_id)
+            // ->where('expiry_date', $expiry_date)
+            // ->with(['nomenclature','characteristic_price'])
+            ->get();
     }
 }

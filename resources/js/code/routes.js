@@ -41,6 +41,9 @@ const routes = [
     {path: '/producers/create', name: "producers.create", component: ProducerCreate},
     {path: '/producers/:id', name: "producers.edit", component: ProducerEdit},
 
+    {path: '/producers', name: "characteristics.index", component: ProducerIndex},
+    {path: '/characteristics/create/:nomenclature_id', name: "characteristics.create", component: ProducerCreate},
+    {path: '/producers/:id', name: "producers.edit", component: ProducerEdit},
 
     {path: '/income-documents', name: "income.index", component: IncomeIndex},
     {path: '/income-documents/create', name: "income.create", component: IncomeCreate},

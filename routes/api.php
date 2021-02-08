@@ -35,8 +35,8 @@ Route::get('/income-document/filter', [App\Http\Controllers\FinanceDocumentContr
 
 Route::post('/income' , [\App\Http\Controllers\FinanceDocumentController::class, 'incomeCreate']);
 Route::post('/income/{id}' , [\App\Http\Controllers\FinanceDocumentController::class, 'incomeUpdate']);
+Route::post('/characteristics/{nomenclature_id}/create' , [\App\Http\Controllers\CharacteristicController::class, 'store']);
 
 
-
-Route::get('/characteristic/for-nomenclature/{id}', [App\Http\Controllers\CharacteristicController::class, 'forNomenclature']);
+Route::get('/characteristic/for-nomenclature/{id}', [App\Http\Controllers\CharacteristicController::class, 'getAllByNomenclatureId']);
 
