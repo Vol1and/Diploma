@@ -107,6 +107,10 @@ export default {
                 this.is_reload = false;
             });
         },
+        selected(selected_item) {
+            console.log(selected_item);
+            this.$emit("selected", {characteristic: selected_item});
+        },
         characteristicCreated(){
 
             this.create_dialog = false;
