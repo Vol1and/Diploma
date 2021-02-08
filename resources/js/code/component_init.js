@@ -68,6 +68,12 @@ Vue.component('nomenclature-choose-component',
 Vue.component('characteristic-choose-with-wares-component',
     require('../components/Characteristic/ChooseWithWares').default);
 
+Vue.component('characteristic-choose-component',
+    require('../components/Characteristic/Choose').default);
+
+Vue.component('characteristic-create-component',
+    require('../components/Characteristic/Create').default);
+
 //Vue.component('CharacteristicForNomenclature',     CharacteristicForNomenclature.default);
 
 Vue.component('HomeComponent', Home.default);

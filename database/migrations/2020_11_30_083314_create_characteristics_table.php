@@ -18,7 +18,7 @@ class CreateCharacteristicsTable extends Migration
             $table->string('serial');
             $table->date('expiry_date');
             $table->bigInteger('nomenclature_id')->unsigned();
-            $table->bigInteger('characteristic_price_id')->unsigned();
+            $table->bigInteger('characteristic_price_id')->default(1)->unsigned();
 
 
             $table->foreign('nomenclature_id')->references('id')

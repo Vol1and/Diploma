@@ -11,8 +11,6 @@ class FinanceDocumentTableRow {
         this.characteristic = characteristic;
         this.count = count;
         this.income_price = income_price;
-
-
     }
 
     //возвращает ассоциативный массив, который можно отправлять на сервер - в нем нет лишних полей, и тяжелых объектов - только id
@@ -39,6 +37,16 @@ class FinanceDocumentTableRow {
             this.characteristic.characteristic_price.price <= 0 ||
             this.count <= 0);
 
+    }
+
+    isEqual(row) {
+        return this.nomenclature.id === row.nomenclature.id &&
+            this.characteristic.id === row.characteristic.id &&
+            this.characteristic.serial === row.characteristic.serial &&
+            this.characteristic.expiry_date === row.characteristic.expiry_date &&
+            this.income_price === row.income_price &&
+            this.characteristic.characteristic_price.price === row.characteristic.characteristic_price.price &&
+            this.count === row.count;
     }
 
 

@@ -62,10 +62,11 @@
 
                             <el-row style="margin-bottom: 10px">
                                 <el-tooltip class="item" effect="light" content="Добавить новую строку" placement="top">
-                            <el-button @click="addToTable" circle icon="el-icon-plus"></el-button>
+                                    <el-button @click="addToTable" circle icon="el-icon-plus"></el-button>
                                 </el-tooltip>
-                                <el-tooltip class="item" effect="light" content="Удалить выбранную строку" placement="top">
-                                    <el-button @click="deleteSelected"  circle  icon="el-icon-delete-solid"></el-button>
+                                <el-tooltip class="item" effect="light" content="Удалить выбранную строку"
+                                            placement="top">
+                                    <el-button @click="deleteSelected" circle icon="el-icon-delete-solid"></el-button>
                                 </el-tooltip>
                             </el-row>
                             <el-table :cell-style="{padding: '0', height: '50px'}" :data="item.table_rows"
@@ -159,7 +160,7 @@
 
                                         <el-input v-if="selectingRow === scope.row" readonly
                                                   v-model="scope.row.characteristic.name" placeholder="">
-                                            <el-button type="primary" @click="selectingCharacteristic" slot="append"
+                                            <el-button type="primary" @click="characteristic_dialog = true;" slot="append"
                                                        icon="el-icon-d-arrow-right">
                                             </el-button>
                                         </el-input>
@@ -192,11 +193,11 @@
                                     <template slot-scope="scope">
 
                                         <div style="padding: 0">
-                                        <el-input v-if="selectingRow === scope.row" type="number"
-                                                  v-model="scope.row.income_price" placeholder="">
-                                            <template slot="append">руб.</template>
-                                        </el-input>
-                                        <div v-else> {{ scope.row.income_price }} руб.</div>
+                                            <el-input v-if="selectingRow === scope.row" type="number"
+                                                      v-model="scope.row.income_price" placeholder="">
+                                                <template slot="append">руб.</template>
+                                            </el-input>
+                                            <div v-else> {{ scope.row.income_price }} руб.</div>
                                         </div>
                                     </template>
                                 </el-table-column>
@@ -234,12 +235,22 @@
             </el-col>
 
         </el-row>
+        <el-drawer
+
+            :visible.sync="characteristic_dialog"
+            direction="ltr"
+            custom-class="demo-drawer"
+            ref="drawer"
+        >
+            <characteristic-choose-component @back="onBack" v-if="characteristic_dialog"
+                                                        :nomenclature_id="selectingRow.nomenclature.id"
+                                                        @selected="onSelectedCharacteristic"></characteristic-choose-component>
+        </el-drawer>
         <agent-choose-component @back="onBack" v-if="choosing_state ===1"
                                 @selected="onSelectedAgent"></agent-choose-component>
         <storage-choose-component @back="onBack" v-if="choosing_state ===3"
                                   @selected="onSelectedStorage"></storage-choose-component>
-        <characteristic-choose-with-wares-component @back="onBack" v-if="choosing_state === 4" :nomenclature_id="selectingRow.nomenclature.id"
-                                          @selected="onSelectedCharacteristic"> </characteristic-choose-with-wares-component>
+
         <nomenclature-choose-component @back="onBack" v-if="choosing_state ===2"
                                        @selected="onSelectedNomenclature"></nomenclature-choose-component>
 
@@ -264,7 +275,9 @@ export default {
 
     mixins: [mixin_finance_document],
     data() {
-        return {}
+        return {
+
+        }
     },
     created() {
         this.update();
@@ -323,9 +336,13 @@ export default {
             //блокируем кнопку submit
             this.loaded = false;
 
+
             //пост-запрос
             //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
             console.log(this.item.getDataForUpdate());
+            console.log(this.item);
+
+
             axios.post(`/api/income/${this.item.id}`, {
                 item: this.item.getDataForUpdate(),
                 state: state

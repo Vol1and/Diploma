@@ -10,6 +10,8 @@ export default {
     data: function () {
         return {
 
+            characteristic_dialog : false,
+
             errors: [],
             //переменная, которая помогает отображать компоненты выбора (например, NomenclatureChoose или ProducerChoose)
             choosing_state: 0,
@@ -94,6 +96,7 @@ export default {
         onSelectedCharacteristic(data) {
             this.selectingRow.characteristic = data.characteristic;
             this.choosing_state = 0;
+            this.characteristic_dialog = false;
         },
         onSelectedAgent(data) {
             this.item.agent = data.agent;

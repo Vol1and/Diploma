@@ -35,12 +35,6 @@
 
             >
             </el-table-column>
-            <el-table-column
-                prop="ware"
-                label="Текущий остаток "
-
-            >
-            </el-table-column>
         </el-table>
         <el-drawer
             :append-to-body="true"
@@ -64,7 +58,7 @@ import Characteristic from "../../code/models/Characteristic";
 import CharacteristicPrice from "../../code/models/CharacteristicPrice";
 
 export default {
-    name: "CharacteristicChooseWithWares",
+    name: "CharacteristicChoose",
 
     mixins: [mixin_index],
 
@@ -107,7 +101,6 @@ export default {
                         row.serial,
                         row.expiry_date,
                         new CharacteristicPrice(),
-                        row.ware
                     ));
                 })
 
