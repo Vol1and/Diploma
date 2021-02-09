@@ -20,4 +20,9 @@ class WareConnection extends Model
     {
         return $this->belongsTo(Characteristic::class);
     }
+
+    public function butch_number_connection()
+    {
+        return $this->belongsTo(ButchNumberConnection::class);
+    }
 }

@@ -8,6 +8,7 @@ use App\Repositories\CharacteristicPricesRepository;
 use App\Repositories\CharacteristicsRepository;
 use App\Repositories\FinanceDocumentsRepository;
 use App\Repositories\FinanceDocumentTableRowsRepository;
+use App\Repositories\WareConnectionsRepository;
 use Carbon\Carbon;
 
 class CreateFinanceDocumentService
@@ -31,80 +32,49 @@ class CreateFinanceDocumentService
     public function fillData($doc, $med)
     {
         $createCharacteristicPriceService= app(CreateCharacteristicPriceService::class);
+        $financeDocumentTableRowsRepository = app(FinanceDocumentTableRowsRepository::class);
         $characteristicPricesRepository= app(CharacteristicPricesRepository::class);
         $characteristicsRepository= app(CharacteristicsRepository::class);
         $createCharacteristicService = app(CreateCharacteristicService::class);
         $createFinanceDocumentTableRowService = app(CreateFinanceDocumentTableRowService::class);
+        $wareConnectionsRepository = app(WareConnectionsRepository::class);
 
-        // проверка наличия характеристики в БД
-        $checkCharacteristic = $characteristicsRepository->findBySerial($med['nomenclature_id'],$med['serial'],$med['expiry_date']);
 
-        // если в респонсе имеется id характеристики - значит характеристика уже должна быть в БД
-        if($checkCharacteristic) {
+        // поиск выбранной характеристики для выбранной номенклатуры в БД по id
+        $characteristic = $characteristicsRepository->findById($med['nomenclature_id'],$med['characteristic_id']);
 
-            // проверка соответствия цены характеристики их респонса к цене в БД
-            $checkPrice = $characteristicPricesRepository->getLatestPriceForCharacteristic($checkCharacteristic->id);
+        // получение строки таблицы для обновления
+        $tableRow = $financeDocumentTableRowsRepository->find($med['id']);
 
-            // если цены не соответствуют
-            if($checkPrice->price != $med['sell_price']){
+        // если нашлась
+        if ($characteristic) {
 
-                // в массиве медикамент обновляется значение характеристики
-                $med['characteristic_id'] = $checkCharacteristic->id;
+
+            // проверка соответствия цены характеристики из респонса к цене в БД
+            $checkPrice = $characteristicPricesRepository->getLatestPriceForCharacteristic($characteristic->id);
+
+            // если назначается первая цена - устанавливается цена из строки документа
+            if ($checkPrice->price != $med['sell_price']) {
 
                 // создаётся новая цена, с привязкой к характеристике из БД, переоценивая остатки
                 $cp = $createCharacteristicPriceService->makeUpdate($med);
-                if (!$cp) return response(null,500);
+                if (!$cp) return response(null, 500);
+
+                // в характеристике обновляется id цены
+                $characteristic->update(['characteristic_price_id' => $cp->id]);
             }
 
-            // добавление новой строки в документ
-            $tableRow = $createFinanceDocumentTableRowService->fillTableRow($doc, $med, $med['characteristic_id']);
-            if (!$tableRow) return response(null,500);
-
-        } else
-            {
-            // создание цены для характеристики со значением характеристики по умолчанию
-            $cp = $createCharacteristicPriceService->make($med);
-            if (!$cp) return response(null,500);
-
-            // добавление новой характеристики
-            $characteristic = $createCharacteristicService->make(['characteristic_price_id' => $cp->id] +$med);
-            if (!$characteristic) return response(null,500);
-
-            // добавление новой строки в документ
-            $tableRow = $createFinanceDocumentTableRowService->fillTableRow($doc, $med, $characteristic->id);
-            if (!$tableRow) return response(null,500);
-
-            // добавление значения id характеристики в таблицу Цены характеристик
-            $cp->update(['characteristic_id' => $characteristic->id]);
-        }
+            // обновление строки документа если есть, иначе создание новой
+            if ($tableRow) $tableRow->update(['price' => $med['income_price']] + $med);
+            else {
+                $tableRow = $createFinanceDocumentTableRowService->fillTableRow($doc, $med, $med['characteristic_id']);
+                if (!$tableRow) return response(null, 500);
+            }
+        } else return response(['error' => "Характеристика не была выбрана для строки документа"], 500);
 
         return $tableRow;
     }
 
-    // заполнение сущностей данными
-    //public function fillData($doc, $med)
-    //{
-    //    $createCharacteristicPriceService= app(CreateCharacteristicPriceService::class);
-    //    $createCharacteristicService = app(CreateCharacteristicService::class);
-    //    $createFinanceDocumentTableRowService = app(CreateFinanceDocumentTableRowService::class);
-//
-    //    // создание цены для характеристики со значением характеристики по умолчанию
-    //    $cp = $createCharacteristicPriceService->make($med);
-    //    if (!$cp) return response(null,500);
-//
-    //    // добавление новой характеристики
-    //    $characteristic = $createCharacteristicService->make(['characteristic_price_id' => $cp->id] +$med);
-    //    if (!$characteristic) return response(null,500);
-//
-    //    // добавление новой строки в документ
-    //    $tableRow = $createFinanceDocumentTableRowService->fillTableRow($doc, $med, $characteristic->id);
-    //    if (!$tableRow) return response(null,500);
-//
-    //    // добавление значения id характеристики в таблицу Цены характеристик
-    //    $cp->update(['characteristic_id' => $characteristic->id]);
-//
-    //    return $tableRow;
-    //}
 
     // метод сохранения приходного документа
     public function createIncome($data, $meds)
@@ -121,8 +91,6 @@ class CreateFinanceDocumentService
 
             } // foreach
 
-            $result = $this->pushIncome($doc->id);
-            if (!$result) return response(null,500);
         }
         return $doc;
     }

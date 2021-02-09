@@ -137,16 +137,20 @@ class FinanceDocumentController extends OriginController
         $data = $request->input('item');
         if(empty($data)) return response(null,400);
 
-        $meds = $data['table_rows'];
-        if(empty($meds)) return response(null,400);
+        $deleted = $data['deleted_rows'];
 
-        $result = $this->updateFinanceDocumentService->updateIncome($data, $meds, $id);
+        $updated = $data['updated_rows'];
+
+
+        $result = $this->updateFinanceDocumentService->updateIncome($data, $deleted, $updated, $id);
+
         if(empty($result)) return response(null,500);
 
         if($request->input('state')) {
             $result = $this->createFinanceDocumentService->pushIncome($id);
             // if(empty($result)) return response(null,500);
         }
+        return response(null,200);
     } // incomeUpdate
 
 

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCharacteristicPricesTable extends Migration
+class CreateButchNumberConnectionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateCharacteristicPricesTable extends Migration
      */
     public function up()
     {
-        Schema::create('characteristic_prices', function (Blueprint $table) {
+        Schema::create('butch_number_connections', function (Blueprint $table) {
             $table->id();
-            $table->decimal('price')->default(1);
-            $table->bigInteger('characteristic_id')->unsigned()->default(1);
+            $table->bigInteger('butch_number')->unsigned();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -29,6 +27,6 @@ class CreateCharacteristicPricesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('characteristic_prices');
+        Schema::dropIfExists('butch_number_connections');
     }
 }

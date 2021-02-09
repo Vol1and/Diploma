@@ -6,6 +6,7 @@ use App\Models\Characteristic;
 use App\Models\Nomenclature;
 use App\Repositories\CharacteristicsRepository;
 use App\Repositories\NomenclatureRepository;
+use App\Services\CreateCharacteristicService;
 use Illuminate\Http\Request;
 
 class CharacteristicController extends OriginController
@@ -14,13 +15,14 @@ class CharacteristicController extends OriginController
 
     //ссылка на хранилище модели PriceType
     private $characteristicRepository;
-
+    private $createCharacteristicService;
     private $nomenclatureRepository;
     public function __construct()
     {
 
         //инициализация хранилища
         $this->characteristicRepository = app(CharacteristicsRepository::class);
+        $this->createCharacteristicService = app(CreateCharacteristicService::class);
         $this->nomenclatureRepository = app(NomenclatureRepository::class);
     }
 
@@ -45,16 +47,19 @@ class CharacteristicController extends OriginController
      */
     public function store(Request $request, int $nomenclature_id)
     {
-        $result = Nomenclature::find($nomenclature_id);
+        $result = $this->nomenclatureRepository->find($nomenclature_id);
         if(empty($result))
             return response("Номенклатура с выбранным id не найдена!", 500);
 
         //получение данных из реквеста
         $data = $request->input();
         //создание нового элемента
-        $item = new Characteristic(['expiry_date'=> $data['expiry_date'],'serial'=> $data['serial'], 'nomenclature_id' => $nomenclature_id ]);
+        // $item = new Characteristic(['expiry_date'=> $data['expiry_date'],'serial'=> $data['serial'], 'nomenclature_id' => $nomenclature_id ]);
+
+        $item = $this->createCharacteristicService->add(['nomenclature_id' => $nomenclature_id ] + $data);
+
         //сохраняем
-        $item->save();
+        // $item->save();
 
         //если все ок - возвращаем ответ со статусом 201
         if($item)

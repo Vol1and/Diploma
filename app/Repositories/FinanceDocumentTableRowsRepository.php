@@ -16,6 +16,24 @@ class FinanceDocumentTableRowsRepository extends BaseRepository
         return Model::class;
     }
 
+    // получение строк документа
+    public function findRowsByDocId($document_id)
+    {
+        $columns = [
+            'id',
+            'count',
+            'characteristic_id',
+            'finance_document_id',
+            'ware_connection_id',
+            'price'
+        ];
+        return $this->startConditions()
+            ->select($columns)
+            ->where('finance_document_id', $document_id)
+            ->with(['characteristic'])
+            ->get();
+    }
+
     public function find($id)
     {
         $columns = [

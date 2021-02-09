@@ -6,7 +6,7 @@
             <{{ this.item.nomenclature.producer.name }}></h4>
         <el-row>
             <el-col :span="8">
-                <el-button  @click="create_dialog = true;" style=" float:left ">
+                <el-button  @click="create_dialog = true" style=" float:left ">
                     Добавить
                 </el-button>
             </el-col>
