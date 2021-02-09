@@ -5,14 +5,16 @@
             <el-col :span="20" :offset="2">
                 <el-card class="box-card">
                     <div slot="header">
-                        <h2 v-shortkey="['del']" @shortkey="deleteSelected" class="text-center">Новое поступление товаров</h2>
+                        <h2 v-shortkey="['del']" @shortkey="deleteSelected" class="text-center">Новое поступление
+                            товаров</h2>
                     </div>
                     <el-form label-width="100px" label-position="right">
 
                         <div style="margin-bottom: 30px">
                             <el-button type="primary" @click="submit(true)"><i class="el-icon-finished"></i> Провести
                             </el-button>
-                            <el-button @click="submit(false)"><i class="el-icon-folder-checked"></i> Записать</el-button>
+                            <el-button @click="submit(false)"><i class="el-icon-folder-checked"></i> Записать
+                            </el-button>
                             <el-button style="float: right" type="error" @click="()=>{this.$router.go(-1)}"><i
                                 class="el-icon-close"> Выход </i></el-button>
                         </div>
@@ -58,13 +60,14 @@
                                 <el-tooltip class="item" effect="light" content="Добавить новую строку" placement="top">
                                     <el-button @click="addToTable" circle icon="el-icon-plus"></el-button>
                                 </el-tooltip>
-                                <el-tooltip class="item" effect="light" content="Удалить выбранную строку" placement="top">
-                                    <el-button @click="deleteSelected"  circle  icon="el-icon-delete-solid"></el-button>
+                                <el-tooltip class="item" effect="light" content="Удалить выбранную строку"
+                                            placement="top">
+                                    <el-button @click="deleteSelected" circle icon="el-icon-delete-solid"></el-button>
                                 </el-tooltip>
                             </el-row>
-                            <el-table :cell-style="{padding: '0', height: '50px'}"  :data="item.table_rows"
+                            <el-table :cell-style="{padding: '0', height: '50px'}" :data="item.table_rows"
                                       highlight-current-cell
-                                      @cell-dblclick="rowEdit"
+                                      @row-dblclick="rowEdit"
                                       border
                                       show-summary
                                       sum-text="  "
@@ -108,41 +111,42 @@
                                     sortable
                                 >
                                 </el-table-column>
-                              <!--  <el-table-column
-                                    prop="nomenclature.characteristic.serial"
-                                    label="Серия"
-                                    min-width="100"
-                                    :index="4"
-                                    sortable
-                                >
-                                    <template slot-scope="scope">
+                                <!--  <el-table-column
+                                      prop="nomenclature.characteristic.serial"
+                                      label="Серия"
+                                      min-width="100"
+                                      :index="4"
+                                      sortable
+                                  >
+                                      <template slot-scope="scope">
 
-                                        <el-input v-if="selectingRow === scope.row"
-                                                  v-model="scope.row.characteristic.serial" placeholder="">
+                                          <el-input v-if="selectingRow === scope.row"
+                                                    v-model="scope.row.characteristic.serial" placeholder="">
 
-                                        </el-input>
-                                        <div v-else> {{ scope.row.characteristic.serial }}</div>
-                                    </template>
+                                          </el-input>
+                                          <div v-else> {{ scope.row.characteristic.serial }}</div>
+                                      </template>
 
-                                </el-table-column>
-                                <el-table-column
-                                    prop="nomenclature.characteristic.expiry_date"
-                                    label="Срок годности"
-                                    min-width="100"
-                                    :index="5"
+                                  </el-table-column>
+                                  <el-table-column
+                                      prop="nomenclature.characteristic.expiry_date"
+                                      label="Срок годности"
+                                      min-width="100"
+                                      :index="5"
 
-                                    sortable
-                                >
-                                    <template slot-scope="scope">
-                                        <el-date-picker v-if="selectingRow === scope.row"
-                                                        style="width: 100%"
-                                                        v-model="scope.row.characteristic.expiry_date"
-                                                        format="yyyy/MM/dd"
-                                                        value-format="yyyy/MM/dd"/>
+                                      sortable
+                                  >
+                                      <template slot-scope="scope">
+                                          <el-date-picker v-if="selectingRow === scope.row"
+                                                          style="width: 100%"
+                                                          v-model="scope.row.characteristic.expiry_date"
+                                                          format="yyyy/MM/dd"
+                                                          value-format="yyyy/MM/dd"/>
 
-                                        <div v-else> {{ scope.row.characteristic.expiry_date }}</div>
-                                    </template>
-                                </el-table-column> -->
+                                          <div v-else> {{ scope.row.characteristic.expiry_date }}</div>
+                                      </template>
+                                  </el-table-column> -->
+
                                 <el-table-column
                                     prop="characteristic.name"
                                     label="Характеристика"
@@ -152,7 +156,7 @@
 
                                         <el-input v-if="selectingRow === scope.row" readonly
                                                   v-model="scope.row.characteristic.name" placeholder="">
-                                            <el-button type="primary" @click="selectingCharacteristic" slot="append"
+                                            <el-button type="primary" @click="characteristic_dialog = true;" :disabled="scope.row.nomenclature.id === -1" slot="append"
                                                        icon="el-icon-d-arrow-right">
                                             </el-button>
                                         </el-input>
@@ -166,6 +170,7 @@
                                     :index="6"
                                     sortable
                                 >
+
                                     <template slot-scope="scope">
 
                                         <el-input v-if="selectingRow === scope.row" type="number"
@@ -225,12 +230,21 @@
             </el-col>
 
         </el-row>
+        <el-drawer
+
+            :visible.sync="characteristic_dialog"
+            direction="ltr"
+            custom-class="demo-drawer"
+            ref="drawer"
+        >
+            <characteristic-choose-component @back="onBack" v-if="characteristic_dialog"
+                                             :nomenclature_id="selectingRow.nomenclature.id"
+                                             @selected="onSelectedCharacteristic"></characteristic-choose-component>
+        </el-drawer>
         <agent-choose-component @back="onBack" v-if="choosing_state ===1"
                                 @selected="onSelectedAgent"></agent-choose-component>
         <storage-choose-component @back="onBack" v-if="choosing_state ===3"
-                                  @selected="onSelectedStorage" ></storage-choose-component>
-        <characteristic-choose-with-wares-component @back="onBack" v-if="choosing_state === 4" :this.nomenclature_id="selectingRow.nomenclature.id"
-                                                    @selected="onSelectedCharacteristic"> </characteristic-choose-with-wares-component>
+                                  @selected="onSelectedStorage"></storage-choose-component>
         <nomenclature-choose-component @back="onBack" v-if="choosing_state ===2"
                                        @selected="onSelectedNomenclature"></nomenclature-choose-component>
     </div>
@@ -240,11 +254,10 @@
 
 
 import mixin_finance_document from "../../../code/mixins/mixin_finance_document";
-import CharacteristicChooseWithWares from "../../Characteristic/ChooseWithWares";
 
 export default {
     name: "IncomeCreate",
-    components: {CharacteristicChooseWithWares},
+
     mixins: [mixin_finance_document],
     data() {
         return {}
@@ -265,7 +278,7 @@ export default {
             console.log(this.item)
             //пост-запрос
             //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
-            axios.post("/api/income", {item: this.item.getDataForCreate(),state : statet}).then((response) => {
+            axios.post("/api/income", {item: this.item.getDataForCreate(), state: statet}).then((response) => {
                 console.log(response.data);
                 this.$notify({
 

@@ -26,7 +26,6 @@ import IncomeIndex from "../components/Documents/Income/Index";
 import IncomeEdit from "../components/Documents/Income/Edit";
 
 import WaresIndex from "../components/Ware/Index"
-import CharacteristicForNomenclature from "../components/Characteristic/ForNomenclature";
 
 
 import Home from "../components/Home";
@@ -65,11 +64,7 @@ const routes = [
     {path: '/nomenclatures', name: "nomenclature.index", component: NomenclatureIndex},
     {path: '/nomenclatures/create', name: "nomenclature.create", component: NomenclatureCreate},
     {path: '/nomenclatures/:id', name: "nomenclature.edit", component: NomenclatureEdit},
-    {
-        path: '/nomenclatures/:id/characteristics',
-        name: "nomenclature.characteristics",
-        component: CharacteristicForNomenclature
-    },
+
 
     {path: '/', name: "home.index", component: Home},
 
@@ -94,11 +89,6 @@ const routes = [
     {path: '/adm/nomenclatures', name: "admin.nomenclature.index", component: NomenclatureIndex},
     {path: '/adm/nomenclatures/create', name: "admin.nomenclature.create", component: NomenclatureCreate},
     {path: '/adm/nomenclatures/:id', name: "admin.nomenclature.edit", component: NomenclatureEdit},
-    {
-        path: '/adm/nomenclatures/:id/characteristics',
-        name: "admin.nomenclature.characteristics",
-        component: CharacteristicForNomenclature
-    },
 
     {path: '/adm/home', name: "admin.home.index", component: AdminMain}
 

@@ -115,41 +115,41 @@
                                     sortable
                                 >
                                 </el-table-column>
-                                <el-table-column
-                                    prop="nomenclature.characteristic.serial"
-                                    label="Серия"
-                                    min-width="100"
-                                    :index="4"
-                                    sortable
-                                >
-                                    <template slot-scope="scope">
+<!--                                <el-table-column-->
+<!--                                    prop="nomenclature.characteristic.serial"-->
+<!--                                    label="Серия"-->
+<!--                                    min-width="100"-->
+<!--                                    :index="4"-->
+<!--                                    sortable-->
+<!--                                >-->
+<!--                                    <template slot-scope="scope">-->
 
-                                        <el-input v-if="selectingRow === scope.row"
-                                                  v-model="scope.row.characteristic.serial" placeholder="">
+<!--                                        <el-input v-if="selectingRow === scope.row"-->
+<!--                                                  v-model="scope.row.characteristic.serial" placeholder="">-->
 
-                                        </el-input>
-                                        <div v-else> {{ scope.row.characteristic.serial }}</div>
-                                    </template>
+<!--                                        </el-input>-->
+<!--                                        <div v-else> {{ scope.row.characteristic.serial }}</div>-->
+<!--                                    </template>-->
 
-                                </el-table-column>
-                                <el-table-column
-                                    prop="nomenclature.characteristic.expiry_date"
-                                    label="Срок годности"
-                                    min-width="100"
-                                    :index="5"
+<!--                                </el-table-column>-->
+<!--                                <el-table-column-->
+<!--                                    prop="nomenclature.characteristic.expiry_date"-->
+<!--                                    label="Срок годности"-->
+<!--                                    min-width="100"-->
+<!--                                    :index="5"-->
 
-                                    sortable
-                                >
-                                    <template slot-scope="scope">
-                                        <el-date-picker v-if="selectingRow === scope.row"
-                                                        style="width: 100%"
-                                                        v-model="scope.row.characteristic.expiry_date"
-                                                        format="yyyy/MM/dd"
-                                                        value-format="yyyy/MM/dd"/>
+<!--                                    sortable-->
+<!--                                >-->
+<!--                                    <template slot-scope="scope">-->
+<!--                                        <el-date-picker v-if="selectingRow === scope.row"-->
+<!--                                                        style="width: 100%"-->
+<!--                                                        v-model="scope.row.characteristic.expiry_date"-->
+<!--                                                        format="yyyy/MM/dd"-->
+<!--                                                        value-format="yyyy/MM/dd"/>-->
 
-                                        <div v-else> {{ scope.row.characteristic.expiry_date }}</div>
-                                    </template>
-                                </el-table-column>
+<!--                                        <div v-else> {{ scope.row.characteristic.expiry_date }}</div>-->
+<!--                                    </template>-->
+<!--                                </el-table-column>-->
                                 <el-table-column
                                     prop="nomenclature.characteristic.name"
                                     label="Характеристика"
@@ -160,7 +160,7 @@
 
                                         <el-input v-if="selectingRow === scope.row" readonly
                                                   v-model="scope.row.characteristic.name" placeholder="">
-                                            <el-button type="primary" @click="characteristic_dialog = true;" slot="append"
+                                            <el-button type="primary" :disabled="scope.row.nomenclature.id === -1" @click="characteristic_dialog = true;" slot="append"
                                                        icon="el-icon-d-arrow-right">
                                             </el-button>
                                         </el-input>

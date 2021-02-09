@@ -95,8 +95,9 @@ export default {
 
                 response.data.characteristics.forEach(row => {
 
+
                     this.item.characteristics.push(new Characteristic(
-                        row.characteristic_id,
+                        row.id,
                         row.name,
                         row.serial,
                         row.expiry_date,

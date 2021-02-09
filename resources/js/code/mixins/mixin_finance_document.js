@@ -45,6 +45,7 @@ export default {
         ,
         rowHover(item) {
 
+            if(this.selectingRow.isEqual(item)) return;
             this.hover_row = item;
             this.selectingRow = new FinanceDocumentTableRow();
         },
