@@ -31,7 +31,8 @@ class FinanceDocument {
             storage_id: this.storage.id,
             date: this.date,
             table_rows: table_rows,
-            comment: this.comment
+            comment: this.comment,
+            doc_type_id: this.type
         }
     }
 
@@ -46,7 +47,8 @@ class FinanceDocument {
             date: this.date,
             comment: this.comment,
             deleted_rows: this.deleted_rows,
-            updated_rows: updated_rows
+            updated_rows: updated_rows,
+            doc_type_id: this.type
         }
     }
 
