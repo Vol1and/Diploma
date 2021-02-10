@@ -14,7 +14,7 @@ class CreateFindCharacteristicsProcedure extends Migration
     {
         // SQL код создания процедуры для вывода характеристик конкретной номенклатуры с параметром: id номенклатуры
         $procedure = "
-        CREATE PROCEDURE `find_characteristics_procedure`(nomenclature_id bigint)
+        CREATE PROCEDURE `find_characteristics_procedure`(nomenclature_id bigint, storage_id bigint)
             BEGIN
                  SELECT
                 `ware_connections`.`characteristic_id` AS `characteristic_id`,
@@ -29,7 +29,7 @@ class CreateFindCharacteristicsProcedure extends Migration
                 ((`ware_connections`
                 LEFT JOIN `characteristics` ON ((`ware_connections`.`characteristic_id` = `characteristics`.`id`)))
                 LEFT JOIN `nomenclatures` ON ((`characteristics`.`nomenclature_id` = `nomenclatures`.`id`)))
-            WHERE `characteristics`.`nomenclature_id` = nomenclature_id
+            WHERE `characteristics`.`nomenclature_id` = nomenclature_id AND `ware_connections`.storage_id = storage_id
             GROUP BY `ware_connections`.`characteristic_id`, `ware_connections`.`storage_id`;
         END
         ";

@@ -25,6 +25,12 @@ import IncomeCreate from "../components/Documents/Income/Create";
 import IncomeIndex from "../components/Documents/Income/Index";
 import IncomeEdit from "../components/Documents/Income/Edit";
 
+
+import SellingCreate from "../components/Documents/Selling/Create";
+import SellingIndex from "../components/Documents/Selling/Index";
+import SellingEdit from "../components/Documents/Selling/Edit";
+
+
 import WaresIndex from "../components/Ware/Index"
 
 
@@ -47,6 +53,12 @@ const routes = [
     {path: '/income-documents', name: "income.index", component: IncomeIndex},
     {path: '/income-documents/create', name: "income.create", component: IncomeCreate},
     {path: '/income-documents/:id', name: "income.edit", component: IncomeEdit},
+
+
+    {path: '/selling-documents', name: "selling.index", component: SellingIndex},
+    {path: '/selling-documents/create', name: "selling.create", component: SellingCreate},
+    {path: '/selling-documents/:id', name: "selling.edit", component: SellingEdit},
+
 
     {path: '/agents', name: "agents.index", component: AgentIndex},
     {path: '/agents/create', name: "agents.create", component: AgentCreate},

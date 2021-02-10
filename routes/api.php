@@ -40,3 +40,6 @@ Route::post('/characteristics/{nomenclature_id}/create' , [\App\Http\Controllers
 
 Route::get('/characteristic/for-nomenclature/{id}', [App\Http\Controllers\CharacteristicController::class, 'getAllByNomenclatureId']);
 
+
+Route::get('/characteristic/by-nomenclature-storage/{nomenclature_id}/{storage_id}', [App\Http\Controllers\CharacteristicController::class, 'getAllByNomenclatureAndStorageIdWithWares']);
+

@@ -40,7 +40,7 @@
                             start-placeholder="Начало"
                             end-placeholder="Конец"
                             :default-value="null"
-                          >
+                        >
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item style="   margin-bottom: 0;" label="Поставщик:">
@@ -127,7 +127,7 @@
 <script>
 import mixin_index from "../../../code/mixins/mixin_index";
 import FinanceDocumentTableRow from "../../../code/models/FinanceDocumentTableRow";
-import IncomeDocument from "../../../code/models/IncomeDocument";
+import FinanceDocument from "../../../code/models/FinanceDocument";
 import Agent from "../../../code/models/Agent";
 import Storage from "../../../code/models/Storage";
 import moment from "moment";
@@ -140,7 +140,7 @@ export default {
         return {
 
             filter_fields: {
-                date_range : {},
+                date_range: {},
                 agent: {name: ""},
                 storage: {name: ""},
 
@@ -155,7 +155,7 @@ export default {
         filterClear() {
 
             this.filter_fields = {
-                date_range : {},
+                date_range: {},
                 agent: {name: ""},
                 storage: {name: ""}
             }
@@ -165,17 +165,17 @@ export default {
 
         filter() {
             this.filter_state = true;
-            console.log( {
-                    start_date: this.filter_fields.date_range[0],
-                    end_date: this.filter_fields.date_range[1],
-                    agent_id: this.filter_fields.agent.id,
-                    storage_id: this.filter_fields.storage.id
+            console.log({
+                start_date: this.filter_fields.date_range[0],
+                end_date: this.filter_fields.date_range[1],
+                agent_id: this.filter_fields.agent.id,
+                storage_id: this.filter_fields.storage.id
             });
             axios.get('/api/income-document/filter', {
 
                 params: {
-                    start_date: this.filter_fields.date_range[0] === undefined ? null:    moment(this.filter_fields.date_range[0]).format("YYYY-MM-DD hh:mm:ss") ,
-                    end_date: this.filter_fields.date_range[1] === undefined ? null:  moment(this.filter_fields.date_range[1]).format("YYYY-MM-DD hh:mm:ss") ,
+                    start_date: this.filter_fields.date_range[0] === undefined ? null : moment(this.filter_fields.date_range[0]).format("YYYY-MM-DD hh:mm:ss"),
+                    end_date: this.filter_fields.date_range[1] === undefined ? null : moment(this.filter_fields.date_range[1]).format("YYYY-MM-DD hh:mm:ss"),
                     agent_id: this.filter_fields.agent.id,
                     storage_id: this.filter_fields.storage.id
                 }
@@ -187,19 +187,17 @@ export default {
 
                 //console.log(response.data)
                 let table_rows = [];
+                let type = true;
                 //оборачиваем каждый элемент пришедших данных в модель модуля
                 response.data.forEach(item => {
 
 
                     if (item.table_rows !== undefined && item.table_rows.length > 0) item.table_rows.forEach(row => table_rows.push(new FinanceDocumentTableRow(row.id, row.nomenclature, row.characteristic, row.count, row.income_price, row.sell_price)));
-
-
-                    result.push(new IncomeDocument(item.id,
+                    result.push(new FinanceDocument(item.id,
                         new Agent(item.agent.id, item.agent.name, item.agent.billing, item.agent.address, item.agent.description, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at),
                         new Storage(item.storage.id, item.storage.name, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at),
-                        item.date, table_rows,null, item.comment,
+                        item.date, table_rows, null, item.comment,
                         item.created_at, item.updated_at, item.deleted_at))
-
                 })
                 this.page_of_items = result;
             }).catch((error) => {

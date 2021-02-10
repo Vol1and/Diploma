@@ -87,7 +87,7 @@
                                 </el-table-column>
                                 <el-table-column
                                     prop="nomenclature.name"
-                                    label="Наименование"
+                                    label="Номенклатура"
                                     min-width="200"
                                     :index="2"
                                     sortable

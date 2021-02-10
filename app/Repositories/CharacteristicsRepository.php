@@ -20,11 +20,11 @@ class CharacteristicsRepository extends BaseRepository
         return Model::all();
     }
 
-    public function getAllByNomenclatureIdWithWares($nomenclature_id)
+    public function getAllByNomenclatureAndStorageIdWithWares($nomenclature_id, $storage_id)
     {
 
         return DB::select(
-            'CALL find_characteristics_procedure(' . $nomenclature_id . ')'
+            'CALL find_characteristics_procedure(' . $nomenclature_id . ', '.$storage_id.')'
         );
     }
 

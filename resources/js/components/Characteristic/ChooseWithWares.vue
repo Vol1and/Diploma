@@ -2,8 +2,10 @@
     <el-row class="center-90">
 
         <h1 class="text-center">Выбор характеристики</h1>
+        <h4 class="text-center">Склад : {{ this.item.storage.name }}</h4>
         <h4 class="text-center">Номенклатура: {{ this.item.nomenclature.name }}
             <{{ this.item.nomenclature.producer.name }}></h4>
+
         <el-row>
             <el-col :span="8">
                 <el-button  @click="create_dialog = true" style=" float:left ">
@@ -62,6 +64,7 @@ import mixin_index from "../../code/mixins/mixin_index";
 import Producer from "../../code/models/Producer";
 import Characteristic from "../../code/models/Characteristic";
 import CharacteristicPrice from "../../code/models/CharacteristicPrice";
+import Storage from "../../code/models/Storage";
 
 export default {
     name: "CharacteristicChooseWithWares",
@@ -70,11 +73,12 @@ export default {
 
     props: {
         create_dialog: false,
-        nomenclature_id: Number
+        nomenclature_id: Number,
+        storage_id : Number
     },
     data: function () {
         return {
-            item: {characteristics: [], nomenclature: new Nomenclature()}
+            item: {characteristics: [], nomenclature: new Nomenclature(), storage: new Storage()}
         };
     },
     mounted() {
@@ -86,10 +90,10 @@ export default {
             this.selected_item = id;
         },
 
-        update() {
+        update: function () {
             console.log(this.nomenclature_id)
             this.is_reload = true;
-            axios.get(`/api/characteristic/for-nomenclature/${this.nomenclature_id}`).then((response) => {
+            axios.get(`/api/characteristic/by-nomenclature-storage/${this.nomenclature_id}/${this.storage_id}`).then((response) => {
 
 
                 console.log(response.data);
@@ -98,7 +102,9 @@ export default {
                     response.data.nomenclature.name,
                     new Producer(response.data.nomenclature.producer.id, response.data.nomenclature.producer.name, response.data.nomenclature.producer.country),
                 );
-
+                this.item.storage = new Storage(response.data.storage.id,
+                    response.data.storage.name
+                );
                 response.data.characteristics.forEach(row => {
 
                     this.item.characteristics.push(new Characteristic(

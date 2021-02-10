@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Characteristic;
-use App\Models\Nomenclature;
 use App\Repositories\CharacteristicsRepository;
 use App\Repositories\NomenclatureRepository;
 use App\Services\CreateCharacteristicService;
@@ -42,13 +40,13 @@ class CharacteristicController extends OriginController
      * Store a newly created resource in storage.
      *
      * @param int $nomenclature_id Айди номенклатуры, на которую создается характеристика
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, int $nomenclature_id)
     {
         $result = $this->nomenclatureRepository->find($nomenclature_id);
-        if(empty($result))
+        if (empty($result))
             return response("Номенклатура с выбранным id не найдена!", 500);
 
         //получение данных из реквеста
@@ -56,26 +54,26 @@ class CharacteristicController extends OriginController
         //создание нового элемента
         // $item = new Characteristic(['expiry_date'=> $data['expiry_date'],'serial'=> $data['serial'], 'nomenclature_id' => $nomenclature_id ]);
 
-        $item = $this->createCharacteristicService->add(['nomenclature_id' => $nomenclature_id ] + $data);
+        $item = $this->createCharacteristicService->add(['nomenclature_id' => $nomenclature_id] + $data);
 
         //сохраняем
         // $item->save();
 
         //если все ок - возвращаем ответ со статусом 201
-        if($item)
+        if ($item)
             return response(null, 201);
         //либо можно передавать айди созданного элемента
         //return response($item->id, 201);
 
         //если нет - отправляем ошибку (статус возмонжо стоит поменять)
-        return response(null,500);
+        return response(null, 500);
 
-     }
+    }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -86,8 +84,8 @@ class CharacteristicController extends OriginController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -98,7 +96,7 @@ class CharacteristicController extends OriginController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -106,23 +104,28 @@ class CharacteristicController extends OriginController
         //
     }
 
-    public function getAllByNomenclatureId($id){
-
+    public function getAllByNomenclatureId($id)
+    {
 
 
         $nomenclature = $this->nomenclatureRepository->find($id);
         $characteristics = $this->characteristicRepository->getAllByNomenclatureId($id);
 
-        return ['nomenclature'=>$nomenclature, 'characteristics' => $characteristics];
+        return ['nomenclature' => $nomenclature, 'characteristics' => $characteristics];
     }
 
-    public function getAllByNomenclatureIdWithWares($id){
+    public function getAllByNomenclatureAndStorageIdWithWares($nomenclature_id, $storage_id)
+    {
 
 
+        $nomenclature = $this->nomenclatureRepository->find($nomenclature_id);
+        if (empty($nomenclature)) return response('Выбранная номенклатура не найдена', 500);
 
-        $nomenclature = $this->nomenclatureRepository->find($id);
-        $characteristics = $this->characteristicRepository->getAllByNomenclatureIdWithWares($id);
+        $storage = $this->nomenclatureRepository->find($storage_id);
+        if (empty($storage)) return response('Выбранный склад не найден', 500);
 
-        return ['nomenclature'=>$nomenclature, 'characteristics' => $characteristics];
+        $characteristics = $this->characteristicRepository->getAllByNomenclatureAndStorageIdWithWares($nomenclature_id, $storage_id);
+
+        return ['nomenclature' => $nomenclature, 'storage' => $storage, 'characteristics' => $characteristics];
     }
 }

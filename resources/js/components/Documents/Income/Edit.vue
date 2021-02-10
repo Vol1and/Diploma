@@ -91,7 +91,7 @@
                                 </el-table-column>
                                 <el-table-column
                                     prop="nomenclature.name"
-                                    label="Наименование"
+                                    label="Номенклатура"
                                     min-width="200"
                                     :index="2"
                                     sortable
@@ -260,7 +260,7 @@
 <script>
 
 
-import IncomeDocument from "../../../code/models/IncomeDocument";
+import FinanceDocument from "../../../code/models/FinanceDocument";
 import FinanceDocumentTableRow from "../../../code/models/FinanceDocumentTableRow";
 import Agent from "../../../code/models/Agent";
 import Storage from "../../../code/models/Storage";
@@ -308,7 +308,7 @@ export default {
                             row.price,
                         )));
 
-                    this.item = new IncomeDocument(response.data.id,
+                    this.item = new FinanceDocument(response.data.id, true,
                         new Agent(response.data.agent.id, response.data.agent.name, response.data.agent.billing, response.data.agent.address, response.data.agent.description, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at),
                         new Storage(response.data.storage.id, response.data.storage.name, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at),
                         response.data.date,

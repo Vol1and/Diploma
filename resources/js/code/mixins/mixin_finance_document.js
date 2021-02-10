@@ -1,7 +1,7 @@
 //данный код будет включен во все Document-компоненты (например, ProducerIndex)
 //хранит данные, которые используются в каждых компонентах
 //подробнее почитать можно https://ru.vuejs.org/v2/guide/mixins.html
-import IncomeDocument from "../models/IncomeDocument";
+import FinanceDocument from "../models/FinanceDocument";
 import FinanceDocumentTableRow from "../models/FinanceDocumentTableRow";
 
 export default {
@@ -18,7 +18,7 @@ export default {
             //показывает, получены ли данные с сервера - при loaded - false не доступна submit-кнопка
             loaded: true,
             //модель, в которой будут находиться данные
-            item: new IncomeDocument(null),
+            item: new FinanceDocument(null, true),
 
             //выбранная строка - в табличной части идет проверка - id_строки - id_selectingRow
             //если true, то строка переходит в editable
