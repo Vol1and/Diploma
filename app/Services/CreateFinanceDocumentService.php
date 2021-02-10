@@ -16,16 +16,25 @@ class CreateFinanceDocumentService
 
     public function makeIncome($data)
     {
+        $createButchNumberConnectionService = app(CreateButchNumberConnectionService::class);
+
         $rest = substr($data['date'], 0, -3);
         $date = Carbon::createFromTimestamp($rest, 'Europe/Moscow')->toDateTimeString();
 
-        return (new FinanceDocument())->create(['agent_id' => $data['agent_id'],
+
+
+        $doc = (new FinanceDocument())->create(['agent_id' => $data['agent_id'],
             'comment' => $data['comment'],
             'date' =>  $date,
             'is_set' => true,
             'doc_type_id' => 1,
             'storage_id'=> $data['storage_id']
         ]);
+
+        // создание номера партии по номеру документа
+        if($doc) $createButchNumberConnectionService->make(['butch_number' => $doc->id]);
+
+        return $doc;
     }
 
     // заполнение сущностей данными
@@ -112,7 +121,7 @@ class CreateFinanceDocumentService
             // циклический проход по массиву строк документа
             foreach ($rows as $row) {
 
-                $result = $createWareConnectionService->pushWareConnection($row, $doc->storage_id);
+                $result = $createWareConnectionService->pushWareConnection($row, $doc);
                 if (!$result) return response(null,500);
 
             } // foreach

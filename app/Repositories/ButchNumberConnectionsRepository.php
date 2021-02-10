@@ -18,4 +18,19 @@ class ButchNumberConnectionsRepository extends BaseRepository
     public function getTable(){
         return Model::all();
     }
+
+    // поиск сущности по полю Номер партии
+    public function findByButchNumber($butchNumber)
+    {
+        $columns = [
+            'id',
+            'butch_number'
+        ];
+        return $this->startConditions()
+            ->select($columns)
+            ->where('butch_number', $butchNumber)
+            ->get()
+            ->first();
+
+    }
 }
