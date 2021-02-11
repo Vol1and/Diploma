@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\CharacteristicsRepository;
 use App\Repositories\NomenclatureRepository;
+use App\Repositories\StoragesRepository;
 use App\Services\CreateCharacteristicService;
 use Illuminate\Http\Request;
 
@@ -15,6 +16,8 @@ class CharacteristicController extends OriginController
     private $characteristicRepository;
     private $createCharacteristicService;
     private $nomenclatureRepository;
+    private $storageRepository;
+
     public function __construct()
     {
 
@@ -22,6 +25,7 @@ class CharacteristicController extends OriginController
         $this->characteristicRepository = app(CharacteristicsRepository::class);
         $this->createCharacteristicService = app(CreateCharacteristicService::class);
         $this->nomenclatureRepository = app(NomenclatureRepository::class);
+        $this->storageRepository = app(StoragesRepository::class);
     }
 
 
@@ -121,7 +125,7 @@ class CharacteristicController extends OriginController
         $nomenclature = $this->nomenclatureRepository->find($nomenclature_id);
         if (empty($nomenclature)) return response('Выбранная номенклатура не найдена', 500);
 
-        $storage = $this->nomenclatureRepository->find($storage_id);
+        $storage = $this->storageRepository->find($storage_id);
         if (empty($storage)) return response('Выбранный склад не найден', 500);
 
         $characteristics = $this->characteristicRepository->getAllByNomenclatureAndStorageIdWithWares($nomenclature_id, $storage_id);

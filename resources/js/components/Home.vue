@@ -46,7 +46,7 @@
                         </router-link>
                     </div>
                     <div class="text item">
-                        <router-link class="el-link--default el-link" :to="{name: 'selling.index'}">Реализация
+                        <router-link class="el-link--default el-link" :to="{name: 'selling.index'}">Реализации
                             товаров
                         </router-link>
                     </div>

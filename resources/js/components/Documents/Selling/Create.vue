@@ -5,7 +5,8 @@
             <el-col :span="20" :offset="2">
                 <el-card class="box-card">
                     <div slot="header">
-                        <h2 v-shortkey="['del']" @shortkey="deleteSelected" class="text-center">Новая реализация товаров</h2>
+                        <h2 v-shortkey="['del']" @shortkey="deleteSelected" class="text-center">Новая реализация
+                            товаров</h2>
                     </div>
                     <el-form label-width="100px" label-position="right">
 
@@ -111,7 +112,9 @@
 
                                         <el-input v-if="selectingRow === scope.row" readonly
                                                   v-model="scope.row.characteristic.name" placeholder="">
-                                            <el-button type="primary" @click="characteristic_dialog = true;" :disabled="scope.row.nomenclature.id === -1" slot="append"
+                                            <el-button type="primary" @click="characteristic_dialog = true;"
+                                                       :disabled="scope.row.nomenclature.id === -1 || item.storage.id === -1 "
+                                                       slot="append"
                                                        icon="el-icon-d-arrow-right">
                                             </el-button>
                                         </el-input>
@@ -136,22 +139,6 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column
-                                    prop="income_price"
-                                    label="Цена закупки"
-                                    min-width="100"
-                                    :index="7"
-                                    sortable
-                                >
-                                    <template slot-scope="scope">
-
-                                        <el-input v-if="selectingRow === scope.row" type="number"
-                                                  v-model="scope.row.income_price" placeholder="">
-                                            <template slot="append">руб.</template>
-                                        </el-input>
-                                        <div v-else> {{ scope.row.income_price }} руб.</div>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
                                     prop="characteristic.characteristic_price.price"
                                     label="Цена продажи"
                                     min-width="100"
@@ -162,13 +149,26 @@
 
                                         <el-input v-if="selectingRow === scope.row" type="number"
                                                   v-model="scope.row.characteristic.characteristic_price.price"
-                                                  placeholder="">
+                                                  placeholder="" readonly>
                                             <template slot="append">руб.</template>
                                         </el-input>
                                         <div v-else> {{ scope.row.characteristic.characteristic_price.price }} руб.
                                         </div>
                                     </template>
                                 </el-table-column>
+                                <!--                                <el-table-column-->
+                                <!--                                    -->
+                                <!--                                    label="Сумма"-->
+                                <!--                                    min-width="100"-->
+                                <!--                                    :index="7"-->
+                                <!--                                    sortable-->
+                                <!--                                >-->
+                                <!--                                    <template slot-scope="scope">-->
+
+                                <!--                                        <div v-else> {{ scope.row.characteristic.characteristic_price.price * scope.row.count}} руб.-->
+                                <!--                                        </div>-->
+                                <!--                                    </template>-->
+                                <!--                                </el-table-column>-->
                             </el-table>
                         </el-card>
                     </el-form>
@@ -193,9 +193,10 @@
             ref="drawer"
         >
 
-            <characteristic-choose-with-wares-component :storage_id="item.storage.id" @back="onBack" v-if="characteristic_dialog"
-                                             :nomenclature_id="selectingRow.nomenclature.id"
-                                             @selected="onSelectedCharacteristic"></characteristic-choose-with-wares-component>
+            <characteristic-choose-with-wares-component :storage_id="item.storage.id" @back="onBack"
+                                                        v-if="characteristic_dialog"
+                                                        :nomenclature_id="selectingRow.nomenclature.id"
+                                                        @selected="onSelectedCharacteristic"></characteristic-choose-with-wares-component>
         </el-drawer>
         <agent-choose-component @back="onBack" v-if="choosing_state ===1"
                                 @selected="onSelectedAgent"></agent-choose-component>
@@ -255,15 +256,12 @@ export default {
         },
         validateFields() {
             this.errors = [];
-            if (this.item.agent.id === -1) this.errors.push("Поле \"Поставщик\" должно быть заполнено");
             if (this.item.storage.id === -1) this.errors.push("Поле \"Склад\" должно быть заполнено");
 
             this.item.table_rows.forEach(p => {
                 if (p.nomenclature.id === -1) this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Номенклатура\" должно быть заполнено`);
                 if (p.characteristic.serial === "") this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Серия\" должно быть заполнено`);
-                if (p.characteristic.expiry_date === "") this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Срок годности\" должно быть заполнено`);
-                if (p.income_price <= 0) this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Цена поступления\" должно быть больше 0`);
-                //if (p.sell_price <= 0) this.errors.push(`Строка № ${this.item.table_rows.indexOfp}. Поле \"Цена продажи\" должно быть больше 0`);
+                if (p.characteristic.expiry_date === "") this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Срок годности\" должно быть заполнено`);//if (p.sell_price <= 0) this.errors.push(`Строка № ${this.item.table_rows.indexOfp}. Поле \"Цена продажи\" должно быть больше 0`);
                 if (p.count <= 0) this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Количество\" должно быть больше 0`);
             })
             this.showErrors()

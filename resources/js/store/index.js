@@ -6,6 +6,7 @@ import nomenclature from './modules/nomenclature'
 import agents from "./modules/agents";
 import income from "./modules/income";
 import storages from "./modules/storages";
+import selling from "./modules/selling";
 
 Vue.use(Vuex)
 
@@ -18,6 +19,7 @@ export default new Vuex.Store({
         nomenclature,
         agents,
         income,
-        storages
+        storages,
+        selling
     },
 })

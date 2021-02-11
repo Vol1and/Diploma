@@ -43,6 +43,12 @@
 
             >
             </el-table-column>
+            <el-table-column
+                prop="characteristic_price.price"
+                label="Цена продаже "
+
+            >
+            </el-table-column>
         </el-table>
         <el-drawer
             :append-to-body="true"
@@ -112,7 +118,7 @@ export default {
                         row.name,
                         row.serial,
                         row.expiry_date,
-                        new CharacteristicPrice(),
+                        new CharacteristicPrice(row.characteristic_price_id, row.characteristic_price),
                         row.ware
                     ));
                 })
