@@ -121,10 +121,10 @@ class FinanceDocumentController extends OriginController
         if(empty($meds)) return response(null,400);
 
         // добавление нового документа
-        $doc = $this->createFinanceDocumentService->createIncome($data,$meds);
+        $doc = $this->createFinanceDocumentService->createFinanceDoc($data,$meds);
         if(empty($doc)) return response(null,500);
 
-        if($request->input('state')) $result = $this->createFinanceDocumentService->pushIncome($doc->id);
+        if($request->input('state')) $result = $this->createFinanceDocumentService->pushFinanceDoc($doc->id);
         //if(empty($result)) return response(null,500);
 
     } // incomeCreate
@@ -147,7 +147,7 @@ class FinanceDocumentController extends OriginController
         if(empty($result)) return response(null,500);
 
         if($request->input('state')) {
-            $result = $this->createFinanceDocumentService->pushIncome($id);
+            $result = $this->createFinanceDocumentService->pushFinanceDoc($id);
             // if(empty($result)) return response(null,500);
         }
         return response(null,200);

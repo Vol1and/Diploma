@@ -21,6 +21,7 @@ class CreateFindCharacteristicsProcedure extends Migration
                 `nomenclatures`.`name` AS `nomenclature_name`,
                 `characteristics`.`nomenclature_id` AS `nomenclature_id`,
                 `characteristics`.`serial` AS `serial`,
+                `butch_number_connections`.`butch_number` AS `butch`,
                 `characteristic_prices`.`id` as `characteristic_price_id`,
                 `characteristic_prices`.`price` as `characteristic_price`,
                 `characteristics`.`name` AS `name`,
@@ -29,11 +30,13 @@ class CreateFindCharacteristicsProcedure extends Migration
                 SUM(`ware_connections`.`change`) AS `ware`
             FROM
                 ((`ware_connections`
+                INNER JOIN `butch_number_connections` ON ((`ware_connections`.`butch_number_connection_id` = `butch_number_connections`.`id`))
                 LEFT JOIN `characteristics` ON ((`ware_connections`.`characteristic_id` = `characteristics`.`id`))
-                 LEFT JOIN `characteristic_prices` ON ((`characteristics`.`characteristic_price_id` = `characteristic_prices`.`id`))
+                LEFT JOIN `characteristic_prices` ON ((`characteristics`.`characteristic_price_id` = `characteristic_prices`.`id`))
                 LEFT JOIN `nomenclatures` ON ((`characteristics`.`nomenclature_id` = `nomenclatures`.`id`))))
             WHERE `characteristics`.`nomenclature_id` = nomenclature_id AND `ware_connections`.storage_id = storage_id
-            GROUP BY `ware_connections`.`characteristic_id`, `ware_connections`.`storage_id`;
+                AND `butch_number_connections`.butch_number > 0
+            GROUP BY `ware_connections`.`characteristic_id`, `ware_connections`.`storage_id`, `butch_number_connections`.`butch_number`;
         END
         ";
 

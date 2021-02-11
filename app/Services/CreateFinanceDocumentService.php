@@ -14,25 +14,24 @@ use Carbon\Carbon;
 class CreateFinanceDocumentService
 {
 
-    public function makeIncome($data)
+    public function makeFinanceDoc($data)
     {
         $createButchNumberConnectionService = app(CreateButchNumberConnectionService::class);
 
         $rest = substr($data['date'], 0, -3);
         $date = Carbon::createFromTimestamp($rest, 'Europe/Moscow')->toDateTimeString();
 
-
-
+        // заполнение сущности документа
         $doc = (new FinanceDocument())->create(['agent_id' => $data['agent_id'],
             'comment' => $data['comment'],
             'date' =>  $date,
-            'is_set' => true,
-            'doc_type_id' => 1,
+            'is_set' => false,
+            'doc_type_id' => $data['doc_type_id'],
             'storage_id'=> $data['storage_id']
         ]);
 
-        // создание номера партии по номеру документа
-        if($doc) $createButchNumberConnectionService->make(['butch_number' => $doc->id]);
+        // создание номера партии по номеру документа если это получение
+        if($doc && $data['doc_type_id'] < 2) $createButchNumberConnectionService->make(['butch_number' => $doc->id]);
 
         return $doc;
     }
@@ -44,10 +43,7 @@ class CreateFinanceDocumentService
         $financeDocumentTableRowsRepository = app(FinanceDocumentTableRowsRepository::class);
         $characteristicPricesRepository= app(CharacteristicPricesRepository::class);
         $characteristicsRepository= app(CharacteristicsRepository::class);
-        $createCharacteristicService = app(CreateCharacteristicService::class);
         $createFinanceDocumentTableRowService = app(CreateFinanceDocumentTableRowService::class);
-        $wareConnectionsRepository = app(WareConnectionsRepository::class);
-
 
         // поиск выбранной характеристики для выбранной номенклатуры в БД по id
         $characteristic = $characteristicsRepository->findById($med['nomenclature_id'],$med['characteristic_id']);
@@ -58,7 +54,6 @@ class CreateFinanceDocumentService
         // если нашлась
         if ($characteristic) {
 
-
             // проверка соответствия цены характеристики из респонса к цене в БД
             $checkPrice = $characteristicPricesRepository->getLatestPriceForCharacteristic($characteristic->id);
 
@@ -67,7 +62,7 @@ class CreateFinanceDocumentService
 
                 // создаётся новая цена, с привязкой к характеристике из БД, переоценивая остатки
                 $cp = $createCharacteristicPriceService->makeUpdate($med);
-                if (!$cp) return response(null, 500);
+                if (!$cp) return response(['error' => "Сущность цены характеристики не добавлена"], 500);
 
                 // в характеристике обновляется id цены
                 $characteristic->update(['characteristic_price_id' => $cp->id]);
@@ -77,7 +72,7 @@ class CreateFinanceDocumentService
             if ($tableRow) $tableRow->update(['price' => $med['income_price']] + $med);
             else {
                 $tableRow = $createFinanceDocumentTableRowService->fillTableRow($doc, $med, $med['characteristic_id']);
-                if (!$tableRow) return response(null, 500);
+                if (!$tableRow) return response(['error' => "Строка документа не была создана"], 500);
             }
         } else return response(['error' => "Характеристика не была выбрана для строки документа"], 500);
 
@@ -86,10 +81,10 @@ class CreateFinanceDocumentService
 
 
     // метод сохранения приходного документа
-    public function createIncome($data, $meds)
+    public function createFinanceDoc($data, $meds)
     {
         // добавление нового документа
-        $doc = $this->makeIncome($data);
+        $doc = $this->makeFinanceDoc($data);
 
         if($doc){
             // циклический проход по массиву медикаментов
@@ -105,7 +100,7 @@ class CreateFinanceDocumentService
     }
 
     // метод проведения документа
-    public function pushIncome($doc_id)
+    public function pushFinanceDoc($doc_id)
     {
         $financeDocumentTableRowsRepository = app(FinanceDocumentTableRowsRepository::class);
         $financeDocumentsRepository = app(FinanceDocumentsRepository::class);
@@ -117,14 +112,30 @@ class CreateFinanceDocumentService
         // получение строк документа
         $rows = $financeDocumentTableRowsRepository->forPush($doc_id);
 
-        if($rows){
-            // циклический проход по массиву строк документа
-            foreach ($rows as $row) {
+        if($rows)
+        {
+            if($doc->doc_type_id > 1){
+                // циклический проход по массиву строк документа
+                foreach ($rows as $row) {
 
-                $result = $createWareConnectionService->pushWareConnection($row, $doc);
-                if (!$result) return response(null,500);
+                    //TODO: здесь может вылезти ошибкаа!!!
 
-            } // foreach
+                    // попытка изменить знак в расходе
+                    $row->change = -$row->change;
+
+                    $result = $createWareConnectionService->pushWareConnection($row, $doc);
+                    if (!$result) return response(null,500);
+
+                } // foreach
+            } else {
+                // циклический проход по массиву строк документа
+                foreach ($rows as $row) {
+
+                    $result = $createWareConnectionService->pushWareConnection($row, $doc);
+                    if (!$result) return response(null,500);
+
+                } // foreach
+            }
         }
         return $doc;
     }
