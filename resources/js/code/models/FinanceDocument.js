@@ -52,7 +52,7 @@ class FinanceDocument {
             deleted_rows: this.deleted_rows,
             updated_rows: updated_rows,
             doc_type_id: this.type,
-            doc_sum: this.type === 1 ? this.sumOfIncomePrices() :  this.sumOfSellPrices()
+            doc_sum: this.type ? this.sumOfIncomePrices() :  this.sumOfSellPrices()
         }
     }
 
@@ -94,11 +94,13 @@ class FinanceDocument {
         return sum;
     }
     sumOfSellPrices(){
-       // let sum = 0
-       // this.table_rows.forEach(p => {
-       //     sum += p.income_sum * p.count;
-       // })
-       // return sum;
+
+
+        let sum = 0
+        this.table_rows.forEach(p => {
+            sum += p.characteristic.characteristic_price.price * p.count;
+        })
+        return sum;
     }//
 
 }
