@@ -13,8 +13,11 @@
                     <el-form label-width="100px" label-position="right">
 
                         <div style="margin-bottom: 30px">
-                            <el-button type="primary" @click="submit(true)"><i class="el-icon-finished"></i> Провести
+                            <el-button v-if="!item.is_set" type="primary" @click="submit(true)"><i class="el-icon-finished"></i> Провести
                             </el-button>
+                            <el-button v-else type="primary" disabled ><i class="el-icon-finished"></i> Уже проведен
+                            </el-button>
+
                             <el-button @click="submit(false)"><i class="el-icon-folder-checked"></i> Записать
                             </el-button>
                             <el-button style="float: right" type="error" @click="()=>{this.$router.go(-1)}"><i
@@ -340,7 +343,7 @@ export default {
             //пост-запрос
             //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
             console.log(this.item.getDataForUpdate());
-            console.log(this.item);
+            //console.log(this.item);
 
 
             axios.post(`/api/income/${this.item.id}`, {

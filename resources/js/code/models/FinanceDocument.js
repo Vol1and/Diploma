@@ -89,7 +89,7 @@ class FinanceDocument {
     sumOfIncomePrices(){
         let sum = 0
         this.table_rows.forEach(p => {
-            sum += p.income_sum * p.count;
+            sum += p.income_price * p.count;
         })
         return sum;
     }

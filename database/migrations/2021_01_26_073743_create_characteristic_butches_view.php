@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 class CreateCharacteristicButchesView extends Migration
 {
@@ -13,7 +11,7 @@ class CreateCharacteristicButchesView extends Migration
      */
     public function up()
     {
-        \DB::statement('
+        \DB::statement(/** @lang MySQL */ '
             CREATE
         VIEW `characteristic_butches_view` AS
         SELECT
@@ -33,6 +31,7 @@ class CreateCharacteristicButchesView extends Migration
             LEFT JOIN `characteristics` ON ((`ware_connections`.`characteristic_id` = `characteristics`.`id`))
             LEFT JOIN `characteristic_prices` ON ((`characteristics`.`characteristic_price_id` = `characteristic_prices`.`id`))
             LEFT JOIN `nomenclatures` ON ((`characteristics`.`nomenclature_id` = `nomenclatures`.`id`))))
+            WHERE butch_number_connections.butch_number > 0
         GROUP BY `ware_connections`.`characteristic_id`, `butch_number_connections`.`butch_number`;
             ');
     }
