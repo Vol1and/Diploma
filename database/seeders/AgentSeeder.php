@@ -17,6 +17,13 @@ class AgentSeeder extends Seeder
     {
         $data = [
             [
+                'name' => 'Не указан',
+                'billing' => '',
+                'address' => '',
+                'description' => '',
+                'created_at' => Carbon::now(), 'updated_at' => Carbon::now()
+            ],
+            [
                 'name' => 'Медикодон',
                 'billing' => 'ИКЮЛ: 60110215; КБК: 22011303010010000130; Номер счета: 40101810720000011001',
                 'address' => 'г. Донецк, ул. Павших Коммунаров, 95Б',

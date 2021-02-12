@@ -299,7 +299,7 @@ export default {
         },
         validateFields() {
             this.errors = [];
-            if (this.item.agent.id === -1) this.errors.push("Поле \"Поставщик\" должно быть заполнено");
+            if (this.item.agent.id === 1) this.errors.push("Поле \"Поставщик\" должно быть заполнено");
             if (this.item.storage.id === -1) this.errors.push("Поле \"Склад\" должно быть заполнено");
 
             this.item.table_rows.forEach(p => {

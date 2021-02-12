@@ -311,7 +311,7 @@ export default {
                             row.price,
                         )));
 
-                    this.item = new FinanceDocument(response.data.id, true,response.data.is_set,
+                    this.item = new FinanceDocument(response.data.id, 1,response.data.is_set,
                         new Agent(response.data.agent.id, response.data.agent.name, response.data.agent.billing, response.data.agent.address, response.data.agent.description, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at),
                         new Storage(response.data.storage.id, response.data.storage.name, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at),
                         response.data.date,
@@ -372,7 +372,7 @@ export default {
         ,
         validateFields() {
             this.errors = [];
-            if (this.item.agent.id === -1) this.errors.push("Поле \"Поставщик\" должно быть заполнено");
+            if (this.item.agent.id === 1) this.errors.push("Поле \"Поставщик\" должно быть заполнено");
             if (this.item.storage.id === -1) this.errors.push("Поле \"Склад\" должно быть заполнено");
 
             this.item.table_rows.forEach(p => {

@@ -196,7 +196,7 @@ export default {
 
 
                     result.push(new FinanceDocument(item.id,
-                        new Agent(item.agent.id, item.agent.name, item.agent.billing, item.agent.address, item.agent.description, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at),
+                        new Agent(1),
                         new Storage(item.storage.id, item.storage.name, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at),
                         item.date, table_rows,null, item.comment,
                         item.created_at, item.updated_at, item.deleted_at))

@@ -262,7 +262,8 @@ export default {
                 if (p.nomenclature.id === -1) this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Номенклатура\" должно быть заполнено`);
                 if (p.characteristic.serial === "") this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Серия\" должно быть заполнено`);
                 if (p.characteristic.expiry_date === "") this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Срок годности\" должно быть заполнено`);//if (p.sell_price <= 0) this.errors.push(`Строка № ${this.item.table_rows.indexOfp}. Поле \"Цена продажи\" должно быть больше 0`);
-                if (p.characteristic.ware  < p.count) this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Количество превышает остаток на Складе "${this.item.storage.name}". Текущий остаток - ${p.characteristic.ware}.`);
+                if ((p.count - p.characteristic.ware) > 0)
+                    this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Количество превышает остаток на Складе "${this.item.storage.name}". Текущий остаток - ${p.characteristic.ware}. Запрашиваемое ко-во: ${p.count}`);
                 if (p.count <= 0) this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Количество\" должно быть больше 0`);
             })
             this.showErrors()

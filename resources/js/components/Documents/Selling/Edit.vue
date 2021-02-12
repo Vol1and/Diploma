@@ -234,7 +234,6 @@ export default {
     },
     methods: {
 
-
         update() {
             axios.get(`/api/finance-documents/${this.$route.params.id}`).then(response => {
                     console.log(response)
@@ -257,13 +256,13 @@ export default {
                             row.count,
                             row.price,
                         )));
-                    this.item = new FinanceDocument(response.data.id, response.data.is_set,
-                        new Agent(response.data.agent.id, response.data.agent.name, response.data.agent.billing, response.data.agent.address, response.data.agent.description, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at),
+                    this.item = new FinanceDocument(response.data.id, 2, response.data.is_set,
+                        new Agent(1),
                         new Storage(response.data.storage.id, response.data.storage.name, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at),
                         response.data.date,
                         table_data,
-                        null,
                         response.data.comment,
+
                         response.data.created_at,
                         response.data.updated_at,
                         response.data.deleted_at);
@@ -313,8 +312,7 @@ export default {
                 })
                 this.loaded = true;
             })
-        }
-        ,
+        },
         validateFields() {
             this.errors = [];
             if (this.item.agent.id === -1) this.errors.push("Поле \"Поставщик\" должно быть заполнено");
