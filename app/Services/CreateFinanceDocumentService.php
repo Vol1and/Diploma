@@ -31,7 +31,7 @@ class CreateFinanceDocumentService
         ]);
 
         // создание номера партии по номеру документа если это получение
-        if($doc && $data['doc_type_id'] < 2) $createButchNumberConnectionService->make(['butch_number' => $doc->id]);
+        if($doc->doc_type_id == 1) $createButchNumberConnectionService->make(['butch_number' => $doc->id]);
 
         return $doc;
     }

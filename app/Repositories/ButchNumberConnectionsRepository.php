@@ -31,6 +31,5 @@ class ButchNumberConnectionsRepository extends BaseRepository
             ->where('butch_number', $butchNumber)
             ->get()
             ->first();
-
     }
 }
