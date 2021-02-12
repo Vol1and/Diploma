@@ -56,9 +56,21 @@
             </el-row>
             <el-divider></el-divider>
             <el-table :data="page_of_items"
+                      border
                       highlight-current-row
                       @row-dblclick="toEdit"
                       @current-change="rowSelected">
+                <el-table-column
+                    label="Статус"
+                    min-width="40"
+                >
+                    <template slot-scope="scope">
+
+                        <el-button type="info" icon="el-icon-folder-checked" size="mini" readonly v-if="scope.row.is_set === 0" circle></el-button>
+
+                        <el-button type="success" icon="el-icon-check" size="mini" readonly v-else circle></el-button>
+                    </template>
+                </el-table-column>
                 <el-table-column
                     prop="id"
                     label="#"
@@ -71,12 +83,7 @@
                     min-width="100"
                 >
                 </el-table-column>
-                <el-table-column
-                    prop="agent.name"
-                    label="Покупатель"
-                    min-width="200"
-                >
-                </el-table-column>
+
                 <el-table-column
                     prop="storage.name"
                     label="Склад"
@@ -85,7 +92,7 @@
                 </el-table-column>
                 <el-table-column
 
-                    prop="income_sum"
+                    prop="doc_sum"
                     label="Сумма документа"
                     min-width="100"
                 >

@@ -286,7 +286,7 @@ export default {
 
 
         update() {
-            axios.get(`/api/income-documents/${this.$route.params.id}`).then(response => {
+            axios.get(`/api/finance-documents/${this.$route.params.id}`).then(response => {
                     console.log(response)
                     this.is_visible = true;
                     let table_data = [];
@@ -308,7 +308,7 @@ export default {
                             row.price,
                         )));
 
-                    this.item = new FinanceDocument(response.data.id, true,
+                    this.item = new FinanceDocument(response.data.id, true,response.data.is_set,
                         new Agent(response.data.agent.id, response.data.agent.name, response.data.agent.billing, response.data.agent.address, response.data.agent.description, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at),
                         new Storage(response.data.storage.id, response.data.storage.name, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at),
                         response.data.date,

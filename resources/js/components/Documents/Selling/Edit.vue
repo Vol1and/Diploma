@@ -33,19 +33,10 @@
 
                                 <el-form-item label="Дата: ">
                                     <el-date-picker id="name_input" style="width: 100%" v-model="item.date"
-                                                    type="datetime" format="yyyy-MM-dd HH:mm:ss"
-                                                    value-format="yyyy-MM-dd HH:mm:ss"/>
+                                                    type="datetime" format="yyyy-MM-dd HH:mm:ss"/>
                                 </el-form-item>
                             </el-col>
 
-                            <el-col :span="5">
-                                <el-form-item label="Поставщик: ">
-                                    <el-input readonly v-model="item.agent.name" placeholder="">
-                                        <el-button type="primary" @click="selectingAgent" slot="append"
-                                                   icon="el-icon-d-arrow-right"></el-button>
-                                    </el-input>
-                                </el-form-item>
-                            </el-col>
                             <el-col :span="5">
                                 <el-form-item label="Склад: ">
                                     <el-input readonly v-model="item.storage.name" placeholder="">
@@ -55,7 +46,6 @@
                                 </el-form-item>
                             </el-col>
                         </el-row>
-
 
                         <el-card style="margin-bottom: 40px">
                             <el-divider content-position="left"><h2>Товары</h2></el-divider>
@@ -116,16 +106,17 @@
                                 >
                                 </el-table-column>
                                 <el-table-column
-                                    prop="nomenclature.characteristic.name"
+                                    prop="characteristic.name"
                                     label="Характеристика"
-                                    min-width="150"
                                     sortable
                                 >
                                     <template slot-scope="scope">
 
                                         <el-input v-if="selectingRow === scope.row" readonly
                                                   v-model="scope.row.characteristic.name" placeholder="">
-                                            <el-button type="primary" :disabled="scope.row.nomenclature.id === -1" @click="characteristic_dialog = true;" slot="append"
+                                            <el-button type="primary" @click="characteristic_dialog = true;"
+                                                       :disabled="scope.row.nomenclature.id === -1 || item.storage.id === -1 "
+                                                       slot="append"
                                                        icon="el-icon-d-arrow-right">
                                             </el-button>
                                         </el-input>
@@ -139,6 +130,7 @@
                                     :index="6"
                                     sortable
                                 >
+
                                     <template slot-scope="scope">
 
                                         <el-input v-if="selectingRow === scope.row" type="number"
@@ -146,24 +138,6 @@
                                             <template slot="append">шт.</template>
                                         </el-input>
                                         <div v-else> {{ scope.row.count }} шт.</div>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                    prop="income_price"
-                                    label="Цена закупки"
-                                    min-width="100"
-                                    :index="7"
-                                    sortable
-                                >
-                                    <template slot-scope="scope">
-
-                                        <div style="padding: 0">
-                                            <el-input v-if="selectingRow === scope.row" type="number"
-                                                      v-model="scope.row.income_price" placeholder="">
-                                                <template slot="append">руб.</template>
-                                            </el-input>
-                                            <div v-else> {{ scope.row.income_price }} руб.</div>
-                                        </div>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
@@ -177,13 +151,26 @@
 
                                         <el-input v-if="selectingRow === scope.row" type="number"
                                                   v-model="scope.row.characteristic.characteristic_price.price"
-                                                  placeholder="">
+                                                  placeholder="" readonly>
                                             <template slot="append">руб.</template>
                                         </el-input>
                                         <div v-else> {{ scope.row.characteristic.characteristic_price.price }} руб.
                                         </div>
                                     </template>
                                 </el-table-column>
+                                <!--                                <el-table-column-->
+                                <!--                                    -->
+                                <!--                                    label="Сумма"-->
+                                <!--                                    min-width="100"-->
+                                <!--                                    :index="7"-->
+                                <!--                                    sortable-->
+                                <!--                                >-->
+                                <!--                                    <template slot-scope="scope">-->
+
+                                <!--                                        <div v-else> {{ scope.row.characteristic.characteristic_price.price * scope.row.count}} руб.-->
+                                <!--                                        </div>-->
+                                <!--                                    </template>-->
+                                <!--                                </el-table-column>-->
                             </el-table>
                         </el-card>
                     </el-form>
@@ -207,18 +194,18 @@
             custom-class="demo-drawer"
             ref="drawer"
         >
-            <characteristic-choose-component @back="onBack" v-if="characteristic_dialog"
+
+            <characteristic-choose-with-wares-component :storage_id="item.storage.id" @back="onBack"
+                                                        v-if="characteristic_dialog"
                                                         :nomenclature_id="selectingRow.nomenclature.id"
-                                                        @selected="onSelectedCharacteristic"></characteristic-choose-component>
+                                                        @selected="onSelectedCharacteristic"></characteristic-choose-with-wares-component>
         </el-drawer>
         <agent-choose-component @back="onBack" v-if="choosing_state ===1"
                                 @selected="onSelectedAgent"></agent-choose-component>
         <storage-choose-component @back="onBack" v-if="choosing_state ===3"
                                   @selected="onSelectedStorage"></storage-choose-component>
-
         <nomenclature-choose-component @back="onBack" v-if="choosing_state ===2"
                                        @selected="onSelectedNomenclature"></nomenclature-choose-component>
-
     </div>
 </template>
 
@@ -240,9 +227,7 @@ export default {
 
     mixins: [mixin_finance_document],
     data() {
-        return {
-
-        }
+        return {}
     },
     created() {
         this.update();
@@ -251,7 +236,7 @@ export default {
 
 
         update() {
-            axios.get(`/api/income-documents/${this.$route.params.id}`).then(response => {
+            axios.get(`/api/finance-documents/${this.$route.params.id}`).then(response => {
                     console.log(response)
                     this.is_visible = true;
                     let table_data = [];
@@ -272,8 +257,7 @@ export default {
                             row.count,
                             row.price,
                         )));
-
-                    this.item = new FinanceDocument(response.data.id,
+                    this.item = new FinanceDocument(response.data.id, response.data.is_set,
                         new Agent(response.data.agent.id, response.data.agent.name, response.data.agent.billing, response.data.agent.address, response.data.agent.description, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at),
                         new Storage(response.data.storage.id, response.data.storage.name, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at),
                         response.data.date,
@@ -316,7 +300,6 @@ export default {
                 console.log(response.data);
                 this.update();
                 this.$notify({
-
                     type: 'success',
                     title: 'Успешно!',
                     message: `Поступление с Id = ${this.item.id} успешно изменено!`,
@@ -342,7 +325,6 @@ export default {
                 if (p.characteristic.serial === "") this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Серия\" должно быть заполнено`);
                 if (p.characteristic.expiry_date === "") this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Срок годности\" должно быть заполнено`);
                 if (p.income_price <= 0) this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Цена поступления\" должно быть больше 0`);
-                //if (p.sell_price <= 0) this.errors.push(`Строка № ${this.item.table_rows.indexOfp}. Поле \"Цена продажи\" должно быть больше 0`);
                 if (p.count <= 0) this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Количество\" должно быть больше 0`);
             })
 

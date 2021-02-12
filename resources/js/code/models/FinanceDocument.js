@@ -2,15 +2,17 @@ import Storage from "./Storage";
 import Agent from "./Agent";
 
 class FinanceDocument {
-    constructor(id = -1,type , agent = new Agent(), storage = new Storage(),
-                date = "", table_rows = [], income_sum = null, comment = "", created_at = null, updated_at = null, deleted_at = null) {
+    constructor(id = -1,type ,is_set, agent = new Agent(), storage = new Storage(),
+                date = "", table_rows = [], income_sum = null, comment = "",doc_sum = 0, created_at = null, updated_at = null, deleted_at = null) {
 
         this.id = id;
         this.type = type;
+        this.is_set = is_set;
         this.agent = agent;
         this.storage = storage;
         this.date = date;
         this.comment = comment;
+        this.doc_sum = doc_sum;
         this.table_rows = _.cloneDeep(table_rows);
         this.income_sum = income_sum;
         this.created_at = created_at;
@@ -32,7 +34,8 @@ class FinanceDocument {
             date: this.date,
             table_rows: table_rows,
             comment: this.comment,
-            doc_type_id: this.type
+            doc_type_id: this.type,
+            doc_sum: this.type === 1 ? this.sumOfIncomePrices() :  this.sumOfSellPrices()
         }
     }
 
@@ -48,7 +51,8 @@ class FinanceDocument {
             comment: this.comment,
             deleted_rows: this.deleted_rows,
             updated_rows: updated_rows,
-            doc_type_id: this.type
+            doc_type_id: this.type,
+            doc_sum: this.type === 1 ? this.sumOfIncomePrices() :  this.sumOfSellPrices()
         }
     }
 
@@ -82,7 +86,20 @@ class FinanceDocument {
             if (result == undefined || !result.isEqual(p)) this.updated_rows.push(p);
         })
     }
-
+    sumOfIncomePrices(){
+        let sum = 0
+        this.table_rows.forEach(p => {
+            sum += p.income_sum * p.count;
+        })
+        return sum;
+    }
+    sumOfSellPrices(){
+       // let sum = 0
+       // this.table_rows.forEach(p => {
+       //     sum += p.income_sum * p.count;
+       // })
+       // return sum;
+    }//
 
 }
 

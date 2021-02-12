@@ -30,7 +30,7 @@ const actions = {
     update(context) {
         return new Promise((resolve, reject) => {
             //запрашивает данные с сервера
-            axios.get('/api/income-documents').then((response) => {
+            axios.get('/api/finance-documents').then((response) => {
                 let result = [];
 
                 //console.log(response.data)
@@ -42,10 +42,10 @@ const actions = {
                     if (item.table_rows !== undefined && item.table_rows.length > 0) item.table_rows.forEach(row => table_rows.push(new FinanceDocumentTableRow(row.id, row.nomenclature, row.characteristic, row.count, row.income_price, row.sell_price)));
 
 
-                    result.push(new FinanceDocument(item.id, 1,
+                    result.push(new FinanceDocument(item.id, 1, item.is_set,
                         new Agent(item.agent.id, item.agent.name, item.agent.billing, item.agent.address, item.agent.description, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at),
                         new Storage(item.storage.id, item.storage.name, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at),
-                        item.date, table_rows,null, item.comment,
+                        item.date, table_rows,null, item.comment,item.doc_sum,
                         item.created_at, item.updated_at, item.deleted_at))
 
                 })

@@ -25,7 +25,7 @@ Route::apiResource('/characteristics', "App\Http\Controllers\CharacteristicContr
 Route::apiResource('/agents', "App\Http\Controllers\AgentController");
 Route::apiResource('/nomenclatures', "App\Http\Controllers\NomenclatureController");
 Route::apiResource('/storages', "App\Http\Controllers\StorageController");
-Route::apiResource('/income-documents', "App\Http\Controllers\FinanceDocumentController");
+Route::apiResource('/finance-documents', "App\Http\Controllers\FinanceDocumentController");
 Route::apiResource('/wares', "App\Http\Controllers\WareController");
 
 
@@ -43,3 +43,4 @@ Route::get('/characteristic/for-nomenclature/{id}', [App\Http\Controllers\Charac
 
 Route::get('/characteristic/by-nomenclature-storage/{nomenclature_id}/{storage_id}', [App\Http\Controllers\CharacteristicController::class, 'getAllByNomenclatureAndStorageIdWithWares']);
 
+Route::get('/sellings' , [App\Http\Controllers\FinanceDocumentController::class, 'getSellings']);

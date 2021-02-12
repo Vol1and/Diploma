@@ -21,7 +21,6 @@ class CreateWareConnectionService
         $createWareConnectionService = app(CreateWareConnectionService::class);
         $butchNumberConnectionRepository = app(ButchNumberConnectionsRepository::class);
 
-
         // поиск номера партии если добавление в документ получения товара
         if($doc->doc_type_id == 1) $bn = $butchNumberConnectionRepository->findByButchNumber($doc->id);
 

@@ -4,12 +4,8 @@
 namespace App\Services;
 
 
-use App\Models\CharacteristicPrice;
-use App\Repositories\CharacteristicPricesRepository;
-use App\Repositories\CharacteristicsRepository;
 use App\Repositories\FinanceDocumentsRepository;
 use App\Repositories\FinanceDocumentTableRowsRepository;
-use App\Repositories\WareConnectionsRepository;
 use Carbon\Carbon;
 
 class UpdateFinanceDocumentService
@@ -22,19 +18,20 @@ class UpdateFinanceDocumentService
 
         // поиск Документа найден по id
         $doc = $financeDocumentsRepository->find($id);
-        if (empty($doc)) return response(null,400);
+        if (empty($doc)) return response(null, 400);
 
         // обновление информации о документе
-        $doc->update(['agent_id' => $data['agent_id'],'comment' => $data['comment'],'date' => new Carbon($data['date']) ,'is_set' => true, 'doc_type_id' => 1, 'storage_id'=> $data['storage_id'] ]);
+        $doc->update(['agent_id' => $data['agent_id'], 'comment' => $data['comment'], 'date' => new Carbon($data['date']), 'is_set' => true, 'doc_type_id' => 1, 'storage_id' => $data['storage_id'],
+            'doc_sum' => $data['doc_sum']]);
 
 
         // если есть строки для удаления
         if ($deleted) {
-            foreach ($deleted as $del_row){
+            foreach ($deleted as $del_row) {
 
                 // получение строки таблицы для удаления
                 $tableRow = $financeDocumentTableRowsRepository->find($del_row);
-                if($tableRow){
+                if ($tableRow) {
                     $result = $tableRow->delete();
                     if (!$result)
                         return response(['error' => "Ошибка удаления"], 500);
@@ -51,13 +48,13 @@ class UpdateFinanceDocumentService
             $base_row = $financeDocumentTableRowsRepository->find($row['id']);
 
             // если строка не новая
-            if ($base_row){
+            if ($base_row) {
 
                 // если по строке изменилась номенклатура
-                if($base_row->characteristic->nomenclature_id != $row['nomenclature_id']){
+                if ($base_row->characteristic->nomenclature_id != $row['nomenclature_id']) {
 
                     // проверка на ошибочную характеристику
-                    if ($base_row->characteristic_id == $row['characteristic_id']) return response(null,400);
+                    if ($base_row->characteristic_id == $row['characteristic_id']) return response(null, 400);
                 }
             }
 

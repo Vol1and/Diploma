@@ -10,6 +10,19 @@ class FinanceDocumentsRepository extends BaseRepository
     /**
      * @inheritDoc
      */
+
+    private $default_columns = [
+        'id',
+        'date',
+        'is_set',
+        'doc_type_id',
+        'agent_id',
+        'storage_id',
+        'comment',
+        'doc_sum'
+
+    ];
+
     public function getModelClass()
     {
         return Model::class;
@@ -17,59 +30,39 @@ class FinanceDocumentsRepository extends BaseRepository
 
     public function getTable()
     {
-        $columns = [
-            'id',
-            'date',
-            'is_set',
-            'doc_type_id',
-            'agent_id',
-            'storage_id',
-            'comment'
-
-        ];
         return $this->startConditions()
-            ->select($columns)
+            ->select($this->default_columns)
+            ->get();
+
+    }
+
+    public function getByDocTypeId($doc_type_id)
+    {
+
+        return $this->startConditions()
+            ->select($this->default_columns)
+            ->where('doc_type_id', '=', $doc_type_id)
             ->get();
 
     }
 
     public function find($id)
     {
-        $columns = [
-            'id',
-            'date',
-            'is_set',
-            'doc_type_id',
-            'agent_id',
-            'storage_id',
-            'comment'
-        ];
+
         return $this->startConditions()
-            ->select($columns)
+            ->select($this->default_columns)
             ->where('id', $id)
             ->with(['table_rows', 'table_rows.characteristic'])
             ->get()->first();
     }
 
 
-
-
-    public function getFilter($start_date = null,$end_date = null, $agent = null, $storage = null)
+    public function getFilter($start_date = null, $end_date = null, $agent = null, $storage = null)
     {
 
-        $columns = [
-            'id',
-            'date',
-            'is_set',
-            'doc_type_id',
-            'agent_id',
-            'storage_id',
-            'comment'
-
-        ];
 
         $query = $this->startConditions()
-            ->select($columns);
+            ->select($this->default_columns);
 
         if ($start_date && $end_date)
             $query = $query->whereBetween('date', [$start_date, $end_date]);
@@ -79,7 +72,6 @@ class FinanceDocumentsRepository extends BaseRepository
 
         if ($storage)
             $query = $query->where('storage_id', 'like', $storage);
-
 
 
         return $query->get();

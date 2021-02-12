@@ -31,9 +31,13 @@ class FinanceDocumentController extends OriginController
 
     public function index()
     {
-        return $this->financeDocumentsRepository->getTable()->toJson();
+        return $this->financeDocumentsRepository->getByDocTypeId(1)->toJson();
     }
 
+    public function getSellings()
+    {
+        return $this->financeDocumentsRepository->getByDocTypeId(2)->toJson();
+    }
 
 
     //принимает реквест DocumentCreateRequest

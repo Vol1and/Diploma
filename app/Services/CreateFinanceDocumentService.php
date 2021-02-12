@@ -8,7 +8,6 @@ use App\Repositories\CharacteristicPricesRepository;
 use App\Repositories\CharacteristicsRepository;
 use App\Repositories\FinanceDocumentsRepository;
 use App\Repositories\FinanceDocumentTableRowsRepository;
-use App\Repositories\WareConnectionsRepository;
 use Carbon\Carbon;
 
 class CreateFinanceDocumentService
@@ -27,7 +26,8 @@ class CreateFinanceDocumentService
             'date' =>  $date,
             'is_set' => false,
             'doc_type_id' => $data['doc_type_id'],
-            'storage_id'=> $data['storage_id']
+            'storage_id'=> $data['storage_id'],
+            'doc_sum' => $data['doc_sum']
         ]);
 
         // создание номера партии по номеру документа если это получение
