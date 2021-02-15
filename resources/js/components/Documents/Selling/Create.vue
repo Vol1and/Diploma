@@ -186,7 +186,7 @@
 
         </el-row>
         <el-drawer
-
+            size="50%"
             :visible.sync="characteristic_dialog"
             direction="ltr"
             custom-class="demo-drawer"
@@ -211,13 +211,16 @@
 
 
 import mixin_finance_document from "../../../code/mixins/mixin_finance_document";
+import FinanceDocument from "../../../code/models/FinanceDocument";
 
 export default {
     name: "SellingCreate",
 
     mixins: [mixin_finance_document],
     data() {
-        return {}
+        return {
+            item: new FinanceDocument(null, 2)
+        }
     },
     //ивент, срабатывающий при created стадии компонента - в поле дата закидывает текущую дату
     created() {
@@ -277,3 +280,6 @@ export default {
 <style scoped>
 
 </style>
+
+
+

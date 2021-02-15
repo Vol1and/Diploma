@@ -18,7 +18,7 @@ export default {
             //показывает, получены ли данные с сервера - при loaded - false не доступна submit-кнопка
             loaded: true,
             //модель, в которой будут находиться данные
-            item: new FinanceDocument(null, true),
+            item: new FinanceDocument(null, 1),
 
             //выбранная строка - в табличной части идет проверка - id_строки - id_selectingRow
             //если true, то строка переходит в editable

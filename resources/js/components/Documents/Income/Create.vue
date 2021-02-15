@@ -236,6 +236,7 @@
             direction="ltr"
             custom-class="demo-drawer"
             ref="drawer"
+            size="50%"
         >
             <characteristic-choose-component @back="onBack" v-if="characteristic_dialog"
                                              :nomenclature_id="selectingRow.nomenclature.id"
@@ -254,13 +255,16 @@
 
 
 import mixin_finance_document from "../../../code/mixins/mixin_finance_document";
+import FinanceDocument from "../../../code/models/FinanceDocument";
 
 export default {
     name: "IncomeCreate",
 
     mixins: [mixin_finance_document],
     data() {
-        return {}
+        return {
+            item: new FinanceDocument(null, 1)
+        }
     },
     //ивент, срабатывающий при created стадии компонента - в поле дата закидывает текущую дату
     created() {
@@ -275,7 +279,7 @@ export default {
             //блокируем кнопку submit
             this.loaded = false;
 
-            console.log(this.item)
+            console.log(this.item.getDataForCreate())
             //пост-запрос
             //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
             axios.post("/api/income", {item: this.item.getDataForCreate(), state: statet}).then((response) => {

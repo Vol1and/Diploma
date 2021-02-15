@@ -52,7 +52,7 @@ class FinanceDocument {
             deleted_rows: this.deleted_rows,
             updated_rows: updated_rows,
             doc_type_id: this.type,
-            doc_sum: this.type ? this.sumOfIncomePrices() :  this.sumOfSellPrices()
+            doc_sum: this.type  === 1  ? this.sumOfIncomePrices() :  this.sumOfSellPrices()
         }
     }
 

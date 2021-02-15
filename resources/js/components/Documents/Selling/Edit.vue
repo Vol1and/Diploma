@@ -188,7 +188,7 @@
 
         </el-row>
         <el-drawer
-
+            size="50%"
             :visible.sync="characteristic_dialog"
             direction="ltr"
             custom-class="demo-drawer"
