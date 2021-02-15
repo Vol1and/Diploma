@@ -45,7 +45,7 @@
             </el-table-column>
             <el-table-column
                 prop="characteristic_price.price"
-                label="Цена продаже "
+                label="Цена продажи "
 
             >
             </el-table-column>
@@ -114,12 +114,13 @@ export default {
                 response.data.characteristics.forEach(row => {
 
                     this.item.characteristics.push(new Characteristic(
-                        row.characteristic_id,
+                        row.id,
                         row.name,
                         row.serial,
                         row.expiry_date,
-                        new CharacteristicPrice(row.characteristic_price_id, row.characteristic_price),
-                        row.ware
+                        new CharacteristicPrice(row.characteristic_price.id, row.characteristic_price.price),
+                        row.ware,
+                        row.butch_wares
                     ));
                 })
 

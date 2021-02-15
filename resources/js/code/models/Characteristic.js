@@ -1,7 +1,7 @@
 import CharacteristicPrice from "./CharacteristicPrice";
 
 class Characteristic {
-    constructor(id = -1, name = "", serial = "",expiry_date = "",characteristic_price = new CharacteristicPrice(),ware, created_at, updated_at, deleted_at) {
+    constructor(id = -1, name = "", serial = "",expiry_date = "",characteristic_price = new CharacteristicPrice(),ware,butch_wares ,created_at, updated_at, deleted_at) {
 
         this.id = id;
         this.name = name;
@@ -13,6 +13,7 @@ class Characteristic {
         this.updated_at = updated_at;
         this.deleted_at = deleted_at;
 
+        this.butch_wares = butch_wares;
 
     }
 

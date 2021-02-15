@@ -40,6 +40,37 @@ class FinanceDocument {
     }
 
     //возвращает ассоциативный массив, который можно отправлять на сервер - в нем нет лишних полей, и тяжелых объектов - только id
+    getDataForCreateRealization() {
+        let table_rows = this.prepareRowsToServerRealization(this.table_rows);
+        return {
+            id: this.id,
+            agent_id: this.agent.id,
+            storage_id: this.storage.id,
+            date: this.date,
+            table_rows: table_rows,
+            comment: this.comment,
+            doc_type_id: this.type,
+            doc_sum: this.type === 1 ? this.sumOfIncomePrices() :  this.sumOfSellPrices()
+        }
+    }
+    //возвращает ассоциативный массив, который можно отправлять на сервер - в нем нет лишних полей, и тяжелых объектов - только id
+    getDataForUpdateRealization() {
+        this.fill_updated_rows();
+        let updated_rows = this.prepareRowsToServerRealization(this.updated_rows);
+        return {
+            id: this.id,
+            agent_id: this.agent.id,
+            storage_id: this.storage.id,
+            date: this.date,
+            comment: this.comment,
+            deleted_rows: this.deleted_rows,
+            updated_rows: updated_rows,
+            doc_type_id: this.type,
+            doc_sum: this.type  === 1  ? this.sumOfIncomePrices() :  this.sumOfSellPrices()
+        }
+    }
+
+    //возвращает ассоциативный массив, который можно отправлять на сервер - в нем нет лишних полей, и тяжелых объектов - только id
     getDataForUpdate() {
         this.fill_updated_rows();
         let updated_rows = this.prepareRowsToServer(this.updated_rows);
@@ -62,6 +93,18 @@ class FinanceDocument {
 
         rows.forEach(p => {
             items.push(p.getDataForServer());
+
+
+        })
+        return items;
+
+    }
+    //подгатавливает данные табличной части - каждый из элементов возращает подготовленные данные
+    prepareRowsToServerRealization(rows) {
+        let items = [];
+
+        rows.forEach(p => {
+            items.push(p.getDataForServerRealization());
 
 
         })
