@@ -21,13 +21,9 @@ class ButchWare extends Model
         return $this->belongsTo(Characteristic::class);
     }
 
-    public function getDataToRealization()
+    public function nomenclature()
     {
-        return [
-            'butch' => $this->butch,
-            'storage_id' => $this->storage_id,
-            'characteristic_id' => $this->characteristic_id,
-            'ware' => $this->ware
-        ];
+
+        return $this->belongsTo(Storage::class);
     }
 }

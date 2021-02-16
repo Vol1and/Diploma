@@ -32,6 +32,7 @@ class CharacteristicController extends OriginController
     }
 
 
+
     /**
      * Display a listing of the resource.
      *
@@ -132,9 +133,7 @@ class CharacteristicController extends OriginController
 
         $characteristics = $this->characteristicRepository->getAllByNomenclatureAndStorageIdWithWares($nomenclature_id, $storage_id);
 
-        $characteristic_data = [];
-        foreach ($characteristics as $characteristic) $characteristic_data[] = $characteristic->getDataToChooseInRealization($storage_id);
         //$butch_wares = $this->butchWaresRepository->getByNomenclatureAndStorage();
-        return ['nomenclature' => $nomenclature, 'storage' => $storage, 'characteristics' => $characteristic_data];
+        return ['nomenclature' => $nomenclature, 'storage' => $storage, 'characteristics' => $characteristics];
     }
 }

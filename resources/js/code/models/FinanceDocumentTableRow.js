@@ -14,7 +14,7 @@ class FinanceDocumentTableRow {
     }
 
     //возвращает ассоциативный массив, который можно отправлять на сервер - в нем нет лишних полей, и тяжелых объектов - только id
-    getDataForServerIncome() {
+    getDataForServer() {
         return {
             id: this.id,
             nomenclature_id: this.nomenclature.id,
@@ -29,6 +29,26 @@ class FinanceDocumentTableRow {
     }
 
     getDataForServerRealization() {
+
+        let butches = [];
+        let ware = this.count;
+        this.characteristic.butch_wares.forEach(p =>{
+
+            if(ware > 0) {
+                if (ware - p.ware > 0) {
+                    let butch_copy = _.clone(p);
+                    butches.push(butch_copy);
+                    ware = ware - p.ware;
+                } else {
+                    let butch_copy = _.clone(p);
+                    butch_copy.ware = ware;
+                    butches.push(butch_copy);
+                    ware = 0;
+                }
+            }
+
+        })
+
         return {
             id: this.id,
             nomenclature_id: this.nomenclature.id,
@@ -39,44 +59,11 @@ class FinanceDocumentTableRow {
             count: this.count,
             income_price: this.income_price,
             sell_price: this.characteristic.characteristic_price.price,
-            butches: this.getButchesForRealization()
+            butches : butches
         }
     }
 
-    //просчитывает и разделяет кол-во строки по партиям
-    getButchesForRealization() {
-        //массив который будет возвращаться
-        let butches = [];
-        //копия числа кол-ва строки - с ним будут взаимодействия
-        let ware = this.count;
-        //foreach по партиям характеристики
-        this.characteristic.butch_wares.forEach(p => {
-            //если кол-во УЖЕ разбили по партиям - ничего не делаем
-            if (ware > 0) {
-                //если этой партии не хватает чтобы покрыть кол-во
-                if (ware - p.ware > 0) {
-                    //клонируем партию - чтобы избавиться от реактивности
-                    let butch_copy = _.clone(p);
-                    //пушим в butches
-                    butches.push(butch_copy);
-                    //вычитаем кол-во партии из общего кол-ва
-                    ware = ware - p.ware;
-                }
-                //если этой партии хватает для покрытия кол-ва
-                else {
-                    //клонируем партию - чтобы избавиться от реактивности
-                    let butch_copy = _.clone(p);
-                    //присваиваем кол-во партии = остаток общего кол-ва
-                    butch_copy.ware = ware;
-                    //пушим
-                    butches.push(butch_copy);
-                    //остаток равен нулю - попартийная разбивка проведена
-                    ware = 0;
-                }
-            }
-        })
-        return butches;
-    }
+
 
     isValid() {
 
