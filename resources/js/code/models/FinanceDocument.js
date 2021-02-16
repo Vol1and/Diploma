@@ -25,8 +25,8 @@ class FinanceDocument {
 
 
     //возвращает ассоциативный массив, который можно отправлять на сервер - в нем нет лишних полей, и тяжелых объектов - только id
-    getDataForCreate() {
-        let table_rows = this.prepareRowsToServer(this.table_rows);
+    getDataForCreateIncome() {
+        let table_rows = this.prepareRowsToServerIncome(this.table_rows);
         return {
             id: this.id,
             agent_id: this.agent.id,
@@ -71,9 +71,9 @@ class FinanceDocument {
     }
 
     //возвращает ассоциативный массив, который можно отправлять на сервер - в нем нет лишних полей, и тяжелых объектов - только id
-    getDataForUpdate() {
+    getDataForUpdateIncome() {
         this.fill_updated_rows();
-        let updated_rows = this.prepareRowsToServer(this.updated_rows);
+        let updated_rows = this.prepareRowsToServerIncome(this.updated_rows);
         return {
             id: this.id,
             agent_id: this.agent.id,
@@ -88,11 +88,11 @@ class FinanceDocument {
     }
 
     //подгатавливает данные табличной части - каждый из элементов возращает подготовленные данные
-    prepareRowsToServer(rows) {
+    prepareRowsToServerIncome(rows) {
         let items = [];
 
         rows.forEach(p => {
-            items.push(p.getDataForServer());
+            items.push(p.getDataForServerIncome());
 
 
         })
@@ -122,9 +122,6 @@ class FinanceDocument {
                 this.updated_rows.push(p);
                 return;
             }
-
-
-
             let result = this.base_rows.find(x => x.id === p.id);
             if (result == undefined || !result.isEqual(p)) this.updated_rows.push(p);
         })

@@ -72,6 +72,8 @@ import Characteristic from "../../code/models/Characteristic";
 import CharacteristicPrice from "../../code/models/CharacteristicPrice";
 import Storage from "../../code/models/Storage";
 
+import ButchWare from "../../code/models/ButchWare";
+
 export default {
     name: "CharacteristicChooseWithWares",
 
@@ -111,8 +113,14 @@ export default {
                 this.item.storage = new Storage(response.data.storage.id,
                     response.data.storage.name
                 );
-                response.data.characteristics.forEach(row => {
 
+                let butches = [];
+                response.data.characteristics.forEach(row => {
+                    butches = [];
+                    console.log(row.butch_wares)
+                    row.butch_wares.forEach(p=>{
+                        butches.push(new ButchWare(p.butch, p.characteristic_id, p.storage_id, p.ware));
+                    });
                     this.item.characteristics.push(new Characteristic(
                         row.id,
                         row.name,
@@ -120,7 +128,7 @@ export default {
                         row.expiry_date,
                         new CharacteristicPrice(row.characteristic_price.id, row.characteristic_price.price),
                         row.ware,
-                        row.butch_wares
+                        butches
                     ));
                 })
 

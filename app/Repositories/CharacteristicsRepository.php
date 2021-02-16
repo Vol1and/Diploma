@@ -21,16 +21,17 @@ class CharacteristicsRepository extends BaseRepository
 
     public function getAllByNomenclatureAndStorageIdWithWares($nomenclature_id, $storage_id)
     {
-       //$columns = [
-       //    'id',
-       //    'serial',
-       //    'nomenclature_id',
-       //    'expiry_date',
-       //    'name'
-       //];
+        $columns = [
+            'id',
+            'name',
+            'serial',
+            'nomenclature_id',
+            'expiry_date',
+            'characteristic_price_id'
+        ];
         return $this->startConditions()
-            ->select('*')
-            ->with(['butch_wares', 'characteristic_price'])
+            ->select($columns)
+            ->with(['butch_wares', 'characteristic_price', 'wares'])
             ->where('nomenclature_id', $nomenclature_id)
             ->get();
     }
