@@ -28,43 +28,6 @@ class FinanceDocumentTableRow {
         }
     }
 
-    getDataForServerRealization() {
-
-        let butches = [];
-        let ware = this.count;
-        this.characteristic.butch_wares.forEach(p =>{
-
-            if(ware > 0) {
-                if (ware - p.ware > 0) {
-                    let butch_copy = _.clone(p);
-                    butches.push(butch_copy);
-                    ware = ware - p.ware;
-                } else {
-                    let butch_copy = _.clone(p);
-                    butch_copy.ware = ware;
-                    butches.push(butch_copy);
-                    ware = 0;
-                }
-            }
-
-        })
-
-        return {
-            id: this.id,
-            nomenclature_id: this.nomenclature.id,
-            characteristic_id: this.characteristic.id,
-            characteristic_price_id: this.characteristic.characteristic_price.id,
-            serial: this.characteristic.serial,
-            expiry_date: this.characteristic.expiry_date,
-            count: this.count,
-            income_price: this.income_price,
-            sell_price: this.characteristic.characteristic_price.price,
-            butches : butches
-        }
-    }
-
-
-
     isValid() {
 
         return !(this.nomenclature.id === -1 ||

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\ButchWaresRepository;
 use App\Repositories\CharacteristicsRepository;
 use App\Repositories\NomenclatureRepository;
 use App\Repositories\StoragesRepository;
@@ -18,7 +17,6 @@ class CharacteristicController extends OriginController
     private $createCharacteristicService;
     private $nomenclatureRepository;
     private $storageRepository;
-    private $butchWaresRepository;
 
     public function __construct()
     {
@@ -28,7 +26,6 @@ class CharacteristicController extends OriginController
         $this->createCharacteristicService = app(CreateCharacteristicService::class);
         $this->nomenclatureRepository = app(NomenclatureRepository::class);
         $this->storageRepository = app(StoragesRepository::class);
-        $this->butchWaresRepository = app(ButchWaresRepository::class);
     }
 
 
@@ -133,7 +130,6 @@ class CharacteristicController extends OriginController
 
         $characteristics = $this->characteristicRepository->getAllByNomenclatureAndStorageIdWithWares($nomenclature_id, $storage_id);
 
-        //$butch_wares = $this->butchWaresRepository->getByNomenclatureAndStorage();
         return ['nomenclature' => $nomenclature, 'storage' => $storage, 'characteristics' => $characteristics];
     }
 }

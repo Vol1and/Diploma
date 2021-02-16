@@ -235,10 +235,10 @@ export default {
             //блокируем кнопку submit
             this.loaded = false;
 
-            console.log(this.item.getDataForCreateRealization())
+            console.log(this.item)
             //пост-запрос
             //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
-            axios.post("/api/income", {item: this.item.getDataForCreateRealization(), state: statet}).then((response) => {
+            axios.post("/api/income", {item: this.item.getDataForCreate(), state: statet}).then((response) => {
                 console.log(response.data);
                 this.$notify({
 

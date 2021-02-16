@@ -4,6 +4,7 @@
 namespace App\Repositories;
 
 use App\Models\Characteristic as Model;
+use DB;
 
 
 class CharacteristicsRepository extends BaseRepository
@@ -21,24 +22,11 @@ class CharacteristicsRepository extends BaseRepository
 
     public function getAllByNomenclatureAndStorageIdWithWares($nomenclature_id, $storage_id)
     {
-       //$columns = [
-       //    'id',
-       //    'serial',
-       //    'nomenclature_id',
-       //    'expiry_date',
-       //    'name'
-       //];
-        return $this->startConditions()
-            ->select('*')
-            ->with(['butch_wares', 'characteristic_price'])
-            ->where('nomenclature_id', $nomenclature_id)
-            ->get();
+
+        return DB::select(
+            'CALL find_characteristics_procedure(' . $nomenclature_id . ', '.$storage_id.')'
+        );
     }
-
-       // return DB::select(
-       //     'CALL find_characteristics_procedure(' . $nomenclature_id . ', '.$storage_id.')'
-       // );
-
 
     // поиск в БД характеристики по её id
     public function find($id)

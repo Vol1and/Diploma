@@ -31,13 +31,6 @@ class Characteristic extends Model
         return $this->belongsTo(CharacteristicPrice::class);
     }
 
-    public function butch_wares(){
-        return $this->hasMany(ButchWare::class);
-    }
-
-    public function wares(){
-        return $this->hasMany(Ware::class);
-    }
 
 
 }

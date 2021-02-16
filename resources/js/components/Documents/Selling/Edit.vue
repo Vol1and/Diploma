@@ -287,12 +287,12 @@ export default {
 
             //пост-запрос
             //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
-            console.log(this.item.getDataForUpdateRealization());
-            //console.log(this.item);
+            console.log(this.item.getDataForUpdate());
+            console.log(this.item);
 
 
             axios.post(`/api/income/${this.item.id}`, {
-                item: this.item.getDataForUpdateRealization(),
+                item: this.item.getDataForUpdate(),
                 state: state
             }).then((response) => {
                 this.selectingRow = new FinanceDocumentTableRow(null);
