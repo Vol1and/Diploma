@@ -40,9 +40,26 @@ class CreateFindCharacteristicsProcedure extends Migration
         END
         ";
 
+        $procedure2 = "
+        CREATE PROCEDURE `find_characteristic_ware_butches`(characteristic_id bigint, storage_id bigint)
+        BEGIN
+            SELECT
+                `butch_number_connections`.`id` AS `id`,
+                `butch_number_connections`.`butch_number` AS `butch`,
+                SUM(`ware_connections`.`change`) AS `ware`
+            FROM
+                ((`ware_connections`
+                INNER JOIN `butch_number_connections` ON ((`ware_connections`.`butch_number_connection_id` = `butch_number_connections`.`id`))))
+            WHERE `ware_connections`.characteristic_id = characteristic_id AND  `ware_connections`.storage_id = storage_id AND `butch_number_connections`.butch_number > 0
+            GROUP BY `butch_number_connections`.`id`;
+        END
+        ";
+
         // внедрение процедуры в db
         DB::unprepared("DROP procedure IF EXISTS find_characteristics_procedure");
         DB::unprepared($procedure);
+        DB::unprepared("DROP procedure IF EXISTS find_characteristic_ware_butches");
+        DB::unprepared($procedure2);
 
     }
 
@@ -54,5 +71,6 @@ class CreateFindCharacteristicsProcedure extends Migration
     public function down()
     {
         Schema::dropIfExists('find_characteristics_procedure');
+        Schema::dropIfExists('find_characteristic_ware_butches');
     }
 }

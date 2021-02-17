@@ -51,6 +51,7 @@ class WareConnectionsRepository extends BaseRepository
             ->get();
     }
 
+
     public function find($id)
     {
         $columns = [

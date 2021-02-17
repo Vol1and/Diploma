@@ -28,6 +28,15 @@ class CharacteristicsRepository extends BaseRepository
         );
     }
 
+
+    // получение остатков по характеристике с делением на партии
+    public function getCharacteristicWareButches($characteristic_id, $storage_id)
+    {
+        return DB::select(
+            'CALL find_characteristic_ware_butches(' . $characteristic_id . ', '.$storage_id.')'
+        );
+    }
+
     // поиск в БД характеристики по её id
     public function find($id)
     {

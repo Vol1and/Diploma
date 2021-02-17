@@ -11,7 +11,7 @@ class CreateCharacteristicButchesView extends Migration
      */
     public function up()
     {
-        \DB::statement(/** @lang MySQL */ '
+        \DB::statement('
             CREATE
         VIEW `characteristic_butches_view` AS
         SELECT

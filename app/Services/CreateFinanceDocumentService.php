@@ -4,6 +4,7 @@
 namespace App\Services;
 
 use App\Models\FinanceDocument;
+use App\Repositories\ButchNumberConnectionsRepository;
 use App\Repositories\CharacteristicPricesRepository;
 use App\Repositories\CharacteristicsRepository;
 use App\Repositories\FinanceDocumentsRepository;
@@ -20,8 +21,12 @@ class CreateFinanceDocumentService
         $rest = substr($data['date'], 0, -3);
         $date = Carbon::createFromTimestamp($rest, 'Europe/Moscow')->toDateTimeString();
 
+
+        if($data['doc_type_id'] != 1) $agent_id = 1;
+        else $agent_id = $data['agent_id'];
+
         // заполнение сущности документа
-        $doc = (new FinanceDocument())->create(['agent_id' => $data['agent_id'],
+        $doc = (new FinanceDocument())->create(['agent_id' => $agent_id,
             'comment' => $data['comment'],
             'date' =>  $date,
             'is_set' => false,
@@ -44,6 +49,7 @@ class CreateFinanceDocumentService
         $characteristicPricesRepository= app(CharacteristicPricesRepository::class);
         $characteristicsRepository= app(CharacteristicsRepository::class);
         $createFinanceDocumentTableRowService = app(CreateFinanceDocumentTableRowService::class);
+
 
         // поиск выбранной характеристики для выбранной номенклатуры в БД по id
         $characteristic = $characteristicsRepository->findById($med['nomenclature_id'],$med['characteristic_id']);
@@ -69,7 +75,10 @@ class CreateFinanceDocumentService
             }
 
             // обновление строки документа если есть, иначе создание новой
-            if ($tableRow) $tableRow->update(['price' => $med['income_price']] + $med);
+            if ($tableRow) {
+                if($doc->doc_type_id == 1) $tableRow->update(['price' => $med['income_price']] + $med);
+                else $tableRow->update(['price' => $med['sell_price']] + $med);
+            }
             else {
                 $tableRow = $createFinanceDocumentTableRowService->fillTableRow($doc, $med, $med['characteristic_id']);
                 if (!$tableRow) return response(['error' => "Строка документа не была создана"], 500);
@@ -86,11 +95,12 @@ class CreateFinanceDocumentService
         // добавление нового документа
         $doc = $this->makeFinanceDoc($data);
 
+
         if($doc){
             // циклический проход по массиву медикаментов
-            foreach ($meds as $med) {
+            foreach ($meds as $row) {
 
-                $result = $this->fillData($doc, $med);
+                $result = $this->fillData($doc, $row);
                 if (!$result) return response(null,500);
 
             } // foreach
@@ -99,44 +109,193 @@ class CreateFinanceDocumentService
         return $doc;
     }
 
+
+
     // метод проведения документа
     public function pushFinanceDoc($doc_id)
     {
         $financeDocumentTableRowsRepository = app(FinanceDocumentTableRowsRepository::class);
         $financeDocumentsRepository = app(FinanceDocumentsRepository::class);
         $createWareConnectionService = app(CreateWareConnectionService::class);
+        $characteristicsRepository = app(CharacteristicsRepository::class);
+        $createFinanceDocumentTableRowService = app(CreateFinanceDocumentTableRowService::class);
+        $butchNumberConnectionRepository = app(ButchNumberConnectionsRepository::class);
 
         // получение документа
         $doc = $financeDocumentsRepository->find($doc_id);
 
+
+        if ($doc['is_set'] == 1) return $doc;
+
+
         // получение строк документа
-        $rows = $financeDocumentTableRowsRepository->forPush($doc_id);
+        $doc_rows = $financeDocumentTableRowsRepository->forPush($doc_id);
 
-        if($rows)
-        {
-            if($doc->doc_type_id > 1){
-                // циклический проход по массиву строк документа
-                foreach ($rows as $row) {
+        if ($doc['doc_type_id'] != 1){
 
-                    //TODO: здесь может вылезти ошибкаа!!!
+            foreach($doc_rows as $row) {
 
-                    // попытка изменить знак в расходе
-                    $row->change = -$row->change;
+                $row_sale = $row['count'];
+                $is_first_row = true;
 
-                    $result = $createWareConnectionService->pushWareConnection($row, $doc);
-                    if (!$result) return response(null,500);
+                // партии с количествами продаваемого медикамента
+                $wares_data = $characteristicsRepository->getCharacteristicWareButches($row['characteristic_id'], $doc->storage_id);
+                $wares = array();
 
-                } // foreach
-            } else {
-                // циклический проход по массиву строк документа
-                foreach ($rows as $row) {
+                // исключение 0 остатков по партиям
+                foreach(array_keys($wares_data) as $key){
+                    $temp[$key] = $wares_data[$key]->ware;
 
-                    $result = $createWareConnectionService->pushWareConnection($row, $doc);
-                    if (!$result) return response(null,500);
+                    if ($temp[$key] > 0){
+                        $wares[$key] = $wares_data[$key];
+                    }
+                }
 
-                } // foreach
+                foreach ($wares as $ware){
+
+                    $tr = $financeDocumentTableRowsRepository->find($row['id']);
+
+                    if($ware->ware >= $row_sale) {
+
+                        if($is_first_row){
+                            $wc = $createWareConnectionService->
+                            make(['storage_id'=> $doc->storage_id, 'characteristic_id' => $row['characteristic_id'],
+                                'change' => -$row_sale , 'butch_number_connection_id' => $ware->id
+                            ]);
+                            $tr->update(['ware_connection_id' => $wc->id]);
+                            break;
+                        } else {
+                            $wc = $createWareConnectionService
+                                ->make(['storage_id'=> $doc->storage_id, 'characteristic_id' => $row['characteristic_id'],
+                                    'change' => -$row_sale, 'butch_number_connection_id' => $ware->id
+                                ]);
+
+                            $tr = $createFinanceDocumentTableRowService
+                                ->fillTableRow($doc, ['finance_document_id' => $doc['id'], 'count' => $row_sale, 'sell_price' => $row['price']], $row['characteristic_id']);
+                            $tr->update(['ware_connection_id' => $wc->id]);
+                            break;
+                        }
+                    } else {
+                        if($is_first_row) {
+
+                            // если первая строка документа, но будет больше одной всего
+                            $wc = $createWareConnectionService
+                                ->make(['storage_id'=> $doc->storage_id, 'characteristic_id' => $row['characteristic_id'],
+                                    'change' => -$ware->ware , 'butch_number_connection_id' => $ware->id
+                                ]);
+
+                            $tr->update(['count' => $ware->ware, 'ware_connection_id' => $wc->id]);
+
+
+                            $row_sale -= $ware->ware;
+
+                            $is_first_row = false;
+                        } else {
+                            $wc = $createWareConnectionService
+                                ->make(['storage_id'=> $doc->storage_id, 'characteristic_id' => $row['characteristic_id'],
+                                    'change' => -$ware->ware, 'butch_number_connection_id' => $ware->id
+                                ]);
+
+
+                            $tr = $createFinanceDocumentTableRowService
+                                ->fillTableRow($doc, ['finance_document_id' => $doc['id'], 'count' => $ware->ware, 'sell_price' => $row['price']], $row['characteristic_id']);
+                            $tr->update(['ware_connection_id' => $wc->id]);
+                            $row_sale -= $ware->ware;
+                        }
+                    }
+                }
             }
+        } else {
+            // циклический проход по массиву строк документа
+
+
+            foreach ($doc_rows as $row) {
+
+                $bn = $butchNumberConnectionRepository->findByButchNumber($doc->id);
+
+                $result = $createWareConnectionService->make([ 'storage_id'=> $doc->storage_id,
+                    'characteristic_id' => $row->characteristic_id, 'change' => $row['count'] , 'butch_number_connection_id' => $bn->id ]);
+                if (!$result) return response(null,500);
+
+                $tr = $financeDocumentTableRowsRepository->find($row['id']);
+
+                $tr->update(['ware_connection_id' => $result->id]);
+            } // foreach
         }
+
+        // изменение состояния документа на "Проведён"
+        $doc->update(['is_set' => true]);
+
         return $doc;
     }
+
+    // функция отбирает только уникальные сущности из массива по указанному свойству
+    function unique_multidim_array($array, $key) {
+        $temp_array = array();
+        $i = 0;
+        $key_array = array();
+
+        foreach($array as $val) {
+
+            if (!in_array($val[$key], $key_array)) {
+                $key_array[$i] = $val[$key];
+                $temp_array[$i] = $val;
+            }
+            $i++;
+        }
+        return $temp_array;
+    }
+
+
+    // функция отбирает только уникальные сущности из массива по указанному свойству
+    //function multiple_keys($array, $key) {
+    //    $temp_array = array();          // возвращаемый массив
+    //    $key_array = array();           // массив ключей
+    //    $not_uniq_key_array = array();  // массив ключей строк с повторяющейся характеристикой
+    //
+    //    // цикл записывает в $temp_array строки с уникальными значениями $characteristic_id
+    //    // так же формируется массив всех уникальных $characteristic_id
+    //    $i = 0;
+    //    foreach($array as $val) {
+    //        if (!in_array($val[$key], $key_array)) {
+    //            $key_array[$i] = $val[$key];
+    //            $temp_array[$i] = $val;
+    //        }
+    //        $i++;
+    //    }  // foreach
+    //
+    //    // создание массива из id строк с повторяющимися id характеристик
+    //    foreach($key_array as $k) {
+    //        $uniq_count = array_count_values(array_column($array, $key))[$k];
+    //        if ($uniq_count > 1) $not_uniq_key_array[] = $k;
+    //    }
+    //
+    //    // в цикле формируется результирующий массив, количества дублированных строк суммируются
+    //    foreach($not_uniq_key_array as $not_uniq_key) {
+    //
+    //        // массив подсчёта финального количества
+    //        $final_array = array();
+    //
+    //        // в массив $final_array добавляются все повторяющиеся строки с characteristic_id = $not_uniq_key
+    //        $i = 0;
+    //        foreach ($array as $item){
+    //            if ($item[$key] == $not_uniq_key){
+    //                $final_array[$i] = $item;
+    //            }
+    //            $i++;
+    //        }
+    //
+    //        // агрегируется count повторяющихся строк
+    //        $uniq_sum = array_sum(array_column($final_array, 'count'));
+    //
+    //        // в результирующий массив вносятся суммированные кол-ва повторявшихся строк
+    //        foreach($temp_array as $k => &$v)
+    //            if ($v[$key] ==  $not_uniq_key) $v["count"] = $uniq_sum;
+    //
+    //    } // foreach
+    //
+    //    // возвращается массив с уменьшенным кол-вом строк
+    //    return $temp_array;
+    //}
+
 }

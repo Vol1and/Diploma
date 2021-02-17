@@ -21,7 +21,8 @@ class UpdateFinanceDocumentService
         if (empty($doc)) return response(null, 400);
 
         // обновление информации о документе
-        $doc->update(['agent_id' => $data['agent_id'], 'comment' => $data['comment'], 'date' => new Carbon($data['date']), 'is_set' => true, 'doc_type_id' => 1, 'storage_id' => $data['storage_id'],
+        $doc->update(['agent_id' => $data['agent_id'], 'comment' => $data['comment'], 'date' => new Carbon($data['date']),
+            'is_set' => false, 'doc_type_id' => $data['doc_type_id'], 'storage_id' => $data['storage_id'],
             'doc_sum' => $data['doc_sum']]);
 
 
@@ -36,10 +37,9 @@ class UpdateFinanceDocumentService
                     if (!$result)
                         return response(['error' => "Ошибка удаления"], 500);
                 }
-                // TODO: доработать логику удаления всех сущностей (сейчас только строки документа)
-
             }
         }
+
 
         // циклический проход по массиву медикаментов
         foreach ($updated as $row) {

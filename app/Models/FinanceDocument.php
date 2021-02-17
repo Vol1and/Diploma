@@ -13,8 +13,8 @@ class FinanceDocument extends Model
         'doc_type_id',
         'agent_id',
         'storage_id',
-        'comment',
-        'doc_sum'
+        'doc_sum',
+        'comment'
     ];
 
     protected $with = ['storage', 'agent'];

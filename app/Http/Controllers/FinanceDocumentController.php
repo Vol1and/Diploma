@@ -128,6 +128,12 @@ class FinanceDocumentController extends OriginController
         $doc = $this->createFinanceDocumentService->createFinanceDoc($data,$meds);
         if(empty($doc)) return response(null,500);
 
+
+        echo ("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        echo ($doc);
+        echo ("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+
         if($request->input('state')) $result = $this->createFinanceDocumentService->pushFinanceDoc($doc->id);
         //if(empty($result)) return response(null,500);
 
@@ -144,6 +150,8 @@ class FinanceDocumentController extends OriginController
         $deleted = $data['deleted_rows'];
 
         $updated = $data['updated_rows'];
+
+
 
 
         $result = $this->updateFinanceDocumentService->updateIncome($data, $deleted, $updated, $id);
