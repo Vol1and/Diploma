@@ -91,10 +91,12 @@ class CharacteristicsRepository extends BaseRepository
             'serial',
             'nomenclature_id',
             'expiry_date',
-            'name'
+            'name',
+            'characteristic_price_id'
         ];
         return $this->startConditions()
             ->select($columns)
+            ->with('characteristic_price')
             ->where('nomenclature_id', $nomenclature_id)
             ->get();
     }

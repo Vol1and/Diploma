@@ -45,9 +45,10 @@
             </el-table-column>
             <el-table-column
                 prop="characteristic_price.price"
-                label="Цена продаже "
+                label="Цена продажи "
 
             >
+
             </el-table-column>
         </el-table>
         <el-drawer
@@ -71,6 +72,7 @@ import Producer from "../../code/models/Producer";
 import Characteristic from "../../code/models/Characteristic";
 import CharacteristicPrice from "../../code/models/CharacteristicPrice";
 import Storage from "../../code/models/Storage";
+
 
 export default {
     name: "CharacteristicChooseWithWares",
@@ -111,15 +113,19 @@ export default {
                 this.item.storage = new Storage(response.data.storage.id,
                     response.data.storage.name
                 );
+
+                let butches = [];
                 response.data.characteristics.forEach(row => {
+                    butches = [];
 
                     this.item.characteristics.push(new Characteristic(
-                        row.characteristic_id,
+                        row.id,
                         row.name,
                         row.serial,
                         row.expiry_date,
-                        new CharacteristicPrice(row.characteristic_price_id, row.characteristic_price),
+                        new CharacteristicPrice(row.characteristic_price.id, row.characteristic_price.price),
                         row.ware
+
                     ));
                 })
 
@@ -138,5 +144,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

@@ -95,7 +95,27 @@ export default {
         }
         ,
         onSelectedCharacteristic(data) {
-            this.selectingRow.characteristic = data.characteristic;
+            let flag = true;
+            this.item.table_rows.forEach
+            this.item.table_rows.forEach(p => {
+                if(p.characteristic.id === data.characteristic.id){
+                    //удаляем строку из табличной части
+                    let index = this.item.table_rows.indexOf(this.hover_row);
+                    this.item.table_rows.splice(index, 1);
+
+                    this.hover_row = p;
+                    this.selectingRow = p;
+                    flag = false;
+                    this.$notify.error({
+                        title: 'Ошибка!',
+                      //  message: "Строка с такой номенклатурой уже присутствует в таблице!",  Глаза раззуй, мышь!
+                        message: "Глаза раззуй, мышь! TODO: исправить на релизе"
+                    });
+                }
+            })
+            if(flag) this.selectingRow.characteristic = data.characteristic;
+
+
             this.choosing_state = 0;
             this.characteristic_dialog = false;
         },

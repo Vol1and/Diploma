@@ -128,8 +128,12 @@ class CharacteristicController extends OriginController
         $storage = $this->storageRepository->find($storage_id);
         if (empty($storage)) return response('Выбранный склад не найден', 500);
 
-        $characteristics = $this->characteristicRepository->getAllByNomenclatureAndStorageIdWithWares($nomenclature_id, $storage_id);
+        $characteristics = $this->characteristicRepository->getAllByNomenclatureId($nomenclature_id);
 
-        return ['nomenclature' => $nomenclature, 'storage' => $storage, 'characteristics' => $characteristics];
+        $characteristic_data = [];
+        foreach ($characteristics as $characteristic) if($characteristic->get_ware_by_storage($storage_id) > 0) $characteristic_data[] = $characteristic->getDataToChooseInRealization($storage_id);
+        //$butch_wares = $this->butchWaresRepository->getByNomenclatureAndStorage();
+        return ['nomenclature' => $nomenclature, 'storage' => $storage, 'characteristics' => $characteristic_data];
+
     }
 }
