@@ -124,9 +124,7 @@ class CreateFinanceDocumentService
         // получение документа
         $doc = $financeDocumentsRepository->find($doc_id);
 
-
         if ($doc['is_set'] == 1) return $doc;
-
 
         // получение строк документа
         $doc_rows = $financeDocumentTableRowsRepository->forPush($doc_id);
@@ -139,17 +137,8 @@ class CreateFinanceDocumentService
                 $is_first_row = true;
 
                 // партии с количествами продаваемого медикамента
-                $wares_data = $characteristicsRepository->getCharacteristicWareButches($row['characteristic_id'], $doc->storage_id);
-                $wares = array();
+                $wares = $characteristicsRepository->getCharacteristicWareButches($row['characteristic_id'], $doc->storage_id);
 
-                // исключение 0 остатков по партиям
-                foreach(array_keys($wares_data) as $key){
-                    $temp[$key] = $wares_data[$key]->ware;
-
-                    if ($temp[$key] > 0){
-                        $wares[$key] = $wares_data[$key];
-                    }
-                }
 
                 foreach ($wares as $ware){
 

@@ -50,8 +50,11 @@ class CreateFindCharacteristicsProcedure extends Migration
             FROM
                 ((`ware_connections`
                 INNER JOIN `butch_number_connections` ON ((`ware_connections`.`butch_number_connection_id` = `butch_number_connections`.`id`))))
-            WHERE `ware_connections`.characteristic_id = characteristic_id AND  `ware_connections`.storage_id = storage_id AND `butch_number_connections`.butch_number > 0
-            GROUP BY `butch_number_connections`.`id`;
+            WHERE `ware_connections`.characteristic_id = characteristic_id
+            AND  `ware_connections`.storage_id = storage_id
+            AND `butch_number_connections`.butch_number > 0
+            GROUP BY `butch_number_connections`.`id`
+            having ware > 0;
         END
         ";
 

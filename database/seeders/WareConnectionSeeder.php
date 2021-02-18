@@ -62,6 +62,18 @@ class WareConnectionSeeder extends Seeder
                 'butch_number_connection_id' => 3,
                 'characteristic_id' => 5,
                 'change' => -20
+            ],
+            [
+                'storage_id' => 1,
+                'butch_number_connection_id' => 2,
+                'characteristic_id' => 1,
+                'change' => -7
+            ],
+            [
+                'storage_id' => 1,
+                'butch_number_connection_id' => 3,
+                'characteristic_id' => 3,
+                'change' => -2
             ]
         ];
 
