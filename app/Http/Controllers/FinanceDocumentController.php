@@ -129,11 +129,6 @@ class FinanceDocumentController extends OriginController
         if(empty($doc)) return response(null,500);
 
 
-        echo ("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        echo ($doc);
-        echo ("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-
-
         if($request->input('state')) $result = $this->createFinanceDocumentService->pushFinanceDoc($doc->id);
         //if(empty($result)) return response(null,500);
 

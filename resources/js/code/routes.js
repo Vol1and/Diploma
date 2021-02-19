@@ -35,8 +35,8 @@ import CancellationIndex from "../components/Documents/Cancellation/Index";
 import CancellationEdit from "../components/Documents/Cancellation/Edit";
 
 
-import CashierIndex from "../components/CashierPlace/Index"
-import MedicamentSearch from "../components/CashierPlace/MedicamentSearch"
+//import CashierIndex from "../components/CashierPlace/Index"
+//import MedicamentSearch from "../components/CashierPlace/MedicamentSearch"
 
 
 import WaresIndex from "../components/Ware/Index"
@@ -91,8 +91,8 @@ const routes = [
     {path: '/nomenclatures/:id', name: "nomenclature.edit", component: NomenclatureEdit},
 
 
-    {path: '/cashier', name: "cashier.index", component: CashierIndex},
-    {path: '/test', name: "cashier.test", component: MedicamentSearch},
+   //{path: '/cashier', name: "cashier.index", component: CashierIndex},
+   //{path: '/test', name: "cashier.test", component: MedicamentSearch},
 
 
 
