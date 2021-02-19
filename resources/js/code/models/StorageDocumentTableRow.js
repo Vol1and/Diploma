@@ -20,6 +20,7 @@ class StorageDocumentTableRow {
             nomenclature_id: this.nomenclature.id,
             characteristic_id: this.characteristic.id,
             characteristic_price_id: this.characteristic.characteristic_price.id,
+            characteristic_price_price: this.characteristic.characteristic_price.price,
             count: this.count,
 
         }

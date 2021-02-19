@@ -33,7 +33,7 @@ class StorageDocument {
             table_rows: table_rows,
             comment: this.comment,
             doc_type_id: this.type,
-            doc_sum: this.type === 1 ? this.sumOfIncomePrices() :  this.sumOfSellPrices()
+            doc_sum:  this.sumOfSellPrices()
         }
     }
 
@@ -49,7 +49,7 @@ class StorageDocument {
             deleted_rows: this.deleted_rows,
             updated_rows: updated_rows,
             doc_type_id: this.type,
-            doc_sum: this.type  === 1  ? this.sumOfIncomePrices() :  this.sumOfSellPrices()
+            doc_sum: this.sumOfSellPrices()
         }
     }
 
