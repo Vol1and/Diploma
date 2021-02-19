@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PriceTypeCreateRequest;
 use App\Models\PriceType;
-use App\Repositories\PriceTypesRepository;
+use App\Repositories\WorkplacesRepository;
 use Illuminate\Http\Request;
 
-class PriceTypeController extends OriginController
+class WorkplaceController extends OriginController
 {
     //ссылка на хранилище модели PriceType
-    private $priceTypeRepository;
+    private $workplacesRepository;
 
     public function __construct()
     {
@@ -18,19 +17,18 @@ class PriceTypeController extends OriginController
         parent::__construct();
 
         //инициализация хранилища
-        $this->priceTypeRepository = app(PriceTypesRepository::class);
+        $this->workplacesRepository = app(WorkplacesRepository::class);
     }
 
 
     public function index()
     {
-        return $this->priceTypeRepository->getTable()->toJson();
+        return $this->workplacesRepository->getTable()->toJson();
     }
 
 
-
     //принимает реквест с моделью
-    public function store(PriceTypeCreateRequest $request)
+    public function store(Request $request)
     {
         //получение данных из реквеста
         $data = $request->input();
@@ -54,7 +52,7 @@ class PriceTypeController extends OriginController
 
     public function show($id)
     {
-        $result = $this->priceTypeRepository->find($id);
+        $result = $this->workplacesRepository->find($id);
 
         if(empty($result) || !$result){
 
@@ -70,9 +68,9 @@ class PriceTypeController extends OriginController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function update(PriceTypeCreateRequest $request)
+    public function update(Request $request)
     {
-        $item = $this->priceTypeRepository->find($request->id);
+        $item = $this->workplacesRepository->find($request->id);
         if (empty($item)) {
 
             return response(null, 404);

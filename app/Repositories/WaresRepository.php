@@ -15,13 +15,7 @@ class WaresRepository extends BaseRepository
     }
 
     public function getTable(){
-       // $columns = [
-       //     'characteristic_id',
-       //     'ware',
-       //     'storage_id'
-//
-//
-       // ];
+
         $result = $this->startConditions()
             ->select('*')
             ->with(['characteristic','storage', 'characteristic.nomenclature'])

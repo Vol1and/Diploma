@@ -28,6 +28,7 @@ class CreateStorageDocumentService
             'date' =>  $date,
             'is_set' => false,
             'doc_type_id' => 3,
+            'doc_sum' => $data['doc_sum'],
             'source_storage_id'=> $data['source_storage_id'],
             'destination_storage_id' => $destination_storage_id
         ]);
