@@ -30,6 +30,14 @@ import SellingCreate from "../components/Documents/Selling/Create";
 import SellingIndex from "../components/Documents/Selling/Index";
 import SellingEdit from "../components/Documents/Selling/Edit";
 
+import CancellationCreate from "../components/Documents/Cancellation/Create";
+import CancellationIndex from "../components/Documents/Cancellation/Index";
+import CancellationEdit from "../components/Documents/Cancellation/Edit";
+
+
+import CashierIndex from "../components/CashierPlace/Index"
+import MedicamentSearch from "../components/CashierPlace/MedicamentSearch"
+
 
 import WaresIndex from "../components/Ware/Index"
 
@@ -59,6 +67,11 @@ const routes = [
     {path: '/selling-documents/create', name: "selling.create", component: SellingCreate},
     {path: '/selling-documents/:id', name: "selling.edit", component: SellingEdit},
 
+    {path: '/cancellation-documents', name: "cancellation.index", component: CancellationIndex},
+    {path: '/cancellation-documents/create', name: "cancellation.create", component: CancellationCreate},
+    {path: '/cancellation-documents/:id', name: "cancellation.edit", component: CancellationEdit},
+
+
 
     {path: '/agents', name: "agents.index", component: AgentIndex},
     {path: '/agents/create', name: "agents.create", component: AgentCreate},
@@ -76,6 +89,11 @@ const routes = [
     {path: '/nomenclatures', name: "nomenclature.index", component: NomenclatureIndex},
     {path: '/nomenclatures/create', name: "nomenclature.create", component: NomenclatureCreate},
     {path: '/nomenclatures/:id', name: "nomenclature.edit", component: NomenclatureEdit},
+
+
+    {path: '/cashier', name: "cashier.index", component: CashierIndex},
+    {path: '/test', name: "cashier.test", component: MedicamentSearch},
+
 
 
     {path: '/', name: "home.index", component: Home},

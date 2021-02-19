@@ -1,6 +1,5 @@
-import FinanceDocument from "../../code/models/FinanceDocument";
-import FinanceDocumentTableRow from "../../code/models/FinanceDocumentTableRow";
-import Agent from "../../code/models/Agent";
+import StorageDocument from "../../code/models/StorageDocument";
+import StorageDocumentTableRow from "../../code/models/StorageDocumentTableRow";
 import Storage from "../../code/models/Storage";
 //содержит переменные, которые будут помещены в модуль хранилища
 const state = () => ({
@@ -30,7 +29,9 @@ const actions = {
     update(context) {
         return new Promise((resolve, reject) => {
             //запрашивает данные с сервера
-            axios.get('/api/sellings').then((response) => {
+
+            axios.get('/api/storage-documents').then((response) => {
+                console.log(response)
                 let result = [];
 
                 //console.log(response.data)
@@ -39,14 +40,13 @@ const actions = {
                 response.data.forEach(item => {
 
 
-                    if (item.table_rows !== undefined && item.table_rows.length > 0) item.table_rows.forEach(row => table_rows.push(new FinanceDocumentTableRow(row.id, row.nomenclature, row.characteristic, row.count, row.income_price, row.sell_price)));
+                    if (item.table_rows !== undefined && item.table_rows.length > 0) item.table_rows.forEach(row => table_rows.push(new StorageDocumentTableRow(row.id, row.nomenclature, row.characteristic, row.count, row.sell_price)));
 
 
-                    result.push(new FinanceDocument(item.id, 2,item.is_set,
-                        new Agent(1),
-                        new Storage(item.storage.id, item.storage.name),
-
-                        item.date, table_rows,null, item.comment,item.doc_sum,
+                    result.push(new StorageDocument(item.id, 3,item.is_set,
+                        new Storage(item.source_storage.id, item.source_storage.name),
+                        new Storage(),
+                        item.date, table_rows,item.comment,item.doc_sum,
                         item.created_at, item.updated_at, item.deleted_at))
 
                 })
@@ -70,7 +70,7 @@ const actions = {
     sendNewItem(context, data) {
         return new Promise((resolve, reject) => {
             //запрашивает данные с сервера
-            axios.post('/api/selling-documents', data.fields).then(response => {
+            axios.post('/api/cancellation-documents', data.fields).then(response => {
 
                 resolve();
 
@@ -85,7 +85,7 @@ const actions = {
     deleteItem(context, data) {
         return new Promise((resolve, reject) => {
             //запрашивает данные с сервера
-            axios.delete(`/api/selling-documents/${data.id}`).then(response => {
+            axios.delete(`/api/cancellation-documents/${data.id}`).then(response => {
 
                 context.dispatch('update').then(() => {
                     resolve();

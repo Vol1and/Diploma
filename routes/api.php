@@ -26,6 +26,7 @@ Route::apiResource('/agents', "App\Http\Controllers\AgentController");
 Route::apiResource('/nomenclatures', "App\Http\Controllers\NomenclatureController");
 Route::apiResource('/storages', "App\Http\Controllers\StorageController");
 Route::apiResource('/finance-documents', "App\Http\Controllers\FinanceDocumentController");
+Route::apiResource('/storage-documents', "App\Http\Controllers\StorageDocumentController");
 Route::apiResource('/wares', "App\Http\Controllers\WareController");
 
 

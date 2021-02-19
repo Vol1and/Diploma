@@ -1,8 +1,8 @@
 //данный код будет включен во все Document-компоненты (например, ProducerIndex)
 //хранит данные, которые используются в каждых компонентах
 //подробнее почитать можно https://ru.vuejs.org/v2/guide/mixins.html
-import FinanceDocument from "../models/FinanceDocument";
-import FinanceDocumentTableRow from "../models/FinanceDocumentTableRow";
+import StorageDocument from "../models/StorageDocument";
+import StorageDocumentTableRow from "../models/StorageDocumentTableRow";
 
 export default {
 
@@ -16,7 +16,7 @@ export default {
             //показывает, получены ли данные с сервера - при loaded - false не доступна submit-кнопка
             loaded: true,
             //модель, в которой будут находиться данные
-            item: new FinanceDocument(null, 1),
+            item: new StorageDocument(null, 3),
             //выбранная строка - в табличной части идет проверка - id_строки - id_selectingRow
             //если true, то строка переходит в editable
             selectingRow: null,
@@ -67,7 +67,7 @@ export default {
         },
         //метод добавляет новую пустую строку в массив table_rows, и, соответственно в табличную часть формы
         addToTable() {
-            this.item.table_rows.push(new FinanceDocumentTableRow(null));
+            this.item.table_rows.push(new StorageDocumentTableRow(null));
         },
         selectingStorage() {
             this.choosing_state = 3;
@@ -84,12 +84,14 @@ export default {
         },
         onSelectedCharacteristic(data) {
             let flag = true;
-            this.item.table_rows.forEach
             this.item.table_rows.forEach(p => {
                 if (p.characteristic.id === data.characteristic.id) {
                     //удаляем строку из табличной части
+                    //удаляем строку из табличной части
                     let index = this.item.table_rows.indexOf(this.hover_row);
                     this.item.table_rows.splice(index, 1);
+                    //если удалена новая строка и она не сохранена на сервере - не заносим в deleted_rows
+                    if (this.hover_row.id != null)  this.item.deleted_rows.push(this.hover_row.id);
 
                     this.hover_row = p;
                     this.selectingRow = p;
@@ -131,7 +133,7 @@ export default {
                 this.buffer_row.characteristic = data.nomenclature.characteristic;
             }
             else {
-                let row = new FinanceDocumentTableRow();
+                let row = new StorageDocumentTableRow();
                 row.nomenclature = data.nomenclature;
                 row.characteristic = data.nomenclature.characteristic;
                 this.item.table_rows.push(row);
@@ -148,7 +150,7 @@ export default {
             if(this.buffer_row != null) {
 
             }
-            let row = new FinanceDocumentTableRow();
+            let row = new StorageDocumentTableRow();
             row.nomenclature = data.nomenclature;
             row.characteristic = data.nomenclature.characteristic;
 

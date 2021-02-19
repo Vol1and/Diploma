@@ -3,11 +3,11 @@
         <el-row v-if="choosing_state === 0 " class="center-75">
 
 
-            <h1 v-shortkey="['del']" @shortkey="deleteSelected" class="text-center">Реализации товаров</h1>
+            <h1 v-shortkey="['del']" @shortkey="deleteSelected" class="text-center">Списания товаров</h1>
 
             <el-row>
                 <el-col :span="8">
-                    <router-link tag="button" class="el-button" :to="{name: 'selling.create'}"
+                    <router-link tag="button" class="el-button" :to="{name: 'cancellation.create'}"
                                  style=" float:left ">
                         Добавить
                     </router-link>
@@ -44,7 +44,7 @@
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item style="   margin-bottom: 0;" label="Склад:">
-                        <el-input readonly v-model="filter_fields.storage.name" placeholder="">
+                        <el-input readonly v-model="filter_fields.source_storage.name" placeholder="">
                             <el-button type="primary" @click="selectingStorage" slot="append"
                                        icon="el-icon-d-arrow-right"></el-button>
                         </el-input>
@@ -85,7 +85,7 @@
                 </el-table-column>
 
                 <el-table-column
-                    prop="storage.name"
+                    prop="source_storage.name"
                     label="Склад"
                     min-width="100"
                 >
@@ -117,23 +117,21 @@
                 </el-pagination>
             </div>
         </el-row>
-
-        <storage-choose-component @back="onBack" v-if="choosing_state ===2"
-                                  @selected="onSelectedStorage"></storage-choose-component>
+        <source_storage-choose-component @back="onBack" v-if="choosing_state ===2"
+                                  @selected="onSelectedStorage"></source_storage-choose-component>
     </div>
 </template>
 
 
 <script>
 import mixin_index from "../../../code/mixins/mixin_index";
-import FinanceDocumentTableRow from "../../../code/models/FinanceDocumentTableRow";
-import FinanceDocument from "../../../code/models/FinanceDocument";
-import Agent from "../../../code/models/Agent";
+import StorageDocumentTableRow from "../../../code/models/StorageDocumentTableRow";
+import StorageDocument from "../../../code/models/StorageDocument";
 import Storage from "../../../code/models/Storage";
 import moment from "moment";
 
 export default {
-    name: "SellingIndex",
+    name: "CancellationIndex",
 
     mixins: [mixin_index],
     data: function () {
@@ -141,12 +139,11 @@ export default {
 
             filter_fields: {
                 date_range : {},
-                agent: {name: ""},
-                storage: {name: ""},
+                source_storage: {name: ""},
 
             },
             choosing_state: 0,
-            action_namespace: "selling"
+            action_namespace: "cancellations"
 
         };
     },
@@ -156,7 +153,7 @@ export default {
 
             this.filter_fields = {
                 date_range : {},
-                storage: {name: ""}
+                source_storage: {name: ""}
             }
 
         },
@@ -164,23 +161,17 @@ export default {
 
         filter() {
             this.filter_state = true;
-            console.log( {
-                    start_date: this.filter_fields.date_range[0],
-                    end_date: this.filter_fields.date_range[1],
-                    storage_id: this.filter_fields.storage.id
-            });
-            axios.get('/api/income-document/filter', {
+            axios.get('/api/cancellation-document/filter', {
 
                 params: {
                     start_date: this.filter_fields.date_range[0] === undefined ? null:    moment(this.filter_fields.date_range[0]).format("YYYY-MM-DD hh:mm:ss") ,
                     end_date: this.filter_fields.date_range[1] === undefined ? null:  moment(this.filter_fields.date_range[1]).format("YYYY-MM-DD hh:mm:ss") ,
-                    storage_id: this.filter_fields.storage.id
+                    source_storage_id: this.filter_fields.source_storage.id
                 }
 
             }).then((response) => {
 
                 let result = [];
-
 
                 //console.log(response.data)
                 let table_rows = [];
@@ -188,10 +179,11 @@ export default {
                 response.data.forEach(item => {
 
 
-                    if (item.table_rows !== undefined && item.table_rows.length > 0) item.table_rows.forEach(row => table_rows.push(new FinanceDocumentTableRow(row.id, row.nomenclature, row.characteristic, row.count, row.income_price, row.sell_price)));
-                    result.push(new FinanceDocument(item.id,
-                        new Agent(1),
-                        new Storage(item.storage.id, item.storage.name, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at),
+                    if (item.table_rows !== undefined && item.table_rows.length > 0) item.table_rows.forEach(row => table_rows.push(new StorageDocumentTableRow(row.id, row.nomenclature, row.characteristic, row.count, row.income_price, row.sell_price)));
+
+
+                    result.push(new StorageDocument(item.id,
+                        new Storage(item.source_storage.id, item.source_storage.name, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at),
                         item.date, table_rows,null, item.comment,
                         item.created_at, item.updated_at, item.deleted_at))
 
@@ -211,15 +203,11 @@ export default {
         selectingStorage() {
             this.choosing_state = 2;
         },
-        selectingAgent() {
-            this.choosing_state = 1;
-        },
 
         onSelectedStorage(data) {
-            this.filter_fields.storage = data.storage;
+            this.filter_fields.source_storage = data.source_storage;
             this.choosing_state = 0;
         },
-
         onBack() {
             this.choosing_state = 0;
         }

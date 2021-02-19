@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class StorageDocument extends Model
@@ -17,7 +16,14 @@ class StorageDocument extends Model
         'comment'
     ];
 
-    public function storage()
+    protected $with = ['source_storage'];
+
+    public function source_storage()
+    {
+        return $this->belongsTo(Storage::class);
+    }
+
+    public function destination_storage()
     {
         return $this->belongsTo(Storage::class);
     }

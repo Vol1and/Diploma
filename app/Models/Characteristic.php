@@ -36,7 +36,7 @@ class Characteristic extends Model
     }
 
     public function get_ware_by_storage($storage_id){
-        return $this->wares->where('storage_id', $storage_id)->first()->ware;
+         return !empty($this->wares->where('storage_id', $storage_id)) ? $this->wares->where('storage_id', $storage_id)->first()->ware: 0;
     }
 
     function getDataToChooseInRealization($storage_id){

@@ -7,6 +7,7 @@ import agents from "./modules/agents";
 import income from "./modules/income";
 import storages from "./modules/storages";
 import selling from "./modules/selling";
+import cancellations from "./modules/cancellations";
 
 Vue.use(Vuex)
 
@@ -20,6 +21,7 @@ export default new Vuex.Store({
         agents,
         income,
         storages,
-        selling
+        selling,
+        cancellations
     },
 })

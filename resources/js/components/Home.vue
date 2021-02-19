@@ -51,6 +51,11 @@
                         </router-link>
                     </div>
                     <div class="text item">
+                        <router-link class="el-link--default el-link" :to="{name: 'cancellation.index'}">Списания
+                            товаров
+                        </router-link>
+                    </div>
+                    <div class="text item">
                         <router-link class="el-link--default el-link" :to="{name: 'wares.index'}">Остатки товаров
                         </router-link>
                     </div>
