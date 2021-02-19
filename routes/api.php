@@ -45,3 +45,7 @@ Route::get('/characteristic/for-nomenclature/{id}', [App\Http\Controllers\Charac
 Route::get('/characteristic/by-nomenclature-storage/{nomenclature_id}/{storage_id}', [App\Http\Controllers\CharacteristicController::class, 'getAllByNomenclatureAndStorageIdWithWares']);
 
 Route::get('/sellings' , [App\Http\Controllers\FinanceDocumentController::class, 'getSellings']);
+
+Route::post('/cancellation/create', [\App\Http\Controllers\StorageDocumentController::class, 'cancellationCreate']);
+
+Route::post('/cancellation/{id}', [\App\Http\Controllers\StorageDocumentController::class, 'cancellationUpdate']);

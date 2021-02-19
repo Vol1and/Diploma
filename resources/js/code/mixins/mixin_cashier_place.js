@@ -19,8 +19,9 @@ export default {
             item: new FinanceDocument(null, 1),
             //выбранная строка - в табличной части идет проверка - id_строки - id_selectingRow
             //если true, то строка переходит в editable
-            selectingRow: new FinanceDocumentTableRow(),
+            selectingRow: null,
             hover_row: null,
+            buffer_row: null
         };
     },
 
@@ -41,34 +42,27 @@ export default {
         ,
         rowHover(item) {
 
-
-            if(item == null){
-               this.hover_row = null;
-                return;
-            }
-            console.log(item)
             if (this.selectingRow.isEqual(item)) return;
             this.hover_row = item;
-            this.selectingRow = new FinanceDocumentTableRow();
+            this.selectingRow = null;
         },
         //удаление строки табличной части
         deleteSelected() {
 
-            this.selectingRow = new FinanceDocumentTableRow();
             //если не выбрана ни одна строка - ничего не делаем
             if (this.hover_row == null) return;
-
 
             //удаляем строку из табличной части
             let index = this.item.table_rows.indexOf(this.hover_row);
             this.item.table_rows.splice(index, 1);
-
             //если удалена новая строка и она не сохранена на сервере - не заносим в deleted_rows
             if (this.hover_row.id == null) return;
 
+
             //вносим данные в deleted_rows
             this.item.deleted_rows.push(this.hover_row.id);
-
+            //чтобы сбросился выбор
+            this.hover_row = null
 
         },
         //метод добавляет новую пустую строку в массив table_rows, и, соответственно в табличную часть формы
@@ -83,6 +77,7 @@ export default {
         },
         selectingNomenclature(row) {
             this.choosing_state = 2;
+            this.buffer_row = this.selectingRow;
         },
         selectingCharacteristic() {
             this.choosing_state = 4;
@@ -128,6 +123,21 @@ export default {
             this.choosing_state = 0;
         },
         onBack() {
+            this.choosing_state = 0;
+        },
+        onSelectedNomenclatureForCashier(data) {
+            if (this.buffer_row != null) {
+                this.buffer_row.nomenclature = data.nomenclature;
+                this.buffer_row.characteristic = data.nomenclature.characteristic;
+            }
+            else {
+                let row = new FinanceDocumentTableRow();
+                row.nomenclature = data.nomenclature;
+                row.characteristic = data.nomenclature.characteristic;
+                this.item.table_rows.push(row);
+            }
+            this.buffer_row = null;
+            this.selectingRow = null;
             this.choosing_state = 0;
         }
     }

@@ -77,13 +77,6 @@ class StorageDocument {
             if (result == undefined || !result.isEqual(p)) this.updated_rows.push(p);
         })
     }
-    sumOfIncomePrices(){
-        let sum = 0
-        this.table_rows.forEach(p => {
-            sum += p.income_price * p.count;
-        })
-        return sum;
-    }
     sumOfSellPrices(){
 
 
@@ -92,7 +85,7 @@ class StorageDocument {
             sum += p.characteristic.characteristic_price.price * p.count;
         })
         return sum;
-    }//
+    }
 
 }
 

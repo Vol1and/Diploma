@@ -37,8 +37,6 @@ import CancellationEdit from "../components/Documents/Cancellation/Edit";
 
 //import CashierIndex from "../components/CashierPlace/Index"
 //import MedicamentSearch from "../components/CashierPlace/MedicamentSearch"
-
-
 import WaresIndex from "../components/Ware/Index"
 
 
@@ -67,9 +65,9 @@ const routes = [
     {path: '/selling-documents/create', name: "selling.create", component: SellingCreate},
     {path: '/selling-documents/:id', name: "selling.edit", component: SellingEdit},
 
-    {path: '/cancellation-documents', name: "cancellation.index", component: CancellationIndex},
-    {path: '/cancellation-documents/create', name: "cancellation.create", component: CancellationCreate},
-    {path: '/cancellation-documents/:id', name: "cancellation.edit", component: CancellationEdit},
+    {path: '/cancellation-documents', name: "cancellations.index", component: CancellationIndex},
+    {path: '/cancellation-documents/create', name: "cancellations.create", component: CancellationCreate},
+    {path: '/cancellation-documents/:id', name: "cancellations.edit", component: CancellationEdit},
 
 
 

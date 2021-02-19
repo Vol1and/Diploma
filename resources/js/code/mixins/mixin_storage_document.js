@@ -3,6 +3,7 @@
 //подробнее почитать можно https://ru.vuejs.org/v2/guide/mixins.html
 import StorageDocument from "../models/StorageDocument";
 import StorageDocumentTableRow from "../models/StorageDocumentTableRow";
+import FinanceDocumentTableRow from "../models/FinanceDocumentTableRow";
 
 export default {
 
@@ -19,9 +20,8 @@ export default {
             item: new StorageDocument(null, 3),
             //выбранная строка - в табличной части идет проверка - id_строки - id_selectingRow
             //если true, то строка переходит в editable
-            selectingRow: null,
+            selectingRow: new StorageDocumentTableRow(),
             hover_row: null,
-            buffer_row: null
         };
     },
 
@@ -44,7 +44,7 @@ export default {
 
             if (this.selectingRow.isEqual(item)) return;
             this.hover_row = item;
-            this.selectingRow = null;
+            this.selectingRow = new FinanceDocumentTableRow();
         },
         //удаление строки табличной части
         deleteSelected() {
@@ -61,8 +61,6 @@ export default {
 
             //вносим данные в deleted_rows
             this.item.deleted_rows.push(this.hover_row.id);
-            //чтобы сбросился выбор
-            this.hover_row = null
 
         },
         //метод добавляет новую пустую строку в массив table_rows, и, соответственно в табличную часть формы
@@ -106,18 +104,15 @@ export default {
             this.choosing_state = 0;
             this.characteristic_dialog = false;
         },
-        onSelectedAgent(data) {
-            this.item.agent = data.agent;
-            this.choosing_state = 0;
-        },
-        onSelectedStorage(data) {
+
+        onSelectedSourceStorage(data) {
             this.choosing_state = 0;
             if (this.item.type === 2 && this.item.table_rows.length > 0) {
                 this.$notify.error({
                     title: 'Ошибка!',
                     message: "Очистите табличную часть перед изменением склада",
                 })
-            } else this.item.storage = data.storage;
+            } else this.item.source_storage = data.storage;
 
         },
         onSelectedNomenclature(data) {
@@ -127,21 +122,7 @@ export default {
         onBack() {
             this.choosing_state = 0;
         },
-        onSelectedNomenclatureForCashier(data) {
-            if (this.buffer_row != null) {
-                this.buffer_row.nomenclature = data.nomenclature;
-                this.buffer_row.characteristic = data.nomenclature.characteristic;
-            }
-            else {
-                let row = new StorageDocumentTableRow();
-                row.nomenclature = data.nomenclature;
-                row.characteristic = data.nomenclature.characteristic;
-                this.item.table_rows.push(row);
-            }
-            this.buffer_row = null;
-            this.selectingRow = null;
-            this.choosing_state = 0;
-        }
+
     }
 }
 /*

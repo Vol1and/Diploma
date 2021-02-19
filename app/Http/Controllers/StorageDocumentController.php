@@ -71,4 +71,16 @@ class StorageDocumentController extends OriginController
     }
 
 
+    public function show($id)
+    {
+        $result = $this->storageDocumentsRepository->find($id);
+
+        if(empty($result) || !$result){
+
+            return response(null, 404);
+        }
+        return $result->toJson();
+    }
+
+
 }

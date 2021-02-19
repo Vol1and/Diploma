@@ -39,7 +39,7 @@
 
                             <el-col :span="5">
                                 <el-form-item label="Склад: ">
-                                    <el-input readonly v-model="item.storage.name" placeholder="">
+                                    <el-input readonly v-model="item.source_storage.name" placeholder="">
                                         <el-button type="primary" @click="selectingStorage" slot="append"
                                                    icon="el-icon-d-arrow-right"></el-button>
                                     </el-input>
@@ -158,19 +158,6 @@
                                         </div>
                                     </template>
                                 </el-table-column>
-                                <!--                                <el-table-column-->
-                                <!--                                    -->
-                                <!--                                    label="Сумма"-->
-                                <!--                                    min-width="100"-->
-                                <!--                                    :index="7"-->
-                                <!--                                    sortable-->
-                                <!--                                >-->
-                                <!--                                    <template slot-scope="scope">-->
-
-                                <!--                                        <div v-else> {{ scope.row.characteristic.characteristic_price.price * scope.row.count}} руб.-->
-                                <!--                                        </div>-->
-                                <!--                                    </template>-->
-                                <!--                                </el-table-column>-->
                             </el-table>
                         </el-card>
                     </el-form>
@@ -195,15 +182,13 @@
             ref="drawer"
         >
 
-            <characteristic-choose-with-wares-component :storage_id="item.storage.id" @back="onBack"
+            <characteristic-choose-with-wares-component :storage_id="item.source_storage.id" @back="onBack"
                                                         v-if="characteristic_dialog"
                                                         :nomenclature_id="selectingRow.nomenclature.id"
                                                         @selected="onSelectedCharacteristic"></characteristic-choose-with-wares-component>
         </el-drawer>
-        <agent-choose-component @back="onBack" v-if="choosing_state ===1"
-                                @selected="onSelectedAgent"></agent-choose-component>
         <storage-choose-component @back="onBack" v-if="choosing_state ===3"
-                                  @selected="onSelectedStorage"></storage-choose-component>
+                                  @selected="onSelectedSourceStorage"></storage-choose-component>
         <nomenclature-choose-component @back="onBack" v-if="choosing_state ===2"
                                        @selected="onSelectedNomenclature"></nomenclature-choose-component>
     </div>
@@ -212,20 +197,19 @@
 <script>
 
 
-import FinanceDocument from "../../../code/models/FinanceDocument";
-import FinanceDocumentTableRow from "../../../code/models/FinanceDocumentTableRow";
-import Agent from "../../../code/models/Agent";
+import StorageDocument from "../../../code/models/StorageDocument";
+import StorageDocumentTableRow from "../../../code/models/StorageDocumentTableRow";
 import Storage from "../../../code/models/Storage";
 import Nomenclature from "../../../code/models/Nomenclature";
 import Producer from "../../../code/models/Producer";
 import Characteristic from "../../../code/models/Characteristic";
 import CharacteristicPrice from "../../../code/models/CharacteristicPrice";
-import mixin_finance_document from "../../../code/mixins/mixin_finance_document";
+import mixin_storage_document from "../../../code/mixins/mixin_storage_document";
 
 export default {
     name: "SellingEdit",
 
-    mixins: [mixin_finance_document],
+    mixins: [mixin_storage_document],
     data() {
         return {}
     },
@@ -235,16 +219,16 @@ export default {
     methods: {
 
         update() {
-            axios.get(`/api/finance-documents/${this.$route.params.id}`).then(response => {
+            axios.get(`/api/storage-documents/${this.$route.params.id}`).then(response => {
                     console.log(response)
                     this.is_visible = true;
                     let table_data = [];
                     if (response.data.table_rows !== undefined && response.data.table_rows.length > 0) response.data.table_rows.forEach(row => table_data.push(
-                        new FinanceDocumentTableRow(row.id,
+                        new StorageDocumentTableRow(row.id,
 
-                            new Nomenclature(row.nomenclature.id,
-                                row.nomenclature.name,
-                                new Producer(row.nomenclature.producer.id, row.nomenclature.producer.name, row.nomenclature.producer.country),
+                            new Nomenclature(row.characteristic.nomenclature.id,
+                                row.characteristic.nomenclature.name,
+                                new Producer(row.characteristic.nomenclature.producer.id, row.characteristic.nomenclature.producer.name, row.characteristic.nomenclature.producer.country),
                             ),
                             new Characteristic(
                                 row.characteristic.id,
@@ -256,9 +240,9 @@ export default {
                             row.count,
                             row.price,
                         )));
-                    this.item = new FinanceDocument(response.data.id, 2, response.data.is_set,
-                        new Agent(1),
-                        new Storage(response.data.storage.id, response.data.storage.name, response.data.agent.created_at, response.data.agent.updated_at, response.data.agent.deleted_at),
+                    this.item = new StorageDocument(response.data.id, 3, response.data.is_set,
+                        new Storage(response.data.source_storage.id, response.data.source_storage.name),
+                        new Storage(),
                         response.data.date,
                         table_data,
                         response.data.comment,
@@ -291,11 +275,11 @@ export default {
             console.log(this.item);
 
 
-            axios.post(`/api/income/${this.item.id}`, {
+            axios.post(`/api/cancellation/${this.item.id}`, {
                 item: this.item.getDataForUpdate(),
                 state: state
             }).then((response) => {
-                this.selectingRow = new FinanceDocumentTableRow(null);
+                this.selectingRow = new StorageDocumentTableRow(null);
                 console.log(response.data);
                 this.update();
                 this.$notify({
@@ -315,8 +299,8 @@ export default {
         },
         validateFields() {
             this.errors = [];
-            if (this.item.agent.id === -1) this.errors.push("Поле \"Поставщик\" должно быть заполнено");
-            if (this.item.storage.id === -1) this.errors.push("Поле \"Склад\" должно быть заполнено");
+
+            if (this.item.source_storage.id === -1) this.errors.push("Поле \"Склад\" должно быть заполнено");
 
             this.item.table_rows.forEach(p => {
                 if (p.nomenclature.id === -1) this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Номенклатура\" должно быть заполнено`);

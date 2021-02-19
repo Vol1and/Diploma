@@ -7,7 +7,7 @@
 
             <el-row>
                 <el-col :span="8">
-                    <router-link tag="button" class="el-button" :to="{name: 'cancellation.create'}"
+                    <router-link tag="button" class="el-button" :to="{name: 'cancellations.create'}"
                                  style=" float:left ">
                         Добавить
                     </router-link>
@@ -117,8 +117,8 @@
                 </el-pagination>
             </div>
         </el-row>
-        <source_storage-choose-component @back="onBack" v-if="choosing_state ===2"
-                                  @selected="onSelectedStorage"></source_storage-choose-component>
+        <storage-choose-component @back="onBack" v-if="choosing_state ===2"
+                                  @selected="onSelectedStorage"></storage-choose-component>
     </div>
 </template>
 

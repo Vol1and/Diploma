@@ -37,7 +37,7 @@
 
                             <el-col :span="5">
                                 <el-form-item label="Склад: ">
-                                    <el-input readonly v-model="item.storage.name" placeholder="">
+                                    <el-input readonly v-model="item.source_storage.name" placeholder="">
                                         <el-button type="primary" @click="selectingStorage" slot="append"
                                                    icon="el-icon-d-arrow-right"></el-button>
                                     </el-input>
@@ -113,7 +113,7 @@
                                         <el-input v-if="selectingRow === scope.row" readonly
                                                   v-model="scope.row.characteristic.name" placeholder="">
                                             <el-button type="primary" @click="characteristic_dialog = true;"
-                                                       :disabled="scope.row.nomenclature.id === -1 || item.storage.id === -1 "
+                                                       :disabled="scope.row.nomenclature.id === -1 || item.source_storage.id === -1 "
                                                        slot="append"
                                                        icon="el-icon-d-arrow-right">
                                             </el-button>
@@ -180,13 +180,15 @@
             ref="drawer"
         >
 
-            <characteristic-choose-with-wares-component :storage_id="item.storage.id" @back="onBack"
+            <characteristic-choose-with-wares-component :storage_id="item.source_storage.id" @back="onBack"
                                                         v-if="characteristic_dialog"
                                                         :nomenclature_id="selectingRow.nomenclature.id"
                                                         @selected="onSelectedCharacteristic"></characteristic-choose-with-wares-component>
         </el-drawer>
         <storage-choose-component @back="onBack" v-if="choosing_state ===3"
-                                  @selected="onSelectedStorage"></storage-choose-component>
+                                  @selected="onSelectedSourceStorage"></storage-choose-component>
+
+
         <nomenclature-choose-component @back="onBack" v-if="choosing_state ===2"
                                        @selected="onSelectedNomenclature"></nomenclature-choose-component>
     </div>
@@ -194,14 +196,13 @@
 
 <script>
 
-
-import mixin_finance_document from "../../../code/mixins/mixin_finance_document";
 import StorageDocument from "../../../code/models/StorageDocument";
+import mixin_storage_document from "../../../code/mixins/mixin_storage_document";
 
 export default {
     name: "CancellationCreate",
 
-    mixins: [mixin_finance_document],
+    mixins: [mixin_storage_document],
     data() {
         return {
             item: new StorageDocument(null, 2)
@@ -220,10 +221,10 @@ export default {
             //блокируем кнопку submit
             this.loaded = false;
 
-            //console.log(this.item)
+            console.log(this.item.getDataForCreate())
             //пост-запрос
             //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
-            axios.post("/api/cancellation", {item: this.item.getDataForCreate(), state: statet}).then((response) => {
+            axios.post("/api/cancellation/create", {item: this.item.getDataForCreate(), state: statet}).then((response) => {
                // console.log(response.data);
                 this.$notify({
 
@@ -244,14 +245,14 @@ export default {
         },
         validateFields() {
             this.errors = [];
-            if (this.item.storage.id === -1) this.errors.push("Поле \"Склад\" должно быть заполнено");
+            if (this.item.source_storage.id === -1) this.errors.push("Поле \"Склад\" должно быть заполнено");
 
             this.item.table_rows.forEach(p => {
                 if (p.nomenclature.id === -1) this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Номенклатура\" должно быть заполнено`);
                 if (p.characteristic.serial === "") this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Серия\" должно быть заполнено`);
                 if (p.characteristic.expiry_date === "") this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Срок годности\" должно быть заполнено`);//if (p.sell_price <= 0) this.errors.push(`Строка № ${this.item.table_rows.indexOfp}. Поле \"Цена продажи\" должно быть больше 0`);
                 if ((p.count - p.characteristic.ware) > 0)
-                    this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Количество превышает остаток на Складе "${this.item.storage.name}". Текущий остаток - ${p.characteristic.ware}. Запрашиваемое ко-во: ${p.count}`);
+                    this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Количество превышает остаток на Складе "${this.item.source_storage.name}". Текущий остаток - ${p.characteristic.ware}. Запрашиваемое ко-во: ${p.count}`);
                 if (p.count <= 0) this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Количество\" должно быть больше 0`);
             })
             this.showErrors()

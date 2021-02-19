@@ -20,10 +20,8 @@ class StorageDocumentTableRow {
             nomenclature_id: this.nomenclature.id,
             characteristic_id: this.characteristic.id,
             characteristic_price_id: this.characteristic.characteristic_price.id,
-            serial: this.characteristic.serial,
-            expiry_date: this.characteristic.expiry_date,
             count: this.count,
-            sell_price: this.characteristic.characteristic_price.price
+
         }
     }
 
@@ -40,8 +38,6 @@ class StorageDocumentTableRow {
     isEqual(row) {
         return this.nomenclature.id === row.nomenclature.id &&
             this.characteristic.id === row.characteristic.id &&
-            this.characteristic.serial === row.characteristic.serial &&
-            this.characteristic.expiry_date === row.characteristic.expiry_date &&
             this.characteristic.characteristic_price.price === row.characteristic.characteristic_price.price &&
             this.count === row.count;
     }
