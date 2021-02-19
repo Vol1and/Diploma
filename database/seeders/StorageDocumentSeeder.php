@@ -22,7 +22,7 @@ class StorageDocumentSeeder extends Seeder
                 'source_storage_id' => 1,
                 'destination_storage_id' => 0,
                 'comment' => 'Списание №1',
-                'doc_sum' =>750
+                'doc_sum' => 2000
             ]
         ];
 

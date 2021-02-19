@@ -20,14 +20,14 @@ class StorageDocumentTableRowSeeder extends Seeder
                 'characteristic_id'  => 1,
                 'storage_document_id'  => 1,
                 'ware_connection_id' => 2,
-                'price'  => 80,
+                'price'  => 100,
                 'count' => 7
             ],
             [
                 'characteristic_id'  => 3,
                 'storage_document_id'  => 1,
                 'ware_connection_id' => 4,
-                'price'  => 95,
+                'price'  => 650,
                 'count' => 2
             ]
         ];

@@ -5,9 +5,8 @@ namespace App\Services;
 
 
 use App\Models\StorageDocument;
-use App\Repositories\CharacteristicPricesRepository;
 use App\Repositories\CharacteristicsRepository;
-use App\Repositories\FinanceDocumentTableRowsRepository;
+use App\Repositories\StorageDocumentsRepository;
 use App\Repositories\StorageDocumentTableRowsRepository;
 use Carbon\Carbon;
 
@@ -19,18 +18,20 @@ class CreateStorageDocumentService
         $rest = substr($data['date'], 0, -3);
         $date = Carbon::createFromTimestamp($rest, 'Europe/Moscow')->toDateTimeString();
 
-        if($data['doc_type_id'] == 3) {
-            // заполнение сущности документа
-            $doc = (new StorageDocument())
-                ->create([
-                'comment' => $data['comment'],
-                'date' =>  $date,
-                'is_set' => false,
-                'doc_type_id' => 3,
-                'source_storage_id'=> $data['source_storage_id'],
-                'destination_storage_id' => $data['destination_storage_id']
-            ]);
-        }
+        if (!empty($data['destination_storage_id'])) $destination_storage_id = $data['destination_storage_id'];
+        else $destination_storage_id = $data['source_storage_id'];
+
+        // заполнение сущности документа
+        $doc = (new StorageDocument())
+            ->create([
+            'comment' => $data['comment'],
+            'date' =>  $date,
+            'is_set' => false,
+            'doc_type_id' => 3,
+            'source_storage_id'=> $data['source_storage_id'],
+            'destination_storage_id' => $destination_storage_id
+        ]);
+
         return $doc;
     }
 
@@ -39,7 +40,6 @@ class CreateStorageDocumentService
     {
 
         $storageDocumentTableRowsRepository = app(StorageDocumentTableRowsRepository::class);
-        $characteristicsRepository= app(CharacteristicsRepository::class);
         $createStorageDocumentTableRowService = app(CreateStorageDocumentTableRowService::class);
 
 
@@ -72,9 +72,89 @@ class CreateStorageDocumentService
         return $doc;
     }
 
-    public function pushStorageDoc($data)
+    public function pushStorageDoc($doc_id)
     {
-        // TODO: СДЕЛАТЬ!
-        return true;
+        $storageDocumentsRepository = app(StorageDocumentsRepository::class);
+        $storageDocumentTableRowsRepository = app(StorageDocumentTableRowsRepository::class);
+        $createStorageDocumentTableRowService = app(CreateStorageDocumentTableRowService::class);
+        $createWareConnectionService = app(CreateWareConnectionService::class);
+        $characteristicsRepository = app(CharacteristicsRepository::class);
+
+        // получение документа
+        $doc = $storageDocumentsRepository->find($doc_id);
+
+        if ($doc['is_set'] == 1) return $doc;
+
+        // получение строк документа
+        $doc_rows = $storageDocumentTableRowsRepository->forPush($doc_id);
+
+        foreach($doc_rows as $row) {
+
+            $row_cancel = $row['count'];
+            $is_first_row = true;
+
+            // партии с количествами продаваемого медикамента
+            $wares = $characteristicsRepository->getCharacteristicWareButches($row['characteristic_id'], $doc->source_storage_id);
+
+
+            foreach ($wares as $ware){
+
+                $tr = $storageDocumentTableRowsRepository->find($row['id']);
+
+                if($ware->ware >= $row_cancel) {
+
+                    if($is_first_row){
+                        $wc = $createWareConnectionService->
+                        make(['storage_id'=> $doc->source_storage_id, 'characteristic_id' => $row['characteristic_id'],
+                            'change' => -$row_cancel , 'butch_number_connection_id' => $ware->id
+                        ]);
+                        $tr->update(['ware_connection_id' => $wc->id]);
+                        break;
+                    } else {
+                        $wc = $createWareConnectionService
+                            ->make(['storage_id'=> $doc->source_storage_id, 'characteristic_id' => $row['characteristic_id'],
+                                'change' => -$row_cancel, 'butch_number_connection_id' => $ware->id
+                            ]);
+
+                        $tr = $createStorageDocumentTableRowService
+                            ->fillTableRow($doc, ['storage_document_id' => $doc['id'], 'count' => $row_cancel, 'price' => $row['characteristic_price_price']], $row['characteristic_id']);
+                        $tr->update(['ware_connection_id' => $wc->id]);
+                        break;
+                    }
+                } else {
+                    if($is_first_row) {
+
+                        // если первая строка документа, но будет больше одной всего
+                        $wc = $createWareConnectionService
+                            ->make(['storage_id'=> $doc->source_storage_id, 'characteristic_id' => $row['characteristic_id'],
+                                'change' => -$ware->ware , 'butch_number_connection_id' => $ware->id
+                            ]);
+
+                        $tr->update(['count' => $ware->ware, 'ware_connection_id' => $wc->id]);
+
+
+                        $row_cancel -= $ware->ware;
+
+                        $is_first_row = false;
+                    } else {
+                        $wc = $createWareConnectionService
+                            ->make(['storage_id'=> $doc->source_storage_id, 'characteristic_id' => $row['characteristic_id'],
+                                'change' => -$ware->ware, 'butch_number_connection_id' => $ware->id
+                            ]);
+
+
+                        $tr = $createStorageDocumentTableRowService
+                            ->fillTableRow($doc, ['storage_document_id' => $doc['id'], 'count' => $ware->ware, 'price' => $row['characteristic_price_price']], $row['characteristic_id']);
+                        $tr->update(['ware_connection_id' => $wc->id]);
+                        $row_cancel -= $ware->ware;
+                    }
+                }
+            }
+        }
+
+        // изменение состояния документа на "Проведён"
+        $doc->update(['is_set' => true]);
+
+        return $doc;
     }
 }

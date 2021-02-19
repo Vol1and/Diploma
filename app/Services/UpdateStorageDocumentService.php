@@ -20,9 +20,12 @@ class UpdateStorageDocumentService
         $doc = $storageDocumentsRepository->find($id);
         if (empty($doc)) return response(null, 400);
 
+        if (!empty($data['destination_storage_id'])) $destination_storage_id = $data['destination_storage_id'];
+        else $destination_storage_id = $data['source_storage_id'];
+
         // обновление информации о документе
         $doc->update(['source_storage_id' => $data['source_storage_id'], 'comment' => $data['comment'], 'date' => new Carbon($data['date']),
-            'is_set' => false, 'doc_type_id' => $data['doc_type_id'], 'destination_storage_id' => $data['destination_storage_id'],
+            'is_set' => false, 'doc_type_id' => $data['doc_type_id'], 'destination_storage_id' => $destination_storage_id,
             'doc_sum' => $data['doc_sum']]);
 
 
