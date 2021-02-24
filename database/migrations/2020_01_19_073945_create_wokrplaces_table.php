@@ -13,7 +13,7 @@ class CreateWokrplacesTable extends Migration
      */
     public function up()
     {
-        Schema::create('wokrplaces', function (Blueprint $table) {
+        Schema::create('workplaces', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->boolean('is_opened');
@@ -32,6 +32,6 @@ class CreateWokrplacesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('wokrplaces');
+        Schema::dropIfExists('workplaces');
     }
 }

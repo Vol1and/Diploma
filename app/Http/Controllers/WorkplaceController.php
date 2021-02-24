@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class WorkplaceController extends OriginController
 {
-    //ссылка на хранилище модели PriceType
+    //ссылка на хранилище
     private $workplacesRepository;
 
     public function __construct()
@@ -48,8 +48,6 @@ class WorkplaceController extends OriginController
 
     }
 
-
-
     public function show($id)
     {
         $result = $this->workplacesRepository->find($id);
@@ -60,7 +58,6 @@ class WorkplaceController extends OriginController
         }
         return $result->toJson();
     }
-
 
     /**
      * Update the specified resource in storage.

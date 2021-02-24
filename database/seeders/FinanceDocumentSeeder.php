@@ -40,7 +40,7 @@ class FinanceDocumentSeeder extends Seeder
                 'agent_id' => 1,
                 'storage_id' => 1,
                 'comment' => 'Реализация №1',
-                'doc_sum' =>1
+                'doc_sum' => 13500
             ]
         ];
 
