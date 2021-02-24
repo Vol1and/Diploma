@@ -4,7 +4,7 @@
 namespace App\Repositories;
 
 
-use App\Models\Wokrplace as Model;
+use App\Models\Workplace as Model;
 
 class WorkplacesRepository extends BaseRepository
 {

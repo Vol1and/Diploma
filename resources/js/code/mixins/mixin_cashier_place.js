@@ -3,12 +3,14 @@
 //подробнее почитать можно https://ru.vuejs.org/v2/guide/mixins.html
 import FinanceDocument from "../models/FinanceDocument";
 import FinanceDocumentTableRow from "../models/FinanceDocumentTableRow";
+import WorkPlace from "../models/WorkPlace";
 
 export default {
 
 
     data: function () {
         return {
+            workplace : new WorkPlace(null),
             characteristic_dialog: false,
             errors: [],
             //переменная, которая помогает отображать компоненты выбора (например, NomenclatureChoose или ProducerChoose)
@@ -38,11 +40,18 @@ export default {
         rowEdit(row) {
             //присваивает выбранную строку в selectingRow - читать выше
             this.selectingRow = row;
+            //let id = this.item.table_rows.indexOf(row)
+            //console.log(id)
+            //if(this.$refs[id] !== null)this.$refs[id].focus();
         }
         ,
         rowHover(item) {
 
-            if (this.selectingRow.isEqual(item)) return;
+            if (item == null ) {
+                this.hover_row = null;
+                return;
+            }
+            //if (this.selectingRow.isEqual(item)) return;
             this.hover_row = item;
             this.selectingRow = null;
         },
@@ -58,26 +67,19 @@ export default {
             //если удалена новая строка и она не сохранена на сервере - не заносим в deleted_rows
             if (this.hover_row.id == null) return;
 
-
-            //вносим данные в deleted_rows
-            this.item.deleted_rows.push(this.hover_row.id);
-            //чтобы сбросился выбор
             this.hover_row = null
 
         },
         //метод добавляет новую пустую строку в массив table_rows, и, соответственно в табличную часть формы
-        addToTable() {
-            this.item.table_rows.push(new FinanceDocumentTableRow(null));
-        },
+        //addToTable() {
+        //    this.item.table_rows.push(new FinanceDocumentTableRow(null));
+        //},
         selectingStorage() {
             this.choosing_state = 3;
         },
-        selectingAgent() {
-            this.choosing_state = 1;
-        },
         selectingNomenclature(row) {
             this.choosing_state = 2;
-            this.buffer_row = this.selectingRow;
+
         },
         selectingCharacteristic() {
             this.choosing_state = 4;
@@ -96,17 +98,13 @@ export default {
                     flag = false;
                     this.$notify.error({
                         title: 'Ошибка!',
-                         message: "Строка с такой номенклатурой уже присутствует в таблице!"
+                        message: "Строка с такой номенклатурой уже присутствует в таблице!"
                     });
                 }
             })
             if (flag) this.selectingRow.characteristic = data.characteristic;
             this.choosing_state = 0;
             this.characteristic_dialog = false;
-        },
-        onSelectedAgent(data) {
-            this.item.agent = data.agent;
-            this.choosing_state = 0;
         },
         onSelectedStorage(data) {
             this.choosing_state = 0;
@@ -122,22 +120,25 @@ export default {
             this.selectingRow.nomenclature = data.nomenclature;
             this.choosing_state = 0;
         },
+        selectingWorkPlace(){
+            this.choosing_state = 3;
+        },
+        onSelectedWorkPlace(data) {
+            this.workplace = data.workplace;
+            this.choosing_state = 0;
+        },
         onBack() {
             this.choosing_state = 0;
         },
         onSelectedNomenclatureForCashier(data) {
-            if (this.buffer_row != null) {
-                this.buffer_row.nomenclature = data.nomenclature;
-                this.buffer_row.characteristic = data.nomenclature.characteristic;
-            }
-            else {
-                let row = new FinanceDocumentTableRow();
-                row.nomenclature = data.nomenclature;
-                row.characteristic = data.nomenclature.characteristic;
-                this.item.table_rows.push(row);
-            }
-            this.buffer_row = null;
-            this.selectingRow = null;
+
+
+            let row = new FinanceDocumentTableRow();
+            row.nomenclature = data.nomenclature;
+            row.characteristic = data.nomenclature.characteristic;
+            this.item.table_rows.push(row);
+            this.rowEdit(row);
+
             this.choosing_state = 0;
         }
     }

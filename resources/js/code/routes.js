@@ -30,13 +30,17 @@ import SellingCreate from "../components/Documents/Selling/Create";
 import SellingIndex from "../components/Documents/Selling/Index";
 import SellingEdit from "../components/Documents/Selling/Edit";
 
+import WorkPlaceCreate from "../components/WorkPlace/Create";
+import WorkPlaceIndex from "../components/WorkPlace/Index";
+import WorkPlaceEdit from "../components/WorkPlace/Edit";
+
 import CancellationCreate from "../components/Documents/Cancellation/Create";
 import CancellationIndex from "../components/Documents/Cancellation/Index";
 import CancellationEdit from "../components/Documents/Cancellation/Edit";
 
 
-//import CashierIndex from "../components/CashierPlace/Index"
-//import MedicamentSearch from "../components/CashierPlace/MedicamentSearch"
+import CashierIndex from "../components/CashierPlace/Index"
+import MedicamentSearch from "../components/CashierPlace/MedicamentSearch"
 import WaresIndex from "../components/Ware/Index"
 
 
@@ -70,10 +74,13 @@ const routes = [
     {path: '/cancellation-documents/:id', name: "cancellations.edit", component: CancellationEdit},
 
 
-
     {path: '/agents', name: "agents.index", component: AgentIndex},
     {path: '/agents/create', name: "agents.create", component: AgentCreate},
     {path: '/agents/:id', name: "agents.edit", component: AgentEdit},
+
+    {path: '/workplaces', name: "workplaces.index", component: WorkPlaceIndex},
+    {path: '/workplaces/create', name: "workplaces.create", component: WorkPlaceCreate},
+    {path: '/workplaces/:id', name: "workplaces.edit", component: WorkPlaceEdit},
 
     {path: '/storages', name: "storages.index", component: StorageIndex},
     {path: '/storages/create', name: "storages.create", component: StorageCreate},
@@ -89,9 +96,8 @@ const routes = [
     {path: '/nomenclatures/:id', name: "nomenclature.edit", component: NomenclatureEdit},
 
 
-   //{path: '/cashier', name: "cashier.index", component: CashierIndex},
-   //{path: '/test', name: "cashier.test", component: MedicamentSearch},
-
+    {path: '/cashier', name: "cashier.index", component: CashierIndex},
+    {path: '/test', name: "cashier.test", component: MedicamentSearch},
 
 
     {path: '/', name: "home.index", component: Home},

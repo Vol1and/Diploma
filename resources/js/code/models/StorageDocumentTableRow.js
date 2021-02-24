@@ -37,6 +37,7 @@ class StorageDocumentTableRow {
     }
 
     isEqual(row) {
+        if(row === null) return false;
         return this.nomenclature.id === row.nomenclature.id &&
             this.characteristic.id === row.characteristic.id &&
             this.characteristic.characteristic_price.price === row.characteristic.characteristic_price.price &&

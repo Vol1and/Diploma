@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(StorageSeeder::class);
-        $this->call(WokrplaceSeeder::class);
+        $this->call(WorkplaceSeeder::class);
         $this->call(MedFormSeeder::class);
         $this->call(AgentSeeder::class);
         $this->call(DocTypeSeeder::class);

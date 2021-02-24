@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWokrplacesTable extends Migration
+class CreateWorkplacesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,8 +16,8 @@ class CreateWokrplacesTable extends Migration
         Schema::create('workplaces', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->boolean('is_opened');
-            $table->dateTime('last_access');
+            $table->boolean('is_opened')->default(false);
+            $table->dateTime('last_access')->nullable();
             $table->bigInteger('storage_id')->unsigned();
             $table->foreign('storage_id')->references('id')
                 ->on('storages');

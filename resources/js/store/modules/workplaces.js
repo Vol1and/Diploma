@@ -1,3 +1,4 @@
+import WorkPlace from "../../code/models/WorkPlace";
 import Storage from "../../code/models/Storage";
 
 //содержит переменные, которые будут помещены в модуль хранилища
@@ -24,10 +25,10 @@ const actions = {
     update(context) {
         return new Promise((resolve, reject) => {
             //запрашивает данные с сервера
-            axios.get('/api/storages').then((response) => {
+            axios.get('/api/workplaces').then((response) => {
                 let result = [];
                 //оборачиваем каждый элемент пришедших данных в модель модуля
-                response.data.forEach(item => result.push(new Storage(item.id, item.name)))
+                response.data.forEach(item => result.push(new WorkPlace(item.id, item.name, new Storage(item.storage.id, item.storage.name), item.last_access, item.is_opened, item.created_at, item.updated_at, item.deleted_at)))
 
                 //дергаем мутатор
                 context.commit('setItems', result);
@@ -44,7 +45,7 @@ const actions = {
     deleteItem(context, data) {
         return new Promise((resolve, reject) => {
             //запрашивает данные с сервера
-            axios.delete(`/api/storages/${data.id}`).then(response => {
+            axios.delete(`/api/workplaces/${data.id}`).then(response => {
 
                 context.dispatch('update').then(() => {
                     resolve();

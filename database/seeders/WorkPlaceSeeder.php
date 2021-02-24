@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use DB;
 use Illuminate\Database\Seeder;
 
-class WokrplaceSeeder extends Seeder
+class WorkPlaceSeeder extends Seeder
 {
     /**
      * Run the database seeds.

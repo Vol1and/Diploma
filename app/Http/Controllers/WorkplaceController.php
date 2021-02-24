@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PriceType;
+use App\Models\Workplace;
 use App\Repositories\WorkplacesRepository;
 use Illuminate\Http\Request;
 
@@ -33,7 +33,7 @@ class WorkplaceController extends OriginController
         //получение данных из реквеста
         $data = $request->input();
         //создание нового элемента
-        $item = new PriceType($data);
+        $item = new WorkPlace($data);
         //сохраняем
         $item->save();
 
@@ -91,7 +91,7 @@ class WorkplaceController extends OriginController
      */
     public function destroy($id)
     {
-        $result = PriceType::destroy($id);
+        $result = Workplace::destroy($id);
 
         if (!$result) return response(null, 404);
 

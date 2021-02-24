@@ -7,7 +7,7 @@
             <el-col :span="6" :offset="1">
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">
-                        <span><h4 class="text-center">Нормативно-справочная информация</h4></span>
+                        <span><h4 class="text-center">НСИ</h4></span>
                     </div>
 
 
@@ -31,6 +31,10 @@
                         <router-link class="el-link--default el-link" :to="{name: 'storages.index'}">Склады
                         </router-link>
                     </div>
+                    <div class="text item">
+                        <router-link class="el-link--default el-link" :to="{name: 'workplaces.index'}">Рабочие места
+                        </router-link>
+                    </div>
                 </el-card>
             </el-col>
             <el-col :span="6" :offset="2">
@@ -39,6 +43,10 @@
                         <span><h3 class="text-center">Документы</h3></span>
                     </div>
 
+                    <div class="text item">
+                        <router-link class="el-link--default el-link" :to="{name: 'cashier.index'}">Рабочее место кассира
+                        </router-link>
+                    </div>
 
                     <div class="text item">
                         <router-link class="el-link--default el-link" :to="{name: 'income.index'}">Поступления

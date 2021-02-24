@@ -8,6 +8,7 @@ import income from "./modules/income";
 import storages from "./modules/storages";
 import selling from "./modules/selling";
 import cancellations from "./modules/cancellations";
+import workplaces from "./modules/workplaces";
 
 Vue.use(Vuex)
 
@@ -22,6 +23,7 @@ export default new Vuex.Store({
         income,
         storages,
         selling,
-        cancellations
+        cancellations,
+        workplaces
     },
 })

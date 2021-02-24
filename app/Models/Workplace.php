@@ -2,16 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Wokrplace extends Model
+class Workplace extends Model
 {
     protected $fillable = [
     'name',
-    'is_opened',
-    'storage_id',
-    'last_access'
+    'storage_id'
     ];
 
 

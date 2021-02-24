@@ -2,27 +2,6 @@
 
 import NormativeInfo from "../components/Menu/NormativeInfo";
 
-import ProducerIndex from "../components/Producer/Index";
-import ProducerCreate from "../components/Producer/Create";
-import ProducerEdit from "../components/Producer/Edit";
-
-
-import PriceTypeIndex from "../components/PriceType/Index";
-import PriceTypeCreate from "../components/PriceType/Create";
-import PriceTypeEdit from "../components/PriceType/Edit";
-
-import StorageIndex from "../components/Storage/Index";
-import StorageCreate from "../components/Storage/Create";
-import StorageEdit from "../components/Storage/Edit";
-
-import AgentIndex from "../components/Agent/Index";
-import AgentCreate from "../components/Agent/Create";
-import AgentEdit from "../components/Agent/Edit";
-
-import NomenclatureIndex from "../components/Nomenclature/Index";
-import NomenclatureCreate from "../components/Nomenclature/Create";
-import NomenclatureEdit from "../components/Nomenclature/Edit";
-
 import IncomeCreate from "../components/Documents/Income/Create";
 import WaresIndex from "../components/Ware/Index"
 
@@ -35,38 +14,30 @@ Vue.component('WaresIndex', WaresIndex.default);
 
 Vue.component('NormativeInfo', NormativeInfo.default);
 
-Vue.component('ProducerIndex', ProducerIndex.default);
-Vue.component('ProducerCreate', ProducerCreate.default);
-Vue.component('ProducerEdit', ProducerEdit.default);
 Vue.component('producer-choose-component',
     require('../components/Producer/Choose').default);
 
-Vue.component('PriceTypeIndex', PriceTypeIndex.default);
-Vue.component('PriceTypeCreate', PriceTypeCreate.default);
-Vue.component('PriceTypeEdit', PriceTypeEdit.default);
+
 Vue.component('price-type-choose-component',
     require('../components/PriceType/Choose').default);
 
-Vue.component('StorageIndex', StorageIndex.default);
-Vue.component('StorageCreate', StorageCreate.default);
-Vue.component('StorageEdit', StorageEdit.default);
+
 Vue.component('storage-choose-component',
     require('../components/Storage/Choose').default);
 
-Vue.component('AgentIndex', AgentIndex.default);
-Vue.component('AgentCreate', AgentCreate.default);
-Vue.component('AgentEdit', AgentEdit.default);
 Vue.component('agent-choose-component',
     require('../components/Agent/Choose').default);
 
-Vue.component('NomenclatureIndex', NomenclatureIndex.default);
-Vue.component('NomenclatureCreate', NomenclatureCreate.default);
-Vue.component('NomenclatureEdit', NomenclatureEdit.default);
+
 Vue.component('nomenclature-choose-component',
     require('../components/Nomenclature/Choose').default);
 
 Vue.component('characteristic-choose-with-wares-component',
     require('../components/Characteristic/ChooseWithWares').default);
+
+Vue.component('workplace-choose-component',
+    require('../components/WorkPlace/Choose').default);
+
 
 Vue.component('characteristic-choose-component',
     require('../components/Characteristic/Choose').default);
@@ -74,6 +45,9 @@ Vue.component('characteristic-choose-component',
 Vue.component('characteristic-create-component',
     require('../components/Characteristic/Create').default);
 
+
+Vue.component('CharacteristicSearch', require('../components/CashierPlace/CharacteristicSearch').default)
+Vue.component('CashInput', require('../components/CashierPlace/CashInput').default)
 //Vue.component('CharacteristicForNomenclature',     CharacteristicForNomenclature.default);
 
 Vue.component('HomeComponent', Home.default);

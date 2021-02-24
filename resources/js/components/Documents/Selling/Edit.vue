@@ -13,7 +13,9 @@
                     <el-form label-width="100px" label-position="right">
 
                         <div style="margin-bottom: 30px">
-                            <el-button type="primary" @click="submit(true)"><i class="el-icon-finished"></i> Провести
+                            <el-button v-if="!item.is_set" type="primary" @click="submit(true)"><i class="el-icon-finished"></i> Провести
+                            </el-button>
+                            <el-button v-else type="primary" disabled ><i class="el-icon-finished"></i> Уже проведен
                             </el-button>
                             <el-button @click="submit(false)"><i class="el-icon-folder-checked"></i> Записать
                             </el-button>
@@ -320,6 +322,9 @@ export default {
 
             this.item.table_rows.forEach(p => {
                 if (p.nomenclature.id === -1) this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Номенклатура\" должно быть заполнено`);
+                if ((p.count - p.characteristic.ware) > 0)
+                    this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Количество превышает остаток на Складе "${this.item.storage.name}". Текущий остаток - ${p.characteristic.ware}. Запрашиваемое ко-во: ${p.count}`);
+
                 if (p.characteristic.serial === "") this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Серия\" должно быть заполнено`);
                 if (p.characteristic.expiry_date === "") this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Срок годности\" должно быть заполнено`);
                 if (p.income_price <= 0) this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Цена поступления\" должно быть больше 0`);
