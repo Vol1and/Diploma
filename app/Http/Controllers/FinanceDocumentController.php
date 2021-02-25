@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\DocumentCreateRequest;
 use App\Models\FinanceDocument;
 use App\Repositories\FinanceDocumentsRepository;
+use App\Repositories\FinanceDocumentTableRowsRepository;
 use App\Services\CreateFinanceDocumentService;
 use App\Services\UpdateFinanceDocumentService;
 use Illuminate\Http\Request;
@@ -108,9 +109,11 @@ class FinanceDocumentController extends OriginController
      */
     public function destroy($id)
     {
-        //todo: Реализовать логику для удаления поступления
-        return response(null, 404);
-        //
+        $result = $this->updateFinanceDocumentService->deleteFinanceDoc($id);
+
+        if ($result)
+        return response(['msg' => "Документ успешно удалён"], 200);
+        else return response(['error' => "Ошибка удаления"], 500);
     }
 
 

@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Repositories\FinanceDocumentsRepository;
 use App\Repositories\FinanceDocumentTableRowsRepository;
+use App\Repositories\WorkplaceDocumentConnectionsRepository;
 use Carbon\Carbon;
 
 class UpdateFinanceDocumentService
@@ -64,5 +65,33 @@ class UpdateFinanceDocumentService
         }
 
         return $doc;
+    }
+
+    public function deleteFinanceDoc($id)
+    {
+        $financeDocumentsRepository = app(FinanceDocumentsRepository::class);
+        $financeDocumentTableRowsRepository = app(FinanceDocumentTableRowsRepository::class);
+        $workplaceDocumentConnectionsRepository = app(WorkplaceDocumentConnectionsRepository::class);
+
+
+        $doc = $financeDocumentsRepository->find($id);
+
+        if ($doc){
+            if(!$doc->is_set){
+                $rows = $financeDocumentTableRowsRepository->findRowsByDocId($doc->id);
+                foreach ($rows as $row)
+                    $row->delete();
+
+            }
+
+            if($doc->doc_type_id == 2) {
+                $wpdc = $workplaceDocumentConnectionsRepository->findByDocument($doc->id);
+                if ($wpdc) $wpdc->delete();
+            }
+
+            $doc->delete();
+        }
+
+        return true;
     }
 }

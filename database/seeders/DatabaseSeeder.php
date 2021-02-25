@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
         $this->call(FinanceDocumentTableRowSeeder::class);
         $this->call(StorageDocumentTableRowSeeder::class);
         $this->call(RolesAndPermissionsSeeder::class);
+        $this->call(WorkplaceDocumentConnectionSeeder::class);
         // \App\Models\User::factory(10)->create();
     }
 }

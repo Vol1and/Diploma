@@ -17,6 +17,7 @@ class CreateFinanceDocumentService
     public function makeFinanceDoc($data)
     {
         $createButchNumberConnectionService = app(CreateButchNumberConnectionService::class);
+        $createWorkplaceDocumentConnectionService = app(CreateWorkplaceDocumentConnectionService::class);
 
         $rest = substr($data['date'], 0, -3);
         $date = Carbon::createFromTimestamp($rest, 'Europe/Moscow')->toDateTimeString();
@@ -35,8 +36,11 @@ class CreateFinanceDocumentService
             'doc_sum' => $data['doc_sum']
         ]);
 
+        // TODO: ЗАГЛУШКА! Устранить когда введётся авторизация и рабочие места!
+
         // создание номера партии по номеру документа если это получение
         if($doc->doc_type_id == 1) $createButchNumberConnectionService->make(['butch_number' => $doc->id]);
+        else $createWorkplaceDocumentConnectionService->make(['workplace_id' => 1, 'document_id' => $doc->id, 'user_id' => 3]);
 
         return $doc;
     }
