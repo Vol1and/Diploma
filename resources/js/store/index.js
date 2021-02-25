@@ -9,6 +9,8 @@ import storages from "./modules/storages";
 import selling from "./modules/selling";
 import cancellations from "./modules/cancellations";
 import workplaces from "./modules/workplaces";
+import auth from "./modules/auth";
+import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex)
 
@@ -24,6 +26,43 @@ export default new Vuex.Store({
         storages,
         selling,
         cancellations,
-        workplaces
+        workplaces,
+        auth
     },
+    state: {
+        errors: []
+    },
+
+    getters: {
+        errors: state => state.errors
+    },
+
+    //mutations: {
+    //    setErrors(state, errors) {
+    //        state.errors = errors;
+    //    },
+    //    setUser(state, username){
+    //        state.user = username
+    //    },
+//
+    //    LogOut(state){
+    //        state.user = null
+    //        state.posts = null
+    //    },
+    //},
+    //actions: {
+//
+    //    async LogIn({commit}, User) {
+    //        await axios.post('/api/login', User)
+    //        await commit('setUser', User.get('username'))
+    //    },
+    //    async LogOut({commit}){
+    //        let user = null
+    //        commit('LogOut', user)
+    //    }
+    //},
+    plugins: [createPersistedState()],
+
 })
+
+

@@ -45,6 +45,7 @@ import WaresIndex from "../components/Ware/Index"
 
 
 import Home from "../components/Home";
+import Login from "../components/Auth/Login"
 
 import AdminMain from "../components/Admin/Main";
 
@@ -98,6 +99,8 @@ const routes = [
 
     {path: '/cashier', name: "cashier.index", component: CashierIndex},
     {path: '/test', name: "cashier.test", component: MedicamentSearch},
+
+    {path: '/login', name: 'login', component: Login},
 
 
     {path: '/', name: "home.index", component: Home},

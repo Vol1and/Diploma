@@ -14,11 +14,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Auth::routes();
+//Auth::routes();
 
-Route::middleware(['role:admin'])->prefix('/adm')->group(function () {
-    Route::get('/{any}', [App\Http\Controllers\Admin\HomeController::class, 'index'])->where('any', '.*');
-});
+//Route::middleware(['role:admin'])->prefix('/adm')->group(function () {
+//    Route::get('/{any}', [App\Http\Controllers\Admin\HomeController::class, 'index'])->where('any', '.*');
+//});
 
 Route::get('/adm', function () {
     return redirect('/adm/home');

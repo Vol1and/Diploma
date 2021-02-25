@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,8 +13,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
+
+    Route::post('login', [\App\Http\Controllers\Api\LoginController::class, 'login'])->name('login');
+
+    Route::post('register', [\App\Http\Controllers\Api\RegisterController::class, 'register'])->name('register');
+
+    Route::group(['middleware' => ['auth:api']], function () {
+
+        Route::get('email/verify/{hash}',  [\App\Http\Controllers\Api\VerificationController::class, 'verify'])->name('verification.verify');
+
+        Route::get('email/resend', [\App\Http\Controllers\Api\VerificationController::class, 'resend'])->name('verification.resend');
+
+        Route::get('user', [\App\Http\Controllers\Api\AuthenticationController::class, 'user'])->name('user');
+
+        Route::post('logout', [\App\Http\Controllers\Api\LoginController::class, 'logout'])->name('logout');
+
+    });
+
 });
 
 //прописание API-маршрутов для контроллеров
@@ -34,9 +49,9 @@ Route::get('/producer/filter', [App\Http\Controllers\ProducerController::class, 
 Route::get('/nomenclature/filter', [App\Http\Controllers\NomenclatureController::class, 'filter']);
 Route::get('/income-document/filter', [App\Http\Controllers\FinanceDocumentController::class, 'incomeFilter']);
 
-Route::post('/income' , [\App\Http\Controllers\FinanceDocumentController::class, 'incomeCreate']);
-Route::post('/income/{id}' , [\App\Http\Controllers\FinanceDocumentController::class, 'incomeUpdate']);
-Route::post('/characteristics/{nomenclature_id}/create' , [\App\Http\Controllers\CharacteristicController::class, 'store']);
+Route::post('/income', [\App\Http\Controllers\FinanceDocumentController::class, 'incomeCreate']);
+Route::post('/income/{id}', [\App\Http\Controllers\FinanceDocumentController::class, 'incomeUpdate']);
+Route::post('/characteristics/{nomenclature_id}/create', [\App\Http\Controllers\CharacteristicController::class, 'store']);
 
 
 Route::get('/characteristic/for-nomenclature/{id}', [App\Http\Controllers\CharacteristicController::class, 'getAllByNomenclatureId']);
@@ -44,7 +59,7 @@ Route::get('/characteristic/for-nomenclature/{id}', [App\Http\Controllers\Charac
 
 Route::get('/characteristic/by-nomenclature-storage/{nomenclature_id}/{storage_id}', [App\Http\Controllers\CharacteristicController::class, 'getAllByNomenclatureAndStorageIdWithWares']);
 
-Route::get('/sellings' , [App\Http\Controllers\FinanceDocumentController::class, 'getSellings']);
+Route::get('/sellings', [App\Http\Controllers\FinanceDocumentController::class, 'getSellings']);
 
 Route::post('/cancellation/create', [\App\Http\Controllers\StorageDocumentController::class, 'cancellationCreate']);
 

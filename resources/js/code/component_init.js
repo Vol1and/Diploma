@@ -45,6 +45,10 @@ Vue.component('characteristic-choose-component',
 Vue.component('characteristic-create-component',
     require('../components/Characteristic/Create').default);
 
+Vue.component('navbar',
+    require('../components/NavBar').default);
+
+
 
 Vue.component('CharacteristicSearch', require('../components/CashierPlace/CharacteristicSearch').default)
 Vue.component('CashInput', require('../components/CashierPlace/CashInput').default)
