@@ -14,7 +14,7 @@
                                                   v-shortkey="{del: ['del'], f2: ['f2'], change : ['alt', 'q'],change_rus : ['alt', 'й']}"
                                                   @shortkey="theAction" class="text-center">Рабочее место кассира</h3>
                             </el-col>
-                            <el-col :span="8"><h4 :span="6" style="float: right">Пользователь: </h4></el-col>
+                            <el-col :span="8"><h4 :span="6" style="float: right">Пользователь: {{$store.getters["auth/user"].name}} </h4></el-col>
                         </el-row>
                     </div>
                     <el-form label-width="100px" label-position="right">

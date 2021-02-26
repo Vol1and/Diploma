@@ -35,7 +35,6 @@ require('./code/component_init')
 require('./store')
 
 
-
 Vue.use(VueRouter)
 
 Vue.use(vue_shortkey)
@@ -56,3 +55,22 @@ const app = new Vue({
     router,
     store: store
 }).$mount('#app')
+
+
+router.beforeEach((to, from, next) => {
+    if (to.matched.some((record) => record.meta.requiresAuth)) {
+        if (isAuthenticated()) {
+            next()
+        } else {
+            next({name: "login"}) // back to safety route //
+        }
+    } else {
+        next()
+    }
+})
+
+
+function isAuthenticated() {
+
+    return app.$store.getters["auth/isAuthenticated"]
+}

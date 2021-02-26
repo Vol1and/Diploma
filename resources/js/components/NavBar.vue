@@ -10,12 +10,16 @@
                 <ul class="navbar-nav ml-auto">
 
                     <li v-if="$store.getters['auth/user'] == null" class="nav-item">
-                        <router-link class="nav-link" :to="{name: 'login'}" >Логин</router-link>
+                        <router-link class="nav-link" :to="{name: 'login'}">Логин</router-link>
                     </li>
-                    <li v-else class="nav-item">
-                        <a> Вы: {{ $store.getters['auth/user'].name }}</a>
-                    </li>
-
+                    <el-dropdown v-else :command="logout">
+                        <span class="el-dropdown-link">
+                           Вы: {{ $store.getters['auth/user'].name }}<i class="el-icon-arrow-down el-icon--right"></i>
+                        </span>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item :command="logout"><el-button type="text" @click="logout">Выйти</el-button></el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
 
 
                 </ul>
@@ -26,7 +30,24 @@
 
 <script>
 export default {
-    name: "NavBar"
+    name: "NavBar",
+    methods: {
+
+        logout: function () {
+            console.log("Брынь")
+            this.$store.dispatch("auth/sendLogoutRequest").then(()=>{
+                this.$router.push({name: "login"});
+            })
+
+        },
+
+    },
+    created() {
+        if (this.$route.meta.requiresAuth && !this.$store.getters["auth/isAuthenticated"] ) {
+            console.log("1322")
+            this.$router.push({name: "login"})
+        }
+    }
 }
 </script>
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -50,10 +51,10 @@ class LoginController extends Controller
         if ($response = $this->authenticated($request, $this->guard()->user())) {
             return $response;
         }
+        $user = Auth::user();
 
         return response()->json([
-            'token'    => $request->user()->createToken($request->input('device_name'))->accessToken,
-            'user'     => $request->user()
+            'user'     =>  $user
         ]);
     }
 
@@ -71,8 +72,9 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-        $request->user()->token()->revoke();
+        //Auth::user()->token()->revoke();
 
+        Auth::logout();
         return $request->wantsJson()
             ? new Response('', 204)
             : redirect('/');

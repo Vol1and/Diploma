@@ -37,14 +37,12 @@ export default new Vuex.Store({
         errors: state => state.errors
     },
 
-    //mutations: {
-    //    setErrors(state, errors) {
-    //        state.errors = errors;
-    //    },
-    //    setUser(state, username){
-    //        state.user = username
-    //    },
-//
+    mutations: {
+        setErrors(state, errors) {
+            state.errors = errors;
+        }
+    },
+
     //    LogOut(state){
     //        state.user = null
     //        state.posts = null

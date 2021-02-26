@@ -8,7 +8,9 @@ export default {
   },
 
   getters: {
-    user: state => state.userData
+    user: state => state.userData,
+
+      isAuthenticated: state => state.userData != null
   },
 
   mutations: {

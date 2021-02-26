@@ -18,18 +18,8 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     Route::post('login', [\App\Http\Controllers\Api\LoginController::class, 'login'])->name('login');
 
     Route::post('register', [\App\Http\Controllers\Api\RegisterController::class, 'register'])->name('register');
-
-    Route::group(['middleware' => ['auth:api']], function () {
-
-        Route::get('email/verify/{hash}',  [\App\Http\Controllers\Api\VerificationController::class, 'verify'])->name('verification.verify');
-
-        Route::get('email/resend', [\App\Http\Controllers\Api\VerificationController::class, 'resend'])->name('verification.resend');
-
-        Route::get('user', [\App\Http\Controllers\Api\AuthenticationController::class, 'user'])->name('user');
-
-        Route::post('logout', [\App\Http\Controllers\Api\LoginController::class, 'logout'])->name('logout');
-
-    });
+    Route::post('logout', [\App\Http\Controllers\Api\LoginController::class, 'logout'])->name('logout');
+    Route::get('user', [\App\Http\Controllers\Api\AuthenticationController::class, 'user'])->name('user');
 
 });
 
@@ -64,3 +54,4 @@ Route::get('/sellings', [App\Http\Controllers\FinanceDocumentController::class, 
 Route::post('/cancellation/create', [\App\Http\Controllers\StorageDocumentController::class, 'cancellationCreate']);
 
 Route::post('/cancellation/{id}', [\App\Http\Controllers\StorageDocumentController::class, 'cancellationUpdate']);
+
