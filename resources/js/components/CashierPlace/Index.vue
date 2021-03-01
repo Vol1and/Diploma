@@ -266,11 +266,21 @@ export default {
             return this.errors.length === 0;
         },
         changeSelected(data) {
-            this.change = data.change;
-            this.cashInput_dialog = false;
-            this.item.table_rows = [];
-            this.selectingRow = null;
+
+
+            axios.post('/api/cashier/send', {item: this.item, workplace_id: this.workplace.id}).then((response)=>{
+                console.log(response.data);
+                this.change = data.change;
+                this.cashInput_dialog = false;
+                this.item.table_rows = [];
+                this.selectingRow = null;
+            }).catch(error =>{
+                console.log("Произошла ошибка! " + error.message)
+            })
+
         },
+
+
 
     }
 }

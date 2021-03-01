@@ -55,3 +55,4 @@ Route::post('/cancellation/create', [\App\Http\Controllers\StorageDocumentContro
 
 Route::post('/cancellation/{id}', [\App\Http\Controllers\StorageDocumentController::class, 'cancellationUpdate']);
 
+Route::post('/cashier/send', [\App\Http\Controllers\FinanceDocumentController::class, "sell"]);
