@@ -1,4 +1,4 @@
-@charset "UTF-8";
+@import url(https://fonts.googleapis.com/css?family=Nunito);@charset "UTF-8";
 
 /*!
  * Bootstrap v4.5.3 (https://getbootstrap.com/)
@@ -10978,5 +10978,9 @@ a.text-dark:focus {
 .vue-notification.success {
   background: #68CD86;
   border-left-color: #42A85F;
+}
+
+.print_class:hover {
+  text-decoration: none;
 }
 

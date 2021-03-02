@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\DocumentCreateRequest;
 use App\Models\FinanceDocument;
 use App\Repositories\FinanceDocumentsRepository;
-use App\Repositories\FinanceDocumentTableRowsRepository;
 use App\Services\CreateFinanceDocumentService;
 use App\Services\UpdateFinanceDocumentService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use PDF;
+
 
 class FinanceDocumentController extends OriginController
 {
@@ -175,4 +176,24 @@ class FinanceDocumentController extends OriginController
 
         return $result->toJson();
     }
+
+    public function incomeReports( $id, $mode){
+
+        //return true;
+        $item = $this->financeDocumentsRepository->find($id);
+        $pdf = PDF::loadView('pdfs.documents.income.main',
+            ['item' => $item]);
+
+        return $pdf->download('Поступление_№_'.$item->id.'.pdf');
+    }
+    public function sellingReports( $id, $mode){
+
+        //return true;
+        $item = $this->financeDocumentsRepository->find($id);
+        $pdf = PDF::loadView('pdfs.documents.selling.main',
+            ['item' => $item]);
+
+        return $pdf->download('Реализация_№_'.$item->id.'.pdf');
+    }
 }
+

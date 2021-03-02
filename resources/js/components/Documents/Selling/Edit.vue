@@ -19,6 +19,17 @@
                             </el-button>
                             <el-button @click="submit(false)"><i class="el-icon-folder-checked"></i> Записать
                             </el-button>
+
+
+                            <el-dropdown>
+                                <el-button>
+                                    Печать<i class="el-icon-arrow-down el-icon--right"></i>
+                                </el-button>
+                                <el-dropdown-menu slot="dropdown">
+                                    <el-dropdown-item><a  class="print_class" :href="'/report/selling-document/' +item.id+ '/1'" >Общий отчет</a></el-dropdown-item>
+                                </el-dropdown-menu>
+                            </el-dropdown>
+
                             <el-button style="float: right" type="error" @click="()=>{this.$router.go(-1)}"><i
                                 class="el-icon-close"> Выход </i></el-button>
                         </div>

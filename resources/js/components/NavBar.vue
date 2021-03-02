@@ -17,7 +17,7 @@
                            Вы: {{ $store.getters['auth/user'].name }}<i class="el-icon-arrow-down el-icon--right"></i>
                         </span>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item :command="logout"><el-button type="text" @click="logout">Выйти</el-button></el-dropdown-item>
+                            <el-dropdown-item><el-button type="text" @click="logout">Выйти</el-button></el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
 
@@ -34,7 +34,6 @@ export default {
     methods: {
 
         logout: function () {
-            console.log("Брынь")
             this.$store.dispatch("auth/sendLogoutRequest").then(()=>{
                 this.$router.push({name: "login"});
             })
@@ -44,7 +43,6 @@ export default {
     },
     created() {
         if (this.$route.meta.requiresAuth && !this.$store.getters["auth/isAuthenticated"] ) {
-            console.log("1322")
             this.$router.push({name: "login"})
         }
     }

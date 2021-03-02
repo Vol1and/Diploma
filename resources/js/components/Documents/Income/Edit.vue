@@ -20,6 +20,18 @@
 
                             <el-button @click="submit(false)"><i class="el-icon-folder-checked"></i> Записать
                             </el-button>
+
+
+                            <el-dropdown>
+                                <el-button>
+                                    Печать<i class="el-icon-arrow-down el-icon--right"></i>
+                                </el-button>
+                                <el-dropdown-menu slot="dropdown">
+                                    <el-dropdown-item><a  class="print_class" :href="'/report/income-document/' +item.id+ '/1'" >Общий отчет</a></el-dropdown-item>
+                                </el-dropdown-menu>
+                            </el-dropdown>
+
+
                             <el-button style="float: right" type="error" @click="()=>{this.$router.go(-1)}"><i
                                 class="el-icon-close"> Выход </i></el-button>
                         </div>
@@ -387,6 +399,24 @@ export default {
             this.showErrors()
 
             return this.errors.length === 0;
+        },
+        callReport(id){
+
+            //console.log(this.item.id)
+            axios.post('/api/income-document/reports', {document_id: this.item.id}).then((response) => {
+
+                this.downloadFile(response.data);
+                //console.log(response.data);
+
+            }).catch((error) => {
+                //ошибка - выводим
+                this.$notify.error({
+
+                    title: 'Ошибка!',
+                    message: "Сообщение ошибки - " + error.response.data.message,
+                })
+            })
+
         }
     }
 

@@ -1,5 +1,5 @@
-
-
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css?family=Nunito');
 // Variables
 @import 'variables';
 
@@ -92,7 +92,9 @@
         border-left-color: #42A85F;
     }
 }
-
+.print_class:hover{
+    text-decoration: none;
+}
 
 //tr:hover{
 //    cursor: pointer;
