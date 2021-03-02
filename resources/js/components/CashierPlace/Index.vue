@@ -183,6 +183,7 @@ export default {
     //ивент, срабатывающий при created стадии компонента - в поле дата закидывает текущую дату
     created() {
         this.item.date = Date.now();
+
     },
     computed: {
 
@@ -268,7 +269,7 @@ export default {
         changeSelected(data) {
 
 
-            axios.post('/api/cashier/send', {item: this.item, workplace_id: this.workplace.id}).then((response)=>{
+            axios.post('/api/cashier/send', {item: this.item, workplace_id: this.workplace.id, user_id: this.$store.getters["auth/user"].id}).then((response)=>{
                 console.log(response.data);
                 this.change = data.change;
                 this.cashInput_dialog = false;
