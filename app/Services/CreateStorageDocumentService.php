@@ -96,7 +96,6 @@ class CreateStorageDocumentService
             // партии с количествами продаваемого медикамента
             $wares = $characteristicsRepository->getCharacteristicWareButches($row['characteristic_id'], $doc->source_storage_id);
 
-
             foreach ($wares as $ware){
 
                 $tr = $storageDocumentTableRowsRepository->find($row['id']);
@@ -131,7 +130,6 @@ class CreateStorageDocumentService
                             ]);
 
                         $tr->update(['count' => $ware->ware, 'ware_connection_id' => $wc->id]);
-
 
                         $row_cancel -= $ware->ware;
 
