@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DocumentCreateRequest;
 use App\Models\Workplace;
 use App\Repositories\WorkplacesRepository;
 use Illuminate\Http\Request;
 
-class WorkplaceController extends OriginController
+class AccountingConnectionController extends OriginController
 {
     //ссылка на хранилище
-    private $workplacesRepository;
+    private $accountingConnectionsRepository;
 
 
     public function __construct()
@@ -19,13 +18,13 @@ class WorkplaceController extends OriginController
         parent::__construct();
 
         //инициализация хранилища
-        $this->workplacesRepository = app(WorkplacesRepository::class);
+        $this->accountingConnectionsRepository = app(WorkplacesRepository::class);
     }
 
 
     public function index()
     {
-        return $this->workplacesRepository->getTable()->toJson();
+        return $this->accountingConnectionsRepository->getTable()->toJson();
     }
 
 
@@ -52,7 +51,7 @@ class WorkplaceController extends OriginController
 
     public function show($id)
     {
-        $result = $this->workplacesRepository->find($id);
+        $result = $this->accountingConnectionsRepository->find($id);
 
         if(empty($result) || !$result){
 
@@ -69,7 +68,7 @@ class WorkplaceController extends OriginController
      */
     public function update(Request $request)
     {
-        $item = $this->workplacesRepository->find($request->id);
+        $item = $this->accountingConnectionsRepository->find($request->id);
         if (empty($item)) {
 
             return response(null, 404);

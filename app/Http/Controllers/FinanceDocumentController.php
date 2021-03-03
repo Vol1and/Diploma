@@ -7,9 +7,11 @@ use App\Models\FinanceDocument;
 use App\Repositories\FinanceDocumentsRepository;
 use App\Services\CreateFinanceDocumentService;
 use App\Services\UpdateFinanceDocumentService;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use PDF;
+
 
 
 class FinanceDocumentController extends OriginController
@@ -151,8 +153,6 @@ class FinanceDocumentController extends OriginController
         $updated = $data['updated_rows'];
 
 
-
-
         $result = $this->updateFinanceDocumentService->updateIncome($data, $deleted, $updated, $id);
 
         if(empty($result)) return response(null,500);
@@ -163,6 +163,35 @@ class FinanceDocumentController extends OriginController
         }
         return response(null,200);
     } // incomeUpdate
+
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function sell(Request $request)
+    {
+        // получение данных
+        $user_id = $request->input('user_id');
+        $workplace_id = $request->input('workplace_id');
+
+        $data = $request->input('item') + ['user_id'=> $user_id, 'workplace_id' => $workplace_id];
+        if(empty($data)) return response(null,400);
+
+        $meds = $data['table_rows'];
+        if(empty($meds)) return response(null,400);
+
+        // добавление нового документа
+        $doc = $this->createFinanceDocumentService->createFinanceDoc($data,$meds);
+        if(empty($doc)) return response(null,500);
+
+
+        //if($request->input('state')) $result = $this->createFinanceDocumentService->pushFinanceDoc($doc->id);
+        //if(empty($result)) return response(null,500);
+
+    }
 
 
     public function incomeFilter(Request $request)

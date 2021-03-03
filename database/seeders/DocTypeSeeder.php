@@ -26,6 +26,22 @@ class DocTypeSeeder extends Seeder
             [
                 'name'  => 'Списание',
                 'is_income' => false
+            ],
+            [
+                'name'  => 'Переброска',
+                'is_income' => false
+            ],
+            [
+                'name'  => 'Получение',
+                'is_income' => true
+            ],
+            [
+                'name'  => 'Инкассация',
+                'is_income' => false
+            ],
+            [
+                'name'  => 'Внесение средств',
+                'is_income' => false
             ]
         ];
 

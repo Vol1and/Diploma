@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 
+use App\Models\AccountingConnection;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -26,6 +27,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CharacteristicSeeder::class);
         $this->call(FinanceDocumentSeeder::class);
         $this->call(StorageDocumentSeeder::class);
+        $this->call(AccountingConnectionSeeder::class);
         $this->call(ButchNumberConnectionSeeder::class);
         $this->call(WareConnectionSeeder::class);
         $this->call(FinanceDocumentTableRowSeeder::class);

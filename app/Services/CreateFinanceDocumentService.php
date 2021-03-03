@@ -9,6 +9,7 @@ use App\Repositories\CharacteristicPricesRepository;
 use App\Repositories\CharacteristicsRepository;
 use App\Repositories\FinanceDocumentsRepository;
 use App\Repositories\FinanceDocumentTableRowsRepository;
+use App\Repositories\WorkplacesRepository;
 use Carbon\Carbon;
 
 class CreateFinanceDocumentService
@@ -36,11 +37,42 @@ class CreateFinanceDocumentService
             'doc_sum' => $data['doc_sum']
         ]);
 
-        // TODO: ЗАГЛУШКА! Устранить когда введётся авторизация и рабочие места!
-
         // создание номера партии по номеру документа если это получение
         if($doc->doc_type_id == 1) $createButchNumberConnectionService->make(['butch_number' => $doc->id]);
-        else $createWorkplaceDocumentConnectionService->make(['workplace_id' => 1, 'document_id' => $doc->id, 'user_id' => 3]);
+
+        // elseif($doc->doc_type_id == 2) {
+        //
+        //     $createWorkplaceDocumentConnectionService
+        //         ->make(['workplace_id' => $data['workplace_id'], 'document_id' => $doc->id, 'user_id' => $data['user_id']]);
+        //
+        // }
+
+        return $doc;
+    }
+
+    public function makeSell($data)
+    {
+        $createWorkplaceDocumentConnectionService = app(CreateWorkplaceDocumentConnectionService::class);
+        $workplacesRepository = app(WorkplacesRepository::class);
+
+        $rest = substr($data['date'], 0, -3);
+        $date = Carbon::createFromTimestamp($rest, 'Europe/Moscow')->toDateTimeString();
+
+        $workplace = $workplacesRepository->find($data['workplace_id']);
+
+        // заполнение сущности документа
+        $doc = (new FinanceDocument())->create(['agent_id' => 1,
+            'comment' => $data['comment'],
+            'date' =>  $date,
+            'is_set' => false,
+            'doc_type_id' => 2,
+            'storage_id'=> $workplace->storage_id,
+            'doc_sum' => $data['doc_sum']
+        ]);
+
+        $createWorkplaceDocumentConnectionService
+            ->make(['workplace_id' => $data['workplace_id'], 'document_id' => $doc->id, 'user_id' => $data['user_id']]);
+
 
         return $doc;
     }
@@ -92,32 +124,68 @@ class CreateFinanceDocumentService
         return $tableRow;
     }
 
+    // заполнение сущностей данными
+    public function fillDataSell($doc, $med)
+    {
+        $financeDocumentTableRowsRepository = app(FinanceDocumentTableRowsRepository::class);
+        $characteristicPricesRepository= app(CharacteristicPricesRepository::class);
+        $characteristicsRepository= app(CharacteristicsRepository::class);
+        $createFinanceDocumentTableRowService = app(CreateFinanceDocumentTableRowService::class);
+
+
+        // поиск выбранной характеристики
+        $characteristic = $characteristicsRepository->find($med['characteristic_id']);
+
+        // получение строки таблицы для обновления
+        $tableRow = $financeDocumentTableRowsRepository->find($med['id']);
+
+        // если нашлась
+        if ($characteristic) {
+
+            // проверка соответствия цены характеристики из респонса к цене в БД
+            $price = $characteristicPricesRepository->find($characteristic->characteristic_price_id);
+
+            // обновление строки документа если есть, иначе создание новой
+            if ($tableRow) $tableRow
+                ->update(
+                    [
+                        'price' => $price->price,
+                        'characteristic_id' => $characteristic->id,
+                        'count' => $med['count']
+                        ]);
+
+            else {
+                $tableRow = $createFinanceDocumentTableRowService
+                    ->fillTableRow($doc, ['price' => $price->price, 'characteristic_id' => $characteristic->id, 'count' => $med['count']], $characteristic->id);
+                if (!$tableRow) return response(['error' => "Строка документа не была создана"], 500);
+            }
+        } else return response(['error' => "Характеристика не была выбрана для строки документа"], 500);
+
+        return $tableRow;
+    }
+
 
     // метод сохранения приходного документа
     public function createFinanceDoc($data, $meds)
     {
-        // добавление нового документа
-        $doc = $this->makeFinanceDoc($data);
-
-
-        if($doc){
+        if(empty($data['workplace_id'])){
+            $doc = $this->makeFinanceDoc($data);
             // циклический проход по массиву медикаментов
-            foreach ($meds as $row) {
-
+            foreach ($meds as $row)
                 $result = $this->fillData($doc, $row);
-                if (!$result) return response(null,500);
-
-            } // foreach
-
+        } else {
+            $doc = $this->makeSell($data);
+            foreach ($meds as $row)
+                $result = $this->fillDataSell($doc, $row);
         }
+
         return $doc;
     }
-
-
 
     // метод проведения документа
     public function pushFinanceDoc($doc_id)
     {
+        $createAccountingConnectionService = app(CreateAccountingConnectionService::class);
         $financeDocumentTableRowsRepository = app(FinanceDocumentTableRowsRepository::class);
         $financeDocumentsRepository = app(FinanceDocumentsRepository::class);
         $createWareConnectionService = app(CreateWareConnectionService::class);
@@ -218,6 +286,10 @@ class CreateFinanceDocumentService
 
         // изменение состояния документа на "Проведён"
         $doc->update(['is_set' => true]);
+
+        if($doc->doc_type_id == 1) $change = $doc->doc_sum;
+        else $change = -$doc->doc_sum;
+        $result = $createAccountingConnectionService->make(['date'=> $doc->date, 'change' => $change, 'document_id' => $doc->id]);
 
         return $doc;
     }

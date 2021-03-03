@@ -61,7 +61,6 @@ class CreateStorageDocumentService
         // добавление нового документа
         $doc = $this->makeStorageDoc($data);
 
-
         if($doc){
             // циклический проход по массиву медикаментов
             foreach ($meds as $row) {

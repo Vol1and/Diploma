@@ -27,7 +27,6 @@ class CreateFinanceDocumentTableRowsTable extends Migration
             $table->foreign('ware_connection_id')->references('id')
                 ->on('ware_connections');
             //вычисляемый столбец
-            $table->bigInteger('doc_sum')->default(0);
             $table->double('income_sum')->virtualAs('count * price')->nullable();
             $table->timestamps();
         });

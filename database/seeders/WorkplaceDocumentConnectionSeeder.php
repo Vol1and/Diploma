@@ -18,7 +18,7 @@ class WorkplaceDocumentConnectionSeeder extends Seeder
         $data = [
             [
                 'workplace_id' => 1,
-                'document_id' => 3,
+                'document_id' => 4,
                 'user_id' => 3,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
