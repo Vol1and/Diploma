@@ -75,6 +75,22 @@ class CreateFindCharacteristicsProcedure extends Migration
         END
         ";
 
+        $procedure4 = "
+        CREATE PROCEDURE `find_all_cash`(date_start date, date_end date)
+        BEGIN
+            SELECT
+                `accounting_connections`.`date` AS `date`,
+                SUM(`accounting_connections`.`change`) AS `summing`
+            FROM
+                ((`accounting_connections`
+                LEFT JOIN `workplace_document_connections` ON ((`accounting_connections`.`document_id` = `workplace_document_connections`.`document_id`))))
+            WHERE `accounting_connections`.date >= date_start
+            AND `accounting_connections`.date <= date_end
+            AND `accounting_connections`.`change` > 0
+            GROUP BY `accounting_connections`.`date`;
+        END
+        ";
+
         // внедрение процедуры в db
         DB::unprepared("DROP procedure IF EXISTS find_characteristics_procedure");
         DB::unprepared($procedure);
@@ -82,6 +98,8 @@ class CreateFindCharacteristicsProcedure extends Migration
         DB::unprepared($procedure2);
         DB::unprepared("DROP procedure IF EXISTS find_all_finance_connections");
         DB::unprepared($procedure3);
+        DB::unprepared("DROP procedure IF EXISTS find_all_cash");
+        DB::unprepared($procedure4);
 
     }
 
@@ -95,5 +113,6 @@ class CreateFindCharacteristicsProcedure extends Migration
         Schema::dropIfExists('find_characteristics_procedure');
         Schema::dropIfExists('find_characteristic_ware_butches');
         Schema::dropIfExists('find_all_finance_connections');
+        Schema::dropIfExists('find_all_cash');
     }
 }

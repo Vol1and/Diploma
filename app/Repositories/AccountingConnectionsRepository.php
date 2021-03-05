@@ -5,6 +5,7 @@ namespace App\Repositories;
 
 
 use App\Models\AccountingConnection as Model;
+use DB;
 
 class AccountingConnectionsRepository extends BaseRepository
 {
@@ -33,5 +34,12 @@ class AccountingConnectionsRepository extends BaseRepository
             ->where('id', $id)
             ->with(['document'])
             ->get()->first();
+    }
+
+    public function getAllByNomenclatureAndStorageIdWithWares($date_start, $date_end)
+    {
+        return DB::select(
+            'CALL find_all_cash(' . $date_start . ', '.$date_end.')'
+        );
     }
 }
