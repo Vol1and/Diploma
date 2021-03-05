@@ -48,15 +48,14 @@ class CreateFinanceDocumentService
         $createWorkplaceDocumentConnectionService = app(CreateWorkplaceDocumentConnectionService::class);
         $workplacesRepository = app(WorkplacesRepository::class);
 
-        $current = Carbon::now();
-        $date = Carbon::createFromTimestamp($current, 'Europe/Moscow')->toDateTimeString();
+        $today = Carbon::now('Europe/Moscow');
 
         $workplace = $workplacesRepository->find($data['workplace_id']);
 
         // заполнение сущности документа
         $doc = (new FinanceDocument())->create(['agent_id' => 1,
             'comment' => null,
-            'date' =>  $date,
+            'date' =>  $today,
             'is_set' => false,
             'doc_type_id' => 2,
             'storage_id'=> $workplace->storage_id,
@@ -282,8 +281,8 @@ class CreateFinanceDocumentService
         // изменение состояния документа на "Проведён"
         $doc->update(['is_set' => true]);
 
-        if($doc->doc_type_id == 1) $change = $doc->doc_sum;
-        else $change = -$doc->doc_sum;
+        if($doc->doc_type_id == 1) $change = -$doc->doc_sum;
+        else $change = $doc->doc_sum;
         $result = $createAccountingConnectionService->make(['date'=> $doc->date, 'change' => $change, 'document_id' => $doc->id]);
 
         return $doc;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DocumentCreateRequest;
 use App\Models\FinanceDocument;
+use App\Repositories\AccountingConnectionsRepository;
 use App\Repositories\FinanceDocumentsRepository;
 use App\Services\CreateFinanceDocumentService;
 use App\Services\UpdateFinanceDocumentService;
@@ -18,6 +19,7 @@ class FinanceDocumentController extends OriginController
     private $financeDocumentsRepository;
     private $createFinanceDocumentService;
     private $updateFinanceDocumentService;
+    private $accountRep;
 
     public function __construct()
     {
@@ -26,6 +28,7 @@ class FinanceDocumentController extends OriginController
 
         //инициализация хранилищ и сервисов
         $this->financeDocumentsRepository = app(FinanceDocumentsRepository::class);
+        $this->accountRep = app(AccountingConnectionsRepository::class);
         $this->createFinanceDocumentService = app(CreateFinanceDocumentService::class);
         $this->updateFinanceDocumentService = app(UpdateFinanceDocumentService::class);
     }
@@ -192,7 +195,7 @@ class FinanceDocumentController extends OriginController
         if(empty($doc)) return response(null,500);
 
 
-        if($request->input('state')) $result = $this->createFinanceDocumentService->pushFinanceDoc($doc->id);
+        $result = $this->createFinanceDocumentService->pushFinanceDoc($doc->id);
         if(empty($result)) return response(null,500);
 
     }

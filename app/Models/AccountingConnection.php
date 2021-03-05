@@ -17,7 +17,7 @@ class AccountingConnection extends Model
 
     public function document()
     {
-        return $this->belongsTo(FinanceDocument::class);
+        return $this->belongsTo(FinanceDocument::class, 'document_id');
     }
 
 }

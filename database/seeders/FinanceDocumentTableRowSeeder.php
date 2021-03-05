@@ -64,6 +64,20 @@ class FinanceDocumentTableRowSeeder extends Seeder
                 'price'  => 295,
                 'count' => 20
             ],
+            [
+                'characteristic_id'  => 5,
+                'finance_document_id'  => 5,
+                'ware_connection_id' => 11,
+                'price'  => 295,
+                'count' => 3
+            ],
+            [
+                'characteristic_id'  => 5,
+                'finance_document_id'  => 6,
+                'ware_connection_id' => 12,
+                'price'  => 295,
+                'count' => 4
+            ]
         ];
 
         DB::table('finance_document_table_rows')->insert($data);

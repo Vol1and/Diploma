@@ -22,6 +22,20 @@ class WorkplaceDocumentConnectionSeeder extends Seeder
                 'user_id' => 3,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
+            ],
+            [
+                'workplace_id' => 1,
+                'document_id' => 5,
+                'user_id' => 3,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ],
+            [
+                'workplace_id' => 2,
+                'document_id' => 6,
+                'user_id' => 3,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ]
         ];
 
