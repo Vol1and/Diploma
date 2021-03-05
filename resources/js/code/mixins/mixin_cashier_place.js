@@ -136,6 +136,7 @@ export default {
             let row = new FinanceDocumentTableRow();
             row.nomenclature = data.nomenclature;
             row.characteristic = data.nomenclature.characteristic;
+            row.count += 1;
             this.item.table_rows.push(row);
             this.rowEdit(row);
 

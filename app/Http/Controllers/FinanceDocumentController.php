@@ -7,11 +7,9 @@ use App\Models\FinanceDocument;
 use App\Repositories\FinanceDocumentsRepository;
 use App\Services\CreateFinanceDocumentService;
 use App\Services\UpdateFinanceDocumentService;
-use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use PDF;
-
 
 
 class FinanceDocumentController extends OriginController
@@ -43,6 +41,10 @@ class FinanceDocumentController extends OriginController
         return $this->financeDocumentsRepository->getByDocTypeId(2)->toJson();
     }
 
+    //public function sell(Request $request)
+    //{
+    //    return $request;
+    //}
 
     //принимает реквест DocumentCreateRequest
     public function store(DocumentCreateRequest $request)

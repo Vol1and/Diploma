@@ -68,7 +68,7 @@ class FinanceDocument {
         return items;
 
     }
-
+//подгатавливает данные табличной части - каждый из элементов возращает подготовленные данные
     //метод проходится про строкам и проверяет - были ли они изменены
     fill_updated_rows() {
 
@@ -103,6 +103,16 @@ class FinanceDocument {
         return sum;
     }//
 
+    getDataForCashier(){
+        let items = [];
+
+        this.table_rows.forEach(p => {
+            items.push({characteristic_id: p.characteristic.id, count: p.count });
+
+
+        })
+        return items;
+    }
 }
 
 
