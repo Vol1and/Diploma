@@ -79,14 +79,15 @@ class CreateFindCharacteristicsProcedure extends Migration
         CREATE PROCEDURE `find_all_cash`(date_start date, date_end date)
         BEGIN
             SELECT
-                `accounting_connections`.`date` AS `date`,
+                DATE(`accounting_connections`.`date`) AS `date`,
                 SUM(`accounting_connections`.`change`) AS `summing`
             FROM
                 ((`accounting_connections`
-                LEFT JOIN `workplace_document_connections` ON ((`accounting_connections`.`document_id` = `workplace_document_connections`.`document_id`))))
+                LEFT JOIN `workplace_document_connections` ON ((`accounting_connections`.`document_id` = `workplace_document_connections`.`document_id`))
+                JOIN `finance_documents` ON ((`accounting_connections`.`document_id` = `finance_documents`.`id`))))
             WHERE `accounting_connections`.date >= date_start
             AND `accounting_connections`.date <= date_end
-            AND `accounting_connections`.`change` > 0
+            AND `finance_documents`.`doc_type_id` = 2
             GROUP BY `accounting_connections`.`date`;
         END
         ";
