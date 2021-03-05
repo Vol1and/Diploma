@@ -40,13 +40,6 @@ class CreateFinanceDocumentService
         // создание номера партии по номеру документа если это получение
         if($doc->doc_type_id == 1) $createButchNumberConnectionService->make(['butch_number' => $doc->id]);
 
-        // elseif($doc->doc_type_id == 2) {
-        //
-        //     $createWorkplaceDocumentConnectionService
-        //         ->make(['workplace_id' => $data['workplace_id'], 'document_id' => $doc->id, 'user_id' => $data['user_id']]);
-        //
-        // }
-
         return $doc;
     }
 
@@ -55,14 +48,14 @@ class CreateFinanceDocumentService
         $createWorkplaceDocumentConnectionService = app(CreateWorkplaceDocumentConnectionService::class);
         $workplacesRepository = app(WorkplacesRepository::class);
 
-        $rest = substr($data['date'], 0, -3);
-        $date = Carbon::createFromTimestamp($rest, 'Europe/Moscow')->toDateTimeString();
+        $current = Carbon::now();
+        $date = Carbon::createFromTimestamp($current, 'Europe/Moscow')->toDateTimeString();
 
         $workplace = $workplacesRepository->find($data['workplace_id']);
 
         // заполнение сущности документа
         $doc = (new FinanceDocument())->create(['agent_id' => 1,
-            'comment' => $data['comment'],
+            'comment' => null,
             'date' =>  $date,
             'is_set' => false,
             'doc_type_id' => 2,
@@ -133,11 +126,13 @@ class CreateFinanceDocumentService
         $createFinanceDocumentTableRowService = app(CreateFinanceDocumentTableRowService::class);
 
 
+
         // поиск выбранной характеристики
         $characteristic = $characteristicsRepository->find($med['characteristic_id']);
 
+        $tableRow = null;
         // получение строки таблицы для обновления
-        $tableRow = $financeDocumentTableRowsRepository->find($med['id']);
+        if(!empty($med['id'])) $tableRow = $financeDocumentTableRowsRepository->find($med['id']);
 
         // если нашлась
         if ($characteristic) {
@@ -156,7 +151,7 @@ class CreateFinanceDocumentService
 
             else {
                 $tableRow = $createFinanceDocumentTableRowService
-                    ->fillTableRow($doc, ['price' => $price->price, 'characteristic_id' => $characteristic->id, 'count' => $med['count']], $characteristic->id);
+                    ->fillTableRow($doc, ['sell_price' => $price->price, 'characteristic_id' => $characteristic->id, 'count' => $med['count']], $characteristic->id);
                 if (!$tableRow) return response(['error' => "Строка документа не была создана"], 500);
             }
         } else return response(['error' => "Характеристика не была выбрана для строки документа"], 500);

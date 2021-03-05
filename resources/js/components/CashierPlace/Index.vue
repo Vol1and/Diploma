@@ -269,7 +269,7 @@ export default {
         changeSelected(data) {
 
 
-            axios.post('/api/cashier/send', {items: this.item.getDataForCashier(), workplace_id: this.workplace.id, user_id: this.$store.getters["auth/user"].id}).then((response)=>{
+            axios.post('/api/cashier/send', {items: this.item.getDataForCashier(),doc_sum : this.rows_sum, workplace_id: this.workplace.id, user_id: this.$store.getters["auth/user"].id}).then((response)=>{
                 console.log(response.data);
                 this.change = data.change;
                 this.cashInput_dialog = false;

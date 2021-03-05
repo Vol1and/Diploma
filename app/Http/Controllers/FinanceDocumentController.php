@@ -176,13 +176,15 @@ class FinanceDocumentController extends OriginController
     public function sell(Request $request)
     {
         // получение данных
-        $user_id = $request->input('user_id');
-        $workplace_id = $request->input('workplace_id');
+        $data = [
+            'user_id'=> $request->input('user_id'),
+            'workplace_id' => $request->input('workplace_id'),
+            'doc_sum' => $request->input('doc_sum')
+            ];
 
-        $data = $request->input('item') + ['user_id'=> $user_id, 'workplace_id' => $workplace_id];
         if(empty($data)) return response(null,400);
 
-        $meds = $data['table_rows'];
+        $meds = $request->input('items');
         if(empty($meds)) return response(null,400);
 
         // добавление нового документа
@@ -190,8 +192,8 @@ class FinanceDocumentController extends OriginController
         if(empty($doc)) return response(null,500);
 
 
-        //if($request->input('state')) $result = $this->createFinanceDocumentService->pushFinanceDoc($doc->id);
-        //if(empty($result)) return response(null,500);
+        if($request->input('state')) $result = $this->createFinanceDocumentService->pushFinanceDoc($doc->id);
+        if(empty($result)) return response(null,500);
 
     }
 
