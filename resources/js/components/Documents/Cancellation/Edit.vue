@@ -15,7 +15,7 @@
                             </el-button>
                             <el-button v-else type="primary" disabled><i class="el-icon-finished"></i> Уже проведен
                             </el-button>
-                            <el-button @click="submit(false)"><i class="el-icon-folder-checked"></i> Записать
+                            <el-button @click="submit(false)" v-if="!item.is_set"><i class="el-icon-folder-checked"></i> Записать
                             </el-button>
                             <el-button style="float: right" type="error" @click="()=>{this.$router.go(-1)}"><i
                                 class="el-icon-close"> Выход </i></el-button>

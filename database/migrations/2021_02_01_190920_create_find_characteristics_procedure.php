@@ -75,7 +75,8 @@ class CreateFindCharacteristicsProcedure extends Migration
         END
         ";
 
-        $procedure4 = "
+        $procedure4 = /** @lang MySQL */
+            "
         CREATE PROCEDURE `find_all_cash`(date_start date, date_end date)
         BEGIN
             SELECT
@@ -88,7 +89,8 @@ class CreateFindCharacteristicsProcedure extends Migration
             WHERE `accounting_connections`.date >= date_start
             AND `accounting_connections`.date <= date_end
             AND `finance_documents`.`doc_type_id` = 2
-            GROUP BY `accounting_connections`.`date`;
+            GROUP BY `accounting_connections`.`date`
+            ORDER BY  `accounting_connections`.`date`;
         END
         ";
 

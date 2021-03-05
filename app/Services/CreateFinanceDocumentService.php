@@ -282,8 +282,8 @@ class CreateFinanceDocumentService
         // изменение состояния документа на "Проведён"
         $doc->update(['is_set' => true]);
 
-        if($doc->doc_type_id == 1) $change = $doc->doc_sum;
-        else $change = -$doc->doc_sum;
+        if($doc->doc_type_id == 1) $change = -$doc->doc_sum;
+        else $change = $doc->doc_sum;
         $result = $createAccountingConnectionService->make(['date'=> $doc->date, 'change' => $change, 'document_id' => $doc->id]);
 
         return $doc;
