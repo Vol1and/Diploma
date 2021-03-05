@@ -72,13 +72,12 @@
             <el-col :span="6" :offset="2">
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">
-                        <span><h3 class="text-center">В админ-панель!</h3></span>
+                        <span><h3 class="text-center">Статистика</h3></span>
                     </div>
-
-
-                    <a type="button" class="el-link--default el-link" href="/adm">Перейти!</a>
-
-
+                    <div class="text item">
+                        <router-link class="el-link--default el-link" :to="{name: 'charts.total'}">График продаж
+                        </router-link>
+                    </div>
                 </el-card>
             </el-col>
         </el-row>
