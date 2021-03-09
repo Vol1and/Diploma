@@ -23,6 +23,9 @@ class ButchNumberConnectionSeeder extends Seeder
             ],
             [
                 'butch_number' => 3
+            ],
+            [
+                'butch_number' => 4
             ]
         ];
 

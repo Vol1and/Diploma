@@ -62,8 +62,24 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // create demo users
         $user = User::factory()->create([
-            'name' => 'Pharmacist',
-            'email' => 'pharmacist@example.com',
+            'name' => 'Pharmacist1',
+            'email' => 'pharmacist1@example.com',
+            'password' => bcrypt('12345678'),
+        ]);
+        $user->assignRole($role2);
+
+        // create demo users
+        $user = User::factory()->create([
+            'name' => 'Pharmacist2',
+            'email' => 'pharmacist2@example.com',
+            'password' => bcrypt('12345678'),
+        ]);
+        $user->assignRole($role2);
+
+        // create demo users
+        $user = User::factory()->create([
+            'name' => 'Pharmacist3',
+            'email' => 'pharmacist3@example.com',
             'password' => bcrypt('12345678'),
         ]);
         $user->assignRole($role2);

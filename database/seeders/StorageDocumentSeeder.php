@@ -16,12 +16,12 @@ class StorageDocumentSeeder extends Seeder
     {
         $data = [
             [
-                'date' => date("Y-m-d H:i:s", mktime(8, 30, 12, date("m"),   date("d") - 1,   date("Y"))),
+                'date' => date("Y-m-d H:i:s", mktime(8, 30, 12, date("m"),   date("d") - 18,   date("Y"))),
                 'is_set'  => true,
                 'doc_type_id'  => 3,
                 'source_storage_id' => 1,
                 'destination_storage_id' => 0,
-                'comment' => 'Списание №1',
+                'comment' => 'Списание №1: Испорченные упаковки',
                 'doc_sum' => 2000
             ]
         ];

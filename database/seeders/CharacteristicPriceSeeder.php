@@ -34,6 +34,22 @@ class CharacteristicPriceSeeder extends Seeder
             [
                 'price'  => 295,
                 'characteristic_id' => 5
+            ],
+            [
+                'price'  => 10,
+                'characteristic_id' => 6
+            ],
+            [
+                'price'  => 210,
+                'characteristic_id' => 7
+            ],
+            [
+                'price'  => 250,
+                'characteristic_id' => 8
+            ],
+            [
+                'price'  => 50,
+                'characteristic_id' => 9
             ]
         ];
 

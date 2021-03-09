@@ -75,6 +75,7 @@ class CreateFindCharacteristicsProcedure extends Migration
         END
         ";
 
+        //процедура для формирования графика: ДАТА - СУММА ЧЕКОВ
         $procedure4 =
             "
         CREATE PROCEDURE `find_all_cash`(date_start date, date_end date)
