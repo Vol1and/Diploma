@@ -16,9 +16,10 @@
                         </router-link>
                     </div>
                     <div class="text item">
-                        <router-link class="el-link--default el-link" :to="{name: 'pricetypes.index'}">Типы цен
+                        <router-link class="el-link--default el-link" :to="{name: 'workplaces.index'}">Рабочие места
                         </router-link>
                     </div>
+
                     <div class="text item">
                         <router-link class="el-link--default el-link" :to="{name: 'nomenclature.index'}">Номенклатура
                         </router-link>
@@ -28,13 +29,14 @@
                         </router-link>
                     </div>
                     <div class="text item">
-                        <router-link class="el-link--default el-link" :to="{name: 'storages.index'}">Склады
+                        <router-link class="el-link--default el-link" :to="{name: 'pricetypes.index'}">Типы цен
                         </router-link>
                     </div>
                     <div class="text item">
-                        <router-link class="el-link--default el-link" :to="{name: 'workplaces.index'}">Рабочие места
+                        <router-link class="el-link--default el-link" :to="{name: 'storages.index'}">Склады
                         </router-link>
                     </div>
+
                 </el-card>
             </el-col>
             <el-col :span="6" :offset="2">
@@ -47,7 +49,11 @@
                         <router-link class="el-link--default el-link" :to="{name: 'cashier.index'}">Рабочее место кассира
                         </router-link>
                     </div>
-
+                    <div class="text item">
+                        <router-link class="el-link--default el-link" :to="{name: 'transfers.index'}">Перемещения
+                            товаров
+                        </router-link>
+                    </div>
                     <div class="text item">
                         <router-link class="el-link--default el-link" :to="{name: 'income.index'}">Поступления
                             товаров
@@ -58,6 +64,7 @@
                             товаров
                         </router-link>
                     </div>
+
                     <div class="text item">
                         <router-link class="el-link--default el-link" :to="{name: 'cancellations.index'}">Списания
                             товаров

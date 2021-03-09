@@ -35,26 +35,30 @@ Route::apiResource('/storage-documents', "App\Http\Controllers\StorageDocumentCo
 Route::apiResource('/wares', "App\Http\Controllers\WareController");
 Route::apiResource('/workplaces', "App\Http\Controllers\WorkPlaceController");
 
+//фильтры документов
 Route::get('/producer/filter', [App\Http\Controllers\ProducerController::class, 'filter']);
 Route::get('/nomenclature/filter', [App\Http\Controllers\NomenclatureController::class, 'filter']);
 Route::get('/income-document/filter', [App\Http\Controllers\FinanceDocumentController::class, 'incomeFilter']);
 
-Route::post('/income', [\App\Http\Controllers\FinanceDocumentController::class, 'incomeCreate']);
-Route::post('/income/{id}', [\App\Http\Controllers\FinanceDocumentController::class, 'incomeUpdate']);
-Route::post('/characteristics/{nomenclature_id}/create', [\App\Http\Controllers\CharacteristicController::class, 'store']);
+//отдельные роуты для документов
+Route::get('/sellings', [App\Http\Controllers\FinanceDocumentController::class, 'getSellings']);
+Route::get('/selling', [App\Http\Controllers\FinanceDocumentController::class, 'incomeCreate']);
+
+Route::get('/transfers', [App\Http\Controllers\StorageDocumentController::class, 'indexOfTransfers']);
+Route::get('/transfer', [App\Http\Controllers\StorageDocumentController::class, 'transferCreate']);
+Route::get('/transfer/{id}', [App\Http\Controllers\StorageDocumentController::class, 'transferUpdate']);
+
+Route::post('/income', [App\Http\Controllers\FinanceDocumentController::class, 'incomeCreate']);
+Route::post('/income/{id}', [App\Http\Controllers\FinanceDocumentController::class, 'incomeUpdate']);
+
+Route::post('/cancellation', [App\Http\Controllers\StorageDocumentController::class, 'cancellationCreate']);
+Route::post('/cancellation/{id}', [App\Http\Controllers\StorageDocumentController::class, 'cancellationUpdate']);
 
 
+Route::post('/characteristics/{nomenclature_id}/create', [App\Http\Controllers\CharacteristicController::class, 'store']);
 Route::get('/characteristic/for-nomenclature/{id}', [App\Http\Controllers\CharacteristicController::class, 'getAllByNomenclatureId']);
-
-
 Route::get('/characteristic/by-nomenclature-storage/{nomenclature_id}/{storage_id}', [App\Http\Controllers\CharacteristicController::class, 'getAllByNomenclatureAndStorageIdWithWares']);
 
-Route::get('/sellings', [App\Http\Controllers\FinanceDocumentController::class, 'getSellings']);
 
-Route::post('/cancellation/create', [\App\Http\Controllers\StorageDocumentController::class, 'cancellationCreate']);
-
-Route::post('/cancellation/{id}', [\App\Http\Controllers\StorageDocumentController::class, 'cancellationUpdate']);
-
-Route::post('/cashier/send', [\App\Http\Controllers\FinanceDocumentController::class, "sell"]);
-
-Route::get('/charts/total-sales', [\App\Http\Controllers\ChartController::class, "totalSales"]);
+Route::post('/cashier/send', [App\Http\Controllers\FinanceDocumentController::class, "sell"]);
+Route::get('/charts/total-sales', [App\Http\Controllers\ChartController::class, "totalSales"]);

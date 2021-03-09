@@ -39,6 +39,11 @@ import CancellationIndex from "../components/Documents/Cancellation/Index";
 import CancellationEdit from "../components/Documents/Cancellation/Edit";
 
 
+import TransferCreate from "../components/Documents/Transfer/Create";
+import TransferIndex from "../components/Documents/Transfer/Index";
+import TransferEdit from "../components/Documents/Transfer/Edit";
+
+
 import CashierIndex from "../components/CashierPlace/Index"
 import MedicamentSearch from "../components/CashierPlace/MedicamentSearch"
 import WaresIndex from "../components/Ware/Index"
@@ -64,7 +69,6 @@ const routes = [
     {path: '/income-documents/create', name: "income.create", component: IncomeCreate, meta: {requiresAuth: true}},
     {path: '/income-documents/:id', name: "income.edit", component: IncomeEdit, meta: {requiresAuth: true}},
 
-
     {path: '/selling-documents', name: "selling.index", component: SellingIndex, meta: {requiresAuth: true}},
     {path: '/selling-documents/create', name: "selling.create", component: SellingCreate, meta: {requiresAuth: true}},
     {path: '/selling-documents/:id', name: "selling.edit", component: SellingEdit, meta: {requiresAuth: true}},
@@ -73,6 +77,9 @@ const routes = [
     {path: '/cancellation-documents/create', name: "cancellations.create", component: CancellationCreate, meta: {requiresAuth: true}},
     {path: '/cancellation-documents/:id', name: "cancellations.edit", component: CancellationEdit, meta: {requiresAuth: true}},
 
+    {path: '/transfer-documents', name: "transfers.index", component: TransferIndex, meta: {requiresAuth: true}},
+    {path: '/transfer-documents/create', name: "transfers.create", component: TransferCreate, meta: {requiresAuth: true}},
+    {path: '/transfer-documents/:id', name: "transfers.edit", component: TransferEdit, meta: {requiresAuth: true}},
 
     {path: '/agents', name: "agents.index", component: AgentIndex, meta: {requiresAuth: true}},
     {path: '/agents/create', name: "agents.create", component: AgentCreate, meta: {requiresAuth: true}},
@@ -90,7 +97,6 @@ const routes = [
     {path: '/price-types/create', name: "pricetypes.create", component: PriceTypeCreate, meta: {requiresAuth: true}},
     {path: '/price-types/:id', name: "pricetypes.edit", component: PriceTypeEdit, meta: {requiresAuth: true}},
 
-
     {path: '/nomenclatures', name: "nomenclature.index", component: NomenclatureIndex, meta: {requiresAuth: true}},
     {path: '/nomenclatures/create', name: "nomenclature.create", component: NomenclatureCreate, meta: {requiresAuth: true}},
     {path: '/nomenclatures/:id', name: "nomenclature.edit", component: NomenclatureEdit, meta: {requiresAuth: true}},
@@ -100,7 +106,6 @@ const routes = [
 
     {path: '/', name: "home.index", component: Home, meta: {requiresAuth: true}},
     {path: '/login', name: 'login', component: Login, meta: {requiresAuth: false}},
-
 
     {path: '/charts', name: "charts", component: TotalSalesContainer, meta: {requiresAuth: true}, children: [
             {path: 'total-sales', name: "charts.total", component: TotalSales, meta: {requiresAuth: true}}

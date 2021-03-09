@@ -29,6 +29,7 @@ class StorageDocument {
         return {
             id: this.id,
             source_storage_id: this.source_storage.id,
+            destination_storage_id: this.destination_storage.id,
             date: this.date,
             table_rows: table_rows,
             comment: this.comment,
@@ -44,6 +45,7 @@ class StorageDocument {
         return {
             id: this.id,
             source_storage_id: this.source_storage.id,
+            destination_storage_id: this.destination_storage.id,
             date: this.date,
             comment: this.comment,
             deleted_rows: this.deleted_rows,

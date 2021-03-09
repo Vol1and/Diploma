@@ -67,8 +67,11 @@ export default {
         addToTable() {
             this.item.table_rows.push(new StorageDocumentTableRow(null));
         },
-        selectingStorage() {
+        selectingSourceStorage() {
             this.choosing_state = 3;
+        },
+        selectingDestinationStorage() {
+            this.choosing_state = 4;
         },
         selectingAgent() {
             this.choosing_state = 1;
@@ -89,14 +92,14 @@ export default {
                     let index = this.item.table_rows.indexOf(this.hover_row);
                     this.item.table_rows.splice(index, 1);
                     //если удалена новая строка и она не сохранена на сервере - не заносим в deleted_rows
-                    if (this.hover_row.id != null)  this.item.deleted_rows.push(this.hover_row.id);
+                    if (this.hover_row.id != null) this.item.deleted_rows.push(this.hover_row.id);
 
                     this.hover_row = p;
                     this.selectingRow = p;
                     flag = false;
                     this.$notify.error({
                         title: 'Ошибка!',
-                         message: "Строка с такой номенклатурой уже присутствует в таблице!"
+                        message: "Строка с такой номенклатурой уже присутствует в таблице!"
                     });
                 }
             })
@@ -113,6 +116,11 @@ export default {
                     message: "Очистите табличную часть перед изменением склада",
                 })
             } else this.item.source_storage = data.storage;
+
+        },
+        onSelectedDestinationStorage(data) {
+            this.choosing_state = 0;
+            this.item.destination_storage = data.storage;
 
         },
         onSelectedNomenclature(data) {
