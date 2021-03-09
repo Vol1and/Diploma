@@ -156,7 +156,7 @@ class FinanceDocumentTableRowSeeder extends Seeder
                 'count' => 10
             ],
             [
-                'characteristic_id'  => 3,
+                'characteristic_id'  => 1,
                 'finance_document_id'  => 14,
                 'ware_connection_id' => 24,
                 'price'  => 100,

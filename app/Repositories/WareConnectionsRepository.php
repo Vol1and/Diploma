@@ -64,4 +64,5 @@ class WareConnectionsRepository extends BaseRepository
             ->with(['characteristic'])
             ->get()->first();
     }
+
 }
