@@ -49,7 +49,9 @@ import MedicamentSearch from "../components/CashierPlace/MedicamentSearch"
 import WaresIndex from "../components/Ware/Index"
 
 import TotalSales from "../components/Charts/TotalSales";
-import TotalSalesContainer from "../components/Charts/TotalSalesContainer";
+import ChartContainer from "../components/Charts/ChartContainer";
+import UsersSales from "../components/Charts/UsersSales"
+
 import Home from "../components/Home";
 import Login from "../components/Auth/Login"
 
@@ -107,8 +109,9 @@ const routes = [
     {path: '/', name: "home.index", component: Home, meta: {requiresAuth: true}},
     {path: '/login', name: 'login', component: Login, meta: {requiresAuth: false}},
 
-    {path: '/charts', name: "charts", component: TotalSalesContainer, meta: {requiresAuth: true}, children: [
-            {path: 'total-sales', name: "charts.total", component: TotalSales, meta: {requiresAuth: true}}
+    {path: '/charts', name: "charts", component: ChartContainer, meta: {requiresAuth: true}, children: [
+            {path: 'total-sales', name: "charts.total", component: TotalSales, meta: {requiresAuth: true}},
+            {path: 'users-cash', name: "charts.users", component: UsersSales, meta: {requiresAuth: true}}
         ]},
 
     //админские роуты

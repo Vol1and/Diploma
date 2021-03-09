@@ -61,4 +61,6 @@ Route::get('/characteristic/by-nomenclature-storage/{nomenclature_id}/{storage_i
 
 
 Route::post('/cashier/send', [App\Http\Controllers\FinanceDocumentController::class, "sell"]);
-Route::get('/charts/total-sales', [App\Http\Controllers\ChartController::class, "totalSales"]);
+
+Route::get('/charts/total-sales', [App\Http\Controllers\ChartController::class, "total_sales"]);
+Route::get('/charts/users-sales', [App\Http\Controllers\ChartController::class, "cash_by_users"]);

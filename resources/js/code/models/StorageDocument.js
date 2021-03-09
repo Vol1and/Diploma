@@ -1,7 +1,7 @@
 import Storage from "./Storage";
 
 class StorageDocument {
-    constructor(id = -1,type ,is_set,  source_storage = new Storage(), destination_storage = new Storage(),
+    constructor(id = -1,type ,is_set,  source_storage = new Storage(), destination_storage = new Storage(null),
                 date = "", table_rows = [], comment = "",doc_sum = 0, created_at = null, updated_at = null, deleted_at = null) {
 
         this.id = id;

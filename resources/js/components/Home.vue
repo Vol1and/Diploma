@@ -82,9 +82,17 @@
                         <span><h3 class="text-center">Статистика</h3></span>
                     </div>
                     <div class="text item">
+                        <router-link class="el-link--default el-link" :to="{name: 'charts'}">Графики
+                        </router-link>
+                    </div>
+                    <!--<div class="text item">
                         <router-link class="el-link--default el-link" :to="{name: 'charts.total'}">График продаж
                         </router-link>
                     </div>
+                    <div class="text item">
+                        <router-link class="el-link--default el-link" :to="{name: 'charts.users'}">Продажи по пользователям
+                        </router-link>
+                    </div> -->
                 </el-card>
             </el-col>
         </el-row>

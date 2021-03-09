@@ -37,7 +37,7 @@
                             <el-col :span="5">
                                 <el-form-item label="Склад: ">
                                     <el-input readonly v-model="item.source_storage.name" placeholder="">
-                                        <el-button type="primary" @click="selectingStorage" slot="append"
+                                        <el-button type="primary" @click="selectingSourceStorage" slot="append"
                                                    icon="el-icon-d-arrow-right"></el-button>
                                     </el-input>
                                 </el-form-item>
