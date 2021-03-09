@@ -95,6 +95,24 @@ class CreateFindCharacteristicsProcedure extends Migration
         END
         ";
 
+        //процедура для формирования графика: ПОЛЬЗОВАТЕЛЬ - СУММА ЧЕКОВ
+        $procedure5 =
+            "
+        CREATE PROCEDURE `find_all_cash_by_users`(date_start date, date_end date)
+        BEGIN
+            SELECT
+                `users`.`name` AS `user`,
+                SUM(`accounting_connections`.`change`) AS `summing`
+            FROM
+                ((`workplace_document_connections`
+                JOIN `users` ON ((`workplace_document_connections`.`user_id` = `users`.`id`))
+                LEFT JOIN `accounting_connections` ON ((`workplace_document_connections`.`document_id` = `accounting_connections`.`document_id`))))
+            WHERE `accounting_connections`.date >= date_start
+            AND `accounting_connections`.date <= date_end
+            GROUP BY `users`.`name`;
+        END
+        ";
+
         // внедрение процедуры в db
         DB::unprepared("DROP procedure IF EXISTS find_characteristics_procedure");
         DB::unprepared($procedure);
@@ -104,6 +122,8 @@ class CreateFindCharacteristicsProcedure extends Migration
         DB::unprepared($procedure3);
         DB::unprepared("DROP procedure IF EXISTS find_all_cash");
         DB::unprepared($procedure4);
+        DB::unprepared("DROP procedure IF EXISTS find_all_cash_by_users");
+        DB::unprepared($procedure5);
 
     }
 
@@ -118,5 +138,6 @@ class CreateFindCharacteristicsProcedure extends Migration
         Schema::dropIfExists('find_characteristic_ware_butches');
         Schema::dropIfExists('find_all_finance_connections');
         Schema::dropIfExists('find_all_cash');
+        Schema::dropIfExists('find_all_cash_by_users');
     }
 }
