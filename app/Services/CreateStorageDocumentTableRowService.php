@@ -16,7 +16,6 @@ class CreateStorageDocumentTableRowService
     // метод добавления строки документа
     public function fillTableRow($doc, $med, $characteristic_id)
     {
-
         // заполнение новой строки документа
         $tableRow = $this->make(['characteristic_id' => $characteristic_id,
             'storage_document_id' => $doc->id,

@@ -43,18 +43,19 @@ class StorageDocumentController extends OriginController
     public function transferCreate(DocumentCreateRequest $request)
     {
         // получение данных
-        // $data = $request->input('item');
-        // if(empty($data)) return response(null,400);
-    //
-        // $meds = $data['table_rows'];
-        // if(empty($meds)) return response(null,400);
-    //
-        // // добавление нового документа
-        // $doc = $this->createStorageDocumentService->createStorageDoc($data,$meds);
-        // if(empty($doc)) return response(null,500);
-    //
-    //
-        // if($request->input('state')) $result = $this->createStorageDocumentService->pushStorageDoc($doc->id);
+        $data = $request->input('item');
+        if(empty($data)) return response(null,400);
+
+        $meds = $data['table_rows'];
+        if(empty($meds)) return response(null,400);
+
+        // добавление нового документа
+        $doc = $this->createStorageDocumentService->createTransferDoc($data,$meds);
+        print_r($doc);
+        if(empty($doc)) return response(null,500);
+
+
+        if($request->input('state')) $result = $this->createStorageDocumentService->pushStorageDoc($doc->id);
     }
 
     public function cancellationCreate(DocumentCreateRequest $request)
@@ -77,19 +78,20 @@ class StorageDocumentController extends OriginController
     public function transferUpdate(DocumentCreateRequest $request, $id)
     {
         // получение данных
-        //$data = $request->input('item');
-        //if(empty($data)) return response(null,400);
-        //
-        //$deleted = $data['deleted_rows'];
-        //
-        //$updated = $data['updated_rows'];
-        //
-        //
-        //$result = $this->updateStorageDocumentService->updateCancellation($data, $deleted, $updated, $id);
-        //
-        //if(empty($result)) return response(null,500);
-        //
-        //if($request->input('state')) $result = $this->createStorageDocumentService->pushStorageDoc($id);
+        $data = $request->input('item');
+        if(empty($data)) return response(null,400);
+
+        $deleted = $data['deleted_rows'];
+
+        $updated = $data['updated_rows'];
+
+
+        $result = $this->updateStorageDocumentService->updateCancellation($data, $deleted, $updated, $id);
+
+        if(empty($result)) return response(null,500);
+
+        if($request->input('state')) $result = $this->createStorageDocumentService->pushStorageDoc($id);
+
 
     }
 
@@ -109,7 +111,6 @@ class StorageDocumentController extends OriginController
         if(empty($result)) return response(null,500);
 
         if($request->input('state')) $result = $this->createStorageDocumentService->pushStorageDoc($id);
-
     }
 
 
