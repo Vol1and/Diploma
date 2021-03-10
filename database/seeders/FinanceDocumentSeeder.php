@@ -30,7 +30,7 @@ class FinanceDocumentSeeder extends Seeder
                 'doc_type_id'  => 1,
                 'agent_id' => 2,
                 'storage_id' => 1,
-                'comment' => 'Комментарий №1',
+                'comment' => 'Поступление №1',
                 'doc_sum' =>19400
             ],
             [
@@ -39,7 +39,7 @@ class FinanceDocumentSeeder extends Seeder
                 'doc_type_id'  => 1,
                 'agent_id' => 3,
                 'storage_id' => 1,
-                'comment' => 'Комментарий №2',
+                'comment' => 'Поступление №2',
                 'doc_sum' =>10782
             ],
             [

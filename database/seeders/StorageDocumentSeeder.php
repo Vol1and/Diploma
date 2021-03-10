@@ -16,7 +16,7 @@ class StorageDocumentSeeder extends Seeder
     {
         $data = [
             [
-                'date' => date("Y-m-d H:i:s", mktime(8, 30, 12, date("m"),   date("d") - 18,   date("Y"))),
+                'date' => date("Y-m-d H:i:s", mktime(8, 45, 45, date("m"),   date("d") - 18,   date("Y"))),
                 'is_set'  => true,
                 'doc_type_id'  => 3,
                 'source_storage_id' => 1,

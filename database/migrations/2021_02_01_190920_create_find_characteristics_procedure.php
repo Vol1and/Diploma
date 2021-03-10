@@ -112,6 +112,25 @@ class CreateFindCharacteristicsProcedure extends Migration
             GROUP BY `users`.`name`;
         END
         ";
+        //процедура для формирования графикапродаж конкретной номенклатуры: Дата - Кол-во продаж
+        $procedure6 =
+            "
+        CREATE PROCEDURE `find_all_sales_by_nomenclature`(date_start date, date_end date, nomenclature_id BIGINT)
+        BEGIN
+            SELECT
+                DATE(`ware_connections`.`created_at`) AS `date`,
+                SUM(ABS(`ware_connections`.`change`)) AS `summing`
+            FROM
+                ((`ware_connections`
+                JOIN `characteristics` ON ((`ware_connections`.`characteristic_id` = `characteristics`.`id`))))
+            WHERE `ware_connections`.created_at >= date_start
+            AND `ware_connections`.created_at <= date_end
+            AND `ware_connections`.`change` < 0
+            AND `characteristics`.`nomenclature_id` = nomenclature_id
+            GROUP BY CAST(`ware_connections`.`created_at` AS DATE)
+            ORDER BY CAST(`ware_connections`.`created_at` AS DATE);
+        END
+        ";
 
         // внедрение процедуры в db
         DB::unprepared("DROP procedure IF EXISTS find_characteristics_procedure");
@@ -124,6 +143,8 @@ class CreateFindCharacteristicsProcedure extends Migration
         DB::unprepared($procedure4);
         DB::unprepared("DROP procedure IF EXISTS find_all_cash_by_users");
         DB::unprepared($procedure5);
+        DB::unprepared("DROP procedure IF EXISTS find_all_sales_by_nomenclature");
+        DB::unprepared($procedure6);
 
     }
 
@@ -139,5 +160,6 @@ class CreateFindCharacteristicsProcedure extends Migration
         Schema::dropIfExists('find_all_finance_connections');
         Schema::dropIfExists('find_all_cash');
         Schema::dropIfExists('find_all_cash_by_users');
+        Schema::dropIfExists('find_all_sales_by_nomenclature');
     }
 }
