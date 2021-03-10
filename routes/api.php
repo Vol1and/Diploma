@@ -45,8 +45,8 @@ Route::get('/sellings', [App\Http\Controllers\FinanceDocumentController::class, 
 Route::get('/selling', [App\Http\Controllers\FinanceDocumentController::class, 'incomeCreate']);
 
 Route::get('/transfers', [App\Http\Controllers\StorageDocumentController::class, 'indexOfTransfers']);
-Route::get('/transfer', [App\Http\Controllers\StorageDocumentController::class, 'transferCreate']);
-Route::get('/transfer/{id}', [App\Http\Controllers\StorageDocumentController::class, 'transferUpdate']);
+Route::post('/transfer', [App\Http\Controllers\StorageDocumentController::class, 'transferCreate']);
+Route::post('/transfer/{id}', [App\Http\Controllers\StorageDocumentController::class, 'transferUpdate']);
 
 Route::post('/income', [App\Http\Controllers\FinanceDocumentController::class, 'incomeCreate']);
 Route::post('/income/{id}', [App\Http\Controllers\FinanceDocumentController::class, 'incomeUpdate']);
