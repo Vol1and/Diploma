@@ -48,12 +48,13 @@ import CashierIndex from "../components/CashierPlace/Index"
 import MedicamentSearch from "../components/CashierPlace/MedicamentSearch"
 import WaresIndex from "../components/Ware/Index"
 
-import TotalSales from "../components/Charts/TotalSales";
-import ChartContainer from "../components/Charts/ChartContainer";
-import UsersSales from "../components/Charts/UsersSales"
+import TotalSalesContainer from "../components/Charts/TotalSalesContainer";
+import UsersSalesContainer from "../components/Charts/UsersSalesContainer"
 
 import Home from "../components/Home";
 import Login from "../components/Auth/Login"
+
+import AdminMain from "../components/Admin/Main"
 
 const routes = [
     {path: '/info', name: "menu.info", component: NormativeInfo, meta: {requiresAuth: true}},
@@ -64,7 +65,12 @@ const routes = [
     {path: '/producers/:id', name: "producers.edit", component: ProducerEdit, meta: {requiresAuth: true}},
 
     {path: '/producers', name: "characteristics.index", component: ProducerIndex, meta: {requiresAuth: true}},
-    {path: '/characteristics/create/:nomenclature_id', name: "characteristics.create", component: ProducerCreate, meta: {requiresAuth: true}},
+    {
+        path: '/characteristics/create/:nomenclature_id',
+        name: "characteristics.create",
+        component: ProducerCreate,
+        meta: {requiresAuth: true}
+    },
     {path: '/producers/:id', name: "producers.edit", component: ProducerEdit, meta: {requiresAuth: true}},
 
     {path: '/income-documents', name: "income.index", component: IncomeIndex, meta: {requiresAuth: true}},
@@ -75,12 +81,32 @@ const routes = [
     {path: '/selling-documents/create', name: "selling.create", component: SellingCreate, meta: {requiresAuth: true}},
     {path: '/selling-documents/:id', name: "selling.edit", component: SellingEdit, meta: {requiresAuth: true}},
 
-    {path: '/cancellation-documents', name: "cancellations.index", component: CancellationIndex, meta: {requiresAuth: true}},
-    {path: '/cancellation-documents/create', name: "cancellations.create", component: CancellationCreate, meta: {requiresAuth: true}},
-    {path: '/cancellation-documents/:id', name: "cancellations.edit", component: CancellationEdit, meta: {requiresAuth: true}},
+    {
+        path: '/cancellation-documents',
+        name: "cancellations.index",
+        component: CancellationIndex,
+        meta: {requiresAuth: true}
+    },
+    {
+        path: '/cancellation-documents/create',
+        name: "cancellations.create",
+        component: CancellationCreate,
+        meta: {requiresAuth: true}
+    },
+    {
+        path: '/cancellation-documents/:id',
+        name: "cancellations.edit",
+        component: CancellationEdit,
+        meta: {requiresAuth: true}
+    },
 
     {path: '/transfer-documents', name: "transfers.index", component: TransferIndex, meta: {requiresAuth: true}},
-    {path: '/transfer-documents/create', name: "transfers.create", component: TransferCreate, meta: {requiresAuth: true}},
+    {
+        path: '/transfer-documents/create',
+        name: "transfers.create",
+        component: TransferCreate,
+        meta: {requiresAuth: true}
+    },
     {path: '/transfer-documents/:id', name: "transfers.edit", component: TransferEdit, meta: {requiresAuth: true}},
 
     {path: '/agents', name: "agents.index", component: AgentIndex, meta: {requiresAuth: true}},
@@ -100,7 +126,12 @@ const routes = [
     {path: '/price-types/:id', name: "pricetypes.edit", component: PriceTypeEdit, meta: {requiresAuth: true}},
 
     {path: '/nomenclatures', name: "nomenclature.index", component: NomenclatureIndex, meta: {requiresAuth: true}},
-    {path: '/nomenclatures/create', name: "nomenclature.create", component: NomenclatureCreate, meta: {requiresAuth: true}},
+    {
+        path: '/nomenclatures/create',
+        name: "nomenclature.create",
+        component: NomenclatureCreate,
+        meta: {requiresAuth: true}
+    },
     {path: '/nomenclatures/:id', name: "nomenclature.edit", component: NomenclatureEdit, meta: {requiresAuth: true}},
 
     {path: '/cashier', name: "cashier.index", component: CashierIndex, meta: {requiresAuth: true}},
@@ -109,33 +140,33 @@ const routes = [
     {path: '/', name: "home.index", component: Home, meta: {requiresAuth: true}},
     {path: '/login', name: 'login', component: Login, meta: {requiresAuth: false}},
 
-    {path: '/charts', name: "charts", component: ChartContainer, meta: {requiresAuth: true}, children: [
-            {path: 'total-sales', name: "charts.total", component: TotalSales, meta: {requiresAuth: true}},
-            {path: 'users-cash', name: "charts.users", component: UsersSales, meta: {requiresAuth: true}}
-        ]},
+    {path: '/charts/total-sales', name: "charts.total", component: TotalSalesContainer, meta: {requiresAuth: true}},
+    {path: '/charts/users-cash', name: "charts.users", component: UsersSalesContainer, meta: {requiresAuth: true}},
+
+
 
     //админские роуты
 
-  // {path: '/adm/info', name: "admin.menu.info", component: NormativeInfo},
+    {path: '/adm/info', name: "admin.menu.info", component: NormativeInfo},
 
-  // {path: '/adm/producers', name: "admin.producers.index", component: ProducerIndex},
-  // {path: '/adm/producers/create', name: "admin.producers.create", component: ProducerCreate},
-  // {path: '/adm/producers/:id', name: "admin.producers.edit", component: ProducerEdit},
+    {path: '/adm/producers', name: "admin.producers.index", component: ProducerIndex},
+    {path: '/adm/producers/create', name: "admin.producers.create", component: ProducerCreate},
+    {path: '/adm/producers/:id', name: "admin.producers.edit", component: ProducerEdit},
 
-  // {path: '/adm/price-types', name: "admin.pricetypes.index", component: PriceTypeIndex},
-  // {path: '/adm/price-types/create', name: "admin.pricetypes.create", component: PriceTypeCreate},
-  // {path: '/adm/price-types/:id', name: "admin.pricetypes.edit", component: PriceTypeEdit},
+    {path: '/adm/price-types', name: "admin.pricetypes.index", component: PriceTypeIndex},
+    {path: '/adm/price-types/create', name: "admin.pricetypes.create", component: PriceTypeCreate},
+    {path: '/adm/price-types/:id', name: "admin.pricetypes.edit", component: PriceTypeEdit},
 
-  // {path: '/adm/agents', name: "admin.agents.index", component: AgentIndex},
-  // {path: '/adm/agents/create', name: "admin.agents.create", component: PriceTypeCreate},
-  // {path: '/adm/agents/:id', name: "admin.agents.edit", component: PriceTypeEdit},
+    {path: '/adm/agents', name: "admin.agents.index", component: AgentIndex},
+    {path: '/adm/agents/create', name: "admin.agents.create", component: PriceTypeCreate},
+    {path: '/adm/agents/:id', name: "admin.agents.edit", component: PriceTypeEdit},
 
 
-  // {path: '/adm/nomenclatures', name: "admin.nomenclature.index", component: NomenclatureIndex},
-  // {path: '/adm/nomenclatures/create', name: "admin.nomenclature.create", component: NomenclatureCreate},
-  // {path: '/adm/nomenclatures/:id', name: "admin.nomenclature.edit", component: NomenclatureEdit},
+    {path: '/adm/nomenclatures', name: "admin.nomenclature.index", component: NomenclatureIndex},
+    {path: '/adm/nomenclatures/create', name: "admin.nomenclature.create", component: NomenclatureCreate},
+    {path: '/adm/nomenclatures/:id', name: "admin.nomenclature.edit", component: NomenclatureEdit},
 
-  // {path: '/adm/home', name: "admin.home.index", component: AdminMain}
+    {path: '/adm/home', name: "admin.home.index", component: AdminMain}
 
 
 ];

@@ -1,3 +1,4 @@
+
 <script>
 import {Line} from 'vue-chartjs'
 import moment from "moment";
@@ -6,15 +7,16 @@ export default {
     extends: Line,
     name: "TotalSales",
     mounted() {
-        this.start_date = this.$route.params.start
-        this.end_date = this.$route.params.end
         this.update();
+    },
+    props:{
+        start: String,
+        end :String
     },
     data() {
         return {
 
-            start_date: null,
-            end_date: null,
+
 
             dates: [],
             values: [],
@@ -49,10 +51,12 @@ export default {
     },
     methods: {
         update() {
+            this.dates = [];
+            this.values = [];
             axios.get("/api/charts/total-sales", {
                 params: {
-                    start: this.start_date === undefined ? null : moment(this.start_date).format("YYYY-MM-DD"),
-                    end: this.end_date === undefined ? null : moment(this.end_date).format("YYYY-MM-DD")
+                    start: this.start === undefined ? null : moment(this.start).format("YYYY-MM-DD"),
+                    end: this.end === undefined ? null : moment(this.end).format("YYYY-MM-DD")
                 }
             }).then((response) => {
 

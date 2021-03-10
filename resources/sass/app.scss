@@ -6,6 +6,15 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+/* theme color */
+$--color-primary: teal;
+$--background-color-base : black;
+
+/* icon font path, required */
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+@import "~element-ui/packages/theme-chalk/src/index";
+
 .center-90 {
     width: 90%;
     float: left;

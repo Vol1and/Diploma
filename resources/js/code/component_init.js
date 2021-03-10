@@ -48,6 +48,8 @@ Vue.component('characteristic-create-component',
 Vue.component('navbar',
     require('../components/NavBar').default);
 
+Vue.component('SideBar',
+    require('../components/SideBar').default);
 
 
 Vue.component('CharacteristicSearch', require('../components/CashierPlace/CharacteristicSearch').default)

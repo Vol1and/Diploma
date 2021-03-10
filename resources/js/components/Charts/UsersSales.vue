@@ -8,15 +8,14 @@ export default {
     mixins: [mixin_charts],
     name: "UsersSales",
     mounted() {
-        this.start_date = this.$route.params.start
-        this.end_date = this.$route.params.end
         this.update();
+    },
+    props:{
+        start: String,
+        end :String
     },
     data() {
         return {
-
-            start_date: null,
-            end_date: null,
             users: [],
             values: [],
             chart_data: {
@@ -42,11 +41,12 @@ export default {
     },
     methods: {
         update() {
+            this.chart_data.datasets = [];
             axios.get("/api/charts/users-sales",
                 {
                     params: {
-                        start: this.start_date === undefined ? null : moment(this.start_date).format("YYYY-MM-DD"),
-                        end: this.end_date === undefined ? null : moment(this.end_date).format("YYYY-MM-DD")
+                        start: this.start === undefined ? null : moment(this.start).format("YYYY-MM-DD"),
+                        end: this.end === undefined ? null : moment(this.end).format("YYYY-MM-DD")
                     }
                 }).then((response) => {
 
