@@ -238,7 +238,7 @@ export default {
                         )));
                     this.item = new StorageDocument(response.data.id, 3, response.data.is_set,
                         new Storage(response.data.source_storage.id, response.data.source_storage.name),
-                        new Storage(),
+                        new Storage(null),
                         response.data.date,
                         table_data,
                         response.data.comment,
