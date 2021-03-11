@@ -61,6 +61,18 @@ class WorkplaceController extends OriginController
         return $result->toJson();
     }
 
+
+    public function open($id)
+    {
+        //TODO: открытие смены
+    }
+
+
+    public function close($id)
+    {
+        //TODO: закрытие смены
+    }
+
     /**
      * Update the specified resource in storage.
      *
