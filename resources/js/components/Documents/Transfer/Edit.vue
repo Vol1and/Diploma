@@ -279,7 +279,7 @@ export default {
                 this.$notify({
                     type: 'success',
                     title: 'Успешно!',
-                    message: `Поступление с Id = ${this.item.id} успешно изменено!`,
+                    message: `Перемещение с Id = ${this.item.id} успешно изменено!`,
                 })
             }).catch((error) => {
                 //ошибка - выводим

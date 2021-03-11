@@ -12,6 +12,8 @@ import workplaces from "./modules/workplaces";
 import auth from "./modules/auth";
 import createPersistedState from "vuex-persistedstate";
 
+import transfers from "./modules/transfers";
+
 Vue.use(Vuex)
 
 
@@ -27,38 +29,48 @@ export default new Vuex.Store({
         selling,
         cancellations,
         workplaces,
-        auth
+        auth,
+        transfers
     },
     state: {
-        errors: []
+        errors: [],
+        workplace: null
     },
 
     getters: {
-        errors: state => state.errors
+        errors: state => state.errors,
+        workplace: state => state.workplace,
     },
 
     mutations: {
         setErrors(state, errors) {
             state.errors = errors;
+        },
+        setWorkplace(state, workplace) {
+            state.workplace = workplace;
+        },
+        deleteWorkplace(state) {
+            state.workplace = null;
         }
     },
+    actions: {
+        setWorkplace(context,data) {
+            return new Promise((resolve, reject) => {
 
-    //    LogOut(state){
-    //        state.user = null
-    //        state.posts = null
-    //    },
-    //},
-    //actions: {
-//
-    //    async LogIn({commit}, User) {
-    //        await axios.post('/api/login', User)
-    //        await commit('setUser', User.get('username'))
-    //    },
-    //    async LogOut({commit}){
-    //        let user = null
-    //        commit('LogOut', user)
-    //    }
-    //},
+                context.commit('setWorkplace', data.workplace);
+                resolve();
+            });
+
+        },
+        deleteWorkplace(context,data) {
+            return new Promise((resolve, reject) => {
+
+                context.commit('deleteWorkplace');
+                resolve();
+            });
+
+        },
+    },
     plugins: [createPersistedState()],
 
 })

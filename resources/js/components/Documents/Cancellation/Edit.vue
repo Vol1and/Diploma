@@ -281,7 +281,7 @@ export default {
                 this.$notify({
                     type: 'success',
                     title: 'Успешно!',
-                    message: `Поступление с Id = ${this.item.id} успешно изменено!`,
+                    message: `Списание с Id = ${this.item.id} успешно изменено!`,
                 })
             }).catch((error) => {
                 //ошибка - выводим
@@ -308,6 +308,7 @@ export default {
                 if (p.income_price <= 0) this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Цена поступления\" должно быть больше 0`);
                 if (p.count <= 0) this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Количество\" должно быть больше 0`);
             })
+
 
             this.showErrors()
 

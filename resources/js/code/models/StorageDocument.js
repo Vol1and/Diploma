@@ -1,4 +1,5 @@
 import Storage from "./Storage";
+import cloneDeep from 'lodash/clonedeep';
 
 class StorageDocument {
     constructor(id = -1,type ,is_set,  source_storage = new Storage(), destination_storage = new Storage(null),
@@ -13,13 +14,13 @@ class StorageDocument {
         this.date = date;
         this.comment = comment;
         this.doc_sum = doc_sum;
-        this.table_rows = _.cloneDeep(table_rows);
+        this.table_rows = cloneDeep(table_rows);
         this.created_at = created_at;
         this.updated_at = updated_at;
         this.deleted_at = deleted_at;
         this.deleted_rows = [];
         this.updated_rows = [];
-        this.base_rows = _.cloneDeep(table_rows);
+        this.base_rows = cloneDeep(table_rows);
     }
 
 

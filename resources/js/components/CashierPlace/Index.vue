@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-row v-if=" choosing_state === 0 ">
+        <el-row style="width: 100%" v-if=" choosing_state === 0 ">
 
             <el-col :span="20" :offset="2">
 
@@ -8,23 +8,21 @@
                 <el-card class="box-card">
                     <div slot="header">
                         <el-row>
-                            <el-col :span="8"><h4 :span="8" style="float: left">Рабочее место:
-                                {{ this.workplace.name }}</h4></el-col>
-                            <el-col :span="8"><h3 :span="8"
-                                                  v-shortkey="{del: ['del'], f2: ['f2'], change : ['alt', 'q'],change_rus : ['alt', 'й']}"
-                                                  @shortkey="theAction" class="text-center">Рабочее место кассира</h3>
+
+                            <el-col :offset="8" :span="8"><h1
+                                v-shortkey="{del: ['del'], f2: ['f2'], change : ['alt', 'q'],change_rus : ['alt', 'й']}"
+                                @shortkey="theAction" class="text-center">Рабочее место кассира</h1>
                             </el-col>
-                            <el-col :span="8"><h4 :span="6" style="float: right">Пользователь: {{$store.getters["auth/user"].name}} </h4></el-col>
                         </el-row>
                     </div>
                     <el-form label-width="100px" label-position="right">
 
-                        <el-card v-if="workplace.id != null" style="margin-bottom: 40px">
+                        <el-card v-if="this.$store.getters.workplace.id != null" style="margin-bottom: 40px">
 
                             <el-divider content-position="left"><h2>Товары</h2></el-divider>
 
                             <el-row style="margin-bottom: 10px">
-                                <el-button @click="selectingNomenclature">Поиск товара [F2]</el-button>
+                                <el-button :disabled="!this.$store.getters.workplace.is_opened" @click="selectingNomenclature">Поиск товара [F2]</el-button>
                                 <el-button :disabled="rows_sum ===0 " @click="cashInput_dialog = true">Оплата [Alt +
                                     Q]
                                 </el-button>
@@ -36,9 +34,9 @@
                                 <h1 style="float: right">{{ this.status_label }}</h1>
                             </el-row>
                             <el-table :cell-style="{padding: '0', height: '50px'}" :data="item.table_rows"
-                                      highlight-current-cell
+
                                       @row-dblclick="rowEdit"
-                                      border
+
                                       show-summary
                                       sum-text="  "
                                       highlight-current-row
@@ -78,6 +76,7 @@
                                     prop="characteristic.name"
                                     label="Характеристика"
                                     sortable
+                                    min-width="200"
                                 >
                                     <template slot-scope="scope">
 
@@ -106,7 +105,8 @@
                                                   v-model="scope.row.count" placeholder="">
                                             <template slot="append">шт.</template>
                                         </el-input>
-                                        <div autofocus v-show="selectingRow !== scope.row"> {{ scope.row.count }} шт.</div>
+                                        <div autofocus v-show="selectingRow !== scope.row"> {{ scope.row.count }} шт.
+                                        </div>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
@@ -115,6 +115,7 @@
                                     min-width="100"
                                     :index="7"
                                     sortable
+                                    style="border-right: 10px solid black"
                                 >
                                     <template slot-scope="scope">
 
@@ -126,17 +127,48 @@
                             </el-table>
                         </el-card>
 
-                        <el-button v-else style="margin: 0 auto;" @click="selectingWorkPlace">Выбрать рабочее место</el-button>
                     </el-form>
 
                 </el-card>
 
 
-
             </el-col>
 
+            <el-col :offset="1" :span="1">
+                <div class="outer">
+                    <el-card shadow="always"
+                             style="background: #ebeef5; border: 1px solid #a5a6ac;  float: left; width: 370px; height: 500px">
+                        <el-row style="height: 100%">
+                            <el-col :span="4"><i style="font-size: 30px" class="el-icon-s-tools"></i></el-col>
+                            <el-col :span="20">
+                                <h2> Рабочее место: </h2>
+                                <h4> {{ this.$store.getters.workplace.name }}</h4>
+                                <el-divider></el-divider>
+                                <h2> Пользователь: </h2>
+                                <h4> {{ this.$store.getters["auth/user"].name }}</h4>
+                                <el-divider></el-divider>
+
+                                <el-button v-if="this.$store.getters.workplace.is_opened" type="primary" plain
+                                           style="width: 100%">Закрыть смену
+                                </el-button>
+
+                                <div v-else>
+                                    <el-button type="primary" plain style="width: 100%">Открыть смену</el-button>
+                                    <el-button type="primary" plain
+                                               style="margin-left: 0; margin-top: 15px; width: 100%" @click="quitWorkplace">Выйти из рабочего
+                                        места
+                                    </el-button>
+                                </div>
+                            </el-col>
+                        </el-row>
+                    </el-card>
+
+
+                </div>
+            </el-col>
         </el-row>
-        <MedicamentSearch @back="onBack" v-if="choosing_state === 2"  :storage_id="workplace.storage.id"
+        <MedicamentSearch @back="onBack" v-if="choosing_state === 2"
+                          :storage_id="this.$store.getters.workplace.storage.id"
                           @selected="onSelectedNomenclatureForCashier"></MedicamentSearch>
         <el-drawer
 
@@ -154,9 +186,10 @@
         <el-dialog :visible.sync="cashInput_dialog" style="width: 1000px; margin: 0 auto">
             <CashInput @selected="changeSelected" :check_sum="rows_sum"></CashInput>
         </el-dialog>
-        <workplace-choose-component @back="onBack" v-if="choosing_state ===3"
-                                    @selected="onSelectedWorkPlace">
-        </workplace-choose-component>
+
+        <config-board @selected="choosing_state = 0;" v-if="choosing_state === 4">
+
+        </config-board>
     </div>
 </template>
 
@@ -184,6 +217,7 @@ export default {
     created() {
         this.item.date = Date.now();
 
+        if (this.$store.getters.workplace === null) this.choosing_state = 4;
     },
     computed: {
 
@@ -206,14 +240,19 @@ export default {
         }
     },
     methods: {
+        quitWorkplace(){
+
+            this.$store.dispatch("deleteWorkplace");
+            this.choosing_state = 4;
+        },
         theAction(event) {
             switch (event.srcKey) {
                 case 'del':
                     this.deleteSelected();
                     break;
                 case 'f2':
-                    if(this.workplace.id != null)
-                    this.selectingNomenclature();
+                    if (this.$store.getters.workplace.is_opened)
+                        this.selectingNomenclature();
                     break;
                 case 'change':
                 case 'change_rus':
@@ -269,18 +308,22 @@ export default {
         changeSelected(data) {
 
 
-            axios.post('/api/cashier/send', {items: this.item.getDataForCashier(),doc_sum : this.rows_sum, workplace_id: this.workplace.id, user_id: this.$store.getters["auth/user"].id}).then((response)=>{
+            axios.post('/api/cashier/send', {
+                items: this.item.getDataForCashier(),
+                doc_sum: this.rows_sum,
+                workplace_id: this.$store.getters.workplace.id,
+                user_id: this.$store.getters["auth/user"].id
+            }).then((response) => {
                 console.log(response.data);
                 this.change = data.change;
                 this.cashInput_dialog = false;
                 this.item.table_rows = [];
                 this.selectingRow = null;
-            }).catch(error =>{
+            }).catch(error => {
                 console.log("Произошла ошибка! " + error.message)
             })
 
         },
-
 
 
     }
@@ -288,5 +331,21 @@ export default {
 </script>
 
 <style scoped>
+.outer {
+    overflow: hidden;
+    position: fixed;
 
+
+    transition: .2s;
+}
+
+.outer:hover {
+    transform: translateX(-300px)
+
+}
+
+.inner {
+
+
+}
 </style>

@@ -85,10 +85,9 @@ export default {
 
             this.loaded = false;
 
-            //todo:костыль; поправить отправляемые данные
             axios.patch(`/api/nomenclatures/${this.item.id}`, this.item.getDataForServer()).then(response => {
 
-                //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
+
                 this.loaded = true;
                 this.$notify({
 

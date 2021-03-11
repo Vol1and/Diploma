@@ -71,39 +71,6 @@ const actions = {
             })
         });
     },
-    //updateIfChanged(context) {
-    //    return new Promise((resolve, reject) => {
-    //        //запрашивает данные с сервера
-    //        axios.get('/api/nomenclature/last-updated').then((response) => {
-//
-    //            if (context.getters.when_last_updated !== response.data) {
-//
-//
-    //                context.commit('setWhenLastUpdated', response.data);
-//
-    //                context.dispatch("update").then(() => {
-//
-    //                });
-    //            }
-//
-    //        }).catch((error) => {
-    //            //если не ок - асинхронный ответ с кодом ошибки
-    //            reject(error.response.data.message);
-    //        })
-    //        resolve();
-    //    });
-//
-    //},
-    //updateWhenLastUpdated(context) {
-    //    axios.get('/api/nomenclature/last_updated').then((response) => {
-    //        context.commit('setWhenLastUpdated', response.data);
-    //        //асинхронный ответ - все ок
-    //        resolve();
-    //    }).catch((error) => {
-    //        //если не ок - асинхронный ответ с кодом ошибки
-    //        reject(error.response.data.message);
-    //    })
-    //}
 }
 
 // мутации - СИНХРОННЫЕ операции которые меняют данные в хранилищах

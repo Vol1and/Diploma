@@ -74,8 +74,6 @@ export default {
 
 
             axios.post(`/api/characteristics/${this.nomenclature_id}/create`, this.item).then(response => {
-
-                //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
                 this.loaded = true;
                 this.$notify({
 

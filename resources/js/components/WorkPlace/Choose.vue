@@ -5,13 +5,7 @@
         <h1 v-shortkey="['del']" @shortkey="deleteSelected" class="text-center">Выбор рабочего места</h1>
 
         <el-row>
-            <el-col :span="8">
-                <router-link tag="button" class="el-button" :to="{name: 'workplaces.create'}" style=" float:left ">
-                    Добавить
-                </router-link>
-            </el-col>
-
-            <el-col :span="8" :offset="8">
+            <el-col :span="8" :offset="16">
                 <el-button icon="el-icon-refresh" @click="update" :disabled="is_reload" style="float:right;">
                     Обновить
                 </el-button>

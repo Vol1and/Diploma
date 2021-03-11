@@ -230,7 +230,7 @@ export default {
 
                     type: 'success',
                     title: 'Успешно!',
-                    message: `Реализация успешно проведена!`,
+                    message: `Списание успешно создано!`,
                 })
                 this.$router.push({name: 'cancellation.index'})
             }).catch((error) => {

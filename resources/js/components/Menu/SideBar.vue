@@ -3,6 +3,22 @@
     <div style=" z-index: 9; position: absolute; height: 100%"  @mouseover="isCollapse =false;" @mouseleave="isCollapse = true">
 
         <el-menu  style=" position: fixed; height: 100%" class="el-menu-vertical-demo" :collapse="isCollapse">
+            <el-menu-item   style="padding: 0">
+                <router-link class="print_class" :to="{name: 'dashboard'}">
+                    <el-menu-item index="7-1">
+                    <i class="el-icon-s-platform"></i>
+                    <span slot="title">Приборная панель</span>
+                    </el-menu-item>
+                </router-link>
+            </el-menu-item>
+            <el-menu-item  style="padding: 0">
+                <router-link class="print_class" :to="{name: 'cashier.index'}">
+                    <el-menu-item  index="6-1">
+                        <i class="el-icon-s-help"></i>
+                        <span slot="title">Рабочее место кассира</span>
+                    </el-menu-item>
+                </router-link>
+            </el-menu-item>
             <el-submenu  index="1">
                 <template slot="title" >
                     <i  class="el-icon-s-tools"></i>
@@ -92,7 +108,7 @@
             </el-submenu>
             <el-submenu index="3">
                 <template slot="title">
-                    <i class="el-icon-s-data"></i>
+                    <i class="el-icon-s-marketing"></i>
                     <span slot="title">Графики</span>
                 </template>
                 <el-menu-item-group>
@@ -109,6 +125,22 @@
 
                             <el-menu-item index="3-2">
                                 Продажи по пользователям
+                            </el-menu-item>
+                        </router-link>
+                    </el-menu-item>
+                </el-menu-item-group>
+            </el-submenu>
+            <el-submenu index="4">
+                <template slot="title">
+                    <i class="el-icon-s-data"></i>
+                    <span slot="title">Статистика</span>
+                </template>
+                <el-menu-item-group>
+                    <el-menu-item style="padding: 0">
+                        <router-link class="print_class" :to="{name: 'wares.index'}">
+
+                            <el-menu-item index="4-1">
+                                Остатки товаров
                             </el-menu-item>
                         </router-link>
                     </el-menu-item>

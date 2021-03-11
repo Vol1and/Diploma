@@ -1,5 +1,6 @@
 import Storage from "./Storage";
 import Agent from "./Agent";
+import cloneDeep from 'lodash/clonedeep';
 
 class FinanceDocument {
     constructor(id = -1,type ,is_set, agent = new Agent(), storage = new Storage(),
@@ -13,14 +14,14 @@ class FinanceDocument {
         this.date = date;
         this.comment = comment;
         this.doc_sum = doc_sum;
-        this.table_rows = _.cloneDeep(table_rows);
+        this.table_rows = cloneDeep(table_rows);
         this.income_sum = income_sum;
         this.created_at = created_at;
         this.updated_at = updated_at;
         this.deleted_at = deleted_at;
         this.deleted_rows = [];
         this.updated_rows = [];
-        this.base_rows = _.cloneDeep(table_rows);
+        this.base_rows = cloneDeep(table_rows);
     }
 
 

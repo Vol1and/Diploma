@@ -71,9 +71,6 @@ export default {
 
             console.log(this.item.getDataForServer())
             axios.post(`/api/nomenclatures`, this.item.getDataForServer()).then(response => {
-
-                //todo: на серверной части организовать выброс ошибок, на клиентской - обработку и вывод
-
                 this.$notify({
 
                     type: 'success',

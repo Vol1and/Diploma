@@ -38,7 +38,7 @@ export default {
     },
     computed: {
         change: function () {
-            return this.client_input - this.check_sum > 0 ? this.client_input - this.check_sum : "Недостаточно"
+            return this.client_input - this.check_sum >= 0 ? this.client_input - this.check_sum : "Недостаточно"
         }
     },
     mounted() {

@@ -1,18 +1,15 @@
 //здесь происходит первичная инициализация компонентов, которые используются  в vue
 
-import NormativeInfo from "../components/Menu/NormativeInfo";
 
 import IncomeCreate from "../components/Documents/Income/Create";
 import WaresIndex from "../components/Ware/Index"
 
-import Home from "../components/Home";
+import Home from "../components/Menu/Home";
 
 
 Vue.component('IncomeCreate', IncomeCreate.default);
 Vue.component('WaresIndex', WaresIndex.default);
 
-
-Vue.component('NormativeInfo', NormativeInfo.default);
 
 Vue.component('producer-choose-component',
     require('../components/Producer/Choose').default);
@@ -46,12 +43,12 @@ Vue.component('characteristic-create-component',
     require('../components/Characteristic/Create').default);
 
 Vue.component('navbar',
-    require('../components/NavBar').default);
+    require('../components/Menu/NavBar').default);
 
 Vue.component('SideBar',
-    require('../components/SideBar').default);
+    require('../components/Menu/SideBar').default);
 
-
+Vue.component('ConfigBoard', require('../components/CashierPlace/ConfigBoard').default)
 Vue.component('CharacteristicSearch', require('../components/CashierPlace/CharacteristicSearch').default)
 Vue.component('CashInput', require('../components/CashierPlace/CashInput').default)
 //Vue.component('CharacteristicForNomenclature',     CharacteristicForNomenclature.default);

@@ -171,19 +171,6 @@
                                         </div>
                                     </template>
                                 </el-table-column>
-                                <!--                                <el-table-column-->
-                                <!--                                    -->
-                                <!--                                    label="Сумма"-->
-                                <!--                                    min-width="100"-->
-                                <!--                                    :index="7"-->
-                                <!--                                    sortable-->
-                                <!--                                >-->
-                                <!--                                    <template slot-scope="scope">-->
-
-                                <!--                                        <div v-else> {{ scope.row.characteristic.characteristic_price.price * scope.row.count}} руб.-->
-                                <!--                                        </div>-->
-                                <!--                                    </template>-->
-                                <!--                                </el-table-column>-->
                             </el-table>
                         </el-card>
                     </el-form>
@@ -285,25 +272,16 @@ export default {
                 }
             ).catch((error) => {
                 console.log(error);
-                ///this.$router.push({name: 'income.index'});
             })
         },
         //сабмит - отправляет данные
         submit: function (state) {
             //не проходит валидацию - возвращаем
             if (!this.validateFields()) return;
-
-
             //блокируем кнопку submit
             this.loaded = false;
-
-
             //пост-запрос
             //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
-            console.log(this.item.getDataForUpdate());
-            console.log(this.item);
-
-
             axios.post(`/api/income/${this.item.id}`, {
                 item: this.item.getDataForUpdate(),
                 state: state
@@ -314,7 +292,7 @@ export default {
                 this.$notify({
                     type: 'success',
                     title: 'Успешно!',
-                    message: `Поступление с Id = ${this.item.id} успешно изменено!`,
+                    message: `Реализация с Id = ${this.item.id} успешно изменена!`,
                 })
             }).catch((error) => {
                 //ошибка - выводим

@@ -16,7 +16,7 @@ class StorageDocument extends Model
         'comment'
     ];
 
-    protected $with = ['source_storage'];
+    protected $with = ['source_storage', 'destination_storage'];
 
     public function source_storage()
     {
