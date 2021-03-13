@@ -16,7 +16,7 @@ class CreateWorkplacesTable extends Migration
         Schema::create('workplaces', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->boolean('is_opened')->default(false);
+            $table->bigInteger('active_user_id')->default(0);
             $table->dateTime('last_access')->nullable();
             $table->bigInteger('storage_id')->unsigned();
             $table->foreign('storage_id')->references('id')

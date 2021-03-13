@@ -10,7 +10,7 @@ class Workplace extends Model
         'name',
         'storage_id',
         'last_access',
-        'is_opened'
+        'active_user_id'
     ];
 
 

@@ -68,7 +68,7 @@ class WorkplaceController extends OriginController
     {
         $workplace = $this->workplacesRepository->find($request->input('workplace_id'));
 
-        $workplace->update(['is_opened' => true, 'last_access' => Carbon::now('Europe/Moscow')]);
+        $workplace->update(['active_user_id' => $request->input('user_id'), 'last_access' => Carbon::now('Europe/Moscow')]);
 
 
         return ['workplace' => $workplace];
@@ -79,7 +79,7 @@ class WorkplaceController extends OriginController
     {
         $workplace = $this->workplacesRepository->find($request->input('workplace_id'));
 
-        $workplace->update(['is_opened' => false, 'last_access' => Carbon::now('Europe/Moscow')]);
+        $workplace->update(['active_user_id' => 0, 'last_access' => Carbon::now('Europe/Moscow')]);
 
 
         return ['workplace' => $workplace];

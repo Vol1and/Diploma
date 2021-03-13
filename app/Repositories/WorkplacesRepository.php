@@ -26,7 +26,7 @@ class WorkplacesRepository extends BaseRepository
         $columns = [
             'id',
             'name',
-            'is_opened',
+            'active_user_id',
             'storage_id',
             'last_access'
         ];
