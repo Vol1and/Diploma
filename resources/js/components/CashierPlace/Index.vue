@@ -151,11 +151,13 @@
                                 <el-divider></el-divider>
 
                                 <el-button v-if="this.$store.getters.workplace.is_opened" type="primary" plain
-                                          @click="closeWorkplace"  style="width: 100%">Закрыть смену
+                                           @click="closeWorkplace" style="width: 100%">Закрыть смену
                                 </el-button>
 
                                 <div v-else>
-                                    <el-button @click="openWorkplace" type="primary" plain style="width: 100%">Открыть смену</el-button>
+                                    <el-button @click="openWorkplace" type="primary" plain style="width: 100%">Открыть
+                                        смену
+                                    </el-button>
                                     <el-button type="primary" plain
                                                style="margin-left: 0; margin-top: 15px; width: 100%"
                                                @click="quitWorkplace">Выйти из рабочего
@@ -329,22 +331,21 @@ export default {
         },
 
         openWorkplace() {
-            axios.get("/api/cashier/open", {
-                params: {
-                    user_id: this.$store.getters["auth/user"].id,
-                    workplace_id: this.$store.getters.workplace.id
-                }
+            axios.post("/api/cashier/open", {
+                user_id: this.$store.getters["auth/user"].id,
+                workplace_id: this.$store.getters.workplace.id
+
             }).then((response) => {
                     this.$store.dispatch("setWorkplace", response.data.workplace)
                 }
             )
         },
         closeWorkplace() {
-            axios.get("/api/cashier/close", {
-                params: {
-                    user_id: this.$store.getters["auth/user"].id,
-                    workplace_id: this.$store.getters.workplace.id
-                }
+            axios.post("/api/cashier/close", {
+
+                user_id: this.$store.getters["auth/user"].id,
+                workplace_id: this.$store.getters.workplace.id
+
             }).then((response) => {
                     this.$store.dispatch("setWorkplace", response.data.workplace)
                 }
