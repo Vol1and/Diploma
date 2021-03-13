@@ -7,8 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Workplace extends Model
 {
     protected $fillable = [
-    'name',
-    'storage_id'
+        'name',
+        'storage_id',
+        'last_access',
+        'is_opened'
     ];
 
 

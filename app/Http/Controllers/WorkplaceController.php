@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\DocumentCreateRequest;
 use App\Models\Workplace;
 use App\Repositories\WorkplacesRepository;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Symfony\Component\Console\Input\Input;
 
 class WorkplaceController extends OriginController
 {
@@ -62,15 +64,25 @@ class WorkplaceController extends OriginController
     }
 
 
-    public function open($id)
+    public function open(Request $request)
     {
-        //TODO: открытие смены
+        $workplace = $this->workplacesRepository->find($request->input('workplace_id'));
+
+        $workplace->update(['is_opened' => true, 'last_access' => Carbon::now('Europe/Moscow')]);
+
+
+        return ['workplace' => $workplace];
     }
 
 
-    public function close($id)
+    public function close(Request $request)
     {
-        //TODO: закрытие смены
+        $workplace = $this->workplacesRepository->find($request->input('workplace_id'));
+
+        $workplace->update(['is_opened' => false, 'last_access' => Carbon::now('Europe/Moscow')]);
+
+
+        return ['workplace' => $workplace];
     }
 
     /**
