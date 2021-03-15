@@ -164,6 +164,16 @@
                                         </div>
                                     </template>
                                 </el-table-column>
+                                <el-table-column
+                                    label="Сумма"
+                                    min-width="100"
+                                    :index="7"
+                                    sortable
+                                >
+                                    <template slot-scope="scope">
+                                        {{ scope.row.characteristic.characteristic_price.price * scope.row.count}} руб.
+                                    </template>
+                                </el-table-column>
                             </el-table>
                         </el-card>
                     </el-form>

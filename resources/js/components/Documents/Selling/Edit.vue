@@ -26,7 +26,8 @@
                                     Печать<i class="el-icon-arrow-down el-icon--right"></i>
                                 </el-button>
                                 <el-dropdown-menu slot="dropdown">
-                                    <el-dropdown-item><a  class="print_class" :href="'/report/selling-document/' +item.id+ '/1'" >Общий отчет</a></el-dropdown-item>
+                                    <el-dropdown-item><a  class="print_class" :href="'/report/selling-document/' +item.id+ '/main'" >Общий отчет</a></el-dropdown-item>
+                                    <el-dropdown-item><a  class="print_class" :href="'/report/selling-document/' +item.id+ '/check'" >Кассовый чек</a></el-dropdown-item>
                                 </el-dropdown-menu>
                             </el-dropdown>
 
@@ -169,6 +170,16 @@
                                         </el-input>
                                         <div v-else> {{ scope.row.characteristic.characteristic_price.price }} руб.
                                         </div>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    label="Сумма"
+                                    min-width="100"
+                                    :index="7"
+                                    sortable
+                                >
+                                    <template slot-scope="scope">
+                                       {{ scope.row.characteristic.characteristic_price.price * scope.row.count}} руб.
                                     </template>
                                 </el-table-column>
                             </el-table>

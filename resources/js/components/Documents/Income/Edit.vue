@@ -130,41 +130,6 @@
                                     sortable
                                 >
                                 </el-table-column>
-<!--                                <el-table-column-->
-<!--                                    prop="nomenclature.characteristic.serial"-->
-<!--                                    label="Серия"-->
-<!--                                    min-width="100"-->
-<!--                                    :index="4"-->
-<!--                                    sortable-->
-<!--                                >-->
-<!--                                    <template slot-scope="scope">-->
-
-<!--                                        <el-input v-if="selectingRow === scope.row"-->
-<!--                                                  v-model="scope.row.characteristic.serial" placeholder="">-->
-
-<!--                                        </el-input>-->
-<!--                                        <div v-else> {{ scope.row.characteristic.serial }}</div>-->
-<!--                                    </template>-->
-
-<!--                                </el-table-column>-->
-<!--                                <el-table-column-->
-<!--                                    prop="nomenclature.characteristic.expiry_date"-->
-<!--                                    label="Срок годности"-->
-<!--                                    min-width="100"-->
-<!--                                    :index="5"-->
-
-<!--                                    sortable-->
-<!--                                >-->
-<!--                                    <template slot-scope="scope">-->
-<!--                                        <el-date-picker v-if="selectingRow === scope.row"-->
-<!--                                                        style="width: 100%"-->
-<!--                                                        v-model="scope.row.characteristic.expiry_date"-->
-<!--                                                        format="yyyy/MM/dd"-->
-<!--                                                        value-format="yyyy/MM/dd"/>-->
-
-<!--                                        <div v-else> {{ scope.row.characteristic.expiry_date }}</div>-->
-<!--                                    </template>-->
-<!--                                </el-table-column>-->
                                 <el-table-column
                                     prop="nomenclature.characteristic.name"
                                     label="Характеристика"
@@ -214,6 +179,16 @@
                                             </el-input>
                                             <div v-else> {{ scope.row.income_price }} руб.</div>
                                         </div>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    label="Сумма"
+                                    min-width="100"
+                                    :index="7"
+                                    sortable
+                                >
+                                    <template slot-scope="scope">
+                                        {{  scope.row.income_price * scope.row.count}} руб.
                                     </template>
                                 </el-table-column>
                                 <el-table-column

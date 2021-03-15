@@ -1,39 +1,29 @@
-
 <script>
 import {Line} from 'vue-chartjs'
 import moment from "moment";
+import {uniq} from 'lodash'
+import mixin_charts from "../../code/mixins/mixin_charts";
 
 export default {
     extends: Line,
-    name: "TotalSales",
+    name: "StoragesSales",
+    mixins: [mixin_charts],
     mounted() {
         this.update();
     },
-    props:{
+    props: {
         start: String,
-        end :String
+        end: String
     },
     data() {
         return {
-
 
 
             dates: [],
             values: [],
             chart_data: {
                 labels: null,
-                datasets: [{
-                    label: 'Размер продаж за день',
-                    data: [],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)'
-
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)'
-                    ],
-                    borderWidth: 3
-                }]
+                datasets: []
             },
             options: {
                 responsive: true,
@@ -51,9 +41,10 @@ export default {
     },
     methods: {
         update() {
+            this.chart_data.datasets = [];
             this.dates = [];
             this.values = [];
-            axios.get("/api/charts/total-sales", {
+            axios.get("/api/charts/storages-sales", {
                 params: {
                     start: this.start === undefined ? null : moment(this.start).format("YYYY-MM-DD"),
                     end: this.end === undefined ? null : moment(this.end).format("YYYY-MM-DD")
@@ -64,22 +55,24 @@ export default {
 
                 this.dates = response.data.period;
 
+                response.data.storage_data.forEach(p => {
+                    let dataset = this.createNewColoredDataset();
 
-                this.dates.forEach(a => {
+                    dataset.label = `${p.storage.name}`;
 
-                    let res = response.data.data.filter(obj => {
-                        return obj.date === a
-                    })[0];
-                    this.chart_data.datasets[0].data.push(res != null ? res.summing : 0)
-                })
+                    this.dates.forEach(a => {
 
-               // response.data.data.forEach(p => {
-               //     this.dates.push(p.date);
-               //     this.values.push(p.summing)
-               // })
-                this.chart_data.labels = this.dates;
+                        let res = p.data.filter(obj => {
+                            return obj.date === a
+                        })[0];
+                        dataset.data.push(res != null ? res.summing : 0)
+                    })
+
+                    this.chart_data.datasets.push(dataset);
+                });
+
+                this.chart_data.labels = response.data.period;
                 this.renderChart(this.chart_data, this.options)
-
             })
         }
     }
