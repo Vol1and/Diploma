@@ -111,42 +111,6 @@
                                     sortable
                                 >
                                 </el-table-column>
-                                <!--  <el-table-column
-                                      prop="nomenclature.characteristic.serial"
-                                      label="Серия"
-                                      min-width="100"
-                                      :index="4"
-                                      sortable
-                                  >
-                                      <template slot-scope="scope">
-
-                                          <el-input v-if="selectingRow === scope.row"
-                                                    v-model="scope.row.characteristic.serial" placeholder="">
-
-                                          </el-input>
-                                          <div v-else> {{ scope.row.characteristic.serial }}</div>
-                                      </template>
-
-                                  </el-table-column>
-                                  <el-table-column
-                                      prop="nomenclature.characteristic.expiry_date"
-                                      label="Срок годности"
-                                      min-width="100"
-                                      :index="5"
-
-                                      sortable
-                                  >
-                                      <template slot-scope="scope">
-                                          <el-date-picker v-if="selectingRow === scope.row"
-                                                          style="width: 100%"
-                                                          v-model="scope.row.characteristic.expiry_date"
-                                                          format="yyyy/MM/dd"
-                                                          value-format="yyyy/MM/dd"/>
-
-                                          <div v-else> {{ scope.row.characteristic.expiry_date }}</div>
-                                      </template>
-                                  </el-table-column> -->
-
                                 <el-table-column
                                     prop="characteristic.name"
                                     label="Характеристика"
@@ -194,6 +158,16 @@
                                             <template slot="append">руб.</template>
                                         </el-input>
                                         <div v-else> {{ scope.row.income_price }} руб.</div>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    label="Сумма"
+                                    min-width="100"
+                                    :index="7"
+                                    sortable
+                                >
+                                    <template slot-scope="scope">
+                                        {{  scope.row.income_price * scope.row.count}} руб.
                                     </template>
                                 </el-table-column>
                                 <el-table-column
@@ -311,7 +285,6 @@ export default {
                 if (p.characteristic.serial === "") this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Серия\" должно быть заполнено`);
                 if (p.characteristic.expiry_date === "") this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Срок годности\" должно быть заполнено`);
                 if (p.income_price <= 0) this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Цена поступления\" должно быть больше 0`);
-                //if (p.sell_price <= 0) this.errors.push(`Строка № ${this.item.table_rows.indexOfp}. Поле \"Цена продажи\" должно быть больше 0`);
                 if (p.count <= 0) this.errors.push(`Строка № ${this.item.table_rows.indexOf(p) + 1}. Поле \"Количество\" должно быть больше 0`);
             })
             this.showErrors()

@@ -3,7 +3,6 @@
 //подробнее почитать можно https://ru.vuejs.org/v2/guide/mixins.html
 import StorageDocument from "../models/StorageDocument";
 import StorageDocumentTableRow from "../models/StorageDocumentTableRow";
-import FinanceDocumentTableRow from "../models/FinanceDocumentTableRow";
 
 export default {
 
@@ -20,7 +19,7 @@ export default {
             item: new StorageDocument(null, 3),
             //выбранная строка - в табличной части идет проверка - id_строки - id_selectingRow
             //если true, то строка переходит в editable
-            selectingRow: new StorageDocumentTableRow(),
+            selectingRow: new StorageDocumentTableRow(null),
             hover_row: null,
         };
     },
@@ -42,22 +41,26 @@ export default {
         ,
         rowHover(item) {
 
-            if (this.selectingRow.isEqual(item)) return;
             this.hover_row = item;
-            this.selectingRow = new FinanceDocumentTableRow();
+            if (this.selectingRow.isEqual(item)) return;
+
+            this.selectingRow = new StorageDocumentTableRow();
         },
         //удаление строки табличной части
         deleteSelected() {
 
+
+
+            this.selectingRow = new StorageDocumentTableRow();
             //если не выбрана ни одна строка - ничего не делаем
             if (this.hover_row == null) return;
 
             //удаляем строку из табличной части
             let index = this.item.table_rows.indexOf(this.hover_row);
             this.item.table_rows.splice(index, 1);
+
             //если удалена новая строка и она не сохранена на сервере - не заносим в deleted_rows
             if (this.hover_row.id == null) return;
-
 
             //вносим данные в deleted_rows
             this.item.deleted_rows.push(this.hover_row.id);

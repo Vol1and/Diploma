@@ -19,7 +19,7 @@ export default {
             item: new FinanceDocument(null, 1),
             //выбранная строка - в табличной части идет проверка - id_строки - id_selectingRow
             //если true, то строка переходит в editable
-            selectingRow: new FinanceDocumentTableRow(),
+            selectingRow: new FinanceDocumentTableRow(null),
             hover_row: null,
         };
     },
@@ -41,14 +41,8 @@ export default {
         ,
         rowHover(item) {
 
-
-            if(item == null){
-               this.hover_row = null;
-                return;
-            }
-            console.log(item)
-            if (this.selectingRow.isEqual(item)) return;
             this.hover_row = item;
+            if (!this.selectingRow.isEqual(item)) return;
             this.selectingRow = new FinanceDocumentTableRow();
         },
         //удаление строки табличной части
@@ -57,7 +51,6 @@ export default {
             this.selectingRow = new FinanceDocumentTableRow();
             //если не выбрана ни одна строка - ничего не делаем
             if (this.hover_row == null) return;
-
 
             //удаляем строку из табличной части
             let index = this.item.table_rows.indexOf(this.hover_row);
@@ -68,7 +61,6 @@ export default {
 
             //вносим данные в deleted_rows
             this.item.deleted_rows.push(this.hover_row.id);
-
 
         },
         //метод добавляет новую пустую строку в массив table_rows, и, соответственно в табличную часть формы
@@ -132,17 +124,3 @@ export default {
         }
     }
 }
-/*
-*
-* onSelectedNomenclature(data) {
-            if(this.buffer_row != null) {
-
-            }
-            let row = new FinanceDocumentTableRow();
-            row.nomenclature = data.nomenclature;
-            row.characteristic = data.nomenclature.characteristic;
-
-            this.item.table_rows.push(row);
-            this.choosing_state = 0;
-        }
-* */

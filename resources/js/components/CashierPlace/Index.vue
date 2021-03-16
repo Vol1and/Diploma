@@ -22,7 +22,7 @@
                             <el-divider content-position="left"><h2>Товары</h2></el-divider>
 
                             <el-row style="margin-bottom: 10px">
-                                <el-button :disabled="!this.$store.getters.workplace.is_opened"
+                                <el-button :disabled="!this.$store.getters.workplace.active_user_id > 0"
                                            @click="selectingNomenclature">Поиск товара [F2]
                                 </el-button>
                                 <el-button :disabled="rows_sum ===0 " @click="cashInput_dialog = true">Оплата [Alt +
@@ -150,7 +150,7 @@
                                 <h4> {{ this.$store.getters["auth/user"].name }}</h4>
                                 <el-divider></el-divider>
 
-                                <el-button v-if="this.$store.getters.workplace.is_opened" type="primary" plain
+                                <el-button v-if="this.$store.getters.workplace.active_user_id > 0 " type="primary" plain
                                            @click="closeWorkplace" style="width: 100%">Закрыть смену
                                 </el-button>
 
@@ -256,7 +256,7 @@ export default {
                     this.deleteSelected();
                     break;
                 case 'f2':
-                    if (this.$store.getters.workplace.is_opened)
+                    if (this.$store.getters.workplace.active_user_id > 0)
                         this.selectingNomenclature();
                     break;
                 case 'change':
@@ -336,7 +336,13 @@ export default {
                 workplace_id: this.$store.getters.workplace.id
 
             }).then((response) => {
-                    this.$store.dispatch("setWorkplace", response.data.workplace)
+                    console.log(response.data)
+                    this.$store.dispatch("setWorkplace", response.data);
+                    this.$notify({
+                        type: 'success',
+                        title: 'Открыто!',
+                        message: `Смена была успешно открыта!`,
+                    })
                 }
             )
         },
@@ -347,7 +353,12 @@ export default {
                 workplace_id: this.$store.getters.workplace.id
 
             }).then((response) => {
-                    this.$store.dispatch("setWorkplace", response.data.workplace)
+                    this.$store.dispatch("setWorkplace", response.data)
+                    this.$notify({
+                        type: 'success',
+                        title: 'Закрыто!',
+                        message: `Смена была успешно закрыта!`,
+                    })
                 }
             )
         }

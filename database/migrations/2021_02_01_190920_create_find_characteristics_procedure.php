@@ -132,7 +132,7 @@ class CreateFindCharacteristicsProcedure extends Migration
         END
         ";
         //получить роль пользователя
-        $procedure7 =
+        $procedure8 =
             "
         CREATE PROCEDURE `get_user_role`(user_id BIGINT)
         BEGIN
@@ -145,6 +145,27 @@ class CreateFindCharacteristicsProcedure extends Migration
         END
         ";
 
+        //процедура для формирования графика: ДАТА - СУММА ЧЕКОВ
+        $procedure7 =
+            /** @lang MySQL */
+            "
+       CREATE PROCEDURE `find_all_cash_by_storage`(date_start date, date_end date, storage_id int)
+        BEGIN
+            SELECT
+                DATE(`accounting_connections`.`date`) AS `date`,
+                SUM(`accounting_connections`.`change`) AS `summing`
+            FROM
+                ((`accounting_connections`
+                LEFT JOIN `workplace_document_connections` ON ((`accounting_connections`.`document_id` = `workplace_document_connections`.`document_id`))
+                JOIN `finance_documents` ON ((`accounting_connections`.`document_id` = `finance_documents`.`id`))))
+            WHERE `accounting_connections`.date >= date_start
+            AND `accounting_connections`.date <= date_end
+            AND `finance_documents`.`doc_type_id` = 2
+            AND `finance_documents`.`storage_id` = storage_id
+            GROUP BY CAST(`accounting_connections`.`date` AS DATE)
+            ORDER BY CAST(`accounting_connections`.`date` AS DATE);
+        END
+        ";
         // внедрение процедуры в db
         DB::unprepared("DROP procedure IF EXISTS find_characteristics_procedure");
         DB::unprepared($procedure);
@@ -159,6 +180,8 @@ class CreateFindCharacteristicsProcedure extends Migration
         DB::unprepared("DROP procedure IF EXISTS find_all_sales_by_nomenclature");
         DB::unprepared($procedure6);
         DB::unprepared("DROP procedure IF EXISTS get_user_role");
+        DB::unprepared($procedure8);
+        DB::unprepared("DROP procedure IF EXISTS find_all_cash_by_storage");
         DB::unprepared($procedure7);
 
     }

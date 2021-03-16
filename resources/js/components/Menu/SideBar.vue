@@ -128,6 +128,14 @@
                             </el-menu-item>
                         </router-link>
                     </el-menu-item>
+                    <el-menu-item style="padding: 0">
+                        <router-link class="print_class" :to="{name: 'charts.storages'}">
+
+                            <el-menu-item index="3-3">
+                                Продажи по складам
+                            </el-menu-item>
+                        </router-link>
+                    </el-menu-item>
                 </el-menu-item-group>
             </el-submenu>
             <el-submenu index="4">

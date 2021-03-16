@@ -42,7 +42,7 @@ Route::get('/income-document/filter', [App\Http\Controllers\FinanceDocumentContr
 
 //отдельные роуты для документов
 Route::get('/sellings', [App\Http\Controllers\FinanceDocumentController::class, 'getSellings']);
-Route::get('/selling', [App\Http\Controllers\FinanceDocumentController::class, 'incomeCreate']);
+Route::post('/selling', [App\Http\Controllers\FinanceDocumentController::class, 'incomeCreate']);
 
 Route::get('/transfers', [App\Http\Controllers\StorageDocumentController::class, 'indexOfTransfers']);
 Route::post('/transfer', [App\Http\Controllers\StorageDocumentController::class, 'transferCreate']);
@@ -64,6 +64,7 @@ Route::post('/cashier/send', [App\Http\Controllers\FinanceDocumentController::cl
 
 Route::get('/charts/total-sales', [App\Http\Controllers\ChartController::class, "total_sales"]);
 Route::get('/charts/users-sales', [App\Http\Controllers\ChartController::class, "cash_by_users"]);
+Route::get('/charts/storages-sales', [App\Http\Controllers\ChartController::class, "total_sales_by_storage"]);
 
 Route::post('/cashier/close', [\App\Http\Controllers\WorkplaceController::class, "close"]);
 Route::post('/cashier/open',  [\App\Http\Controllers\WorkplaceController::class, "open" ]);

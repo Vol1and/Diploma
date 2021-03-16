@@ -28,6 +28,15 @@ class StoragesRepository extends BaseRepository
 
     }
 
-
+    public function getStoragesId(){
+        $result = $this->startConditions()
+            ->select('id')
+            ->get();
+        $res = [];
+        foreach ($result as $id){
+            $res[] = $id->id;
+        }
+        return $res;
+    }
 
 }
