@@ -27,16 +27,19 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => 'admin panel access']);
 
         // create roles and assign existing permissions
-        $role1 = Role::create(['name' => 'user']);
+        $role1 = Role::create(['name' => 'pharmacist']);
         $role1->givePermissionTo('income access');
-        $role1->givePermissionTo('outcome access');
+        $role1->givePermissionTo('income create');
+        $role1->givePermissionTo('income edit');
         $role1->givePermissionTo('wares access');
 
         // create roles and assign existing permissions
-        $role2 = Role::create(['name' => 'pharmacist']);
+        $role2 = Role::create(['name' => 'manager']);
         $role2->givePermissionTo('income access');
         $role2->givePermissionTo('income create');
         $role2->givePermissionTo('income edit');
+        $role2->givePermissionTo('outcome access');
+        $role2->givePermissionTo('outcome create');
         $role2->givePermissionTo('wares access');
 
         $role3 = Role::create(['name' => 'admin']);
@@ -49,16 +52,6 @@ class RolesAndPermissionsSeeder extends Seeder
         $role3->givePermissionTo('wares access');
         $role3->givePermissionTo('admin panel access');
 
-        // $role4 = Role::create(['name' => 'super-admin']);
-        // gets all permissions via Gate::before rule; see AuthServiceProvider
-
-        // create demo users
-        $user = User::factory()->create([
-            'name' => 'User',
-            'email' => 'user@example.com',
-            'password' => bcrypt('12345678'),
-        ]);
-        $user->assignRole($role1);
 
         // create demo users
         $user = User::factory()->create([
@@ -66,7 +59,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'email' => 'pharmacist1@example.com',
             'password' => bcrypt('12345678'),
         ]);
-        $user->assignRole($role2);
+        $user->assignRole($role1);
 
         // create demo users
         $user = User::factory()->create([
@@ -74,12 +67,20 @@ class RolesAndPermissionsSeeder extends Seeder
             'email' => 'pharmacist2@example.com',
             'password' => bcrypt('12345678'),
         ]);
-        $user->assignRole($role2);
+        $user->assignRole($role1);
 
         // create demo users
         $user = User::factory()->create([
             'name' => 'Pharmacist3',
             'email' => 'pharmacist3@example.com',
+            'password' => bcrypt('12345678'),
+        ]);
+        $user->assignRole($role1);
+
+        // create demo users
+        $user = User::factory()->create([
+            'name' => 'Manager',
+            'email' => 'manager@example.com',
             'password' => bcrypt('12345678'),
         ]);
         $user->assignRole($role2);
@@ -90,12 +91,5 @@ class RolesAndPermissionsSeeder extends Seeder
             'password' => bcrypt('12345678'),
         ]);
         $user->assignRole($role3);
-
-        // $user = User::factory()->create([
-        //     'name' => 'Super-Admin',
-        //     'email' => 'superadmin@example.com',
-        //     'password' => bcrypt('12345678'),
-        // ]);
-        // $user->assignRole($role4);
     }
 }
