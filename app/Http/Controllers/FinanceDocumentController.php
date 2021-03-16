@@ -222,14 +222,26 @@ class FinanceDocumentController extends OriginController
 
         return $pdf->download('Поступление_№_'.$item->id.'.pdf');
     }
+
     public function sellingReports( $id, $mode){
 
-        //return true;
-        $item = $this->financeDocumentsRepository->find($id);
-        $pdf = PDF::loadView('pdfs.documents.selling.main',
-            ['item' => $item]);
+        switch ($mode){
+            case "main":
+                $item = $this->financeDocumentsRepository->find($id);
+                $pdf = PDF::loadView('pdfs.documents.selling.main',
+                    ['item' => $item]);
 
-        return $pdf->download('Реализация_№_'.$item->id.'.pdf');
+                return $pdf->download('Реализация_№_'.$item->id.'.pdf');
+            case "check":
+                $item = $this->financeDocumentsRepository->find($id);
+                $pdf = PDF::loadView('pdfs.documents.selling.check',
+                    ['item' => $item]);
+
+                return $pdf->download('Чек №_'.$item->id.'.pdf');
+
+        }
+        //return true;
+
     }
 }
 

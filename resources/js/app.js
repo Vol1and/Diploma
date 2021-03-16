@@ -61,7 +61,11 @@ const app = new Vue({
 router.beforeEach((to, from, next) => {
     if (to.matched.some((record) => record.meta.requiresAuth)) {
         if (isAuthenticated()) {
+            if(app.$store.getters["auth/role"] >= to.meta.access_rate)
             next()
+            else {
+                next({name: "home"})
+            }
         } else {
             next({name: "login"}) // back to safety route //
         }

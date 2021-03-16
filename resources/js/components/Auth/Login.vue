@@ -12,7 +12,7 @@
                     </el-form-item>
 
                     <el-form-item label="Пароль">
-                        <el-input type="text" v-model="item.password"></el-input>
+                        <el-input type="password"  v-model="item.password"></el-input>
                     </el-form-item>
 
 

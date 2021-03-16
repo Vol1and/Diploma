@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Auth;
+use DB;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -52,9 +53,12 @@ class LoginController extends Controller
             return $response;
         }
         $user = Auth::user();
+        $role = DB::select(
+        /** @lang MySQL */ "call diploma.get_user_role(". $user->id .")");
 
         return response()->json([
-            'user'     =>  $user
+            'user' => $user,
+            'role' =>$role[0]->role_id
         ]);
     }
 
@@ -95,7 +99,7 @@ class LoginController extends Controller
      *    }
      * }
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      *
      * @throws \Illuminate\Validation\ValidationException

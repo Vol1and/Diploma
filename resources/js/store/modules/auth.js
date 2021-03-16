@@ -4,19 +4,24 @@ export default {
   namespaced: true,
 
   state: {
-    userData: null
+    userData: null,
+      userRole : null
   },
 
   getters: {
     user: state => state.userData,
 
+      role : state => state.userRole,
       isAuthenticated: state => state.userData != null
   },
 
   mutations: {
     setUserData(state, user) {
       state.userData = user;
-    }
+    },
+      setUserRole(state, role){
+        state.userRole = role;
+      }
   },
 
   actions: {
@@ -36,21 +41,15 @@ export default {
         .post("/api/login", data)
         .then(response => {
           commit("setUserData", response.data.user);
-          localStorage.setItem("authToken", response.data.token);
-        });
-    },
-    sendRegisterRequest({ commit }, data) {
-      commit("setErrors", {}, { root: true });
-      return axios
-        .post("/api/register", data)
-        .then(response => {
-          commit("setUserData", response.data.user);
+            commit("setUserRole", response.data.role);
           localStorage.setItem("authToken", response.data.token);
         });
     },
     sendLogoutRequest({ commit }) {
       axios.post("/api/logout").then(() => {
         commit("setUserData", null);
+          commit("setUserRole", null);
+          this.$store.dispatch("deleteWorkplace");
         localStorage.removeItem("authToken");
       });
     },

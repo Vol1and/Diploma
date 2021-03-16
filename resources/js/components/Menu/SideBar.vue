@@ -1,10 +1,10 @@
 <template>
 
-    <div style=" z-index: 9; position: absolute; height: 100%"  @mouseover="isCollapse =false;" @mouseleave="isCollapse = true">
+    <div v-if="$store.getters['auth/isAuthenticated']" style=" z-index: 9; position: absolute; height: 100%"  @mouseover="isCollapse =false;" @mouseleave="isCollapse = true">
 
         <el-menu  style=" position: fixed; height: 100%" class="el-menu-vertical-demo" :collapse="isCollapse">
-            <el-menu-item   style="padding: 0">
-                <router-link class="print_class" :to="{name: 'dashboard'}">
+            <el-menu-item v-if="$store.getters['auth/role'] > 2"  style="padding: 0">
+                <router-link  class="print_class" :to="{name: 'dashboard'}">
                     <el-menu-item index="7-1">
                     <i class="el-icon-s-platform"></i>
                     <span slot="title">Приборная панель</span>
@@ -19,20 +19,20 @@
                     </el-menu-item>
                 </router-link>
             </el-menu-item>
-            <el-submenu  index="1">
+            <el-submenu v-if="$store.getters['auth/role'] > 1"   index="1">
                 <template slot="title" >
                     <i  class="el-icon-s-tools"></i>
                     <span style="padding-right: 40px" slot="title">Справочная информация</span>
                 </template>
-                <el-menu-item-group>
+                <el-menu-item-group v-if="$store.getters['auth/role'] > 1">
                     <el-menu-item style="padding: 0">
                         <router-link class="print_class" :to="{name: 'producers.index'}">
                             <el-menu-item index="1-1"> Производители
                             </el-menu-item>
                         </router-link>
                     </el-menu-item>
-                    <el-menu-item style="padding: 0">
-                        <router-link class="print_class" :to="{name: 'workplaces.index'}">
+                    <el-menu-item  v-if="$store.getters['auth/role'] > 2" style="padding: 0">
+                        <router-link  class="print_class" :to="{name: 'workplaces.index'}">
                             <el-menu-item index="1-2">Рабочие места</el-menu-item>
                         </router-link>
                     </el-menu-item>
@@ -48,7 +48,7 @@
                             </el-menu-item>
                         </router-link>
                     </el-menu-item>
-                    <el-menu-item style="padding: 0">
+                    <el-menu-item v-if="$store.getters['auth/role'] > 2"  style="padding: 0">
                         <router-link class="print_class" :to="{name: 'pricetypes.index'}">
 
                             <el-menu-item index="1-5">
@@ -56,7 +56,7 @@
                             </el-menu-item>
                         </router-link>
                     </el-menu-item>
-                    <el-menu-item style="padding: 0">
+                    <el-menu-item v-if="$store.getters['auth/role'] > 2" style="padding: 0">
                         <router-link class="print_class" :to="{name: 'storages.index'}">
 
                             <el-menu-item index="1-6">
@@ -66,7 +66,7 @@
                     </el-menu-item>
                 </el-menu-item-group>
             </el-submenu>
-            <el-submenu index="2">
+            <el-submenu index="2" v-if="$store.getters['auth/role'] > 1">
                 <template slot="title">
                     <i class="el-icon-document"></i>
                     <span slot="title">Документы</span>
@@ -106,7 +106,7 @@
                     </el-menu-item>
                 </el-menu-item-group>
             </el-submenu>
-            <el-submenu index="3">
+            <el-submenu index="3" v-if="$store.getters['auth/role'] > 2">
                 <template slot="title">
                     <i class="el-icon-s-marketing"></i>
                     <span slot="title">Графики</span>
@@ -166,6 +166,9 @@ export default {
         return {
             isCollapse: true
         };
+    },
+    created() {
+
     },
     methods: {},
 

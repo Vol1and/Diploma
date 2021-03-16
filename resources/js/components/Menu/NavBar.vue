@@ -42,9 +42,11 @@ export default {
 
     },
     created() {
-        if (this.$route.meta.requiresAuth && !this.$store.getters["auth/isAuthenticated"] ) {
+        if (this.$route.meta.requiresAuth && !this.$store.getters["auth/isAuthenticated"]) {
             this.$router.push({name: "login"})
         }
+        if (app.$store.getters["auth/role"] < this.$route.meta.access_rate) this.$router.push({name: "home"})
+
     }
 }
 </script>
