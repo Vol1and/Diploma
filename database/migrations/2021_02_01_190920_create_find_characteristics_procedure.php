@@ -71,7 +71,7 @@ class CreateFindCharacteristicsProcedure extends Migration
                 ((`accounting_connections`
                 LEFT JOIN `workplace_document_connections` ON ((`accounting_connections`.`document_id` = `workplace_document_connections`.`document_id`))))
             WHERE `accounting_connections`.date >= date_start
-            AND `accounting_connections`.date <= date_end;
+            AND `accounting_connections`.date <= ((SELECT DATE_ADD(date_end, INTERVAL 24 HOUR)));
         END
         ";
 
@@ -88,7 +88,7 @@ class CreateFindCharacteristicsProcedure extends Migration
                 LEFT JOIN `workplace_document_connections` ON ((`accounting_connections`.`document_id` = `workplace_document_connections`.`document_id`))
                 JOIN `finance_documents` ON ((`accounting_connections`.`document_id` = `finance_documents`.`id`))))
             WHERE `accounting_connections`.date >= date_start
-            AND `accounting_connections`.date <= date_end
+            AND `accounting_connections`.date <= ((SELECT DATE_ADD(date_end, INTERVAL 24 HOUR)))
             AND `finance_documents`.`doc_type_id` = 2
             GROUP BY CAST(`accounting_connections`.`date` AS DATE)
             ORDER BY CAST(`accounting_connections`.`date` AS DATE);
@@ -108,7 +108,7 @@ class CreateFindCharacteristicsProcedure extends Migration
                 JOIN `users` ON ((`workplace_document_connections`.`user_id` = `users`.`id`))
                 LEFT JOIN `accounting_connections` ON ((`workplace_document_connections`.`document_id` = `accounting_connections`.`document_id`))))
             WHERE `accounting_connections`.date >= date_start
-            AND `accounting_connections`.date <= date_end
+            AND `accounting_connections`.date <= ((SELECT DATE_ADD(date_end, INTERVAL 24 HOUR)))
             GROUP BY `users`.`name`;
         END
         ";
@@ -124,7 +124,7 @@ class CreateFindCharacteristicsProcedure extends Migration
                 ((`ware_connections`
                 JOIN `characteristics` ON ((`ware_connections`.`characteristic_id` = `characteristics`.`id`))))
             WHERE `ware_connections`.created_at >= date_start
-            AND `ware_connections`.created_at <= date_end
+            AND `ware_connections`.created_at <= ((SELECT DATE_ADD(date_end, INTERVAL 24 HOUR)))
             AND `ware_connections`.`change` < 0
             AND `characteristics`.`nomenclature_id` = nomenclature_id
             GROUP BY CAST(`ware_connections`.`created_at` AS DATE)
@@ -158,13 +158,32 @@ class CreateFindCharacteristicsProcedure extends Migration
                 LEFT JOIN `workplace_document_connections` ON ((`accounting_connections`.`document_id` = `workplace_document_connections`.`document_id`))
                 JOIN `finance_documents` ON ((`accounting_connections`.`document_id` = `finance_documents`.`id`))))
             WHERE `accounting_connections`.date >= date_start
-            AND `accounting_connections`.date <= date_end
+            AND `accounting_connections`.date <= ((SELECT DATE_ADD(date_end, INTERVAL 24 HOUR)))
             AND `finance_documents`.`doc_type_id` = 2
             AND `finance_documents`.`storage_id` = storage_id
             GROUP BY CAST(`accounting_connections`.`date` AS DATE)
             ORDER BY CAST(`accounting_connections`.`date` AS DATE);
         END
         ";
+
+
+
+        //процедура для формирования графика: Период - Кол-ВО ЧЕКОВ
+        $procedure9 =
+            "
+        CREATE PROCEDURE `find_all_sales_by_period`(date_start date, date_end date)
+        BEGIN
+            SELECT
+                COUNT(`accounting_connections`.`change`) AS `counting`
+            FROM
+                ((`accounting_connections`
+                JOIN `finance_documents` ON ((`accounting_connections`.`document_id` = `finance_documents`.`id`))))
+            WHERE `accounting_connections`.date >= date_start
+            AND `accounting_connections`.date <= ((SELECT DATE_ADD(date_end, INTERVAL 24 HOUR)))
+            AND `finance_documents`.`doc_type_id` = 2;
+        END
+        ";
+
         // внедрение процедуры в db
         DB::unprepared("DROP procedure IF EXISTS find_characteristics_procedure");
         DB::unprepared($procedure);
@@ -182,6 +201,8 @@ class CreateFindCharacteristicsProcedure extends Migration
         DB::unprepared($procedure8);
         DB::unprepared("DROP procedure IF EXISTS find_all_cash_by_storage");
         DB::unprepared($procedure7);
+        DB::unprepared("DROP procedure IF EXISTS find_all_sales_by_period");
+        DB::unprepared($procedure9);
 
     }
 
@@ -200,5 +221,6 @@ class CreateFindCharacteristicsProcedure extends Migration
         Schema::dropIfExists('find_all_sales_by_nomenclature');
         Schema::dropIfExists('get_user_role');
         Schema::dropIfExists('find_all_cash_by_storage');
+        Schema::dropIfExists('find_all_sales_by_period');
     }
 }
