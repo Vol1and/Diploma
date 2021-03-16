@@ -42,4 +42,11 @@ class AccountingConnectionsRepository extends BaseRepository
             'CALL find_all_cash(' . $date_start . ', '.$date_end.')'
         );
     }
+
+    public function findAllSalesByPeriod($date_start, $date_end)
+    {
+        return DB::select(
+            'CALL find_all_sales_by_period(' . $date_start . ', '.$date_end.')'
+        );
+    }
 }

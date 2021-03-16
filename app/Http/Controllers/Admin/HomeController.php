@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\OriginController;
+use App\Repositories\AccountingConnectionsRepository;
 use App\Repositories\AgentsRepository;
 use App\Repositories\NomenclatureRepository;
 use App\Repositories\WorkplacesRepository;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class HomeController extends OriginController
@@ -13,6 +15,7 @@ class HomeController extends OriginController
 
     private $nomenclatureRepository;
     private $workplacesRepository;
+    private $accountingConnectionsRepository;
     private $agentsRepository;
 
 
@@ -22,6 +25,7 @@ class HomeController extends OriginController
         $this->nomenclatureRepository = app(NomenclatureRepository::class);
         $this->agentsRepository = app(AgentsRepository::class);
         $this->workplacesRepository = app(WorkplacesRepository::class);
+        $this->accountingConnectionsRepository = app(AccountingConnectionsRepository::class);
     }
 
     public function index(){
@@ -35,6 +39,13 @@ class HomeController extends OriginController
     }
 
     public function forDashboard(){
+
+        // сколько на данный момент открытых смен у пользователей
         $active_user_count = $this->workplacesRepository->how_many_active();
+
+        // кол-во чеков за последние 7 дней
+        $last_week_sales_count = $this
+            ->accountingConnectionsRepository
+            ->findAllSalesByPeriod(Carbon::now()->subDays(7)->toDateString(),Carbon::now()->toDateString());
     }
 }
