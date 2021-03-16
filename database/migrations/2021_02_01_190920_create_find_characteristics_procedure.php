@@ -131,6 +131,19 @@ class CreateFindCharacteristicsProcedure extends Migration
             ORDER BY CAST(`ware_connections`.`created_at` AS DATE);
         END
         ";
+        //получить роль пользователя
+        $procedure7 =
+            "
+        CREATE PROCEDURE `get_user_role`(user_id BIGINT)
+        BEGIN
+            SELECT
+                `role_id`
+            FROM
+                `model_has_roles`
+            WHERE `model_has_roles`.model_id = user_id
+            LIMIT 1;
+        END
+        ";
 
         // внедрение процедуры в db
         DB::unprepared("DROP procedure IF EXISTS find_characteristics_procedure");
@@ -145,6 +158,8 @@ class CreateFindCharacteristicsProcedure extends Migration
         DB::unprepared($procedure5);
         DB::unprepared("DROP procedure IF EXISTS find_all_sales_by_nomenclature");
         DB::unprepared($procedure6);
+        DB::unprepared("DROP procedure IF EXISTS get_user_role");
+        DB::unprepared($procedure7);
 
     }
 
@@ -161,5 +176,6 @@ class CreateFindCharacteristicsProcedure extends Migration
         Schema::dropIfExists('find_all_cash');
         Schema::dropIfExists('find_all_cash_by_users');
         Schema::dropIfExists('find_all_sales_by_nomenclature');
+        Schema::dropIfExists('get_user_role');
     }
 }

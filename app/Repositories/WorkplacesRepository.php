@@ -36,4 +36,9 @@ class WorkplacesRepository extends BaseRepository
             ->with(['storage'])
             ->get()->first();
     }
+
+    public function how_many_active()
+    {
+        return $this->startConditions()->where('active_user_id','>', 0)->count();
+    }
 }
