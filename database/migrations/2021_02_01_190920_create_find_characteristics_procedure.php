@@ -147,7 +147,6 @@ class CreateFindCharacteristicsProcedure extends Migration
 
         //процедура для формирования графика: ДАТА - СУММА ЧЕКОВ
         $procedure7 =
-            /** @lang MySQL */
             "
        CREATE PROCEDURE `find_all_cash_by_storage`(date_start date, date_end date, storage_id int)
         BEGIN
@@ -200,5 +199,6 @@ class CreateFindCharacteristicsProcedure extends Migration
         Schema::dropIfExists('find_all_cash_by_users');
         Schema::dropIfExists('find_all_sales_by_nomenclature');
         Schema::dropIfExists('get_user_role');
+        Schema::dropIfExists('find_all_cash_by_storage');
     }
 }
