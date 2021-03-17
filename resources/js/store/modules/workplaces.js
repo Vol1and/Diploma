@@ -27,8 +27,9 @@ const actions = {
             //запрашивает данные с сервера
             axios.get('/api/workplaces').then((response) => {
                 let result = [];
+                console.log(response.data);
                 //оборачиваем каждый элемент пришедших данных в модель модуля
-                response.data.forEach(item => result.push(new WorkPlace(item.id, item.name, new Storage(item.storage.id, item.storage.name), item.last_access, item.is_opened, item.created_at, item.updated_at, item.deleted_at)))
+                response.data.forEach(item => result.push(new WorkPlace(item.id, item.name, new Storage(item.storage.id, item.storage.name), item.last_access, item.active_user, item.created_at, item.updated_at, item.deleted_at)))
 
                 //дергаем мутатор
                 context.commit('setItems', result);

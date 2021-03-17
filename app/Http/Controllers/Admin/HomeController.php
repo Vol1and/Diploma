@@ -8,7 +8,6 @@ use App\Repositories\AgentsRepository;
 use App\Repositories\NomenclatureRepository;
 use App\Repositories\WorkplacesRepository;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 
 class HomeController extends OriginController
 {
@@ -47,5 +46,7 @@ class HomeController extends OriginController
         $last_week_sales_count = $this
             ->accountingConnectionsRepository
             ->findAllSalesByPeriod(Carbon::now()->subDays(7)->toDateString(),Carbon::now()->toDateString());
+
+        return ['opened_workplace_count' => $active_user_count, 'last_week_sales_count' => $last_week_sales_count[0]->counting];
     }
 }

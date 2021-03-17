@@ -48,15 +48,15 @@
             >
             </el-table-column>
             <el-table-column
-                prop="is_opened"
-                label="Открыт"
+                prop=""
+                label="Пользователь/Открыт"
 
             >
                 <template slot-scope="scope">
 
-                    <div  v-if="scope.row.is_opened">Да</div>
+                    <div  v-if="scope.row.active_user != null">{{scope.row.active_user.name}}</div>
 
-                    <div v-else> Нет</div>
+                    <div v-else> Не открыта</div>
                 </template>
             </el-table-column>
         </el-table>

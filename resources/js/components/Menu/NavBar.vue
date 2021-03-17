@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+    <nav class="navbar nanav navbar-expand-md navbar-light bg-white shadow-sm">
 
             <router-link class="navbar-brand" :to="{name: 'home.index'}">
                 Diploma
@@ -45,7 +45,7 @@ export default {
         if (this.$route.meta.requiresAuth && !this.$store.getters["auth/isAuthenticated"]) {
             this.$router.push({name: "login"})
         }
-        if (app.$store.getters["auth/role"] < this.$route.meta.access_rate) this.$router.push({name: "home"})
+        if (this.$store.getters["auth/role"] < this.$route.meta.access_rate) this.$router.push({name: "home"})
 
     }
 }
@@ -53,4 +53,14 @@ export default {
 
 <style scoped>
 
+.nanav{
+
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 111;
+    background: #f3faff !important;
+
+
+}
 </style>

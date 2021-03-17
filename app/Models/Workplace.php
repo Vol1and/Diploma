@@ -14,10 +14,16 @@ class Workplace extends Model
     ];
 
 
+    protected $appends = ['active_user'];
+
     protected $with = ['storage'];
 
     public function storage()
     {
         return $this->belongsTo(Storage::class);
+    }
+
+    public function getActiveUserAttribute(){
+        return User::find($this->active_user_id);
     }
 }

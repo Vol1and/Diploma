@@ -49,7 +49,7 @@ import WaresIndex from "../components/Ware/Index"
 import TotalSalesContainer from "../components/Charts/TotalSalesContainer";
 import UsersSalesContainer from "../components/Charts/UsersSalesContainer"
 import StoragesSalesContainer from "../components/Charts/StoragesSalesContainer";
-
+import AgentsCashContainer from "../components/Charts/AgentsCashContainer";
 import Home from "../components/Menu/Home";
 import Login from "../components/Auth/Login"
 
@@ -132,6 +132,7 @@ const routes = [
     {path: '/charts/total-sales', name: "charts.total", component: TotalSalesContainer, meta: {requiresAuth: true, access_rate: 3}},
     {path: '/charts/users-cash', name: "charts.users", component: UsersSalesContainer, meta: {requiresAuth: true, access_rate: 3}},
     {path: '/charts/storages-sales', name: "charts.storages", component: StoragesSalesContainer, meta: {requiresAuth: true, access_rate: 3}},
+    {path: '/charts/agents-cash', name: "charts.agents", component: AgentsCashContainer, meta: {requiresAuth: true, access_rate: 3}},
 
 
     {path: '/dashboard', name: 'dashboard', component: DashBoard, meta: {requiresAuth: true, access_rate: 3}},

@@ -252,7 +252,7 @@ export default {
                     title: 'Успешно!',
                     message: `Перемещение успешно добавлено!`,
                 })
-                this.$router.push({name: 'cancellation.index'})
+                this.$router.push({name: 'transfers.index'})
             }).catch((error) => {
                 //ошибка - выводим
                 this.$notify.error({

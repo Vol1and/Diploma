@@ -82,9 +82,10 @@
 </head>
 <body>
     <div id="app">
+        <navbar></navbar>
 
-        <main>
-            <navbar></navbar>
+        <main style="margin-top: 53px">
+
             @yield('content')
         </main>
     </div>

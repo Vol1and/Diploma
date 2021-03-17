@@ -1,6 +1,6 @@
 <template>
 
-    <div v-if="$store.getters['auth/isAuthenticated']" style=" z-index: 9; position: absolute; height: 100%"  @mouseover="isCollapse =false;" @mouseleave="isCollapse = true">
+    <div v-if="$store.getters['auth/isAuthenticated']" style=" z-index: 99; position: absolute; height: 100%"  @mouseover="isCollapse =false;" @mouseleave="isCollapse = true">
 
         <el-menu  style=" position: fixed; height: 100%" class="el-menu-vertical-demo" :collapse="isCollapse">
             <el-menu-item v-if="$store.getters['auth/role'] > 2"  style="padding: 0">
@@ -133,6 +133,14 @@
 
                             <el-menu-item index="3-3">
                                 Продажи по складам
+                            </el-menu-item>
+                        </router-link>
+                    </el-menu-item>
+                    <el-menu-item style="padding: 0">
+                        <router-link class="print_class" :to="{name: 'charts.agents'}">
+
+                            <el-menu-item index="3-4">
+                                Статистика контрагентов
                             </el-menu-item>
                         </router-link>
                     </el-menu-item>

@@ -5,71 +5,108 @@
             <div class="container-fluid">
                 <!-- Small boxes (Stat box) -->
                 <el-row>
+                    <el-col :span="5"> <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3>{{opened_workplace_count}}</h3>
 
-                    <el-col :span="5">
-                        <!-- small box -->
-                        <div class="small-box bg-info">
-                            <div class="inner">
-                                <h3></h3>
-
-                                <p>Кол-во номенклатуры:</p>
-                            </div>
-                            <div class="icon">
-                                <i class="ion ion-bag"></i>
-                            </div>
-                            <div href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></div>
+                            <p>Открытых рабочих смен</p>
                         </div>
-
-                        <!-- ./col -->
-
-                        <div class="small-box bg-success">
-                            <div class="inner">
-                                <h3>53<sup style="font-size: 20px">%</sup></h3>
-
-                                <p>Bounce Rate</p>
-                            </div>
-                            <div class="icon">
-                                <i class="ion ion-stats-bars"></i>
-                            </div>
-                            <div href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></div>
+                        <div class="icon">
+                            <i class="ion ion-bag"></i>
                         </div>
+                        <div href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></div>
+                    </div></el-col>
+                    <el-col :offset="1" :span="5">  <div class="small-box bg-success">
+                        <div class="inner">
+                            <h3>{{last_week_sales_count}}</h3>
 
-
-                        <!-- small box -->
-                        <div class="small-box bg-warning">
-                            <div class="inner">
-                                <h3></h3>
-
-                                <p>Всего агентов:</p>
-                            </div>
-                            <div class="icon">
-                                <i class="ion ion-person-add"></i>
-                            </div>
-                            <div href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></div>
+                            <p>Продаж за последние 7 дней</p>
                         </div>
-
-                        <!-- small box -->
-                        <div class="small-box bg-danger">
-                            <div class="inner">
-                                <h3>65</h3>
-
-                                <p>Unique Visitors</p>
-                            </div>
-                            <div class="icon">
-                                <i class="ion ion-pie-graph"></i>
-                            </div>
-                            <div href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
                         </div>
+                        <div href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></div>
+                    </div></el-col>
+                    <el-col :offset="1" :span="5"> <div class="small-box bg-warning">
+                        <div class="inner">
+                            <h3>33</h3>
 
-                    </el-col>
-                    <el-col :offset="1" :span="10">
-                        <el-card style="margin-right: 30px" shadow="hover" class="box-card">
+                            <p>Всего агентов:</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-person-add"></i>
+                        </div>
+                        <div href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></div>
+                    </div></el-col>
+                    <el-col :offset="1" :span="5"><div class="small-box bg-danger">
+                        <div class="inner">
+                            <h3>65</h3>
+
+                            <p>Unique Visitors</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-pie-graph"></i>
+                        </div>
+                        <div href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></div>
+                    </div></el-col>
+
+                </el-row>
+                <el-row>
+                    <el-col :span="11">
+                        <el-card  shadow="hover" class="box-card">
                             <div slot="header" class="clearfix">
                                 <span><h4>График продаж за текущий месяц</h4></span>
                             </div>
+
                             <total-sales :start="start_date" :end="end_date"></total-sales>
+
                         </el-card>
                     </el-col>
+                    <el-col style="margin-bottom: 20px"  :offset="1"  :span="11">
+                        <el-card>
+                            <div slot="header" class="clearfix">
+                                <span><h4>Данные по рабочим местам</h4></span>
+                            </div>
+                        <div class="box">
+                            <!-- /.box-header -->
+                            <div class="box-body no-padding">
+                                <table style="overflow-y:scroll" class="table table-condensed">
+                                    <tbody><tr>
+                                        <th style="width: 10px">#</th>
+                                        <th>Наименование</th>
+                                        <th>Склад</th>
+                                        <th >Последнее действие</th>
+                                        <th >Пользователь</th>
+                                    </tr>
+
+                                    <tr v-for="item in this.$store.getters['workplaces/items']" :key="item.id">
+                                        <td>{{item.id}}</td>
+                                        <td>{{item.name}}</td>
+                                        <td>
+                                            {{item.storage.name}}
+                                        </td>
+                                        <td>
+                                            {{item.last_access}}
+                                        </td>
+                                        <td>
+                                            {{item.active_user === null ? "Не открыта" :item.active_user.name}}
+                                        </td>
+
+                                    </tr>
+                                    </tbody></table>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                        </el-card>
+                        <el-card style="margin-top: 30px">
+                            <div slot="header" class="clearfix">
+                                <span><h4>Кол-во закупок у контрагентов</h4></span>
+                            </div>
+                            <agents-cash></agents-cash>
+                        </el-card>
+                    </el-col>
+
                 </el-row>
             </div>
         </section>
@@ -81,19 +118,30 @@
 <script>
 import TotalSales from "../Charts/TotalSales";
 import moment from "moment";
-
+import AgentsCash from "../Charts/AgentsCash";
 export default {
     name: "DashBoard",
-    components: {TotalSales},
+    components: {TotalSales, AgentsCash},
     data() {
         return {
-            sales_by_month: null,
+            opened_workplace_count: null,
+            last_week_sales_count: null,
+           // workplaces : this.$store.getters["workplaces/items"],
             start_date: moment().clone().startOf('month').format('YYYY-MM-DD'),
             end_date: moment().clone().endOf('month').format('YYYY-MM-DD')
         };
     },
     methods: {},
-    created() {
+    mounted() {
+        this.$store.dispatch("workplaces/update");
+       // this.workplaces = this.$store.getters["workplaces/items"];
+        axios.post('/api/dashboard').then((response) =>{
+
+            this.opened_workplace_count = response.data.opened_workplace_count;
+
+            this.last_week_sales_count = response.data.last_week_sales_count;
+        })
+
     }
 }
 </script>

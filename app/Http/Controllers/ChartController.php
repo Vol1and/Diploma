@@ -118,6 +118,21 @@ class ChartController extends Controller
 
         return ['storage_data' => $storage_data, 'period' => $dates];
     }
+    public function agent_sales_statistics(){
+
+        $data = DB::select(
+            '  SELECT
+				diploma.`agents`.`name`,
+                SUM(diploma.`finance_documents`.`doc_sum`) AS `counting`
+
+            FROM
+                ((diploma.`finance_documents`
+                JOIN diploma.`agents` ON ((diploma.`finance_documents`.`agent_id` = diploma.`agents`.`id`))))
+            GROUP BY `agents`.id;'
+        );
+        return $data;
+
+    }
 }
 
 

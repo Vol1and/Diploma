@@ -65,6 +65,9 @@ Route::post('/cashier/send', [App\Http\Controllers\FinanceDocumentController::cl
 Route::get('/charts/total-sales', [App\Http\Controllers\ChartController::class, "total_sales"]);
 Route::get('/charts/users-sales', [App\Http\Controllers\ChartController::class, "cash_by_users"]);
 Route::get('/charts/storages-sales', [App\Http\Controllers\ChartController::class, "total_sales_by_storage"]);
+Route::get('/charts/agents-cash', [App\Http\Controllers\ChartController::class, "agent_sales_statistics"]);
 
 Route::post('/cashier/close', [\App\Http\Controllers\WorkplaceController::class, "close"]);
 Route::post('/cashier/open',  [\App\Http\Controllers\WorkplaceController::class, "open" ]);
+
+Route::post('/dashboard',  [\App\Http\Controllers\Admin\HomeController::class, "forDashboard" ]);
