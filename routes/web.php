@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/report/selling-document/{id}/{mode}', [\App\Http\Controllers\FinanceDocumentController::class, 'sellingReports']);
 
 Route::get('/report/income-document/{id}/{mode}', [\App\Http\Controllers\FinanceDocumentController::class, 'incomeReports']);
+Route::get('/report/wares/{nomenclature_id}/{storage_id}', [\App\Http\Controllers\WareController::class, 'report']);
 //Auth::routes();
 
 //Route::middleware(['role:admin'])->prefix('/adm')->group(function () {

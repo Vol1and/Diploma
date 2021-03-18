@@ -32,13 +32,16 @@ Route::apiResource('/nomenclatures', "App\Http\Controllers\NomenclatureControlle
 Route::apiResource('/storages', "App\Http\Controllers\StorageController");
 Route::apiResource('/finance-documents', "App\Http\Controllers\FinanceDocumentController");
 Route::apiResource('/storage-documents', "App\Http\Controllers\StorageDocumentController");
-Route::apiResource('/wares', "App\Http\Controllers\WareController");
+
 Route::apiResource('/workplaces', "App\Http\Controllers\WorkPlaceController");
 
 //фильтры документов
 Route::get('/producer/filter', [App\Http\Controllers\ProducerController::class, 'filter']);
 Route::get('/nomenclature/filter', [App\Http\Controllers\NomenclatureController::class, 'filter']);
 Route::get('/income-document/filter', [App\Http\Controllers\FinanceDocumentController::class, 'incomeFilter']);
+
+Route::get('/wares/filter', [App\Http\Controllers\WareController::class, 'getFilter']);
+Route::get('/wares',  [App\Http\Controllers\WareController::class, 'index']);
 
 //отдельные роуты для документов
 Route::get('/sellings', [App\Http\Controllers\FinanceDocumentController::class, 'getSellings']);
