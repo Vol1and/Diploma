@@ -73,7 +73,7 @@ export default {
         selectingAgent() {
             this.choosing_state = 1;
         },
-        selectingNomenclature(row) {
+        selectingNomenclature() {
             this.choosing_state = 2;
         },
         selectingCharacteristic() {

@@ -257,7 +257,6 @@ export default {
             //пост-запрос
             //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
             axios.post("/api/income", {item: this.item.getDataForCreate(), state: statet}).then((response) => {
-                console.log(response.data);
                 this.$notify({
 
                     type: 'success',

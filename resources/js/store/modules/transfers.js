@@ -18,42 +18,40 @@ const getters = {
         return Math.ceil(state.items.length / items_per_page);
     },
 
+    aggregateData: state => data =>{
+        let items = [];
 
+        data.forEach(item => {
+            let table_rows = [];
+
+            if (item.table_rows !== undefined && item.table_rows.length > 0) item.table_rows.forEach(row => table_rows.push(new StorageDocumentTableRow(row.id, row.nomenclature, row.characteristic, row.count, row.sell_price)));
+
+
+            items.push(new StorageDocument(item.id, 4,item.is_set,
+                new Storage(item.source_storage.id, item.source_storage.name),
+                new Storage(item.destination_storage.id, item.destination_storage.name),
+                item.date, table_rows,item.comment,item.doc_sum,
+                item.created_at, item.updated_at, item.deleted_at))
+
+        })
+        return items;
+    },
 
 
 }
 
 // actions - операции-обертки для мутаций - могут быть асинхронными
 const actions = {
+
     //асинхронная операция апдейта
     update(context) {
         return new Promise((resolve, reject) => {
             //запрашивает данные с сервера
 
             axios.get('/api/transfers').then((response) => {
-                console.log(response)
-                let result = [];
 
-                //console.log(response.data)
-                let table_rows = [];
-                //оборачиваем каждый элемент пришедших данных в модель модуля
-                response.data.forEach(item => {
-
-
-                    if (item.table_rows !== undefined && item.table_rows.length > 0) item.table_rows.forEach(row => table_rows.push(new StorageDocumentTableRow(row.id, row.nomenclature, row.characteristic, row.count, row.sell_price)));
-
-
-                    result.push(new StorageDocument(item.id, 4,item.is_set,
-                        new Storage(item.source_storage.id, item.source_storage.name),
-                        new Storage(item.destination_storage.id, item.destination_storage.name),
-                        item.date, table_rows,item.comment,item.doc_sum,
-                        item.created_at, item.updated_at, item.deleted_at))
-
-                })
-
-                //console.log(result)
                 //дергаем мутатор
-                context.commit('setItems', result);
+                context.commit('setItems', context.getters.aggregateData(response.data));
                 //асинхронный ответ - все ок
                 resolve();
 

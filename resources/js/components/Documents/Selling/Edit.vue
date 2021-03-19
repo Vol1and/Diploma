@@ -247,7 +247,7 @@ export default {
 
         update() {
             axios.get(`/api/finance-documents/${this.$route.params.id}`).then(response => {
-                    console.log(response)
+
                     this.is_visible = true;
                     let table_data = [];
                     if (response.data.table_rows !== undefined && response.data.table_rows.length > 0) response.data.table_rows.forEach(row => table_data.push(
@@ -278,8 +278,6 @@ export default {
                         response.data.updated_at,
                         response.data.deleted_at);
 
-                    console.log(this.item)
-
                 }
             ).catch((error) => {
                 console.log(error);
@@ -298,7 +296,7 @@ export default {
                 state: state
             }).then((response) => {
                 this.selectingRow = new FinanceDocumentTableRow(null);
-                console.log(response.data);
+                ;
                 this.update();
                 this.$notify({
                     type: 'success',

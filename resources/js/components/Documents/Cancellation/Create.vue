@@ -242,7 +242,7 @@ export default {
                     title: 'Успешно!',
                     message: `Списание успешно создано!`,
                 })
-                this.$router.push({name: 'cancellation.index'})
+                this.$router.push({name: 'cancellations.index'})
             }).catch((error) => {
                 //ошибка - выводим
                 this.$notify.error({

@@ -6,6 +6,7 @@ use App\Http\Requests\DocumentCreateRequest;
 use App\Repositories\StorageDocumentsRepository;
 use App\Services\CreateStorageDocumentService;
 use App\Services\UpdateStorageDocumentService;
+use Illuminate\Http\Request;
 
 
 class StorageDocumentController extends OriginController
@@ -125,5 +126,20 @@ class StorageDocumentController extends OriginController
         return $result->toJson();
     }
 
+    public function filter(Request $request)
+    {
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
+
+        $source_storage_id = $request->input('source_storage_id');
+
+        $destination_storage_id = $request->input('destination_storage_id');
+
+        $doc_type_id = $request->input('doc_type_id');
+
+        $result = $this->storageDocumentsRepository->getFilter($doc_type_id,$start_date,$end_date, $source_storage_id, $destination_storage_id);
+
+        return $result->toJson();
+    }
 
 }

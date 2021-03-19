@@ -110,63 +110,35 @@ import Producer from "../../code/models/Producer";
 import Nomenclature from "../../code/models/Nomenclature";
 import PriceType from "../../code/models/PriceType";
 import mixin_index from "../../code/mixins/mixin_index";
+import mixin_filterable from "../../code/mixins/mixin_filterable";
 
 export default {
     name: "NomenclatureIndex",
 
-    mixins: [mixin_index],
+    mixins: [mixin_index, mixin_filterable],
     data: function () {
         return {
 
-            filter_fields: {
+            default_filter_fields: {
                 name_str: "",
                 producer: {name: ""},
                 price_type: {name: ""},
 
             },
             choosing_state: 0,
-            action_namespace: "nomenclature"
+            action_namespace: "nomenclature",
+            filter_namespace: "nomenclature"
 
         };
     },
     methods: {
 
-        filterClear: function () {
-            this.filter_state = false
-            this.filter_fields = {
-                name_str: "",
-                producer: {name: "", id: null},
-                price_type: {name: "", id: null},
+        getParamsPreset(){
+            return {
+                name: this.filter_fields.name_str,
+                producer_id: this.filter_fields.producer.id,
+                price_type_id: this.filter_fields.price_type.id
             }
-        },
-        filter() {
-            this.filter_state = true;
-            axios.get('/api/nomenclature/filter', {
-                params: {
-                    name: this.filter_fields.name_str,
-                    producer_id: this.filter_fields.producer.id,
-                    price_type_id: this.filter_fields.price_type.id
-                }
-            }).then((response) => {
-                this.page_of_items = [];
-                //оборачиваем каждый элемент пришедших данных в модель модуля
-                response.data.forEach(item => this.page_of_items.push(new Nomenclature(item.id,
-                    item.name,
-                    new Producer(item.producer.id, item.producer.name, item.producer.country, item.producer.created_at, item.producer.updated_at, item.producer.deleted_at),
-                    new PriceType(item.price_type.id, item.price_type.name, item.price_type.margin, item.price_type.created_at, item.price_type.updated_at, item.price_type.deleted_at),
-                    item.created_at,
-                    item.updated_at,
-                    item.deleted_at)))
-
-            }).catch((error) => {
-                //если не ок - асинхронный ответ с кодом ошибки
-                console.log(`Что то пошло не так. Код ответа - ${error}`)
-            })
-
-        },
-
-        switch_filter() {
-            this.filter_visible = !this.filter_visible;
         },
 
         selectingProducer() {

@@ -9,7 +9,7 @@
         </div>
         <el-row>
             <el-col :span="8">
-                <router-link tag="button" class="el-button" :to="{name: 'pricetypes.create'}" style=" float:left ">
+                <router-link tag="button" class="el-button" :to="{name: 'storages.create'}" style=" float:left ">
                     Добавить
                 </router-link>
             </el-col>
@@ -40,9 +40,7 @@
             </el-table-column>
 
         </el-table>
-        <div v-if="!filter_state" class="centered">
-            <!--            <jw-pagination :items="items" @changePage="onChangePage"></jw-pagination>-->
-
+        <div  class="centered">
             <el-pagination
                 height="250"
                 @current-change="onChangePage"
@@ -68,9 +66,6 @@ export default {
         return {
             action_namespace: "storages"
         };
-    },
-    mounted() {
-        this.update();
     },
     methods: {
 

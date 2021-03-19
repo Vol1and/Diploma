@@ -241,7 +241,6 @@ export default {
             //блокируем кнопку submit
             this.loaded = false;
 
-            console.log(this.item.getDataForCreate())
             //пост-запрос
             //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
             axios.post("/api/transfer", {item: this.item.getDataForCreate(), state: statet}).then((response) => {

@@ -19,30 +19,35 @@ const getters = {
 
         return Math.ceil(state.items.length / items_per_page);
     },
+    aggregateData: state => data => {
+        let items = [];
+        console.log(data)
+        data.forEach(item => items.push(new Nomenclature(item.id,
+            item.name,
+            new Producer(item.producer.id, item.producer.name, item.producer.country, item.producer.created_at, item.producer.updated_at, item.producer.deleted_at),
+            new PriceType(item.price_type.id, item.price_type.name, item.price_type.margin, item.price_type.created_at, item.price_type.updated_at, item.price_type.deleted_at),
+            item.created_at,
+            item.updated_at,
+            item.deleted_at)))
+
+
+        return items;
+    },
 
 }
 
 // actions - операции-обертки для мутаций - могут быть асинхронными
 const actions = {
+
     //асинхронная операция апдейта
     update(context) {
         return new Promise((resolve, reject) => {
             //запрашивает данные с сервера
             axios.get('/api/nomenclatures').then((response) => {
 
-                console.log(response.data)
-                let result = [];
-                //оборачиваем каждый элемент пришедших данных в модель модуля
-                response.data.forEach(item => result.push(new Nomenclature(item.id,
-                    item.name,
-                    new Producer(item.producer.id, item.producer.name, item.producer.country, item.producer.created_at, item.producer.updated_at, item.producer.deleted_at),
-                    new PriceType(item.price_type.id, item.price_type.name, item.price_type.margin, item.price_type.created_at, item.price_type.updated_at, item.price_type.deleted_at),
-                    item.created_at,
-                    item.updated_at,
-                    item.deleted_at)))
-
                 //дергаем мутатор
-                context.commit('setItems', result);
+                context.commit('setItems', context.getters.aggregateData(response.data));
+
                 //асинхронный ответ - все ок
                 resolve();
 

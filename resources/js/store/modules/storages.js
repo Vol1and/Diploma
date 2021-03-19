@@ -20,6 +20,7 @@ const getters = {
 
 // actions - операции-обертки для мутаций - могут быть асинхронными
 const actions = {
+
     //асинхронная операция апдейта
     update(context) {
         return new Promise((resolve, reject) => {

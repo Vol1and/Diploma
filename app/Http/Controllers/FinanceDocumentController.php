@@ -44,11 +44,6 @@ class FinanceDocumentController extends OriginController
         return $this->financeDocumentsRepository->getByDocTypeId(2)->toJson();
     }
 
-    //public function sell(Request $request)
-    //{
-    //    return $request;
-    //}
-
     //принимает реквест DocumentCreateRequest
     public function store(DocumentCreateRequest $request)
     {
@@ -201,14 +196,16 @@ class FinanceDocumentController extends OriginController
     }
 
 
-    public function incomeFilter(Request $request)
+    public function filter(Request $request)
     {
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date');
         $agent_id = $request->input('agent_id');
         $storage_id = $request->input('storage_id');
 
-        $result = $this->financeDocumentsRepository->getFilter($start_date,$end_date, $agent_id, $storage_id);
+        $doc_type_id = $request->input('doc_type_id');
+
+        $result = $this->financeDocumentsRepository->getFilter($doc_type_id,$start_date,$end_date, $agent_id, $storage_id);
 
         return $result->toJson();
     }

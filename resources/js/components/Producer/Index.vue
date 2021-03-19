@@ -69,8 +69,6 @@
             </el-table-column>
         </el-table>
         <div v-if="!filter_state" class="centered">
-            <!--            <jw-pagination :items="items" @changePage="onChangePage"></jw-pagination>-->
-
             <el-pagination
                 height="250"
                 @current-change="onChangePage"
@@ -88,51 +86,38 @@
 <script>
 import Producer from "../../code/models/Producer";
 import mixin_index from "../../code/mixins/mixin_index";
+import mixin_filterable from "../../code/mixins/mixin_filterable";
 
 export default {
     name: "ProducerIndex",
 
-    mixins: [mixin_index],
+    mixins: [mixin_filterable,mixin_index],
     data: function () {
         return {
 
+
+            action_namespace: "producers",
+            default_filter_fields: {
+                name_str: "",
+                country_str: ""
+            },
+
             filter_fields: {
                 name_str: "",
-                country_str: "",
-
+                country_str: ""
             },
-            //читать об этом в mixin_index
-            action_namespace: "producers"
+            filter_namespace: "producer"
+
         };
     },
 
     methods: {
-
-        filterClear: function () {
-            this.filter_state = false;
-            this.filter_fields.country_str = this.filter_fields.name_str = "";
-        },
-
-
-        filter() {
-            this.filter_state = true;
-            axios.get('/api/producer/filter', {
-                params: {
-                    name: this.filter_fields.name_str,
-                    country: this.filter_fields.country_str
-                }
-            }).then((response) => {
-                this.page_of_items = [];
-                //оборачиваем каждый элемент пришедших данных в модель модуля
-                response.data.forEach(item => this.page_of_items.push(new Producer(item.id, item.name, item.country, item.created_at, item.updated_at, item.deleted_at)))
-
-            }).catch((error) => {
-                //если не ок - асинхронный ответ с кодом ошибки
-                console.log(`Что то пошло не так. Код ответа - ${error}`)
-            })
-
-        },
-
+        getParamsPreset(){
+            return {
+                name: this.filter_fields.name_str,
+                country: this.filter_fields.country_str
+            }
+        }
 
     }
 

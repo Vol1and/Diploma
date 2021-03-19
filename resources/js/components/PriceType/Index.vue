@@ -42,7 +42,7 @@
             >
             </el-table-column>
         </el-table>
-        <div v-if="!filter_state" class="centered">
+        <div  class="centered">
             <!--            <jw-pagination :items="items" @changePage="onChangePage"></jw-pagination>-->
 
             <el-pagination

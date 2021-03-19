@@ -273,12 +273,6 @@ export default {
             this.loaded = false;
 
 
-            //пост-запрос
-            //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
-            console.log(this.item.getDataForUpdate());
-            console.log(this.item);
-
-
             axios.post(`/api/transfer/${this.item.id}`, {
                 item: this.item.getDataForUpdate(),
                 state: state

@@ -72,7 +72,8 @@
                 >
                     <template slot-scope="scope">
 
-                        <el-button type="info" icon="el-icon-folder-checked" size="mini" readonly v-if="scope.row.is_set === 0" circle></el-button>
+                        <el-button type="info" icon="el-icon-folder-checked" size="mini" readonly
+                                   v-if="scope.row.is_set === 0" circle></el-button>
 
                         <el-button type="success" icon="el-icon-check" size="mini" readonly v-else circle></el-button>
                     </template>
@@ -137,19 +138,25 @@
 
 
 <script>
+import mixin_filterable from "../../../code/mixins/mixin_filterable";
 import mixin_index from "../../../code/mixins/mixin_index";
-import FinanceDocumentTableRow from "../../../code/models/FinanceDocumentTableRow";
-import FinanceDocument from "../../../code/models/FinanceDocument";
-import Agent from "../../../code/models/Agent";
-import Storage from "../../../code/models/Storage";
 import moment from "moment";
+
 
 export default {
     name: "IncomeIndex",
 
-    mixins: [mixin_index],
+    mixins: [mixin_filterable, mixin_index],
     data: function () {
         return {
+            default_filter_fields: {
+                date_range: {},
+                agent: {name: ""},
+                storage: {name: ""},
+
+            },
+
+            filter_namespace: "finance-document",
 
             filter_fields: {
                 date_range: {},
@@ -164,63 +171,14 @@ export default {
     },
     methods: {
 
-        filterClear() {
-
-            this.filter_fields = {
-                date_range: {},
-                agent: {name: ""},
-                storage: {name: ""}
-            }
-
-        },
-
-
-        filter() {
-            this.filter_state = true;
-            console.log({
-                start_date: this.filter_fields.date_range[0],
-                end_date: this.filter_fields.date_range[1],
+        getParamsPreset() {
+            return {
+                start_date: this.filter_fields.date_range[0] === undefined ? null : moment(this.filter_fields.date_range[0]).format("YYYY-MM-DD hh:mm:ss"),
+                end_date: this.filter_fields.date_range[1] === undefined ? null : moment(this.filter_fields.date_range[1]).format("YYYY-MM-DD hh:mm:ss"),
                 agent_id: this.filter_fields.agent.id,
-                storage_id: this.filter_fields.storage.id
-            });
-            axios.get('/api/income-document/filter', {
-
-                params: {
-                    start_date: this.filter_fields.date_range[0] === undefined ? null : moment(this.filter_fields.date_range[0]).format("YYYY-MM-DD hh:mm:ss"),
-                    end_date: this.filter_fields.date_range[1] === undefined ? null : moment(this.filter_fields.date_range[1]).format("YYYY-MM-DD hh:mm:ss"),
-                    agent_id: this.filter_fields.agent.id,
-                    storage_id: this.filter_fields.storage.id
-                }
-
-            }).then((response) => {
-
-                let result = [];
-
-
-                //console.log(response.data)
-                let table_rows = [];
-                let type = true;
-                //оборачиваем каждый элемент пришедших данных в модель модуля
-                response.data.forEach(item => {
-
-
-                    if (item.table_rows !== undefined && item.table_rows.length > 0) item.table_rows.forEach(row => table_rows.push(new FinanceDocumentTableRow(row.id, row.nomenclature, row.characteristic, row.count, row.income_price, row.sell_price)));
-                    result.push(new FinanceDocument(item.id,
-                        new Agent(item.agent.id, item.agent.name, item.agent.billing, item.agent.address, item.agent.description, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at),
-                        new Storage(item.storage.id, item.storage.name, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at),
-                        item.date, table_rows, null, item.comment,
-                        item.created_at, item.updated_at, item.deleted_at))
-                })
-                this.page_of_items = result;
-            }).catch((error) => {
-                //если не ок - асинхронный ответ с кодом ошибки
-                console.log(`Что то пошло не так. Код ответа - ${error}`)
-            })
-
-        },
-
-        switch_filter() {
-            this.filter_visible = !this.filter_visible;
+                storage_id: this.filter_fields.storage.id,
+                doc_type_id : 1
+            }
         },
 
         selectingStorage() {

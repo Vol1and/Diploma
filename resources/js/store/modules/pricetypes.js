@@ -21,17 +21,22 @@ const getters = {
 
 // actions - операции-обертки для мутаций - могут быть асинхронными
 const actions = {
+    aggregateData(data){
+        let result = [];
+        //оборачиваем каждый элемент пришедших данных в модель модуля
+        data.forEach(item => result.push(new PriceType(item.id, item.name, item.margin, item.created_at, item.updated_at, item.deleted_at)))
+
+        return result;
+
+    },
     //асинхронная операция апдейта
     update(context) {
         return new Promise((resolve, reject) => {
             //запрашивает данные с сервера
             axios.get('/api/price-types').then((response) => {
-                let result = [];
-                //оборачиваем каждый элемент пришедших данных в модель модуля
-                response.data.forEach(item => result.push(new PriceType(item.id, item.name, item.margin, item.created_at, item.updated_at, item.deleted_at)))
 
                 //дергаем мутатор
-                context.commit('setItems', result);
+                context.commit('setItems', this.aggregateData(response.data));
                 //асинхронный ответ - все ок
                 resolve();
 

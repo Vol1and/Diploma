@@ -16,23 +16,28 @@ const getters = {
     items_length: state => items_per_page => {
 
         return Math.ceil(state.items.length / items_per_page);
-    }
+    },
+    aggregateData: state => data => {
+        let result = [];
+        //оборачиваем каждый элемент пришедших данных в модель модуля
+        data.forEach(item => result.push(new WorkPlace(item.id, item.name, new Storage(item.storage.id, item.storage.name), item.last_access, item.active_user, item.created_at, item.updated_at, item.deleted_at)))
+
+        return result;
+
+    },
 }
 
 // actions - операции-обертки для мутаций - могут быть асинхронными
 const actions = {
+
     //асинхронная операция апдейта
     update(context) {
         return new Promise((resolve, reject) => {
             //запрашивает данные с сервера
             axios.get('/api/workplaces').then((response) => {
-                let result = [];
-                console.log(response.data);
-                //оборачиваем каждый элемент пришедших данных в модель модуля
-                response.data.forEach(item => result.push(new WorkPlace(item.id, item.name, new Storage(item.storage.id, item.storage.name), item.last_access, item.active_user, item.created_at, item.updated_at, item.deleted_at)))
 
                 //дергаем мутатор
-                context.commit('setItems', result);
+                context.commit('setItems', context.getters.aggregateData(response.data));
                 //асинхронный ответ - все ок
                 resolve();
 

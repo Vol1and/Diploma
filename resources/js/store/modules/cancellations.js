@@ -18,6 +18,23 @@ const getters = {
         return Math.ceil(state.items.length / items_per_page);
     },
 
+    aggregateData: state => data => {
+        let items = [];
+
+        data.forEach(item => {
+            let table_rows = [];
+
+            if (item.table_rows !== undefined && item.table_rows.length > 0) item.table_rows.forEach(row => table_rows.push(new StorageDocumentTableRow(row.id, row.nomenclature, row.characteristic, row.count, row.sell_price)));
+
+            items.push(new StorageDocument(item.id, 3,item.is_set,
+                new Storage(item.source_storage.id, item.source_storage.name),
+                new Storage(),
+                item.date, table_rows,item.comment,item.doc_sum,
+                item.created_at, item.updated_at, item.deleted_at))
+
+        })
+        return items;
+    },
 
 
 
@@ -32,28 +49,10 @@ const actions = {
 
             axios.get('/api/storage-documents').then((response) => {
                 console.log(response)
-                let result = [];
-
-                //console.log(response.data)
-                let table_rows = [];
-                //оборачиваем каждый элемент пришедших данных в модель модуля
-                response.data.forEach(item => {
 
 
-                    if (item.table_rows !== undefined && item.table_rows.length > 0) item.table_rows.forEach(row => table_rows.push(new StorageDocumentTableRow(row.id, row.nomenclature, row.characteristic, row.count, row.sell_price)));
-
-
-                    result.push(new StorageDocument(item.id, 3,item.is_set,
-                        new Storage(item.source_storage.id, item.source_storage.name),
-                        new Storage(),
-                        item.date, table_rows,item.comment,item.doc_sum,
-                        item.created_at, item.updated_at, item.deleted_at))
-
-                })
-
-                //console.log(result)
                 //дергаем мутатор
-                context.commit('setItems', result);
+                context.commit('setItems', context.getters.aggregateData(response.data));
                 //асинхронный ответ - все ок
                 resolve();
 

@@ -126,7 +126,6 @@ export default {
         return {
             opened_workplace_count: null,
             last_week_sales_count: null,
-           // workplaces : this.$store.getters["workplaces/items"],
             start_date: moment().clone().startOf('month').format('YYYY-MM-DD'),
             end_date: moment().clone().endOf('month').format('YYYY-MM-DD')
         };
@@ -134,7 +133,7 @@ export default {
     methods: {},
     mounted() {
         this.$store.dispatch("workplaces/update");
-       // this.workplaces = this.$store.getters["workplaces/items"];
+
         axios.post('/api/dashboard').then((response) =>{
 
             this.opened_workplace_count = response.data.opened_workplace_count;

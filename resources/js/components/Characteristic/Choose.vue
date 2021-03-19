@@ -63,38 +63,35 @@ export default {
     mixins: [mixin_index],
 
     props: {
-        create_dialog: false,
+        //айди номенклатуры по которой идет выбор характеристики
         nomenclature_id: Number
     },
     data: function () {
         return {
-            item: {characteristics: [], nomenclature: new Nomenclature()}
+            item: {characteristics: [], nomenclature: new Nomenclature()},
+            //диалоговое окно создания новой характеристики
+            create_dialog: false
         };
     },
     mounted() {
         this.update();
     },
     methods: {
-        rowSelected(id) {
-
-            this.selected_item = id;
-        },
 
         update() {
-            console.log(this.nomenclature_id)
             this.is_reload = true;
             axios.get(`/api/characteristic/for-nomenclature/${this.nomenclature_id}`).then((response) => {
 
-
-                console.log(response.data);
+                //переопределение итема - дефолтные значение
                 this.item = {characteristics: [], nomenclature: new Nomenclature()}
+
+                //присваивание номенклатуры
                 this.item.nomenclature = new Nomenclature(response.data.nomenclature.id,
                     response.data.nomenclature.name,
                     new Producer(response.data.nomenclature.producer.id, response.data.nomenclature.producer.name, response.data.nomenclature.producer.country),
                 );
-
+                //присваивание списка характеристик
                 response.data.characteristics.forEach(row => {
-
 
                     this.item.characteristics.push(new Characteristic(
                         row.id,
@@ -109,14 +106,13 @@ export default {
             });
         },
         selected(selected_item) {
-            console.log(selected_item);
+
             this.$emit("selected", {characteristic: selected_item});
+
         },
         characteristicCreated(){
-
             this.create_dialog = false;
             this.update();
-
         },
         back() {
             this.$emit("back");

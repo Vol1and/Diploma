@@ -40,7 +40,7 @@
                             start-placeholder="Начало"
                             end-placeholder="Конец"
                             :default-value="null"
-                          >
+                        >
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item style="   margin-bottom: 0;" label="Склад:">
@@ -66,7 +66,8 @@
                 >
                     <template slot-scope="scope">
 
-                        <el-button type="info" icon="el-icon-folder-checked" size="mini" readonly v-if="scope.row.is_set === 0" circle></el-button>
+                        <el-button type="info" icon="el-icon-folder-checked" size="mini" readonly
+                                   v-if="scope.row.is_set === 0" circle></el-button>
 
                         <el-button type="success" icon="el-icon-check" size="mini" readonly v-else circle></el-button>
                     </template>
@@ -124,88 +125,49 @@
 
 
 <script>
+import mixin_filterable from "../../../code/mixins/mixin_filterable";
 import mixin_index from "../../../code/mixins/mixin_index";
-import StorageDocumentTableRow from "../../../code/models/StorageDocumentTableRow";
-import StorageDocument from "../../../code/models/StorageDocument";
-import Storage from "../../../code/models/Storage";
 import moment from "moment";
+
 
 export default {
     name: "CancellationIndex",
 
-    mixins: [mixin_index],
+    mixins: [mixin_filterable, mixin_index],
     data: function () {
         return {
+            default_filter_fields: {
+                date_range: {},
+                source_storage: {name: ""},
+            },
+
 
             filter_fields: {
-                date_range : {},
+                date_range: {},
                 source_storage: {name: ""},
-
             },
             choosing_state: 0,
+            filter_namespace: "storage-document",
             action_namespace: "cancellations"
 
         };
     },
     methods: {
 
-        filterClear() {
-
-            this.filter_fields = {
-                date_range : {},
-                source_storage: {name: ""}
+        getParamsPreset() {
+            return {
+                start_date: this.filter_fields.date_range[0] === undefined ? null : moment(this.filter_fields.date_range[0]).format("YYYY-MM-DD hh:mm:ss"),
+                end_date: this.filter_fields.date_range[1] === undefined ? null : moment(this.filter_fields.date_range[1]).format("YYYY-MM-DD hh:mm:ss"),
+                source_storage_id: this.filter_fields.source_storage.id,
+                doc_type_id: 3
             }
-
         },
-
-
-        filter() {
-            this.filter_state = true;
-            axios.get('/api/cancellation-document/filter', {
-
-                params: {
-                    start_date: this.filter_fields.date_range[0] === undefined ? null:    moment(this.filter_fields.date_range[0]).format("YYYY-MM-DD hh:mm:ss") ,
-                    end_date: this.filter_fields.date_range[1] === undefined ? null:  moment(this.filter_fields.date_range[1]).format("YYYY-MM-DD hh:mm:ss") ,
-                    source_storage_id: this.filter_fields.source_storage.id
-                }
-
-            }).then((response) => {
-
-                let result = [];
-
-                //console.log(response.data)
-                let table_rows = [];
-                //оборачиваем каждый элемент пришедших данных в модель модуля
-                response.data.forEach(item => {
-
-
-                    if (item.table_rows !== undefined && item.table_rows.length > 0) item.table_rows.forEach(row => table_rows.push(new StorageDocumentTableRow(row.id, row.nomenclature, row.characteristic, row.count, row.income_price, row.sell_price)));
-
-
-                    result.push(new StorageDocument(item.id,
-                        new Storage(item.source_storage.id, item.source_storage.name, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at),
-                        item.date, table_rows,null, item.comment,
-                        item.created_at, item.updated_at, item.deleted_at))
-
-                })
-                this.page_of_items = result;
-            }).catch((error) => {
-                //если не ок - асинхронный ответ с кодом ошибки
-                console.log(`Что то пошло не так. Код ответа - ${error}`)
-            })
-
-        },
-
-        switch_filter() {
-            this.filter_visible = !this.filter_visible;
-        },
-
         selectingStorage() {
             this.choosing_state = 2;
         },
 
         onSelectedStorage(data) {
-            this.filter_fields.source_storage = data.source_storage;
+            this.filter_fields.source_storage = data.storage;
             this.choosing_state = 0;
         },
         onBack() {

@@ -23,7 +23,7 @@
 
                             <el-row style="margin-bottom: 10px">
                                 <el-button :disabled="!this.$store.getters.workplace.active_user_id > 0"
-                                           @click="selectingNomenclature">Поиск товара [F2]
+                                           @click="selectingEntity(2)">Поиск товара [F2]
                                 </el-button>
                                 <el-button :disabled="rows_sum ===0 " @click="cashInput_dialog = true">Оплата [Alt +
                                     Q]
@@ -204,17 +204,32 @@
 import FinanceDocument from "../../code/models/FinanceDocument";
 import MedicamentSearch from "./MedicamentSearch";
 import CashInput from "./CashInput";
-import mixin_cashier_place from "../../code/mixins/mixin_cashier_place";
-import WorkPlace from "../../code/models/WorkPlace";
+import FinanceDocumentTableRow from "../../code/models/FinanceDocumentTableRow";
 
 export default {
     name: "CashierIndex",
     components: {CashInput, MedicamentSearch},
-    mixins: [mixin_cashier_place],
     data() {
         return {
+
+            //массив с ошибками
+            errors: [],
+            //переменная, которая помогает отображать компоненты выбора (например, NomenclatureChoose или ProducerChoose)
+            choosing_state: 0,
+            //показывает, получены ли данные с сервера - при loaded - false не доступна submit-кнопка
+            loaded: true,
+            //модель, в которой будут находиться данные
             item: new FinanceDocument(null, 1),
+            //выбранная строка - в табличной части идет проверка - id_строки - id_selectingRow
+            //если true, то строка переходит в editable
+            selectingRow: null,
+            //строка, по которой кликнули всего один раз - используется при удалении и отображении
+            hover_row: null,
+            //булево значение диалогового окна выбора характеристики уже созданной строки
+            characteristic_dialog: false,
+            //булево значение диалогового окна ввода наличных
             cashInput_dialog: false,
+            //поле для сдачи
             change: 0
         }
     },
@@ -226,18 +241,14 @@ export default {
     },
     computed: {
 
+        //Вычисляемое поле - отображает либо сумму чека, либо сдачу (если оплата уже была произведена)
         status_label: function () {
-
             if (this.rows_sum === 0 && this.change > 0) return `Сдача: ${this.change}`
-
             return `Сумма: ${this.rows_sum}`
-
         },
-
+        //сумма документа - выводится в status_label
         rows_sum: function () {
-
             let sum = 0;
-
             this.item.table_rows.forEach(p => {
                 sum += p.count * p.characteristic.characteristic_price.price
             });
@@ -245,6 +256,102 @@ export default {
         }
     },
     methods: {
+        //показывает ошибки
+        showErrors() {
+            this.errors.forEach(item => this.$notify.error({
+                title: 'Ошибка!',
+                message: item,
+            }));
+        },
+        //обработчик события row-dblclick - обрабатывает двойной щелчок по выбраной строке
+        rowEdit(row) {
+            //присваивает выбранную строку в selectingRow
+            this.selectingRow = row;
+        },
+        //обработчик события row-dblclick - обрабатывает одиночный щелчок по выбраной строке
+        rowHover(item) {
+            this.hover_row = item;
+            //убирает строку, по которой был dbl-click, потому что фокус сместился на другую строку
+            this.selectingRow = null;
+        },
+        //удаление строки табличной части
+        deleteSelected() {
+
+            //если не выбрана ни одна строка - ничего не делаем
+            if (this.hover_row == null) return;
+
+            //удаляем строку из табличной части
+            let index = this.item.table_rows.indexOf(this.hover_row);
+
+            this.item.table_rows.splice(index, 1);
+
+            this.hover_row = null
+
+        },
+        //меняет choosing_state, выводя другие компоненты
+        //state - число, отображающее компоненту
+        selectingEntity(state){
+            this.choosing_state = state;
+        },
+
+        onSelectedCharacteristic(data) {
+            let flag = true;
+            this.item.table_rows.forEach
+            this.item.table_rows.forEach(p => {
+                if (p.characteristic.id === data.characteristic.id) {
+                    //удаляем строку из табличной части
+                    let index = this.item.table_rows.indexOf(this.hover_row);
+                    this.item.table_rows.splice(index, 1);
+
+                    this.hover_row = p;
+                    this.selectingRow = p;
+                    flag = false;
+                    this.$notify.error({
+                        title: 'Ошибка!',
+                        message: "Строка с такой номенклатурой уже присутствует в таблице!"
+                    });
+                }
+            })
+            if (flag) this.selectingRow.characteristic = data.characteristic;
+            this.choosing_state = 0;
+            this.characteristic_dialog = false;
+        },
+        onSelectedStorage(data) {
+            this.choosing_state = 0;
+            if (this.item.type === 2 && this.item.table_rows.length > 0) {
+                this.$notify.error({
+                    title: 'Ошибка!',
+                    message: "Очистите табличную часть перед изменением склада",
+                })
+            } else this.item.storage = data.storage;
+
+        },
+        onSelectedNomenclature(data) {
+            this.selectingRow.nomenclature = data.nomenclature;
+            this.choosing_state = 0;
+        },
+        selectingWorkPlace(){
+            this.choosing_state = 3;
+        },
+        onSelectedWorkPlace(data) {
+            this.workplace = data.workplace;
+            this.choosing_state = 0;
+        },
+        onBack() {
+            this.choosing_state = 0;
+        },
+        onSelectedNomenclatureForCashier(data) {
+
+
+            let row = new FinanceDocumentTableRow();
+            row.nomenclature = data.nomenclature;
+            row.characteristic = data.nomenclature.characteristic;
+            row.count += 1;
+            this.item.table_rows.push(row);
+            this.rowEdit(row);
+
+            this.choosing_state = 0;
+        },
         quitWorkplace() {
 
             this.$store.dispatch("deleteWorkplace");
@@ -272,11 +379,11 @@ export default {
             if (!this.validateFields()) return;
             //блокируем кнопку submit
             this.loaded = false;
-            console.log(this.item.getDataForCreate())
+
             //пост-запрос
             //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
             axios.post("/api/income", {item: this.item.getDataForCreate(), state: statet}).then((response) => {
-                console.log(response.data);
+
                 this.$notify({
                     type: 'success',
                     title: 'Успешно!',
@@ -312,14 +419,13 @@ export default {
         },
         changeSelected(data) {
 
-
             axios.post('/api/cashier/send', {
                 items: this.item.getDataForCashier(),
                 doc_sum: this.rows_sum,
                 workplace_id: this.$store.getters.workplace.id,
                 user_id: this.$store.getters["auth/user"].id
             }).then((response) => {
-                console.log(response.data);
+
                 this.change = data.change;
                 this.cashInput_dialog = false;
                 this.item.table_rows = [];
@@ -327,16 +433,13 @@ export default {
             }).catch(error => {
                 console.log("Произошла ошибка! " + error.message)
             })
-
         },
-
         openWorkplace() {
             axios.post("/api/cashier/open", {
                 user_id: this.$store.getters["auth/user"].id,
                 workplace_id: this.$store.getters.workplace.id
 
             }).then((response) => {
-                    console.log(response.data)
                     this.$store.dispatch("setWorkplace", response.data);
                     this.$notify({
                         type: 'success',

@@ -57,12 +57,12 @@ class FinanceDocumentsRepository extends BaseRepository
     }
 
 
-    public function getFilter($start_date = null, $end_date = null, $agent = null, $storage = null)
+    public function getFilter($doc_type_id,$start_date = null, $end_date = null, $agent = null, $storage = null)
     {
 
 
         $query = $this->startConditions()
-            ->select($this->default_columns);
+            ->select($this->default_columns)->where('doc_type_id',$doc_type_id );
 
         if ($start_date && $end_date)
             $query = $query->whereBetween('date', [$start_date, $end_date]);

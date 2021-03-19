@@ -131,17 +131,23 @@ import FinanceDocument from "../../../code/models/FinanceDocument";
 import Agent from "../../../code/models/Agent";
 import Storage from "../../../code/models/Storage";
 import moment from "moment";
+import mixin_filterable from "../../../code/mixins/mixin_filterable";
 
 export default {
     name: "SellingIndex",
 
-    mixins: [mixin_index],
+    mixins: [mixin_filterable, mixin_index],
     data: function () {
         return {
+            default_filter_fields: {
+                date_range: {},
+                storage: {name: ""},
 
+            },
+
+            filter_namespace: "finance-document",
             filter_fields: {
                 date_range : {},
-                agent: {name: ""},
                 storage: {name: ""},
 
             },
@@ -151,63 +157,14 @@ export default {
         };
     },
     methods: {
-
-        filterClear() {
-
-            this.filter_fields = {
-                date_range : {},
-                storage: {name: ""}
+        getParamsPreset() {
+            return {
+                start_date: this.filter_fields.date_range[0] === undefined ? null : moment(this.filter_fields.date_range[0]).format("YYYY-MM-DD hh:mm:ss"),
+                end_date: this.filter_fields.date_range[1] === undefined ? null : moment(this.filter_fields.date_range[1]).format("YYYY-MM-DD hh:mm:ss"),
+                storage_id: this.filter_fields.storage.id,
+                doc_type_id : 2
             }
-
         },
-
-
-        filter() {
-            this.filter_state = true;
-            console.log( {
-                    start_date: this.filter_fields.date_range[0],
-                    end_date: this.filter_fields.date_range[1],
-                    storage_id: this.filter_fields.storage.id
-            });
-            axios.get('/api/income-document/filter', {
-
-                params: {
-                    start_date: this.filter_fields.date_range[0] === undefined ? null:    moment(this.filter_fields.date_range[0]).format("YYYY-MM-DD hh:mm:ss") ,
-                    end_date: this.filter_fields.date_range[1] === undefined ? null:  moment(this.filter_fields.date_range[1]).format("YYYY-MM-DD hh:mm:ss") ,
-                    storage_id: this.filter_fields.storage.id
-                }
-
-            }).then((response) => {
-
-                let result = [];
-
-
-                //console.log(response.data)
-                let table_rows = [];
-                //оборачиваем каждый элемент пришедших данных в модель модуля
-                response.data.forEach(item => {
-
-
-                    if (item.table_rows !== undefined && item.table_rows.length > 0) item.table_rows.forEach(row => table_rows.push(new FinanceDocumentTableRow(row.id, row.nomenclature, row.characteristic, row.count, row.income_price, row.sell_price)));
-                    result.push(new FinanceDocument(item.id,
-                        new Agent(1),
-                        new Storage(item.storage.id, item.storage.name, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at),
-                        item.date, table_rows,null, item.comment,
-                        item.created_at, item.updated_at, item.deleted_at))
-
-                })
-                this.page_of_items = result;
-            }).catch((error) => {
-                //если не ок - асинхронный ответ с кодом ошибки
-                console.log(`Что то пошло не так. Код ответа - ${error}`)
-            })
-
-        },
-
-        switch_filter() {
-            this.filter_visible = !this.filter_visible;
-        },
-
         selectingStorage() {
             this.choosing_state = 2;
         },

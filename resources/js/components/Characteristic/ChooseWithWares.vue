@@ -103,8 +103,6 @@ export default {
             this.is_reload = true;
             axios.get(`/api/characteristic/by-nomenclature-storage/${this.nomenclature_id}/${this.storage_id}`).then((response) => {
 
-
-                console.log(response.data);
                 this.item = {characteristics: [], nomenclature: new Nomenclature()}
                 this.item.nomenclature = new Nomenclature(response.data.nomenclature.id,
                     response.data.nomenclature.name,

@@ -16,7 +16,13 @@ const getters = {
     items_length: state => items_per_page => {
 
         return Math.ceil(state.items.length / items_per_page);
-    }
+    },
+    aggregateData: state => data => {
+        let items = [];
+        data.forEach(item => items.push(new Agent(item.id, item.name, item.billing, item.address, item.description, item.created_at, item.updated_at, item.deleted_at)));
+        return items;
+    },
+
 }
 
 // actions - операции-обертки для мутаций - могут быть асинхронными
@@ -27,11 +33,9 @@ const actions = {
             //запрашивает данные с сервера
             axios.get('/api/agents').then((response) => {
                 let result = [];
-                //оборачиваем каждый элемент пришедших данных в модель модуля
-                response.data.forEach(item => result.push(new Agent(item.id, item.name, item.billing, item.address, item.description, item.created_at, item.updated_at, item.deleted_at)))
 
                 //дергаем мутатор
-                context.commit('setItems', result);
+                context.commit('setItems', context.getters.aggregateData(response.data));
                 //асинхронный ответ - все ок
                 resolve();
 

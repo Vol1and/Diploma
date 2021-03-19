@@ -232,7 +232,6 @@ export default {
             //блокируем кнопку submit
             this.loaded = false;
 
-            console.log(this.item)
             //пост-запрос
             //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
             axios.post("/api/selling", {item: this.item.getDataForCreate(), state: statet}).then((response) => {

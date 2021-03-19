@@ -19,40 +19,38 @@ const getters = {
         return Math.ceil(state.items.length / items_per_page);
     },
 
+    aggregateData: state => data => {
+        let items = [];
 
+        data.forEach(item => {
+            let table_rows = [];
+
+            if (item.table_rows !== undefined && item.table_rows.length > 0) item.table_rows.forEach(row => table_rows.push(new FinanceDocumentTableRow(row.id, row.nomenclature, row.characteristic, row.count, row.income_price, row.sell_price)));
+
+
+            items.push(new FinanceDocument(item.id, 1, item.is_set,
+                new Agent(item.agent.id, item.agent.name, item.agent.billing, item.agent.address, item.agent.description, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at),
+                new Storage(item.storage.id, item.storage.name, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at),
+                item.date, table_rows,null, item.comment,item.doc_sum,
+                item.created_at, item.updated_at, item.deleted_at))
+        })
+        return items;
+    },
 
 
 }
 
 // actions - операции-обертки для мутаций - могут быть асинхронными
 const actions = {
+
     //асинхронная операция апдейта
     update(context) {
         return new Promise((resolve, reject) => {
             //запрашивает данные с сервера
             axios.get('/api/finance-documents').then((response) => {
-                let result = [];
 
-                //console.log(response.data)
-                let table_rows = [];
-                //оборачиваем каждый элемент пришедших данных в модель модуля
-                response.data.forEach(item => {
-
-
-                    if (item.table_rows !== undefined && item.table_rows.length > 0) item.table_rows.forEach(row => table_rows.push(new FinanceDocumentTableRow(row.id, row.nomenclature, row.characteristic, row.count, row.income_price, row.sell_price)));
-
-
-                    result.push(new FinanceDocument(item.id, 1, item.is_set,
-                        new Agent(item.agent.id, item.agent.name, item.agent.billing, item.agent.address, item.agent.description, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at),
-                        new Storage(item.storage.id, item.storage.name, item.agent.created_at, item.agent.updated_at, item.agent.deleted_at),
-                        item.date, table_rows,null, item.comment,item.doc_sum,
-                        item.created_at, item.updated_at, item.deleted_at))
-
-                })
-
-                //console.log(result)
                 //дергаем мутатор
-                context.commit('setItems', result);
+                context.commit('setItems', context.getters.aggregateData(response.data));
                 //асинхронный ответ - все ок
                 resolve();
 

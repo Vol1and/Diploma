@@ -38,7 +38,8 @@ Route::apiResource('/workplaces', "App\Http\Controllers\WorkPlaceController");
 //фильтры документов
 Route::get('/producer/filter', [App\Http\Controllers\ProducerController::class, 'filter']);
 Route::get('/nomenclature/filter', [App\Http\Controllers\NomenclatureController::class, 'filter']);
-Route::get('/income-document/filter', [App\Http\Controllers\FinanceDocumentController::class, 'incomeFilter']);
+Route::get('/finance-document/filter', [App\Http\Controllers\FinanceDocumentController::class, 'filter']);
+Route::get('/storage-document/filter', [App\Http\Controllers\StorageDocumentController::class, 'filter']);
 
 Route::get('/wares/filter', [App\Http\Controllers\WareController::class, 'getFilter']);
 Route::get('/wares',  [App\Http\Controllers\WareController::class, 'index']);

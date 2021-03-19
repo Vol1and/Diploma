@@ -54,7 +54,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div v-if="!filter_state" class="centered">
+        <div class="centered">
             <el-pagination
                 height="250"
                 @current-change="onChangePage"

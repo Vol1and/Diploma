@@ -121,7 +121,8 @@ export default {
         return {
             action_namespace: "wares",
             filter_fields: {storage: {name: ""}, nomenclature: {name: ""}},
-            choosing_state: 0
+            choosing_state: 0,
+             filter_visible: false
         };
     },
 
@@ -132,10 +133,6 @@ export default {
             axios.get('/api/wares').then((response) => {
                 this.page_of_items = response.data;
 
-            }).catch((error) => {
-                //если не ок - асинхронный ответ с кодом ошибки
-                reject()
-                //reject(error.response.data.message);
             })
         },
         switch_filter() {
