@@ -169,7 +169,7 @@ class FinanceDocumentController extends OriginController
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response| array
      */
     public function sell(Request $request)
     {
@@ -192,7 +192,8 @@ class FinanceDocumentController extends OriginController
 
         $result = $this->createFinanceDocumentService->pushFinanceDoc($doc->id);
         if(empty($result)) return response(null,500);
-
+        else
+        return ['sell_id' => $doc->id];
     }
 
 
