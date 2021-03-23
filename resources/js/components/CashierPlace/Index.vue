@@ -30,12 +30,13 @@
                                 </el-button>
 
                                 <a tag="button" v-if="last_sell_id > 0" class="el-button print_class"
-                                   :href="'/report/selling-document/' +last_sell_id+ '/check'">Печать последнего чека</a>
+                                   :href="'/report/selling-document/' +last_sell_id+ '/check'">Печать последнего
+                                    чека</a>
                                 <el-button disabled v-else>
-                                   Печать последнего чека
+                                    Печать последнего чека
                                 </el-button>
-                                <router-link  class="el-button print_class" :to="{name: 'selling.index'}"
-                                            >
+                                <router-link class="el-button print_class" :to="{name: 'selling.index'}"
+                                >
                                     Пробитые чеки
                                 </router-link>
                                 <h1 style="float: right">{{ this.status_label }}</h1>
@@ -377,35 +378,6 @@ export default {
                     break;
             }
         },
-        ////сабмит - отправляет данные
-        //submit: function (statet) {
-        //    //не проходит валидацию - возвращаем
-        //    if (!this.validateFields()) return;
-        //    //блокируем кнопку submit
-        //    this.loaded = false;
-//
-        //    //пост-запрос
-        //    //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
-        //    axios.post("/api/income", {item: this.item.getDataForCreate(), state: statet}).then((response) => {
-//
-        //
-        //
-        //        this.$notify({
-        //            type: 'success',
-        //            title: 'Успешно!',
-        //            message: `Поступление успешно добавлено!`,
-        //        })
-        //        this.$router.push({name: 'income.index'})
-        //    }).catch((error) => {
-        //        //ошибка - выводим
-        //        this.$notify.error({
-        //            title: 'Ошибка!',
-        //            message: "Сообщение ошибки - " + error.response.data.message,
-        //        })
-        //        this.loaded = true;
-        //    })
-        //},
-
         validateFields() {
             this.errors = [];
             if (this.item.agent.id === 1) this.errors.push("Поле \"Поставщик\" должно быть заполнено");
@@ -423,6 +395,7 @@ export default {
 
             return this.errors.length === 0;
         },
+
         changeSelected(data) {
 
             axios.post('/api/cashier/send', {
@@ -438,10 +411,17 @@ export default {
                 this.item.table_rows = [];
                 this.selectingRow = null;
                 this.last_sell_id = response.data.sell_id;
+                this.$notify({
+
+                    type: 'success',
+                    title: 'Успешно!',
+                    message: `Кассовый чек успешно проведен!`,
+                })
             }).catch(error => {
                 console.log("Произошла ошибка! " + error.message)
             })
         },
+
         openWorkplace() {
             axios.post("/api/cashier/open", {
                 user_id: this.$store.getters["auth/user"].id,

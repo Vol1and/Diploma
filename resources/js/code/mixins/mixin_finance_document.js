@@ -21,6 +21,7 @@ export default {
             //если true, то строка переходит в editable
             selectingRow: new FinanceDocumentTableRow(null),
             hover_row: null,
+            buffer_row: null
         };
     },
 
@@ -34,6 +35,7 @@ export default {
         },
         //обработчик события cell-dblclick - обрабатывает двойной щелчок по выбраной клетке
         //чисто технически, его можно переделать в rowEdit, но пока не горит
+
         rowEdit(row) {
             //присваивает выбранную строку в selectingRow - читать выше
             this.selectingRow = row;
@@ -42,12 +44,13 @@ export default {
         rowHover(item) {
 
             this.hover_row = item;
+
             if (!this.selectingRow.isEqual(item)) return;
-            this.selectingRow = new FinanceDocumentTableRow();
+
+            this.selectingRow = new FinanceDocumentTableRow(null);
         },
         //удаление строки табличной части
         deleteSelected() {
-
             this.selectingRow = new FinanceDocumentTableRow();
             //если не выбрана ни одна строка - ничего не делаем
             if (this.hover_row == null) return;
@@ -77,13 +80,16 @@ export default {
             this.choosing_state = 2;
         },
         selectingCharacteristic() {
-            this.choosing_state = 4;
+            this.characteristic_dialog = true;
+            this.buffer_row = this.selectingRow;
         },
         onSelectedCharacteristic(data) {
             let flag = true;
-            this.item.table_rows.forEach
+
+            this.selectingRow = this.buffer_row
             this.item.table_rows.forEach(p => {
                 if (p.characteristic.id === data.characteristic.id) {
+                    console.log("Произошла жопа!");
                     //удаляем строку из табличной части
                     let index = this.item.table_rows.indexOf(this.hover_row);
                     this.item.table_rows.splice(index, 1);
@@ -97,7 +103,10 @@ export default {
                     });
                 }
             })
-            if (flag) this.selectingRow.characteristic = data.characteristic;
+            if (flag){
+                console.log(this.selectingRow)
+                this.selectingRow.characteristic = data.characteristic;
+            }
             this.choosing_state = 0;
             this.characteristic_dialog = false;
         },

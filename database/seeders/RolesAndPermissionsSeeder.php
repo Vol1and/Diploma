@@ -5,8 +5,8 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
 class RolesAndPermissionsSeeder extends Seeder
@@ -55,7 +55,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // create demo users
         $user = User::factory()->create([
-            'name' => 'Pharmacist1',
+            'name' => 'Кассир Иван Иванович',
             'email' => 'pharmacist1@example.com',
             'password' => bcrypt('12345678'),
         ]);
@@ -63,7 +63,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // create demo users
         $user = User::factory()->create([
-            'name' => 'Pharmacist2',
+            'name' => 'Кассир Петр Петрович',
             'email' => 'pharmacist2@example.com',
             'password' => bcrypt('12345678'),
         ]);
@@ -71,7 +71,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // create demo users
         $user = User::factory()->create([
-            'name' => 'Pharmacist3',
+            'name' => 'Кассир Ольга Олеговна',
             'email' => 'pharmacist3@example.com',
             'password' => bcrypt('12345678'),
         ]);
@@ -79,14 +79,14 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // create demo users
         $user = User::factory()->create([
-            'name' => 'Manager',
+            'name' => 'Менеджер Валерия Романовна',
             'email' => 'manager@example.com',
             'password' => bcrypt('12345678'),
         ]);
         $user->assignRole($role2);
 
         $user = User::factory()->create([
-            'name' => 'Admin',
+            'name' => 'Администратор Вячеслав Владимирович',
             'email' => 'admin@example.com',
             'password' => bcrypt('12345678'),
         ]);

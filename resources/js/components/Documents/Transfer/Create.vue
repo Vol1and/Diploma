@@ -141,7 +141,7 @@
 
                                         <el-input v-if="selectingRow === scope.row" type="number"
                                                   v-model="scope.row.count" placeholder="">
-                                            <template slot="append">шт.</template>
+
                                         </el-input>
                                         <div v-else> {{ scope.row.count }} шт.</div>
                                     </template>
@@ -158,7 +158,7 @@
                                         <el-input v-if="selectingRow === scope.row" type="number"
                                                   v-model="scope.row.characteristic.characteristic_price.price"
                                                   placeholder="" readonly>
-                                            <template slot="append">руб.</template>
+
                                         </el-input>
                                         <div v-else> {{ scope.row.characteristic.characteristic_price.price }} руб.
                                         </div>
