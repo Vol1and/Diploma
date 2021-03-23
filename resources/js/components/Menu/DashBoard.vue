@@ -12,7 +12,7 @@
                             <p>Открытых рабочих смен</p>
                         </div>
                         <div class="icon">
-                            <i class="ion ion-bag"></i>
+                            <i class="ion ion-person"></i>
                         </div>
                         <div href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></div>
                     </div></el-col>
@@ -29,12 +29,11 @@
                     </div></el-col>
                     <el-col :offset="1" :span="5"> <div class="small-box bg-warning">
                         <div class="inner">
-                            <h3>33</h3>
-
-                            <p>Всего агентов:</p>
+                            <h3>{{most_popular_nomenclature}}</h3>
+                            <p>Наиболее популярная позиция:</p>
                         </div>
                         <div class="icon">
-                            <i class="ion ion-person-add"></i>
+                            <i class="ion ion-bag"></i>
                         </div>
                         <div href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></div>
                     </div></el-col>
@@ -139,6 +138,8 @@ export default {
             this.opened_workplace_count = response.data.opened_workplace_count;
 
             this.last_week_sales_count = response.data.last_week_sales_count;
+
+            this.most_popular_nomenclature = response.data.most_popular_nomenclature;
         })
 
     }

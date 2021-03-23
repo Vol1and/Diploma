@@ -55,16 +55,14 @@ class NomenclatureRepository extends BaseRepository
     }
 
     public function getLastUpdated(){
-      //dd(Model::orderBy('updated_at','desc')->first());
       return Model::orderBy('updated_at','desc')->first();
-
     }
 
 
     public function findMostPopularNomenclature($date_start, $date_end)
     {
         return DB::select(
-            'CALL find_most_popular_nomenclature(' . $date_start . ', '.$date_end.')'
+            "CALL find_most_popular_nomenclature('". $date_start . "', '".$date_end."')"
         );
     }
 
