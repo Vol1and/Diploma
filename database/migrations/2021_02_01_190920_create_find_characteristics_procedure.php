@@ -184,6 +184,29 @@ class CreateFindCharacteristicsProcedure extends Migration
         END
         ";
 
+        //процедура для формирования графика: Период - Кол-ВО ЧЕКОВ
+        $procedure10 =
+            "
+        CREATE PROCEDURE `find_most_popular_nomenclature`(date_start date, date_end date)
+        BEGIN
+            SELECT
+                `nomenclatures`.`name` AS `nomenclature`,
+                SUM(ABS(`ware_connections`.`change` * `finance_document_table_rows`.`price`)) AS `summing`
+            FROM
+                ((`ware_connections`
+                JOIN `finance_document_table_rows` ON ((`ware_connections`.`id` = `finance_document_table_rows`.`ware_connection_id`))
+                JOIN `characteristics` ON ((`ware_connections`.`characteristic_id` = `characteristics`.`id`))
+                JOIN `nomenclatures` ON ((`characteristics`.`nomenclature_id` = `nomenclatures`.`id`))
+                ))
+            WHERE `ware_connections`.created_at >= date_start
+            AND `ware_connections`.created_at <= ((SELECT DATE_ADD(date_end, INTERVAL 24 HOUR)))
+            AND `ware_connections`.`change` < 0
+            GROUP BY `nomenclatures`.`name`
+            ORDER BY SUM(ABS(`ware_connections`.`change`)) DESC
+            LIMIT 1;
+        END
+        ";
+
         // внедрение процедуры в db
         DB::unprepared("DROP procedure IF EXISTS find_characteristics_procedure");
         DB::unprepared($procedure);
@@ -203,6 +226,8 @@ class CreateFindCharacteristicsProcedure extends Migration
         DB::unprepared($procedure7);
         DB::unprepared("DROP procedure IF EXISTS find_all_sales_by_period");
         DB::unprepared($procedure9);
+        DB::unprepared("DROP procedure IF EXISTS find_most_popular_nomenclature");
+        DB::unprepared($procedure10);
 
     }
 
@@ -222,5 +247,6 @@ class CreateFindCharacteristicsProcedure extends Migration
         Schema::dropIfExists('get_user_role');
         Schema::dropIfExists('find_all_cash_by_storage');
         Schema::dropIfExists('find_all_sales_by_period');
+        Schema::dropIfExists('find_most_popular_nomenclature');
     }
 }

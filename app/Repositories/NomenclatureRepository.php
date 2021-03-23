@@ -4,6 +4,7 @@
 namespace App\Repositories;
 
 use App\Models\Nomenclature as Model;
+use DB;
 
 
 class NomenclatureRepository extends BaseRepository
@@ -57,6 +58,14 @@ class NomenclatureRepository extends BaseRepository
       //dd(Model::orderBy('updated_at','desc')->first());
       return Model::orderBy('updated_at','desc')->first();
 
+    }
+
+
+    public function findMostPopularNomenclature($date_start, $date_end)
+    {
+        return DB::select(
+            'CALL find_most_popular_nomenclature(' . $date_start . ', '.$date_end.')'
+        );
     }
 
     public function getFilter($name = null, $producer = null, $price_type = null)

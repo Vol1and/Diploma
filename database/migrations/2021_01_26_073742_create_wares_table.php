@@ -22,6 +22,7 @@ class CreateWaresTable extends Migration
         FROM
             `diploma`.`ware_connections`
         GROUP BY characteristic_id, storage_id
+        HAVING ware > 0
             ');
     }
 

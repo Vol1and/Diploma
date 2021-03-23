@@ -37,11 +37,4 @@ class FinanceDocument extends Model
     public function table_rows(){
         return $this->hasMany(FinanceDocumentTableRow::class);
     }
-
-   //public function getIncomeSumAttribute(){
-   //    $result = 0;
-   //    foreach ($this->table_rows as $connection) $result += $connection->income_sum;
-   //    return $result;
-   //}
-
 }

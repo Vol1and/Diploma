@@ -39,9 +39,12 @@ class HomeController extends OriginController
 
     public function forDashboard(){
 
+        // номенклатура принёсшая наибольшую выручку за последние 30 дней
+        $most_popular_nomenclature = $this->nomenclatureRepository
+            ->findMostPopularNomenclature(Carbon::now()->subDays(30)->toDateString(),Carbon::now()->toDateString());
+
         // сколько на данный момент открытых смен у пользователей
         $active_user_count = $this->workplacesRepository->how_many_active();
-
         // кол-во чеков за последние 7 дней
         $last_week_sales_count = $this
             ->accountingConnectionsRepository
