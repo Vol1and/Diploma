@@ -22,17 +22,22 @@
                             <el-divider content-position="left"><h2>Товары</h2></el-divider>
 
                             <el-row style="margin-bottom: 10px">
-                                <el-button :disabled="!this.$store.getters.workplace.active_user_id > 0"
+                                <el-button :disabled="this.$store.getters.workplace.active_user_id <= 0"
                                            @click="selectingEntity(2)">Поиск товара [F2]
                                 </el-button>
                                 <el-button :disabled="rows_sum ===0 " @click="cashInput_dialog = true">Оплата [Alt +
                                     Q]
                                 </el-button>
-                                <el-tooltip class="item" effect="light" content="Удалить выбранную строку"
-                                            placement="top">
-                                    <el-button @click="deleteSelected" circle icon="el-icon-delete-solid"></el-button>
-                                </el-tooltip>
 
+                                <a tag="button" v-if="last_sell_id > 0" class="el-button print_class"
+                                   :href="'/report/selling-document/' +last_sell_id+ '/check'">Печать последнего чека</a>
+                                <el-button disabled v-else>
+                                   Печать последнего чека
+                                </el-button>
+                                <router-link  class="el-button print_class" :to="{name: 'selling.index'}"
+                                            >
+                                    Пробитые чеки
+                                </router-link>
                                 <h1 style="float: right">{{ this.status_label }}</h1>
                             </el-row>
                             <el-table :cell-style="{padding: '0', height: '50px'}" :data="item.table_rows"
@@ -167,8 +172,6 @@
                             </el-col>
                         </el-row>
                     </el-card>
-
-
                 </div>
             </el-col>
         </el-row>
@@ -230,7 +233,8 @@ export default {
             //булево значение диалогового окна ввода наличных
             cashInput_dialog: false,
             //поле для сдачи
-            change: 0
+            change: 0,
+            last_sell_id: 0
         }
     },
     //ивент, срабатывающий при created стадии компонента - в поле дата закидывает текущую дату
@@ -290,7 +294,7 @@ export default {
         },
         //меняет choosing_state, выводя другие компоненты
         //state - число, отображающее компоненту
-        selectingEntity(state){
+        selectingEntity(state) {
             this.choosing_state = state;
         },
 
@@ -330,7 +334,7 @@ export default {
             this.selectingRow.nomenclature = data.nomenclature;
             this.choosing_state = 0;
         },
-        selectingWorkPlace(){
+        selectingWorkPlace() {
             this.choosing_state = 3;
         },
         onSelectedWorkPlace(data) {
@@ -364,7 +368,7 @@ export default {
                     break;
                 case 'f2':
                     if (this.$store.getters.workplace.active_user_id > 0)
-                        this.selectingNomenclature();
+                        this.selectingEntity(2);
                     break;
                 case 'change':
                 case 'change_rus':
@@ -373,32 +377,34 @@ export default {
                     break;
             }
         },
-        //сабмит - отправляет данные
-        submit: function (statet) {
-            //не проходит валидацию - возвращаем
-            if (!this.validateFields()) return;
-            //блокируем кнопку submit
-            this.loaded = false;
-
-            //пост-запрос
-            //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
-            axios.post("/api/income", {item: this.item.getDataForCreate(), state: statet}).then((response) => {
-
-                this.$notify({
-                    type: 'success',
-                    title: 'Успешно!',
-                    message: `Поступление успешно добавлено!`,
-                })
-                this.$router.push({name: 'income.index'})
-            }).catch((error) => {
-                //ошибка - выводим
-                this.$notify.error({
-                    title: 'Ошибка!',
-                    message: "Сообщение ошибки - " + error.response.data.message,
-                })
-                this.loaded = true;
-            })
-        },
+        ////сабмит - отправляет данные
+        //submit: function (statet) {
+        //    //не проходит валидацию - возвращаем
+        //    if (!this.validateFields()) return;
+        //    //блокируем кнопку submit
+        //    this.loaded = false;
+//
+        //    //пост-запрос
+        //    //отправляет данные, полученные из специально подготовленного метода, чтобы не отправлять лишаки
+        //    axios.post("/api/income", {item: this.item.getDataForCreate(), state: statet}).then((response) => {
+//
+        //
+        //
+        //        this.$notify({
+        //            type: 'success',
+        //            title: 'Успешно!',
+        //            message: `Поступление успешно добавлено!`,
+        //        })
+        //        this.$router.push({name: 'income.index'})
+        //    }).catch((error) => {
+        //        //ошибка - выводим
+        //        this.$notify.error({
+        //            title: 'Ошибка!',
+        //            message: "Сообщение ошибки - " + error.response.data.message,
+        //        })
+        //        this.loaded = true;
+        //    })
+        //},
 
         validateFields() {
             this.errors = [];
@@ -426,10 +432,12 @@ export default {
                 user_id: this.$store.getters["auth/user"].id
             }).then((response) => {
 
+                console.log(response.data)
                 this.change = data.change;
                 this.cashInput_dialog = false;
                 this.item.table_rows = [];
                 this.selectingRow = null;
+                this.last_sell_id = response.data.sell_id;
             }).catch(error => {
                 console.log("Произошла ошибка! " + error.message)
             })

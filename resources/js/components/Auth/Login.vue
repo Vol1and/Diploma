@@ -7,7 +7,7 @@
                     <h2 class="text-center">Аутентификация</h2>
                 </div>
                 <el-form label-position="top">
-                    <el-form-item label="Имя пользователя">
+                    <el-form-item label="Email">
                         <el-input type="text" v-model="item.name"></el-input>
                     </el-form-item>
 
