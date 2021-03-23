@@ -202,7 +202,7 @@ class CreateFindCharacteristicsProcedure extends Migration
             AND `ware_connections`.created_at <= ((SELECT DATE_ADD(date_end, INTERVAL 24 HOUR)))
             AND `ware_connections`.`change` < 0
             GROUP BY `nomenclatures`.`name`
-            ORDER BY SUM(ABS(`ware_connections`.`change`)) DESC
+            ORDER BY SUM(ABS(`ware_connections`.`change` * `finance_document_table_rows`.`price`)) DESC
             LIMIT 1;
         END
         ";
