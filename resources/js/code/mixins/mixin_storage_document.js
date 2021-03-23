@@ -3,6 +3,7 @@
 //подробнее почитать можно https://ru.vuejs.org/v2/guide/mixins.html
 import StorageDocument from "../models/StorageDocument";
 import StorageDocumentTableRow from "../models/StorageDocumentTableRow";
+import FinanceDocumentTableRow from "../models/FinanceDocumentTableRow";
 
 export default {
 
@@ -42,16 +43,13 @@ export default {
         rowHover(item) {
 
             this.hover_row = item;
-            if (this.selectingRow.isEqual(item)) return;
-
-            this.selectingRow = new StorageDocumentTableRow();
+            if (!this.selectingRow.isEqual(item)) return;
+            this.selectingRow = new FinanceDocumentTableRow();
         },
         //удаление строки табличной части
         deleteSelected() {
 
-
-
-            this.selectingRow = new StorageDocumentTableRow();
+            this.selectingRow = new FinanceDocumentTableRow();
             //если не выбрана ни одна строка - ничего не делаем
             if (this.hover_row == null) return;
 

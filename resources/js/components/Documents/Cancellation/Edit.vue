@@ -112,7 +112,7 @@
                                         <el-input v-if="selectingRow === scope.row" readonly
                                                   v-model="scope.row.characteristic.name" placeholder="">
                                             <el-button type="primary" @click="characteristic_dialog = true;"
-                                                       :disabled="scope.row.nomenclature.id === -1 || item.storage.id === -1 "
+                                                       :disabled="scope.row.nomenclature.id === -1 || item.source_storage.id === -1 "
                                                        slot="append"
                                                        icon="el-icon-d-arrow-right">
                                             </el-button>
@@ -131,7 +131,6 @@
 
                                         <el-input v-if="selectingRow === scope.row" type="number"
                                                   v-model="scope.row.count" placeholder="">
-                                            <template slot="append">шт.</template>
                                         </el-input>
                                         <div v-else> {{ scope.row.count }} шт.</div>
                                     </template>
@@ -148,7 +147,7 @@
                                         <el-input v-if="selectingRow === scope.row" type="number"
                                                   v-model="scope.row.characteristic.characteristic_price.price"
                                                   placeholder="" readonly>
-                                            <template slot="append">руб.</template>
+
                                         </el-input>
                                         <div v-else> {{ scope.row.characteristic.characteristic_price.price }} руб.
                                         </div>
