@@ -22,7 +22,7 @@ export default {
             //если true, то строка переходит в editable
             selectingRow: new StorageDocumentTableRow(null),
             hover_row: null,
-buffer_row: null
+            buffer_row: null
         };
     },
 
@@ -80,22 +80,21 @@ buffer_row: null
         },
         selectingNomenclature(row) {
             this.choosing_state = 2;
-            this.buffer_row = this.selectingRow;
         },
         selectingCharacteristic() {
-            this.characteristic_dialog = true;
             this.buffer_row = this.selectingRow;
+            this.characteristic_dialog = true;
+
         },
         onSelectedCharacteristic(data) {
             let flag = true;
+
+            this.selectingRow = this.buffer_row
             this.item.table_rows.forEach(p => {
                 if (p.characteristic.id === data.characteristic.id) {
                     //удаляем строку из табличной части
-                    //удаляем строку из табличной части
                     let index = this.item.table_rows.indexOf(this.hover_row);
                     this.item.table_rows.splice(index, 1);
-                    //если удалена новая строка и она не сохранена на сервере - не заносим в deleted_rows
-                    if (this.hover_row.id != null) this.item.deleted_rows.push(this.hover_row.id);
 
                     this.hover_row = p;
                     this.selectingRow = p;
@@ -106,7 +105,10 @@ buffer_row: null
                     });
                 }
             })
-            if (flag) this.selectingRow.characteristic = data.characteristic;
+            if (flag) {
+                console.log(this.selectingRow)
+                this.selectingRow.characteristic = data.characteristic;
+            }
             this.choosing_state = 0;
             this.characteristic_dialog = false;
         },
