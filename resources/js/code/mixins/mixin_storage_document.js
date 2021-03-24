@@ -22,6 +22,7 @@ export default {
             //если true, то строка переходит в editable
             selectingRow: new StorageDocumentTableRow(null),
             hover_row: null,
+buffer_row: null
         };
     },
 
@@ -82,7 +83,8 @@ export default {
             this.buffer_row = this.selectingRow;
         },
         selectingCharacteristic() {
-            this.choosing_state = 4;
+            this.characteristic_dialog = true;
+            this.buffer_row = this.selectingRow;
         },
         onSelectedCharacteristic(data) {
             let flag = true;

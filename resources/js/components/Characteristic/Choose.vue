@@ -43,8 +43,8 @@
             custom-class="demo-drawer"
             ref="drawer"
         >
-            <characteristic-create-component @created="characteristicCreated" :prop_nomenclature_id="nomenclature_id" v-if="create_dialog"
-                                                        :nomenclature_id="nomenclature_id"
+            <characteristic-create-component @created="characteristicCreated" :prop_nomenclature_id="item.nomenclature.id" v-if="create_dialog"
+
                                                        ></characteristic-create-component>
         </el-drawer>
     </el-row>

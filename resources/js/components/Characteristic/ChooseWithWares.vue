@@ -7,13 +7,9 @@
             <{{ this.item.nomenclature.producer.name }}></h4>
 
         <el-row>
-            <el-col :span="8">
-                <el-button  @click="create_dialog = true" style=" float:left ">
-                    Добавить
-                </el-button>
-            </el-col>
 
-            <el-col :span="8" :offset="8">
+
+            <el-col :span="8" :offset="16">
                 <el-button icon="el-icon-refresh" @click="update" :disabled="is_reload" style="float:right;">
                     Обновить
                 </el-button>
@@ -51,17 +47,6 @@
 
             </el-table-column>
         </el-table>
-        <el-drawer
-            :append-to-body="true"
-            :visible.sync="create_dialog"
-            direction="ltr"
-            custom-class="demo-drawer"
-            ref="drawer"
-        >
-            <characteristic-create-component :prop_nomenclature_id="nomenclature_id" v-if="create_dialog"
-                                                        :nomenclature_id="nomenclature_id"
-                                                       ></characteristic-create-component>
-        </el-drawer>
     </el-row>
 </template>
 

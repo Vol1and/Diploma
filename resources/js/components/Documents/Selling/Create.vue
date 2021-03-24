@@ -186,7 +186,7 @@
 
             <characteristic-choose-with-wares-component :storage_id="item.storage.id" @back="onBack"
                                                         v-if="characteristic_dialog"
-                                                        :nomenclature_id="selectingRow.nomenclature.id"
+                                                        :nomenclature_id="hover_row.nomenclature.id"
                                                         @selected="onSelectedCharacteristic"></characteristic-choose-with-wares-component>
         </el-drawer>
         <agent-choose-component @back="onBack" v-if="choosing_state ===1"

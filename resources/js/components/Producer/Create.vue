@@ -64,7 +64,7 @@ export default {
                     title: 'Элемент добавлен!',
                     message: `Элемент  успешно добавлен!`,
                 })
-                this.$router.push({name: 'nomenclature.index'});
+                this.$router.push({name: 'producers.index'});
 
             }).catch((error) => {
                 this.$notify.error({

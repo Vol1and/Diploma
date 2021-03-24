@@ -109,7 +109,7 @@
 
                                         <el-input v-if="selectingRow === scope.row" readonly
                                                   v-model="scope.row.characteristic.name" placeholder="">
-                                            <el-button type="primary" @click="characteristic_dialog = true;"
+                                            <el-button type="primary" @click="selectingCharacteristic"
                                                        :disabled="scope.row.nomenclature.id === -1 || item.source_storage.id === -1 "
                                                        slot="append"
                                                        icon="el-icon-d-arrow-right">
@@ -187,7 +187,7 @@
 
             <characteristic-choose-with-wares-component :storage_id="item.source_storage.id" @back="onBack"
                                                         v-if="characteristic_dialog"
-                                                        :nomenclature_id="selectingRow.nomenclature.id"
+                                                        :nomenclature_id="buffer_row.nomenclature.id"
                                                         @selected="onSelectedCharacteristic"></characteristic-choose-with-wares-component>
         </el-drawer>
         <storage-choose-component @back="onBack" v-if="choosing_state ===3"
