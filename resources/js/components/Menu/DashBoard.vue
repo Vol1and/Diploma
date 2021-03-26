@@ -20,6 +20,7 @@
                         <div class="inner">
                             <h3>{{last_week_sales_count}}</h3>
 
+
                             <p>Продаж за последние 7 дней</p>
                         </div>
                         <div class="icon">

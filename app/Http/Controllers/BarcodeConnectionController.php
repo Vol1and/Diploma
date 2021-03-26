@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Agent;
-use App\Repositories\AgentsRepository;
+use App\Models\BarcodeConnection;
+use App\Repositories\BarcodeConnectionsRepository;
 use Illuminate\Http\Request;
 
-class AgentController extends OriginController
+class BarcodeConnectionController extends OriginController
 {
-    //ссылка на хранилище модели Agent
-    private $agentRepository;
+//ссылка на хранилище модели Barcode
+    private $barcodeConnectionsRepository;
 
     public function __construct()
     {
@@ -17,13 +17,13 @@ class AgentController extends OriginController
         parent::__construct();
 
         //инициализация хранилища
-        $this->agentRepository = app(AgentsRepository::class);
+        $this->barcodesRepository = app(BarcodeConnectionsRepository::class);
     }
 
 
     public function index()
     {
-        return $this->agentRepository->getTable()->toJson();
+        return $this->barcodeConnectionsRepository->getTable()->toJson();
     }
 
 
@@ -34,7 +34,7 @@ class AgentController extends OriginController
         //получение данных из реквеста
         $data = $request->input();
         //создание нового элемента
-        $item = new Agent($data);
+        $item = new BarcodeConnection($data);
         //сохраняем
         $item->save();
 
@@ -49,11 +49,9 @@ class AgentController extends OriginController
 
     }
 
-
-
     public function show($id)
     {
-        $result = $this->agentRepository->find($id);
+        $result = $this->barcodeConnectionsRepository->find($id);
 
         if(empty($result) || !$result){
 
@@ -71,7 +69,7 @@ class AgentController extends OriginController
      */
     public function update(Request $request)
     {
-        $item = $this->agentRepository->find($request->id);
+        $item = $this->barcodeConnectionsRepository->find($request->id);
         if (empty($item)) {
 
             return response(null, 404);
@@ -93,7 +91,7 @@ class AgentController extends OriginController
      */
     public function destroy($id)
     {
-        $result = Agent::destroy($id);
+        $result = BarcodeConnection::destroy($id);
 
         if (!$result) return response(null, 404);
 

@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Agent;
-use App\Repositories\AgentsRepository;
+use App\Models\Barcode;
+
+use App\Repositories\BarcodesRepository;
 use Illuminate\Http\Request;
 
-class AgentController extends OriginController
+class BarcodeController extends OriginController
 {
-    //ссылка на хранилище модели Agent
-    private $agentRepository;
+//ссылка на хранилище модели Barcode
+    private $barcodesRepository;
 
     public function __construct()
     {
@@ -17,13 +18,13 @@ class AgentController extends OriginController
         parent::__construct();
 
         //инициализация хранилища
-        $this->agentRepository = app(AgentsRepository::class);
+        $this->barcodesRepository = app(BarcodesRepository::class);
     }
 
 
     public function index()
     {
-        return $this->agentRepository->getTable()->toJson();
+        return $this->barcodesRepository->getTable()->toJson();
     }
 
 
@@ -34,7 +35,7 @@ class AgentController extends OriginController
         //получение данных из реквеста
         $data = $request->input();
         //создание нового элемента
-        $item = new Agent($data);
+        $item = new Barcode($data);
         //сохраняем
         $item->save();
 
@@ -49,11 +50,9 @@ class AgentController extends OriginController
 
     }
 
-
-
     public function show($id)
     {
-        $result = $this->agentRepository->find($id);
+        $result = $this->barcodesRepository->find($id);
 
         if(empty($result) || !$result){
 
@@ -71,7 +70,7 @@ class AgentController extends OriginController
      */
     public function update(Request $request)
     {
-        $item = $this->agentRepository->find($request->id);
+        $item = $this->barcodesRepository->find($request->id);
         if (empty($item)) {
 
             return response(null, 404);
@@ -93,7 +92,7 @@ class AgentController extends OriginController
      */
     public function destroy($id)
     {
-        $result = Agent::destroy($id);
+        $result = Barcode::destroy($id);
 
         if (!$result) return response(null, 404);
 

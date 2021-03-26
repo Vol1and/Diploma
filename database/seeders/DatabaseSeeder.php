@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(StorageSeeder::class);
         $this->call(WorkplaceSeeder::class);
+        $this->call(BarcodeSeeder::class);
         $this->call(MedFormSeeder::class);
         $this->call(AgentSeeder::class);
         $this->call(DocTypeSeeder::class);
@@ -24,6 +25,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ProducerSeeder::class);
         $this->call(CharacteristicPriceSeeder::class);
         $this->call(NomenclatureSeeder::class);
+        $this->call(BarcodeConnectionSeeder::class);
         $this->call(CharacteristicSeeder::class);
         $this->call(FinanceDocumentSeeder::class);
         $this->call(StorageDocumentSeeder::class);
@@ -34,6 +36,5 @@ class DatabaseSeeder extends Seeder
         $this->call(StorageDocumentTableRowSeeder::class);
         $this->call(RolesAndPermissionsSeeder::class);
         $this->call(WorkplaceDocumentConnectionSeeder::class);
-        // \App\Models\User::factory(10)->create();
     }
 }
