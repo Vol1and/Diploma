@@ -4,6 +4,8 @@
 namespace App\Repositories;
 
 use App\Models\Nomenclature as Model;
+use App\Repositories\BarcodeConnectionsRepository;
+use App\Repositories\BarcodesRepository;
 use DB;
 
 
@@ -48,6 +50,22 @@ class NomenclatureRepository extends BaseRepository
             ->get()
             ->first();
 
+    }
+
+    public function findByBarcode($barcode)
+    {
+        $barcodeConnectionsRepository = app(BarcodeConnectionsRepository::class);
+        $barcodesRepository = app(BarcodesRepository::class);
+
+        $barcode = $barcodesRepository->findByCode($barcode);
+        if($barcode) {
+            // поиск сущность barcode_connection по id штрихкода
+            $barcodeConnection = $barcodeConnectionsRepository->findByBarcodeId($barcode->id);
+
+            // если найдётся возвращаем из репозитория номклатуры сущность найденную по id
+            if ($barcodeConnection) return $this->find($barcodeConnection->nomenclature_id);
+        }
+        return null;
     }
 
     public function getTotalCount(){

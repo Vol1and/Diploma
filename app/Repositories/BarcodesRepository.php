@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 class BarcodesRepository extends BaseRepository
 {
 
+
     /**
      * @return string
      */
@@ -37,5 +38,14 @@ class BarcodesRepository extends BaseRepository
             'code'
         ];
         return $this->startConditions()->select($columns)->where('id', $id)->get()->first();
+    }
+
+    public function findByCode($code){
+
+        $columns = [
+            'id',
+            'code'
+        ];
+        return $this->startConditions()->select($columns)->where('code', $code)->get()->first();
     }
 }
