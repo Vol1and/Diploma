@@ -43,7 +43,6 @@
             </el-table-column>
         </el-table>
         <div  class="centered">
-            <!--            <jw-pagination :items="items" @changePage="onChangePage"></jw-pagination>-->
 
             <el-pagination
                 height="250"

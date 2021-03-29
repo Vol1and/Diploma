@@ -75,3 +75,8 @@ Route::post('/cashier/close', [\App\Http\Controllers\WorkplaceController::class,
 Route::post('/cashier/open',  [\App\Http\Controllers\WorkplaceController::class, "open" ]);
 
 Route::post('/dashboard',  [\App\Http\Controllers\Admin\HomeController::class, "forDashboard" ]);
+
+Route::get('/barcodes/filter', [App\Http\Controllers\BarcodeConnectionController::class, 'getFilter']);
+Route::get('/barcodes',  [App\Http\Controllers\BarcodeConnectionController::class, 'index']);
+
+Route::post('/barcodes/findNomenclatureByBarcode', [App\Http\Controllers\NomenclatureController::class, 'findByBarcode']);

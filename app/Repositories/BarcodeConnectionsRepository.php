@@ -27,7 +27,12 @@ class BarcodeConnectionsRepository extends BaseRepository
     }
 
     public function getTable(){
-        return Model::all();
+        $columns = [
+            'id',
+            'nomenclature_id',
+            'barcode_id'
+        ];
+        return $this->startConditions()->select($columns)->with(['nomenclature', 'barcode'])->get();
     }
 
     public function find($id){
@@ -48,7 +53,7 @@ class BarcodeConnectionsRepository extends BaseRepository
             'nomenclature_id',
             'barcode_id'
         ];
-        return $this->startConditions()->select($columns)->where('nomenclature_id', $nomenclature_id)->get();
+        return $this->startConditions()->select($columns)->with(['nomenclature', 'barcode'])->where('nomenclature_id', $nomenclature_id)->get();
     }
 
     // поиск id номенклатуры по id штрихкода

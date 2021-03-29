@@ -39,7 +39,7 @@ export default {
 
     data() {
         return {
-            item: {name: "", billing: "", address: "", description: ""},
+            item: new Agent(),
 
             is_visible: false,
             loaded: true,

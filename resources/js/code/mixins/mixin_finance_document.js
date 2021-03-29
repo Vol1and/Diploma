@@ -28,10 +28,14 @@ export default {
     methods: {
 
         showErrors() {
-            this.errors.forEach(item => this.$notify.error({
-                title: 'Ошибка!',
-                message: item,
-            }));
+            this.errors.forEach(item =>
+                this.$message({
+                    showClose: true,
+                    message: item,
+                    type: 'error'
+                }));
+
+
         },
         //обработчик события cell-dblclick - обрабатывает двойной щелчок по выбраной клетке
         //чисто технически, его можно переделать в rowEdit, но пока не горит

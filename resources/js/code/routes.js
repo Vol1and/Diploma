@@ -55,6 +55,8 @@ import Login from "../components/Auth/Login"
 
 import DashBoard from "../components/Menu/DashBoard"
 
+import BarcodeIndex from "../components/BarCode/Index"
+
 const routes = [
     {path: '/wares', name: "wares.index", component: WaresIndex, meta: {requiresAuth: true, access_rate: 1}},
 
@@ -124,7 +126,6 @@ const routes = [
     {path: '/nomenclatures/:id', name: "nomenclature.edit", component: NomenclatureEdit, meta: {requiresAuth: true, access_rate: 2}},
 
     {path: '/cashier', name: "cashier.index", component: CashierIndex, meta: {requiresAuth: true, access_rate: 1}},
-//    {path: '/test', name: "cashier.test", component: MedicamentSearch, meta: {requiresAuth: true, access_rate: 0}},
 
     {path: '/', name: "home.index", component: Home, meta: {requiresAuth: true, access_rate: 1}},
     {path: '/login', name: 'login', component: Login, meta: {requiresAuth: false}},
@@ -133,6 +134,8 @@ const routes = [
     {path: '/charts/users-cash', name: "charts.users", component: UsersSalesContainer, meta: {requiresAuth: true, access_rate: 3}},
     {path: '/charts/storages-sales', name: "charts.storages", component: StoragesSalesContainer, meta: {requiresAuth: true, access_rate: 3}},
     {path: '/charts/agents-cash', name: "charts.agents", component: AgentsCashContainer, meta: {requiresAuth: true, access_rate: 3}},
+
+    {path: '/barcodes', name: "barcodes", component: BarcodeIndex, meta: {requiresAuth: true, access_rate: 3}},
 
 
     {path: '/dashboard', name: 'dashboard', component: DashBoard, meta: {requiresAuth: true, access_rate: 3}},

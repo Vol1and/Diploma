@@ -12,7 +12,7 @@
                     </el-form-item>
 
                     <el-form-item label="Пароль">
-                        <el-input type="password"  v-model="item.password"></el-input>
+                        <el-input type="password" v-model="item.password"></el-input>
                     </el-form-item>
 
 
@@ -37,12 +37,32 @@ export default {
             }
         };
     },
+    computed: {
+
+        index_route: function () {
+            switch (this.$store.getters["auth/role"]) {
+
+                case 1:
+                case 2:
+                    return {name: "cashier.index"}
+                case 3:
+                    return {name: "dashboard"}
+                default:
+                    return {name: "login"}
+
+            }
+        }
+
+    },
     methods: {
-        submit(){
+        submit() {
 
 
-            this.$store.dispatch('auth/sendLoginRequest', {email : this.item.name, password : this.item.password}).then(()=> {
-                this.$router.push({name: "home.index"});
+            this.$store.dispatch('auth/sendLoginRequest', {
+                email: this.item.name,
+                password: this.item.password
+            }).then(() => {
+                this.$router.push(this.index_route);
             })
         }
     }

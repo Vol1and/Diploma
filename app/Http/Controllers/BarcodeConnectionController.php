@@ -17,13 +17,13 @@ class BarcodeConnectionController extends OriginController
         parent::__construct();
 
         //инициализация хранилища
-        $this->barcodesRepository = app(BarcodeConnectionsRepository::class);
+        $this->barcodeConnectionsRepository = app(BarcodeConnectionsRepository::class);
     }
 
 
     public function index()
     {
-        return $this->barcodeConnectionsRepository->getTable()->toJson();
+        return $this->barcodeConnectionsRepository->getTable();
     }
 
 
@@ -96,5 +96,14 @@ class BarcodeConnectionController extends OriginController
         if (!$result) return response(null, 404);
 
         return response(null, 200);
+    }
+    public function getFilter(Request $request)
+    {
+
+
+        $nomenclature_id = $request->input('nomenclature_id');
+
+       return $this->barcodeConnectionsRepository->findByNomenclature( $nomenclature_id)->toJSON();
+
     }
 }

@@ -11,7 +11,7 @@
                         <el-form-item label="Наименование">
                             <el-input type="text" v-model="item.name"></el-input>
                         </el-form-item>
-                        <el-form-item label="Производитель:">
+                        <el-form-item label="Склад:">
                             <el-input readonly v-model="item.storage.name" placeholder="">
                                 <el-button type="primary" @click="selectingStorage" slot="append"
                                            icon="el-icon-d-arrow-right"></el-button>
