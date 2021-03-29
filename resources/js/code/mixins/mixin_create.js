@@ -14,10 +14,14 @@ export default {
     methods: {
 
         showErrors() {
-            this.errors.forEach(item => this.$notify.error({
-                title: 'Ошибка!',
-                message: item,
-            }));
+            this.errors.forEach(item =>
+                this.$message({
+                    showClose: true,
+                    message: item,
+                    type: 'error'
+                }));
+
+
         }
     }
 

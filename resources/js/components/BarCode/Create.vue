@@ -4,18 +4,12 @@
             <el-card class="box-card">
 
                 <div slot="header">
-                    <h2 class="text-center">Новая характеристика</h2>
+                    <h2 class="text-center">Новый штрихкод</h2>
                 </div>
                 <el-form label-position="top">
-                    <el-form-item label="Серия">
-                        <el-input type="text" v-model="item.serial"></el-input>
+                    <el-form-item label="Штрихкод">
+                        <el-input type="text" v-model="item.barcode"></el-input>
                     </el-form-item>
-
-                    <el-form-item label="Срок годности">
-                        <el-date-picker format="yyyy/MM/dd"
-                        value-format="yyyy/MM/dd" style="width: 100%" type="date" v-model="item.expiry_date"></el-date-picker>
-                    </el-form-item>
-
 
                     <el-form-item>
                         <el-button type="primary" @click="submit">Добавить</el-button>
@@ -39,8 +33,7 @@ export default {
     ],
     data() {
         return {
-            item: new Characteristic(-1, "", 0),
-
+            item: {barcode : ""},
             nomenclature_id: this.nomenclature_id = this.$route.params.nomenclature_id,
             loaded: true,
             errors: [],
@@ -73,7 +66,7 @@ export default {
             this.loaded = false;
 
 
-            axios.post(`/api/characteristics/${this.nomenclature_id}/create`, this.item).then(response => {
+            axios.post(`/api/barcodes/${this.nomenclature_id}/create`, this.item).then(response => {
                 this.loaded = true;
                 this.$notify({
 
@@ -81,8 +74,6 @@ export default {
                     title: 'Элемент добавлен!',
                     message: `Элемент  успешно добавлен!`,
                 })
-                if(this.prop_nomenclature_id != null )  this.$emit("created");
-
             }).catch((error) => {
                 this.$notify.error({
 
@@ -92,14 +83,14 @@ export default {
                 this.loaded = true;
             })
         },
-        validateFields() {
-            this.errors = [];
-            if (this.item.serial.length === 0) this.errors.push("Поле \"Серия\" должно быть заполнено");
-            if (this.item.serial.length > 255) this.errors.push("Превышен размер поля \"Серия\"");
-            this.showErrors();
-
-            return this.errors.length === 0;
-        }
+      //  validateFields() {
+      //      this.errors = [];
+      //      if (this.item.serial.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
+      //      if (this.item.serial.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
+      //      this.showErrors();
+//
+      //      return this.errors.length === 0;
+      //  }
 
     }
 

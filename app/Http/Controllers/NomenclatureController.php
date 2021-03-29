@@ -139,4 +139,12 @@ class NomenclatureController extends OriginController
 
         return $result->toJson();
     }
+
+    public function findByBarcode(Request $request){
+        $barcode = $request->input('barcode');
+
+        $nomenclature = $this->nomenclatureRepository->findByBarcode($barcode);
+
+        return ['nomenclature' => $nomenclature];
+    }
 }

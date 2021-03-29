@@ -10,6 +10,7 @@ import locale from 'element-ui/lib/locale/lang/ru-RU'
 import route_file from './code/routes.js';
 //импортируем хранилище из соответствующего модуля
 import store from './store/index'
+import VueBarcodeScanner from 'vue-barcode-scanner'
 
 
 require('./code/bootstrap');
@@ -19,6 +20,8 @@ require('./code/component_init')
 
 require('./store')
 
+// inject vue barcode scanner
+Vue.use(VueBarcodeScanner)
 
 Vue.use(VueRouter)
 

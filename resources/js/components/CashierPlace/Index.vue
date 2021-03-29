@@ -199,6 +199,11 @@
         <config-board @selected="choosing_state = 0;" v-if="choosing_state === 4">
 
         </config-board>
+        <CharacteristicSearch style="margin-bottom: 30px" v-if="choosing_state ===5" @back="characteristic_back" @selected="characteristic_selected" :nomenclature_id="barcode_nomenclature.id" :storage_id="this.$store.getters.workplace.storage.id" >
+
+        </CharacteristicSearch>
+
+
     </div>
 </template>
 
@@ -216,6 +221,7 @@ export default {
     data() {
         return {
 
+            barcode_nomenclature: null,
             //массив с ошибками
             errors: [],
             //переменная, которая помогает отображать компоненты выбора (например, NomenclatureChoose или ProducerChoose)
@@ -243,6 +249,8 @@ export default {
         this.item.date = Date.now();
 
         if (this.$store.getters.workplace === null) this.choosing_state = 4;
+
+        this.$barcodeScanner.init(this.onBarcodeScanned)
     },
     computed: {
 
@@ -261,6 +269,48 @@ export default {
         }
     },
     methods: {
+        characteristic_selected(data){
+            this.choosing_state = 0;
+            let new_row = new FinanceDocumentTableRow();
+            new_row.nomenclature = this.barcode_nomenclature;
+            new_row.characteristic = data.characteristic;
+            new_row.count = 1;
+            this.item.table_rows.push(new_row);
+
+        },
+        characteristic_back() {
+            this.choosing_state = 0;
+        },
+
+        // Create callback function to receive barcode when the scanner is already done
+        onBarcodeScanned (barcode) {
+            console.log(barcode)
+
+            axios.post("/api/barcodes/findNomenclatureByBarcode", {barcode: barcode}).then((response) => {
+
+                console.log(response.data)
+                if(response.data.nomenclature !== null){
+                    this.barcode_nomenclature = response.data.nomenclature;
+                    this.choosing_state = 5;
+                }
+                else {
+                    this.$notify.error({
+                        title: 'Ошибка!',
+                        message: `Номенклатуры со штрихкодом ${barcode} не найдено`,
+                    })
+                }
+
+
+
+            });
+
+
+        },
+        // Reset to the last barcode before hitting enter (whatever anything in the input box)
+        resetBarcode () {
+            let barcode = this.$barcodeScanner.getPreviousCode()
+
+        },
         //показывает ошибки
         showErrors() {
             this.errors.forEach(item => this.$notify.error({
@@ -301,7 +351,6 @@ export default {
 
         onSelectedCharacteristic(data) {
             let flag = true;
-            this.item.table_rows.forEach
             this.item.table_rows.forEach(p => {
                 if (p.characteristic.id === data.characteristic.id) {
                     //удаляем строку из табличной части
@@ -363,6 +412,7 @@ export default {
             this.choosing_state = 4;
         },
         theAction(event) {
+            console.log(event)
             switch (event.srcKey) {
                 case 'del':
                     this.deleteSelected();
@@ -405,18 +455,19 @@ export default {
                 user_id: this.$store.getters["auth/user"].id
             }).then((response) => {
 
-                console.log(response.data)
                 this.change = data.change;
                 this.cashInput_dialog = false;
                 this.item.table_rows = [];
                 this.selectingRow = null;
                 this.last_sell_id = response.data.sell_id;
-                this.$notify({
+                this.errors.forEach(item =>
+                    this.$message({
+                        showClose: true,
+                        message: item,
+                        type: 'success'
+                    }));
 
-                    type: 'success',
-                    title: 'Успешно!',
-                    message: `Кассовый чек успешно проведен!`,
-                })
+
             }).catch(error => {
                 console.log("Произошла ошибка! " + error.message)
             })

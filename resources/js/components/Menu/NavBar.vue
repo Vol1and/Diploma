@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar nanav navbar-expand-md navbar-light bg-white shadow-sm">
 
-            <router-link class="navbar-brand" :to="{name: 'home.index'}">
+            <router-link class="navbar-brand" :to="index_route">
                 Diploma
             </router-link>
 
@@ -39,6 +39,20 @@ export default {
             })
 
         },
+
+    },
+    computed: {
+
+        index_route: function () {
+            switch (this.$store.getters["auth/role"]){
+
+                case 1:
+                case 2: return {name: "cashier.index"}
+                case 3: return {name: "dashboard"}
+                default: return {name: "login"}
+
+            }
+        }
 
     },
     created() {
