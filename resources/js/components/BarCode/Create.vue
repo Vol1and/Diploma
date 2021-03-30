@@ -1,12 +1,21 @@
 <template>
-    <el-row>
-        <el-col :offset="2" :span="20">
+    <div>
+    <el-row v-if="choosing_state === 0">
+        <el-col :offset="7" :span="10">
             <el-card class="box-card">
 
                 <div slot="header">
                     <h2 class="text-center">Новый штрихкод</h2>
                 </div>
                 <el-form label-position="top">
+                    <el-form-item style="   margin-bottom: 0;" label="Номенклатура:">
+                        <el-input readonly
+                                  v-model="item.nomenclature.name" placeholder="">
+                            <el-button type="primary" @click="selectingNomenclature" slot="append"
+                                       icon="el-icon-d-arrow-right">
+                            </el-button>
+                        </el-input>
+                    </el-form-item>
                     <el-form-item label="Штрихкод">
                         <el-input type="text" v-model="item.barcode"></el-input>
                     </el-form-item>
@@ -19,6 +28,9 @@
             </el-card>
         </el-col>
     </el-row>
+    <nomenclature-choose-component @back="onBack" v-if="choosing_state ===1"
+                                   @selected="onSelectedNomenclature"></nomenclature-choose-component>
+    </div>
 </template>
 
 <script>
@@ -33,27 +45,15 @@ export default {
     ],
     data() {
         return {
-            item: {barcode : ""},
-            nomenclature_id: this.nomenclature_id = this.$route.params.nomenclature_id,
+            item: {barcode : "" , nomenclature: {id: null, name: ""}},
             loaded: true,
             errors: [],
-            success: true
+            success: true,
+            choosing_state : 0
 
         };
     },
     mounted() {
-        this.nomenclature_id = this.$route.params.nomenclature_id;
-        if (this.prop_nomenclature_id != null) this.nomenclature_id = this.prop_nomenclature_id;
-
-
-        if(this.nomenclature_id == null) {
-            this.$notify.error({
-
-                title: 'Ошибка!',
-                message: "Не указан id номенклатуры!",
-            })
-            this.loaded = false;
-        }
     },
 
 
@@ -66,7 +66,7 @@ export default {
             this.loaded = false;
 
 
-            axios.post(`/api/barcodes/${this.nomenclature_id}/create`, this.item).then(response => {
+            axios.post(`/api/barcodes`, {barcode: this.item.barcode, nomenclature_id : this.item.nomenclature.id}).then(response => {
                 this.loaded = true;
                 this.$notify({
 
@@ -83,14 +83,22 @@ export default {
                 this.loaded = true;
             })
         },
-      //  validateFields() {
-      //      this.errors = [];
-      //      if (this.item.serial.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
-      //      if (this.item.serial.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
-      //      this.showErrors();
-//
-      //      return this.errors.length === 0;
-      //  }
+        selectingNomenclature() {
+            this.choosing_state = 1;
+        },
+        onSelectedNomenclature(data) {
+            this.item.nomenclature = data.nomenclature;
+            this.choosing_state = 0;
+        },
+        onBack() {
+            this.choosing_state = 0;
+        },
+        validateFields() {
+            this.errors = [];
+            if (this.item.barcode.length < 8 || this.item.barcode.length > 20) this.errors.push("Поле \"Штрихкод\" недопустимого размера");
+            this.showErrors();
+            return this.errors.length === 0;
+        }
 
     }
 

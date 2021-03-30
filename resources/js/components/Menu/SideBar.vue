@@ -64,6 +64,14 @@
                             </el-menu-item>
                         </router-link>
                     </el-menu-item>
+                    <el-menu-item v-if="$store.getters['auth/role'] > 1" style="padding: 0">
+                        <router-link class="print_class" :to="{name: 'barcodes.index'}">
+
+                            <el-menu-item index="1-7">
+                                Штрихкоды
+                            </el-menu-item>
+                        </router-link>
+                    </el-menu-item>
                 </el-menu-item-group>
             </el-submenu>
             <el-submenu index="2" v-if="$store.getters['auth/role'] > 1">

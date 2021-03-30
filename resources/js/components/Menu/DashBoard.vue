@@ -5,7 +5,7 @@
             <div class="container-fluid">
                 <!-- Small boxes (Stat box) -->
                 <el-row>
-                    <el-col :span="5"> <div class="small-box bg-info">
+                    <el-col :span="7"> <div class="small-box bg-info">
                         <div class="inner">
                             <h3>{{opened_workplace_count}}</h3>
 
@@ -16,7 +16,7 @@
                         </div>
                         <div href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></div>
                     </div></el-col>
-                    <el-col :offset="1" :span="5">  <div class="small-box bg-success">
+                    <el-col :offset="1" :span="7">  <div class="small-box bg-success">
                         <div class="inner">
                             <h3>{{last_week_sales_count}}</h3>
 
@@ -28,7 +28,7 @@
                         </div>
                         <div href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></div>
                     </div></el-col>
-                    <el-col :offset="1" :span="5"> <div class="small-box bg-warning">
+                    <el-col :offset="1" :span="7"> <div class="small-box bg-warning">
                         <div class="inner">
                             <h3>{{most_popular_nomenclature}}</h3>
                             <p>Наиболее популярная позиция:</p>
@@ -38,17 +38,7 @@
                         </div>
                         <div href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></div>
                     </div></el-col>
-                    <el-col :offset="1" :span="5"><div class="small-box bg-danger">
-                        <div class="inner">
-                            <h3>65</h3>
 
-                            <p>Unique Visitors</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-pie-graph"></i>
-                        </div>
-                        <div href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></div>
-                    </div></el-col>
 
                 </el-row>
                 <el-row>

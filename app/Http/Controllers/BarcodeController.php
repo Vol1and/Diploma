@@ -3,14 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barcode;
-
 use App\Repositories\BarcodesRepository;
+use App\Services\CreateBarcodeService;
 use Illuminate\Http\Request;
 
 class BarcodeController extends OriginController
 {
 //ссылка на хранилище модели Barcode
     private $barcodesRepository;
+
+    private $createBarcodeService;
 
     public function __construct()
     {
@@ -19,6 +21,7 @@ class BarcodeController extends OriginController
 
         //инициализация хранилища
         $this->barcodesRepository = app(BarcodesRepository::class);
+        $this->createBarcodeService = app(CreateBarcodeService::class);
     }
 
 
@@ -34,16 +37,16 @@ class BarcodeController extends OriginController
     {
         //получение данных из реквеста
         $data = $request->input();
-        //создание нового элемента
-        $item = new Barcode($data);
-        //сохраняем
-        $item->save();
+        $nomenclature_id = $request->input('nomenclature_id');
+        $code = $request->input('barcode');
 
-        //если все ок - возвращаем ответ со статусом 201
-        if($item)
+        if($nomenclature_id && $code) {
+
+            $this->createBarcodeService->addNewBarcodeToNomenclature($nomenclature_id, $code);
+            //если все ок - возвращаем ответ со статусом 201
             return response(null, 201);
-        //либо можно передавать айди созданного элемента
-        //return response($item->id, 201);
+
+        }
 
         //если нет - отправляем ошибку (статус возмонжо стоит поменять)
         return response(null,500);

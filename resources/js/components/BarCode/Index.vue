@@ -7,7 +7,13 @@
 
             <el-row>
 
-                <el-col :span="8" :offset="8">
+                <el-col :span="8" >
+
+                    <router-link tag="button" class="el-button" :to="{name: 'barcodes.create'}" style=" float:left ">
+                        Добавить
+                    </router-link>
+                </el-col>
+                <el-col :span="8" >
                     <el-row>
                         <el-col :span="8" :offset="8">
                             <el-button icon="el-icon-s-operation" style=" width: 100%" @click="switch_filter()"

@@ -56,6 +56,8 @@ import Login from "../components/Auth/Login"
 import DashBoard from "../components/Menu/DashBoard"
 
 import BarcodeIndex from "../components/BarCode/Index"
+import BarcodeCreate from "../components/BarCode/Create"
+
 
 const routes = [
     {path: '/wares', name: "wares.index", component: WaresIndex, meta: {requiresAuth: true, access_rate: 1}},
@@ -135,7 +137,8 @@ const routes = [
     {path: '/charts/storages-sales', name: "charts.storages", component: StoragesSalesContainer, meta: {requiresAuth: true, access_rate: 3}},
     {path: '/charts/agents-cash', name: "charts.agents", component: AgentsCashContainer, meta: {requiresAuth: true, access_rate: 3}},
 
-    {path: '/barcodes', name: "barcodes", component: BarcodeIndex, meta: {requiresAuth: true, access_rate: 3}},
+    {path: '/barcodes', name: "barcodes.index", component: BarcodeIndex, meta: {requiresAuth: true, access_rate: 2}},
+    {path: '/barcodes/create', name: "barcodes.create", component: BarcodeCreate, meta: {requiresAuth: true, access_rate: 2}},
 
 
     {path: '/dashboard', name: 'dashboard', component: DashBoard, meta: {requiresAuth: true, access_rate: 3}},

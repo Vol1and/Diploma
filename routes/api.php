@@ -79,4 +79,6 @@ Route::post('/dashboard',  [\App\Http\Controllers\Admin\HomeController::class, "
 Route::get('/barcodes/filter', [App\Http\Controllers\BarcodeConnectionController::class, 'getFilter']);
 Route::get('/barcodes',  [App\Http\Controllers\BarcodeConnectionController::class, 'index']);
 
+Route::post('/barcodes',  [App\Http\Controllers\BarcodeConnectionController::class, 'store']);
+
 Route::post('/barcodes/findNomenclatureByBarcode', [App\Http\Controllers\NomenclatureController::class, 'findByBarcode']);
