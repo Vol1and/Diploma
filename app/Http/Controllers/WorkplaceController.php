@@ -45,7 +45,6 @@ class WorkplaceController extends OriginController
         if($item)
             return response(null, 201);
         //либо можно передавать айди созданного элемента
-        //return response($item->id, 201);
 
         //если нет - отправляем ошибку (статус возмонжо стоит поменять)
         return response(null,500);
