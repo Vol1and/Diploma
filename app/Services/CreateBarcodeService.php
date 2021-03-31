@@ -30,7 +30,7 @@ class CreateBarcodeService
 
         if ($checkBarcode) return null;
         else {
-        $barcode = $this->make($code);
+        $barcode = $this->make(['code' => $code]);
         $barcodeConnection = $this->makeConnection(['nomenclature_id' => $nomenclature_id, 'barcode_id' => $barcode->id]);
         }
         return $barcodeConnection;
