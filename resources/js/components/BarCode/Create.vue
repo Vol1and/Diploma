@@ -74,6 +74,7 @@ export default {
                     title: 'Элемент добавлен!',
                     message: `Элемент  успешно добавлен!`,
                 })
+                this.$router.push({name: "barcodes.index"})
             }).catch((error) => {
                 this.$notify.error({
 

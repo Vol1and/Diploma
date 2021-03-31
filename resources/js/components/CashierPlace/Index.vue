@@ -199,10 +199,16 @@
         <config-board @selected="choosing_state = 0;" v-if="choosing_state === 4">
 
         </config-board>
-        <CharacteristicSearch style="margin-bottom: 30px" v-if="choosing_state ===5" @back="characteristic_back" @selected="characteristic_selected" :nomenclature_id="barcode_nomenclature.id" :storage_id="this.$store.getters.workplace.storage.id" >
 
-        </CharacteristicSearch>
+        <div v-if="choosing_state ===5">
+            <el-card class="center-75">
+                <CharacteristicSearch style="margin-bottom: 30px" @back="characteristic_back"
+                                      @selected="characteristic_selected" :nomenclature_id="barcode_nomenclature.id"
+                                      :storage_id="this.$store.getters.workplace.storage.id">
 
+                </CharacteristicSearch>
+            </el-card>
+        </div>
 
     </div>
 </template>
@@ -269,7 +275,7 @@ export default {
         }
     },
     methods: {
-        characteristic_selected(data){
+        characteristic_selected(data) {
             this.choosing_state = 0;
             let new_row = new FinanceDocumentTableRow();
             new_row.nomenclature = this.barcode_nomenclature;
@@ -283,17 +289,16 @@ export default {
         },
 
         // Create callback function to receive barcode when the scanner is already done
-        onBarcodeScanned (barcode) {
+        onBarcodeScanned(barcode) {
             console.log(barcode)
 
             axios.post("/api/barcodes/findNomenclatureByBarcode", {barcode: barcode}).then((response) => {
 
                 console.log(response.data)
-                if(response.data.nomenclature !== null){
+                if (response.data.nomenclature !== null) {
                     this.barcode_nomenclature = response.data.nomenclature;
                     this.choosing_state = 5;
-                }
-                else {
+                } else {
                     this.$notify.error({
                         title: 'Ошибка!',
                         message: `Номенклатуры со штрихкодом ${barcode} не найдено`,
@@ -301,13 +306,12 @@ export default {
                 }
 
 
-
             });
 
 
         },
         // Reset to the last barcode before hitting enter (whatever anything in the input box)
-        resetBarcode () {
+        resetBarcode() {
             let barcode = this.$barcodeScanner.getPreviousCode()
 
         },
@@ -460,12 +464,12 @@ export default {
                 this.item.table_rows = [];
                 this.selectingRow = null;
                 this.last_sell_id = response.data.sell_id;
-                this.errors.forEach(item =>
-                    this.$message({
-                        showClose: true,
-                        message: item,
-                        type: 'success'
-                    }));
+
+                this.$message({
+                    showClose: true,
+                    message: `Кассовый чек с Id=${this.last_sell_id} успешно создан!`,
+                    type: 'success'
+                });
 
 
             }).catch(error => {
