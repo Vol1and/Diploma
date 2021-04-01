@@ -43,6 +43,7 @@ class BarcodeController extends OriginController
         if($nomenclature_id && $code) {
 
             $this->createBarcodeService->addNewBarcodeToNomenclature($nomenclature_id, $code);
+
             //если все ок - возвращаем ответ со статусом 201
             return response(null, 201);
 

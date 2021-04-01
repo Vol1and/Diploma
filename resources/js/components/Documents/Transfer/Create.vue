@@ -200,7 +200,7 @@
 
             <characteristic-choose-with-wares-component :storage_id="item.source_storage.id" @back="onBack"
                                                         v-if="characteristic_dialog"
-                                                        :nomenclature_id="hover_row.nomenclature.id"
+                                                        :nomenclature_id="buffer_row.nomenclature.id"
                                                         @selected="onSelectedCharacteristic"></characteristic-choose-with-wares-component>
         </el-drawer>
         <storage-choose-component @back="onBack" v-if="choosing_state ===3"
@@ -231,6 +231,11 @@ export default {
     //ивент, срабатывающий при created стадии компонента - в поле дата закидывает текущую дату
     created() {
         this.item.date = Date.now();
+        this.$barcodeScanner.init(this.onBarcodeScanned)
+    },
+    destroyed() {
+        // Remove listener when component is destroyed
+        this.$barcodeScanner.destroy()
     },
     methods: {
         //сабмит - отправляет данные

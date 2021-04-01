@@ -237,8 +237,36 @@ export default {
     },
     created() {
         this.update();
+        this.$barcodeScanner.init(this.onBarcodeScanned)
+    },
+    destroyed() {
+        // Remove listener when component is destroyed
+        this.$barcodeScanner.destroy()
     },
     methods: {
+
+        // Create callback function to receive barcode when the scanner is already done
+        onBarcodeScanned(barcode) {
+            console.log(barcode)
+
+            axios.post("/api/barcodes/findNomenclatureByBarcode", {barcode: barcode}).then((response) => {
+
+                console.log(response.data)
+                if (response.data.nomenclature !== null) {
+                    let row = new FinanceDocumentTableRow(null);
+                    row.nomenclature = response.data.nomenclature;
+
+                    this.item.table_rows.push(row);
+                    this.selectingRow = row;
+                    this.selectingCharacteristic();
+                } else {
+                    this.$notify.error({
+                        title: 'Ошибка!',
+                        message: `Номенклатуры со штрихкодом ${barcode} не найдено`,
+                    })
+                }
+            });
+        },
 
         update() {
             axios.get(`/api/finance-documents/${this.$route.params.id}`).then(response => {

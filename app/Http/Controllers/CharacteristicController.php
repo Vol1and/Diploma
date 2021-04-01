@@ -131,7 +131,7 @@ class CharacteristicController extends OriginController
         $characteristics = $this->characteristicRepository->getAllByNomenclatureId($nomenclature_id);
 
         $characteristic_data = [];
-        foreach ($characteristics as $characteristic) if($characteristic->get_ware_by_storage($storage_id) > 0) $characteristic_data[] = $characteristic->getDataToChooseInRealization($storage_id);
+        foreach ($characteristics as $characteristic) if($characteristic->get_ware_by_storage($storage_id)->ware > 0) $characteristic_data[] = $characteristic->getDataToChooseInRealization($storage_id);
         //$butch_wares = $this->butchWaresRepository->getByNomenclatureAndStorage();
         return ['nomenclature' => $nomenclature, 'storage' => $storage, 'characteristics' => $characteristic_data];
 

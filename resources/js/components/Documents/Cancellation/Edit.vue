@@ -220,6 +220,11 @@ export default {
     },
     created() {
         this.update();
+        this.$barcodeScanner.init(this.onBarcodeScanned)
+    },
+    destroyed() {
+        // Remove listener when component is destroyed
+        this.$barcodeScanner.destroy()
     },
     methods: {
 

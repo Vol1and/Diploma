@@ -36,13 +36,17 @@ class Characteristic extends Model
     }
 
     public function get_ware_by_storage($storage_id){
-         return !empty($this->wares->where('storage_id', $storage_id)) ? $this->wares->where('storage_id', $storage_id)->first()->ware: 0;
+
+        $result = $this->wares->where('storage_id', $storage_id);
+        if($result->isEmpty()) return 0;
+        return $result->first();
+         // return $this->wares->where('storage_id', $storage_id) != null ? $this->wares->where('storage_id', $storage_id)->first()->ware: 0;
     }
 
     function getDataToChooseInRealization($storage_id){
         return [
             'id' => $this->id,
-            'ware' => $this->get_ware_by_storage($storage_id),
+            'ware' => $this->get_ware_by_storage($storage_id)->ware,
             'characteristic_price' => $this->characteristic_price,
             'serial' => $this->serial,
             'expiry_date' => $this->expiry_date,

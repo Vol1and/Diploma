@@ -16,10 +16,10 @@ class BarcodeSeeder extends Seeder
     {
         $data = [
             [
-                'code' => "0000000000001"
+                'code' => "4601811011047"
             ],
             [
-                'code' => "0000000000002"
+                'code' => "4250369506323"
             ],
             [
                 'code' => "0000000000003"

@@ -221,6 +221,11 @@ export default {
     //ивент, срабатывающий при created стадии компонента - в поле дата закидывает текущую дату
     created() {
         this.item.date = Date.now();
+        this.$barcodeScanner.init(this.onBarcodeScanned)
+    },
+    destroyed() {
+        // Remove listener when component is destroyed
+        this.$barcodeScanner.destroy()
     },
     methods: {
         //сабмит - отправляет данные

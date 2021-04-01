@@ -29,10 +29,12 @@ class CreateBarcodeService
         $checkBarcode = $barcodesRepository->findByCode($code);
 
         if ($checkBarcode) return null;
-        else {
+
+
         $barcode = $this->make(['code' => $code]);
+
         $barcodeConnection = $this->makeConnection(['nomenclature_id' => $nomenclature_id, 'barcode_id' => $barcode->id]);
-        }
+
         return $barcodeConnection;
     }
 

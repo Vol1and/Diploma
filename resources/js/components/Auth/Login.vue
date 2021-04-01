@@ -63,7 +63,20 @@ export default {
                 password: this.item.password
             }).then(() => {
                 this.$router.push(this.index_route);
-            })
+            }).catch((error) => {
+                if (error.response.status === 422) {
+                    this.$notify.error({
+
+                        title: 'Ошибка!',
+                        message: "Вы ввели некорректные данные!",
+                    })
+                } else this.$notify.error({
+
+                    title: 'Ошибка!',
+                    message: "Сообщение ошибки - " + error.response.data.message,
+                })
+                ///this.$router.push({name: 'income.index'});
+            });
         }
     }
 }

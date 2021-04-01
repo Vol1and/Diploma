@@ -3,6 +3,7 @@
 //подробнее почитать можно https://ru.vuejs.org/v2/guide/mixins.html
 import FinanceDocument from "../models/FinanceDocument";
 import FinanceDocumentTableRow from "../models/FinanceDocumentTableRow";
+import Characteristic from "../models/Characteristic";
 
 export default {
 
@@ -130,6 +131,7 @@ export default {
         },
         onSelectedNomenclature(data) {
             this.selectingRow.nomenclature = data.nomenclature;
+            this.selectingRow.characteristic = new Characteristic(null);
             this.choosing_state = 0;
         },
         onBack() {

@@ -137,7 +137,37 @@ export default {
         onBack() {
             this.choosing_state = 0;
         },
+        // Create callback function to receive barcode when the scanner is already done
+        onBarcodeScanned(barcode) {
+            console.log(barcode)
 
+            if (this.item.source_storage.id != null) {
+                axios.post("/api/barcodes/findNomenclatureByBarcode", {barcode: barcode}).then((response) => {
+
+                    console.log(response.data)
+                    if (response.data.nomenclature !== null) {
+                        let row = new StorageDocumentTableRow(null);
+                        row.nomenclature = response.data.nomenclature;
+
+                        this.item.table_rows.push(row);
+                        this.selectingRow = row;
+                        this.buffer_row = row;
+                        this.selectingCharacteristic();
+                    } else {
+                        this.$notify.error({
+                            title: 'Ошибка!',
+                            message: `Номенклатуры со штрихкодом ${barcode} не найдено`,
+                        })
+                    }
+                });
+            }
+            else {
+                this.$notify.error({
+                    title: 'Ошибка!',
+                    message: `Сначала выберите склад! `,
+                })
+            }
+        },
     }
 }
 /*

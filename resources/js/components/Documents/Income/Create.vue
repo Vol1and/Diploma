@@ -106,7 +106,7 @@
                                 <el-table-column
                                     prop="nomenclature.producer.name"
                                     label="Производитель"
-                                    min-width="200"
+                                    min-width="100"
                                     :index="3"
                                     sortable
                                 >
@@ -114,13 +114,15 @@
                                 <el-table-column
                                     prop="characteristic.name"
                                     label="Характеристика"
+                                    min-width="200"
                                     sortable
                                 >
                                     <template slot-scope="scope">
 
                                         <el-input v-if="selectingRow === scope.row" readonly
                                                   v-model="scope.row.characteristic.name" placeholder="">
-                                            <el-button type="primary" @click="selectingCharacteristic" :disabled="scope.row.nomenclature.id === -1" slot="append"
+                                            <el-button type="primary" @click="selectingCharacteristic"
+                                                       :disabled="scope.row.nomenclature.id === -1" slot="append"
                                                        icon="el-icon-d-arrow-right">
                                             </el-button>
                                         </el-input>
@@ -167,7 +169,7 @@
                                     sortable
                                 >
                                     <template slot-scope="scope">
-                                        {{  scope.row.income_price * scope.row.count}} руб.
+                                        {{ scope.row.income_price * scope.row.count }} руб.
                                     </template>
                                 </el-table-column>
                                 <el-table-column
@@ -230,6 +232,8 @@
 
 import mixin_finance_document from "../../../code/mixins/mixin_finance_document";
 import FinanceDocument from "../../../code/models/FinanceDocument";
+import Nomenclature from "../../../code/models/Nomenclature";
+import FinanceDocumentTableRow from "../../../code/models/FinanceDocumentTableRow";
 
 export default {
     name: "IncomeCreate",
@@ -237,14 +241,48 @@ export default {
     mixins: [mixin_finance_document],
     data() {
         return {
-            item: new FinanceDocument(null, 1)
+            item: new FinanceDocument(null, 1),
+            barcode_nomenclature: new Nomenclature()
         }
     },
     //ивент, срабатывающий при created стадии компонента - в поле дата закидывает текущую дату
     created() {
+
         this.item.date = Date.now();
+
+        this.$barcodeScanner.init(this.onBarcodeScanned)
+    },
+    destroyed() {
+        // Remove listener when component is destroyed
+        this.$barcodeScanner.destroy()
     },
     methods: {
+
+        // Create callback function to receive barcode when the scanner is already done
+        onBarcodeScanned(barcode) {
+            console.log(barcode)
+
+                axios.post("/api/barcodes/findNomenclatureByBarcode", {barcode: barcode}).then((response) => {
+
+                    console.log(response.data)
+                    if (response.data.nomenclature !== null) {
+                        let row = new FinanceDocumentTableRow(null);
+                        row.nomenclature = response.data.nomenclature;
+                        //this.barcode_nomenclature = response.data.nomenclature;
+
+
+                        this.item.table_rows.push(row);
+                        this.selectingRow = row;
+                        this.selectingCharacteristic();
+                    } else {
+                        this.$notify.error({
+                            title: 'Ошибка!',
+                            message: `Номенклатуры со штрихкодом ${barcode} не найдено`,
+                        })
+                    }
+                });
+        },
+
         //сабмит - отправляет данные
         submit: function (statet) {
             //не проходит валидацию - возвращаем

@@ -21,10 +21,10 @@ class NomenclatureWaresRepository extends BaseRepository
         $query = $this->startConditions()
             ->select('*')
             ->with(['nomenclature', 'storage'])
-            ->where('storage.id','=',$storage_id);
+            ->where('storage_id','=',$storage_id);
 
-        if ($name)
-            $query = $query->where('name', 'like', $name);
+       if ($name)
+           $query = $query->where('name', 'like', $name);
 
         $result = $query->get();
 

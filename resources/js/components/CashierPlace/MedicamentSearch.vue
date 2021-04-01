@@ -9,7 +9,7 @@
             <el-divider></el-divider>
                 <el-form style="width: 100%">
                     <el-form-item style=" width: 100%;  margin-bottom: 0;">
-                        <el-input ref="nom_input"  v-model="filter_fields.name_str" autofocus placeholder="Название" @input="filter"></el-input>
+                        <el-input ref="nom_input"  v-model="nomenclature_filter" autofocus placeholder="Название" @input="filter"></el-input>
                     </el-form-item>
                 </el-form>
             <el-divider></el-divider>
@@ -18,20 +18,19 @@
                       @row-dblclick="row_dblclick"
                       @current-change="rowSelected">
                 <el-table-column
-                    prop="id"
-                    label="#"
-                    min-width="15"
-                >
-                </el-table-column>
-                <el-table-column
-                    prop="name"
+                    prop="nomenclature.name"
                     label="Номенклатура"
                 >
                 </el-table-column>
                 <el-table-column
-                    prop="producer.name"
+                    prop="nomenclature.producer.name"
                     label="Производитель"
-                    width="400"
+
+                >
+                </el-table-column>
+                <el-table-column
+                    prop="ware"
+                    label="Остатки"
                 >
                 </el-table-column>
             </el-table>
@@ -39,7 +38,7 @@
 
         </el-row>
 
-            <CharacteristicSearch style="margin-bottom: 30px" v-if="choosing_state ===1" @back="characteristic_back" @selected="characteristic_selected" :nomenclature_id="selected_item.id" :storage_id="storage_id" >
+            <CharacteristicSearch style="margin-bottom: 30px" v-if="choosing_state ===1" @back="characteristic_back" @selected="characteristic_selected" :nomenclature_id="selected_item.nomenclature.id" :storage_id="storage_id" >
 
             </CharacteristicSearch>
 
@@ -59,27 +58,23 @@ import CharacteristicSearch from "./CharacteristicSearch";
 export default {
     name: "MedicamentSearch",
     components: {CharacteristicSearch},
-    mixins: [mixin_index],
+    //mixins: [mixin_index],
     props: [
         'storage_id'
     ],
     data: function () {
         return {
-
-            filter_fields: {
-                name_str: "",
-                producer: {name: ""},
-                price_type: {name: ""},
-
-            },
             characteristic_dialog: false,
             choosing_state: 0,
-            action_namespace: "nomenclature",
-            selected_item: new Nomenclature()
+            selected_item: new Nomenclature(),
+            nomenclature_filter: "",
 
+            page_of_items: []
         };
     },
-
+    created() {
+        this.filter();
+    },
     methods: {
         theAction (event) {
             switch (event.srcKey) {
@@ -91,26 +86,35 @@ export default {
                     break;
             }
         },
-        filterClear: function () {
-            this.filter_fields = {
-                name_str: ""
-            }
+        //вызывается при клике по строке
+        rowSelected(item) {
+
+            this.selected_item = item;
         },
         filter() {
             this.filter_state = true;
 
-            setTimeout(() => { axios.get('/api/nomenclature/filter', {
+
+            setTimeout(() => {
+                axios.get('/api/wares/nomenclature/filter', {
                 params: {
-                    name: this.filter_fields.name_str
+                    name: this.nomenclature_filter,
+                    storage_id: this.storage_id
                 }
+
             }).then((response) => {
+                console.log(response.data)
                 this.page_of_items = [];
                 //оборачиваем каждый элемент пришедших данных в модель модуля
-                response.data.forEach(item => this.page_of_items.push(new Nomenclature(item.id,
-                    item.name,
-                    new Producer(item.producer.id, item.producer.name, item.producer.country, item.producer.created_at, item.producer.updated_at, item.producer.deleted_at),
-                    new PriceType(),
-                )))
+                response.data.forEach(item => this.page_of_items.push({
+                    nomenclature: new Nomenclature(item.nomenclature.id,
+
+                        item.nomenclature.name,
+                        new Producer(item.nomenclature.producer.id, item.nomenclature.producer.name, item.nomenclature.producer.country, item.nomenclature.producer.created_at, item.nomenclature.producer.updated_at, item.nomenclature.producer.deleted_at),
+                        new PriceType(),
+                    ),
+                    ware: item.ware
+                }))
 
             }).catch((error) => {
                 //если не ок - асинхронный ответ с кодом ошибки
@@ -124,8 +128,8 @@ export default {
         },
         characteristic_selected(data){
             this.choosing_state = 0;
-            this.selected_item.characteristic = data.characteristic;
-            this.$emit("selected", {nomenclature: this.selected_item});
+            this.selected_item.nomenclature.characteristic = data.characteristic;
+            this.$emit("selected", {nomenclature: this.selected_item.nomenclature});
 
         },
         characteristic_back() {

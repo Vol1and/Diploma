@@ -44,6 +44,9 @@ Route::get('/storage-document/filter', [App\Http\Controllers\StorageDocumentCont
 Route::get('/wares/filter', [App\Http\Controllers\WareController::class, 'getFilter']);
 Route::get('/wares',  [App\Http\Controllers\WareController::class, 'index']);
 
+Route::get('/wares/nomenclature/filter',  [App\Http\Controllers\WareController::class, 'filterCashierPlace']);
+
+
 //отдельные роуты для документов
 Route::get('/sellings', [App\Http\Controllers\FinanceDocumentController::class, 'getSellings']);
 Route::post('/selling', [App\Http\Controllers\FinanceDocumentController::class, 'incomeCreate']);

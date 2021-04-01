@@ -22,7 +22,7 @@
                             <el-divider content-position="left"><h2>Товары</h2></el-divider>
 
                             <el-row style="margin-bottom: 10px">
-                                <el-button :disabled="this.$store.getters.workplace.active_user_id <= 0"
+                                <el-button :disabled="this.$store.getters.workplace.active_user ==null"
                                            @click="selectingEntity(2)">Поиск товара [F2]
                                 </el-button>
                                 <el-button :disabled="rows_sum ===0 " @click="cashInput_dialog = true">Оплата [Alt +
@@ -258,6 +258,10 @@ export default {
 
         this.$barcodeScanner.init(this.onBarcodeScanned)
     },
+    destroyed() {
+        // Remove listener when component is destroyed
+        this.$barcodeScanner.destroy()
+    },
     computed: {
 
         //Вычисляемое поле - отображает либо сумму чека, либо сдачу (если оплата уже была произведена)
@@ -291,22 +295,24 @@ export default {
         // Create callback function to receive barcode when the scanner is already done
         onBarcodeScanned(barcode) {
             console.log(barcode)
-
-            axios.post("/api/barcodes/findNomenclatureByBarcode", {barcode: barcode}).then((response) => {
-
-                console.log(response.data)
-                if (response.data.nomenclature !== null) {
-                    this.barcode_nomenclature = response.data.nomenclature;
-                    this.choosing_state = 5;
-                } else {
-                    this.$notify.error({
-                        title: 'Ошибка!',
-                        message: `Номенклатуры со штрихкодом ${barcode} не найдено`,
-                    })
-                }
+            if (this.$store.getters.workplace.active_user != null) {
+                axios.post("/api/barcodes/findNomenclatureByBarcode", {barcode: barcode}).then((response) => {
 
 
-            });
+                    console.log(response.data)
+                    if (response.data.nomenclature !== null) {
+                        this.barcode_nomenclature = response.data.nomenclature;
+                        this.choosing_state = 5;
+                    } else {
+                        this.$notify.error({
+                            title: 'Ошибка!',
+                            message: `Номенклатуры со штрихкодом ${barcode} не найдено`,
+                        })
+                    }
+
+
+                });
+            }
 
 
         },
@@ -422,7 +428,7 @@ export default {
                     this.deleteSelected();
                     break;
                 case 'f2':
-                    if (this.$store.getters.workplace.active_user_id > 0)
+                    if (this.$store.getters.workplace.active_user != null)
                         this.selectingEntity(2);
                     break;
                 case 'change':

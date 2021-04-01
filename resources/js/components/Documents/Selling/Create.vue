@@ -157,7 +157,7 @@
                                     sortable
                                 >
                                     <template slot-scope="scope">
-                                        {{ scope.row.characteristic.characteristic_price.price * scope.row.count}} руб.
+                                        {{ scope.row.characteristic.characteristic_price.price * scope.row.count }} руб.
                                     </template>
                                 </el-table-column>
                             </el-table>
@@ -186,7 +186,7 @@
 
             <characteristic-choose-with-wares-component :storage_id="item.storage.id" @back="onBack"
                                                         v-if="characteristic_dialog"
-                                                        :nomenclature_id="hover_row.nomenclature.id"
+                                                        :nomenclature_id="selectingRow.nomenclature.id"
                                                         @selected="onSelectedCharacteristic"></characteristic-choose-with-wares-component>
         </el-drawer>
         <agent-choose-component @back="onBack" v-if="choosing_state ===1"
@@ -203,6 +203,7 @@
 
 import mixin_finance_document from "../../../code/mixins/mixin_finance_document";
 import FinanceDocument from "../../../code/models/FinanceDocument";
+import FinanceDocumentTableRow from "../../../code/models/FinanceDocumentTableRow";
 
 export default {
     name: "SellingCreate",
@@ -215,9 +216,41 @@ export default {
     },
     //ивент, срабатывающий при created стадии компонента - в поле дата закидывает текущую дату
     created() {
+
         this.item.date = Date.now();
+
+        this.$barcodeScanner.init(this.onBarcodeScanned)
+    },
+    destroyed() {
+        // Remove listener when component is destroyed
+        this.$barcodeScanner.destroy()
     },
     methods: {
+
+        // Create callback function to receive barcode when the scanner is already done
+        onBarcodeScanned(barcode) {
+            console.log(barcode)
+
+            if (this.item.storage.id != null) {
+                axios.post("/api/barcodes/findNomenclatureByBarcode", {barcode: barcode}).then((response) => {
+
+                    console.log(response.data)
+                    if (response.data.nomenclature !== null) {
+                        let row = new FinanceDocumentTableRow(null);
+                        row.nomenclature = response.data.nomenclature;
+
+                        this.item.table_rows.push(row);
+                        this.selectingRow = row;
+                        this.selectingCharacteristic();
+                    } else {
+                        this.$notify.error({
+                            title: 'Ошибка!',
+                            message: `Номенклатуры со штрихкодом ${barcode} не найдено`,
+                        })
+                    }
+                });
+            }
+        },
         //сабмит - отправляет данные
         submit: function (statet) {
             //не проходит валидацию - возвращаем
