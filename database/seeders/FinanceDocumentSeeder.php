@@ -19,7 +19,7 @@ class FinanceDocumentSeeder extends Seeder
                 'date' => date("Y-m-d H:i:s", mktime(8, 11, 15, date("m"),   date("d") - 19,   date("Y"))),
                 'is_set'  => true,
                 'doc_type_id'  => 7,
-                'agent_id' => 2,
+                'agent_id' => 1,
                 'storage_id' => 1,
                 'comment' => 'Финансовая помощь',
                 'doc_sum' =>1000000
