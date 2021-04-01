@@ -14,7 +14,6 @@ class CreateNomenclatureWares extends Migration
     public function up()
     {
         \DB::statement('
-
             CREATE
         VIEW `diploma`.`nomenclature_wares` AS
         SELECT
