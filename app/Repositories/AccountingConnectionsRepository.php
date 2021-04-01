@@ -21,6 +21,15 @@ class AccountingConnectionsRepository extends BaseRepository
         return Model::all();
     }
 
+
+
+    public function getBalance()
+    {
+
+        return $this->startConditions()
+            ->sum('change');
+    }
+
     public function find($id)
     {
         $columns = [
