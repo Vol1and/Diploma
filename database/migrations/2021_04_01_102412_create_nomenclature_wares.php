@@ -19,6 +19,7 @@ class CreateNomenclatureWares extends Migration
         VIEW `diploma`.`nomenclature_wares` AS
         SELECT
             `diploma`.`nomenclatures`.`id` AS `nomenclature_id`,
+            `diploma`.`nomenclatures`.`name` AS `name`,
             `diploma`.`ware_connections`.`storage_id` AS `storage_id`,
             SUM(`diploma`.`ware_connections`.`change`) AS ware
         FROM
