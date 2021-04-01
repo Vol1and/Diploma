@@ -28,9 +28,13 @@ class WareController extends Controller
      */
     public function index()
     {
-
-
         return $this->waresRepository->getTable()->toJSON();
+    }
+
+    public function getNomenclatureWares(Request $request)
+    {
+
+        // return $result->toJson();
     }
 
     public function getFilter(Request $request)
