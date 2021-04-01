@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Nomenclature;
 use App\Models\Storage;
+use App\Repositories\NomenclatureWaresRepository;
 use App\Repositories\WaresRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -12,12 +13,14 @@ use PDF;
 class WareController extends Controller
 {
     private $waresRepository;
+    private $nomenclatureWaresRepository;
 
     public function __construct()
     {
 
         //инициализация хранилища
         $this->waresRepository = app(WaresRepository::class);
+        $this->nomenclatureWaresRepository = app(NomenclatureWaresRepository::class);
     }
 
 
@@ -35,6 +38,17 @@ class WareController extends Controller
     {
 
         // return $result->toJson();
+    }
+
+
+    public function filterCashierPlace(Request $request)
+    {
+        $storage_id = $request->input('storage_id');
+        $name = $request->input('name');
+
+        $result = $this->nomenclatureWaresRepository->getTableByStorage($storage_id,'%' . $name . '%');
+
+        return $result->toJson();
     }
 
     public function getFilter(Request $request)
