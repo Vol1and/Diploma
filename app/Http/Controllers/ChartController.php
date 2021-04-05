@@ -128,6 +128,7 @@ class ChartController extends Controller
             FROM
                 ((diploma.`finance_documents`
                 JOIN diploma.`agents` ON ((diploma.`finance_documents`.`agent_id` = diploma.`agents`.`id`))))
+            WHERE diploma.`finance_documents`.`agent_id` > 1
             GROUP BY `agents`.id;'
         );
         return $data;

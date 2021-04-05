@@ -114,6 +114,86 @@ class AccountingConnectionSeeder extends Seeder
                 'date' => date("Y-m-d H:i:s", mktime(8, 12, 15, date("m"),   date("d") - 14,   date("Y"))),
                 'document_id' => 20,
                 'change' => -102440
+            ],
+            [
+                'date' => date("Y-m-d H:i:s", mktime(9, 12, 16, date("m"),   date("d") - 14,   date("Y"))),
+                'document_id' => 21,
+                'change' => 500
+            ],
+            [
+                'date' => date("Y-m-d H:i:s", mktime(9, 42, 16, date("m"),   date("d") - 14,   date("Y"))),
+                'document_id' => 22,
+                'change' => 4550
+            ],
+            [
+                'date' => date("Y-m-d H:i:s", mktime(10, 11, 33, date("m"),   date("d") - 14,   date("Y"))),
+                'document_id' => 23,
+                'change' => 500
+            ],
+            [
+                'date' => date("Y-m-d H:i:s", mktime(9, 11, 22, date("m"),   date("d") - 13,   date("Y"))),
+                'document_id' => 24,
+                'change' => 5000
+            ],
+            [
+                'date' => date("Y-m-d H:i:s", mktime(8, 41, 55, date("m"),   date("d") - 12,   date("Y"))),
+                'document_id' => 25,
+                'change' => 12500
+            ],
+            [
+                'date' => date("Y-m-d H:i:s", mktime(11, 12, 13, date("m"),   date("d") - 11,   date("Y"))),
+                'document_id' => 26,
+                'change' => 10000
+            ],
+            [
+                'date' => date("Y-m-d H:i:s", mktime(8, 27, 11, date("m"),   date("d") - 10,   date("Y"))),
+                'document_id' => 27,
+                'change' => 14700
+            ],
+            [
+                'date' => date("Y-m-d H:i:s", mktime(12, 11, 44, date("m"),   date("d") - 9,   date("Y"))),
+                'document_id' => 28,
+                'change' => 5000
+            ],
+            [
+                'date' => date("Y-m-d H:i:s", mktime(10, 15, 11, date("m"),   date("d") - 8,   date("Y"))),
+                'document_id' => 29,
+                'change' => 15000
+            ],
+            [
+                'date' => date("Y-m-d H:i:s", mktime(8, 15, 33, date("m"),   date("d") - 7,   date("Y"))),
+                'document_id' => 30,
+                'change' => 12000
+            ],
+            [
+                'date' => date("Y-m-d H:i:s", mktime(11, 11, 22, date("m"),   date("d") - 6,   date("Y"))),
+                'document_id' => 31,
+                'change' => 2950
+            ],
+            [
+                'date' => date("Y-m-d H:i:s", mktime(9, 5, 44, date("m"),   date("d") - 5,   date("Y"))),
+                'document_id' => 32,
+                'change' => 2000
+            ],
+            [
+                'date' => date("Y-m-d H:i:s", mktime(15, 12, 11, date("m"),   date("d") - 4,   date("Y"))),
+                'document_id' => 33,
+                'change' => 3150
+            ],
+            [
+                'date' => date("Y-m-d H:i:s", mktime(11, 12, 11, date("m"),   date("d") - 3,   date("Y"))),
+                'document_id' => 34,
+                'change' => 5250
+            ],
+            [
+                'date' => date("Y-m-d H:i:s", mktime(8, 44, 55, date("m"),   date("d") - 2,   date("Y"))),
+                'document_id' => 35,
+                'change' => 5000
+            ],
+            [
+                'date' => date("Y-m-d H:i:s", mktime(13, 13, 13, date("m"),   date("d") - 1,   date("Y"))),
+                'document_id' => 36,
+                'change' => 2000
             ]
         ];
 

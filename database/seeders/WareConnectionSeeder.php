@@ -266,6 +266,132 @@ class WareConnectionSeeder extends Seeder
                 'characteristic_id' => 1,
                 'change' => 400,
                 'created_at'=> date("Y-m-d H:i:s", mktime(8, 12, 15, date("m"),   date("d") - 14,   date("Y")))
+            ],
+            [
+                'storage_id' => 1,
+                'butch_number_connection_id' => 2,
+                'characteristic_id' => 1,
+                'change' => -5,
+                'created_at'=> date("Y-m-d H:i:s", mktime(9, 12, 16, date("m"),   date("d") - 14,   date("Y")))
+            ],
+            [
+                'storage_id' => 1,
+                'butch_number_connection_id' => 4,
+                'characteristic_id' => 9,
+                'change' => -20,
+                'created_at'=> date("Y-m-d H:i:s", mktime(9, 42, 16, date("m"),   date("d") - 14,   date("Y")))
+            ],
+            [
+                'storage_id' => 1,
+                'butch_number_connection_id' => 4,
+                'characteristic_id' => 8,
+                'change' => -10,
+                'created_at'=> date("Y-m-d H:i:s", mktime(9, 42, 16, date("m"),   date("d") - 14,   date("Y")))
+            ],
+            [
+                'storage_id' => 1,
+                'butch_number_connection_id' => 4,
+                'characteristic_id' => 7,
+                'change' => -5,
+                'created_at'=> date("Y-m-d H:i:s", mktime(9, 42, 16, date("m"),   date("d") - 14,   date("Y")))
+            ],
+            [
+                'storage_id' => 1,
+                'butch_number_connection_id' => 4,
+                'characteristic_id' => 6,
+                'change' => -50,
+                'created_at'=> date("Y-m-d H:i:s", mktime(10, 11, 33, date("m"),   date("d") - 14,   date("Y")))
+            ],
+            [
+                'storage_id' => 1,
+                'butch_number_connection_id' => 2,
+                'characteristic_id' => 1,
+                'change' => -50,
+                'created_at'=> date("Y-m-d H:i:s", mktime(9, 11, 22, date("m"),   date("d") - 13,   date("Y")))
+            ],
+            [
+                'storage_id' => 1,
+                'butch_number_connection_id' => 4,
+                'characteristic_id' => 8,
+                'change' => -50,
+                'created_at'=> date("Y-m-d H:i:s", mktime(8, 41, 55, date("m"),   date("d") - 12,   date("Y")))
+            ],
+            [
+                'storage_id' => 1,
+                'butch_number_connection_id' => 4,
+                'characteristic_id' => 9,
+                'change' => -200,
+                'created_at'=> date("Y-m-d H:i:s", mktime(11, 12, 13, date("m"),   date("d") - 11,   date("Y")))
+            ],
+            [
+                'storage_id' => 1,
+                'butch_number_connection_id' => 4,
+                'characteristic_id' => 7,
+                'change' => -70,
+                'created_at'=> date("Y-m-d H:i:s", mktime(8, 27, 11, date("m"),   date("d") - 10,   date("Y")))
+            ],
+            [
+                'storage_id' => 1,
+                'butch_number_connection_id' => 4,
+                'characteristic_id' => 9,
+                'change' => -100,
+                'created_at'=> date("Y-m-d H:i:s", mktime(12, 11, 44, date("m"),   date("d") - 9,   date("Y")))
+            ],
+            [
+                'storage_id' => 1,
+                'butch_number_connection_id' => 4,
+                'characteristic_id' => 1,
+                'change' => -150,
+                'created_at'=> date("Y-m-d H:i:s", mktime(10, 15, 11, date("m"),   date("d") - 8,   date("Y")))
+            ],
+            [
+                'storage_id' => 1,
+                'butch_number_connection_id' => 2,
+                'characteristic_id' => 2,
+                'change' => -100,
+                'created_at'=> date("Y-m-d H:i:s", mktime(8, 15, 33, date("m"),   date("d") - 7,   date("Y")))
+            ],
+            [
+                'storage_id' => 1,
+                'butch_number_connection_id' => 3,
+                'characteristic_id' => 5,
+                'change' => -10,
+                'created_at'=> date("Y-m-d H:i:s", mktime(11, 11, 22, date("m"),   date("d") - 6,   date("Y")))
+            ],
+            [
+                'storage_id' => 1,
+                'butch_number_connection_id' => 4,
+                'characteristic_id' => 6,
+                'change' => -200,
+                'created_at'=> date("Y-m-d H:i:s", mktime(9, 5, 44, date("m"),   date("d") - 5,   date("Y")))
+            ],
+            [
+                'storage_id' => 1,
+                'butch_number_connection_id' => 4,
+                'characteristic_id' => 7,
+                'change' => -15,
+                'created_at'=> date("Y-m-d H:i:s", mktime(15, 12, 11, date("m"),   date("d") - 4,   date("Y")))
+            ],
+            [
+                'storage_id' => 1,
+                'butch_number_connection_id' => 4,
+                'characteristic_id' => 7,
+                'change' => -25,
+                'created_at'=> date("Y-m-d H:i:s", mktime(11, 12, 11, date("m"),   date("d") - 3,   date("Y")))
+            ],
+            [
+                'storage_id' => 1,
+                'butch_number_connection_id' => 4,
+                'characteristic_id' => 8,
+                'change' => -20,
+                'created_at'=> date("Y-m-d H:i:s", mktime(8, 44, 55, date("m"),   date("d") - 2,   date("Y")))
+            ],
+            [
+                'storage_id' => 1,
+                'butch_number_connection_id' => 4,
+                'characteristic_id' => 9,
+                'change' => -40,
+                'created_at'=> date("Y-m-d H:i:s", mktime(13, 13, 13, date("m"),   date("d") - 1,   date("Y")))
             ]
         ];
 

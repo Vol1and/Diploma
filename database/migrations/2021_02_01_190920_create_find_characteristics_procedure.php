@@ -184,7 +184,7 @@ class CreateFindCharacteristicsProcedure extends Migration
         END
         ";
 
-        //процедура для формирования графика: Период - Кол-ВО ЧЕКОВ
+        //процедура поиск популярной номенклатуры
         $procedure10 =
             "
         CREATE PROCEDURE `find_most_popular_nomenclature`(date_start date, date_end date)

@@ -245,6 +245,132 @@ class FinanceDocumentTableRowSeeder extends Seeder
                 'ware_connection_id' => 36,
                 'price'  => 80,
                 'count' => 400
+            ],
+            [
+                'characteristic_id'  => 1,
+                'finance_document_id'  => 21,
+                'ware_connection_id' => 37,
+                'price'  => 100,
+                'count' => 5
+            ],
+            [
+                'characteristic_id'  => 9,
+                'finance_document_id'  => 22,
+                'ware_connection_id' => 38,
+                'price'  => 50,
+                'count' => 20
+            ],
+            [
+                'characteristic_id'  => 8,
+                'finance_document_id'  => 22,
+                'ware_connection_id' => 39,
+                'price'  => 250,
+                'count' => 10
+            ],
+            [
+                'characteristic_id'  => 7,
+                'finance_document_id'  => 22,
+                'ware_connection_id' => 40,
+                'price'  => 210,
+                'count' => 5
+            ],
+            [
+                'characteristic_id'  => 6,
+                'finance_document_id'  => 23,
+                'ware_connection_id' => 41,
+                'price'  => 10,
+                'count' => 50
+            ],
+            [
+                'characteristic_id'  => 1,
+                'finance_document_id'  => 24,
+                'ware_connection_id' => 42,
+                'price'  => 100,
+                'count' => 50
+            ],
+            [
+                'characteristic_id'  => 8,
+                'finance_document_id'  => 25,
+                'ware_connection_id' => 43,
+                'price'  => 250,
+                'count' => 50
+            ],
+            [
+                'characteristic_id'  => 9,
+                'finance_document_id'  => 26,
+                'ware_connection_id' => 44,
+                'price'  => 50,
+                'count' => 200
+            ],
+            [
+                'characteristic_id'  => 7,
+                'finance_document_id'  => 27,
+                'ware_connection_id' => 45,
+                'price'  => 210,
+                'count' => 70
+            ],
+            [
+                'characteristic_id'  => 9,
+                'finance_document_id'  => 28,
+                'ware_connection_id' => 46,
+                'price'  => 50,
+                'count' => 100
+            ],
+            [
+                'characteristic_id'  => 1,
+                'finance_document_id'  => 29,
+                'ware_connection_id' => 47,
+                'price'  => 100,
+                'count' => 150
+            ],
+            [
+                'characteristic_id'  => 2,
+                'finance_document_id'  => 30,
+                'ware_connection_id' => 48,
+                'price'  => 120,
+                'count' => 100
+            ],
+            [
+                'characteristic_id'  => 5,
+                'finance_document_id'  => 31,
+                'ware_connection_id' => 49,
+                'price'  => 295,
+                'count' => 10
+            ],
+            [
+                'characteristic_id'  => 6,
+                'finance_document_id'  => 32,
+                'ware_connection_id' => 50,
+                'price'  => 10,
+                'count' => 200
+            ],
+            [
+                'characteristic_id'  => 7,
+                'finance_document_id'  => 33,
+                'ware_connection_id' => 51,
+                'price'  => 210,
+                'count' => 15
+            ],
+            [
+                'characteristic_id'  => 7,
+                'finance_document_id'  => 34,
+                'ware_connection_id' => 52,
+                'price'  => 210,
+                'count' => 25
+            ],
+            [
+                'characteristic_id'  => 8,
+                'finance_document_id'  => 35,
+                'ware_connection_id' => 53,
+                'price'  => 250,
+                'count' => 20
+            ],
+            [
+                'characteristic_id'  => 9,
+                'finance_document_id'  => 36,
+                'ware_connection_id' => 54,
+                'price'  => 50,
+                'count' => 40
             ]
         ];
 
