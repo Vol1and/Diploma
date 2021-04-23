@@ -21,15 +21,14 @@ class AccountingConnectionsRepository extends BaseRepository
         return Model::all();
     }
 
-
-
+    // получение баланса предприятия
     public function getBalance()
     {
-
         return $this->startConditions()
             ->sum('change');
     }
 
+    // поиск сущности по id
     public function find($id)
     {
         $columns = [
@@ -45,6 +44,7 @@ class AccountingConnectionsRepository extends BaseRepository
             ->get()->first();
     }
 
+    // применение процедуры для формирования графика ежедневных продаж
     public function getAllByNomenclatureAndStorageIdWithWares($date_start, $date_end)
     {
         return DB::select(
@@ -52,6 +52,7 @@ class AccountingConnectionsRepository extends BaseRepository
         );
     }
 
+    // применение процедуры для формирования графика итоговых продаж
     public function findAllSalesByPeriod($date_start, $date_end)
     {
         return DB::select(

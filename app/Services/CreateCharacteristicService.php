@@ -10,11 +10,13 @@ use App\Repositories\CharacteristicsRepository;
 
 class CreateCharacteristicService
 {
+    // метод добавления сущности Характеристика
     public function make($med)
     {
         return (new Characteristic())->create($med);
     }
 
+    // метод создания характеристики и подчинённых сущностей
     public function add($ch)
     {
         $createCharacteristicPriceService= app(CreateCharacteristicPriceService::class);
@@ -28,7 +30,6 @@ class CreateCharacteristicService
         if($checkCharacteristic) return response("Раззуйте глаза!", 500);
         else
         {
-
             // создание цены для характеристики со значением характеристики по умолчанию
             $cp = $createCharacteristicPriceService->make(['sell_price' => 0] + $ch);
             if (!$cp) return response(null,500);

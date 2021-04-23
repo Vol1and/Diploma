@@ -8,6 +8,7 @@ use App\Models\FinanceDocumentTableRow;
 
 class CreateFinanceDocumentTableRowService
 {
+    // создание сущности СтрокаФинансовогоДокумента
     public function make($data)
     {
         return (new FinanceDocumentTableRow())->create($data);
@@ -16,7 +17,6 @@ class CreateFinanceDocumentTableRowService
     // метод добавления строки документа
     public function fillTableRow($doc, $med, $characteristic_id)
     {
-
         if($doc->doc_type_id == 1) $price = $med['income_price'];
         else $price = $med['sell_price'];
 

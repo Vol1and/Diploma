@@ -58,8 +58,6 @@ class StorageDocumentsRepository extends BaseRepository
 
     public function getFilter($doc_type_id,$start_date = null, $end_date = null, $source_storage = null, $destination_storage = null)
     {
-
-
         $query = $this->startConditions()
             ->select($this->default_columns)->where('doc_type_id',$doc_type_id );
 

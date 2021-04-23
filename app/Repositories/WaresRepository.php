@@ -40,7 +40,7 @@ class WaresRepository extends BaseRepository
             $query = $query->whereHas('characteristic.nomenclature', function($query)use($nomenclature_id) {
                 $query->where('nomenclature_id', 'like', $nomenclature_id);
 
-            });//->where('characteristic.nomenclature_id', 'like', $nomenclature_id);
+            });
 
         return $query->get();
 

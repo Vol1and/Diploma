@@ -18,7 +18,6 @@ class CreateFinanceDocumentService
     public function makeFinanceDoc($data)
     {
         $createButchNumberConnectionService = app(CreateButchNumberConnectionService::class);
-        $createWorkplaceDocumentConnectionService = app(CreateWorkplaceDocumentConnectionService::class);
 
         $rest = substr($data['date'], 0, -3);
         $date = Carbon::createFromTimestamp($rest, 'Europe/Moscow')->toDateTimeString();
@@ -43,6 +42,7 @@ class CreateFinanceDocumentService
         return $doc;
     }
 
+    // метод продажи через РМК
     public function makeSell($data)
     {
         $createWorkplaceDocumentConnectionService = app(CreateWorkplaceDocumentConnectionService::class);
@@ -65,11 +65,10 @@ class CreateFinanceDocumentService
         $createWorkplaceDocumentConnectionService
             ->make(['workplace_id' => $data['workplace_id'], 'document_id' => $doc->id, 'user_id' => $data['user_id']]);
 
-
         return $doc;
     }
 
-    // заполнение сущностей данными
+    // заполнение сущностей данными приходного дркумента
     public function fillData($doc, $med)
     {
         $createCharacteristicPriceService= app(CreateCharacteristicPriceService::class);
@@ -77,7 +76,6 @@ class CreateFinanceDocumentService
         $characteristicPricesRepository= app(CharacteristicPricesRepository::class);
         $characteristicsRepository= app(CharacteristicsRepository::class);
         $createFinanceDocumentTableRowService = app(CreateFinanceDocumentTableRowService::class);
-
 
         // поиск выбранной характеристики для выбранной номенклатуры в БД по id
         $characteristic = $characteristicsRepository->findById($med['nomenclature_id'],$med['characteristic_id']);
@@ -123,8 +121,6 @@ class CreateFinanceDocumentService
         $characteristicPricesRepository= app(CharacteristicPricesRepository::class);
         $characteristicsRepository= app(CharacteristicsRepository::class);
         $createFinanceDocumentTableRowService = app(CreateFinanceDocumentTableRowService::class);
-
-
 
         // поиск выбранной характеристики
         $characteristic = $characteristicsRepository->find($med['characteristic_id']);
@@ -262,8 +258,6 @@ class CreateFinanceDocumentService
             }
         } else {
             // циклический проход по массиву строк документа
-
-
             foreach ($doc_rows as $row) {
 
                 $bn = $butchNumberConnectionRepository->findByButchNumber($doc->id);

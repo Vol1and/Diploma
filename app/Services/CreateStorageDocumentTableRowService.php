@@ -7,6 +7,7 @@ use App\Models\StorageDocumentTableRow;
 
 class CreateStorageDocumentTableRowService
 {
+    // создание сущности СтрокаСкладскогоДокумента
     public function make($data)
     {
         return (new StorageDocumentTableRow())->create($data);
