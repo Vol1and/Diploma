@@ -76,7 +76,7 @@ class NomenclatureRepository extends BaseRepository
       return Model::orderBy('updated_at','desc')->first();
     }
 
-
+    // вызов процедуры: поиск самой продаваемой номенклатуры для виджета в админпанель
     public function findMostPopularNomenclature($date_start, $date_end)
     {
         return DB::select(
@@ -92,7 +92,6 @@ class NomenclatureRepository extends BaseRepository
             'name',
             'producer_id',
             'price_type_id'
-
         ];
         $query = $this->startConditions()
             ->select($columns)

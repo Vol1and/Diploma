@@ -34,6 +34,7 @@ class FinanceDocumentTableRowsRepository extends BaseRepository
             ->get();
     }
 
+    // поиск по id
     public function find($id)
     {
         $columns = [
@@ -51,7 +52,7 @@ class FinanceDocumentTableRowsRepository extends BaseRepository
             ->get()->first();
     }
 
-
+    // извлечение данных для проведения документа
     public function forPush($doc_id){
         $columns = [
             'id',
@@ -64,7 +65,6 @@ class FinanceDocumentTableRowsRepository extends BaseRepository
         return $this->startConditions()
             ->select($columns)
             ->where('finance_document_id', $doc_id)
-            // ->with(['characteristic', 'document', 'wareConnection'])
             ->get();
     }
 }

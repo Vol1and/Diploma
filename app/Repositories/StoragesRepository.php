@@ -19,7 +19,6 @@ class StoragesRepository extends BaseRepository
 
     public function find($id){
 
-        //return Model::find($id);
         $columns = [
             'id',
             'name',

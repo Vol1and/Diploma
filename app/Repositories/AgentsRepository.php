@@ -28,9 +28,9 @@ class AgentsRepository extends BaseRepository
         return Model::all();
     }
 
+    // поиск сущности по id
     public function find($id){
 
-        //return Model::find($id);
         $columns = [
             'id',
             'name',
@@ -39,7 +39,6 @@ class AgentsRepository extends BaseRepository
             'description',
         ];
         return $this->startConditions()->select($columns)->where('id', $id)->get()->first();
-
     }
 
     public function getTotalCount(){

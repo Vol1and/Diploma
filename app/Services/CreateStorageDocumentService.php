@@ -12,10 +12,9 @@ use Carbon\Carbon;
 
 class CreateStorageDocumentService
 {
-
+    // метод добавления Складского документа
     public function makeStorageDoc($data)
     {
-
         $rest = substr($data['date'], 0, -3);
         $date = Carbon::createFromTimestamp($rest, 'Europe/Moscow')->toDateTimeString();
 
@@ -129,6 +128,7 @@ class CreateStorageDocumentService
         return $doc;
     }
 
+    // метод проведения Складского документа
     public function pushStorageDoc($doc_id)
     {
         $storageDocumentsRepository = app(StorageDocumentsRepository::class);

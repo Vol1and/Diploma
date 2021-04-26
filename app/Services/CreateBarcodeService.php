@@ -54,6 +54,5 @@ class CreateBarcodeService
             return $barcodeConnection;
         }
         return null;
-
     }
 }

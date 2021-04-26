@@ -9,11 +9,11 @@ use App\Repositories\ButchNumberConnectionsRepository;
 
 class CreateWareConnectionService
 {
+    // добавление сущности РеестраНакопления
     public function make($med)
     {
         return (new WareConnection())->create($med);
     }
-
 
     // внедрение проводки в регистр накопления
     public function pushWareConnection($document_row, $doc)
@@ -32,7 +32,6 @@ class CreateWareConnectionService
 
             $bn = $butchNumberConnectionRepository->findByButchNumber($doc->id);
             $change = -$document_row->count;
-
         }
 
         //создание проводки для регистра накопления
