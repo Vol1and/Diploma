@@ -1,15 +1,18 @@
 import PriceType from "./PriceType";
 import Producer from "./Producer";
-
+//Номенклатура
 class Nomenclature {
     constructor(id = -1, name = "", producer = new Producer(), price_type = new PriceType(), created_at, updated_at, deleted_at) {
 
-        this.characteristic = {expiry_date: "2024/12/12", serial: "123"};
 
         this.id = id;
+        //наименование номенклатуры
         this.name = name;
+        //производитель - класс Producer
         this.producer = producer;
+        //ценовая группа - класс PriceType
         this.price_type = price_type;
+
         this.created_at = created_at;
         this.updated_at = updated_at;
         this.deleted_at = deleted_at;

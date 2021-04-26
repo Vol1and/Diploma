@@ -399,24 +399,6 @@ export default {
             this.showErrors()
 
             return this.errors.length === 0;
-        },
-        callReport(id){
-
-            //console.log(this.item.id)
-            axios.post('/api/income-document/reports', {document_id: this.item.id}).then((response) => {
-
-                this.downloadFile(response.data);
-                //console.log(response.data);
-
-            }).catch((error) => {
-                //ошибка - выводим
-                this.$notify.error({
-
-                    title: 'Ошибка!',
-                    message: "Сообщение ошибки - " + error.response.data.message,
-                })
-            })
-
         }
     }
 

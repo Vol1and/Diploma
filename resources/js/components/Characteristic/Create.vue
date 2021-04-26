@@ -96,6 +96,7 @@ export default {
             this.errors = [];
             if (this.item.serial.length === 0) this.errors.push("Поле \"Серия\" должно быть заполнено");
             if (this.item.serial.length > 255) this.errors.push("Превышен размер поля \"Серия\"");
+            if (this.item.expiry_date == null) this.errors.push("Поле \"Срок годности\" должно быть заполнено");
             this.showErrors();
 
             return this.errors.length === 0;

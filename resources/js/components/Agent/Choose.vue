@@ -78,34 +78,14 @@ export default {
     mixins: [mixin_index],
     data: function () {
         return {
-
             action_namespace: "agents"
-
         };
     },
     mounted() {
         this.update();
     },
     methods: {
-        rowSelected(id) {
 
-            this.selected_item = id;
-        },
-
-        update: function () {
-            this.is_reload = true;
-            this.$store.dispatch('agents/update').then(() => {
-                this.is_reload = false;
-                this.page_count = this.$store.getters['agents/items_length'](this.items_per_page);
-                this.current_page = 1;
-                this.onChangePage();
-
-            }, (reason => {
-                console.log(`Что то пошло не так. Код ответа - ${reason}`)
-                this.is_reload = false;
-            }));
-
-        },
         selected(selected_item) {
             this.$emit("selected", {agent: selected_item});
         },

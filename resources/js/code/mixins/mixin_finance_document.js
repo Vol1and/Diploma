@@ -3,124 +3,49 @@
 //подробнее почитать можно https://ru.vuejs.org/v2/guide/mixins.html
 import FinanceDocument from "../models/FinanceDocument";
 import FinanceDocumentTableRow from "../models/FinanceDocumentTableRow";
-import Characteristic from "../models/Characteristic";
+import mixin_base_document from "./mixin_base_document";
 
 export default {
 
+    mixins: [mixin_base_document],
 
     data: function () {
         return {
-            characteristic_dialog: false,
-            errors: [],
-            //переменная, которая помогает отображать компоненты выбора (например, NomenclatureChoose или ProducerChoose)
-            choosing_state: 0,
-            //показывает, получены ли данные с сервера - при loaded - false не доступна submit-кнопка
-            loaded: true,
             //модель, в которой будут находиться данные
             item: new FinanceDocument(null, 1),
             //выбранная строка - в табличной части идет проверка - id_строки - id_selectingRow
             //если true, то строка переходит в editable
             selectingRow: new FinanceDocumentTableRow(null),
-            hover_row: null,
-            buffer_row: null
         };
     },
 
     methods: {
 
-        showErrors() {
-            this.errors.forEach(item =>
-                this.$message({
-                    showClose: true,
-                    message: item,
-                    type: 'error'
-                }));
-
-
-        },
-        //обработчик события cell-dblclick - обрабатывает двойной щелчок по выбраной клетке
-        //чисто технически, его можно переделать в rowEdit, но пока не горит
-
-        rowEdit(row) {
-            //присваивает выбранную строку в selectingRow - читать выше
-            this.selectingRow = row;
-        }
-        ,
-        rowHover(item) {
-
-            this.hover_row = item;
-
-            if (!this.selectingRow.isEqual(item)) return;
-
-            this.selectingRow = new FinanceDocumentTableRow(null);
-        },
-        //удаление строки табличной части
-        deleteSelected() {
-            this.selectingRow = new FinanceDocumentTableRow();
-            //если не выбрана ни одна строка - ничего не делаем
-            if (this.hover_row == null) return;
-
-            //удаляем строку из табличной части
-            let index = this.item.table_rows.indexOf(this.hover_row);
-            this.item.table_rows.splice(index, 1);
-
-            //если удалена новая строка и она не сохранена на сервере - не заносим в deleted_rows
-            if (this.hover_row.id == null) return;
-
-            //вносим данные в deleted_rows
-            this.item.deleted_rows.push(this.hover_row.id);
-
-        },
         //метод добавляет новую пустую строку в массив table_rows, и, соответственно в табличную часть формы
         addToTable() {
             this.item.table_rows.push(new FinanceDocumentTableRow(null));
         },
+        //метод для выбора склада
         selectingStorage() {
             this.choosing_state = 3;
         },
+        //метод для выбора контрагента
         selectingAgent() {
             this.choosing_state = 1;
         },
+        //метод для выбора номенклатуры
         selectingNomenclature() {
             this.choosing_state = 2;
         },
-        selectingCharacteristic() {
-            this.characteristic_dialog = true;
-            this.buffer_row = this.selectingRow;
-        },
-        onSelectedCharacteristic(data) {
-            let flag = true;
-
-            this.selectingRow = this.buffer_row
-            this.item.table_rows.forEach(p => {
-                if (p.characteristic.id === data.characteristic.id) {
-                    console.log("Произошла жопа!");
-                    //удаляем строку из табличной части
-                    let index = this.item.table_rows.indexOf(this.hover_row);
-                    this.item.table_rows.splice(index, 1);
-
-                    this.hover_row = p;
-                    this.selectingRow = p;
-                    flag = false;
-                    this.$notify.error({
-                        title: 'Ошибка!',
-                         message: "Строка с такой номенклатурой уже присутствует в таблице!"
-                    });
-                }
-            })
-            if (flag){
-                console.log(this.selectingRow)
-                this.selectingRow.characteristic = data.characteristic;
-            }
-            this.choosing_state = 0;
-            this.characteristic_dialog = false;
-        },
+        //метод выбранного контрагента
         onSelectedAgent(data) {
             this.item.agent = data.agent;
             this.choosing_state = 0;
         },
+        //метод выбранного склада
         onSelectedStorage(data) {
             this.choosing_state = 0;
+            //если расход  и табличная часть не пуста - запрещаем изменять склад
             if (this.item.type === 2 && this.item.table_rows.length > 0) {
                 this.$notify.error({
                     title: 'Ошибка!',
@@ -128,11 +53,6 @@ export default {
                 })
             } else this.item.storage = data.storage;
 
-        },
-        onSelectedNomenclature(data) {
-            this.selectingRow.nomenclature = data.nomenclature;
-            this.selectingRow.characteristic = new Characteristic(null);
-            this.choosing_state = 0;
         },
         onBack() {
             this.choosing_state = 0;

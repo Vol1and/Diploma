@@ -3,120 +3,41 @@
 //подробнее почитать можно https://ru.vuejs.org/v2/guide/mixins.html
 import StorageDocument from "../models/StorageDocument";
 import StorageDocumentTableRow from "../models/StorageDocumentTableRow";
-import FinanceDocumentTableRow from "../models/FinanceDocumentTableRow";
+import mixin_base_document from "./mixin_base_document";
 
 export default {
+
+    mixins: [mixin_base_document],
 
 
     data: function () {
         return {
-            characteristic_dialog: false,
-            errors: [],
-            //переменная, которая помогает отображать компоненты выбора (например, NomenclatureChoose или ProducerChoose)
-            choosing_state: 0,
-            //показывает, получены ли данные с сервера - при loaded - false не доступна submit-кнопка
-            loaded: true,
             //модель, в которой будут находиться данные
             item: new StorageDocument(null, 3),
             //выбранная строка - в табличной части идет проверка - id_строки - id_selectingRow
             //если true, то строка переходит в editable
             selectingRow: new StorageDocumentTableRow(null),
-            hover_row: null,
-            buffer_row: null
         };
     },
 
     methods: {
 
-        showErrors() {
-            this.errors.forEach(item =>
-                this.$message({
-                    showClose: true,
-                    message: item,
-                    type: 'error'
-                }));
-        },
-        //обработчик события cell-dblclick - обрабатывает двойной щелчок по выбраной клетке
-        //чисто технически, его можно переделать в rowEdit, но пока не горит
-        rowEdit(row) {
-            //присваивает выбранную строку в selectingRow - читать выше
-            this.selectingRow = row;
-        }
-        ,
-        rowHover(item) {
-
-            this.hover_row = item;
-            if (!this.selectingRow.isEqual(item)) return;
-            this.selectingRow = new FinanceDocumentTableRow();
-        },
-        //удаление строки табличной части
-        deleteSelected() {
-
-            this.selectingRow = new FinanceDocumentTableRow();
-            //если не выбрана ни одна строка - ничего не делаем
-            if (this.hover_row == null) return;
-
-            //удаляем строку из табличной части
-            let index = this.item.table_rows.indexOf(this.hover_row);
-            this.item.table_rows.splice(index, 1);
-
-            //если удалена новая строка и она не сохранена на сервере - не заносим в deleted_rows
-            if (this.hover_row.id == null) return;
-
-            //вносим данные в deleted_rows
-            this.item.deleted_rows.push(this.hover_row.id);
-
-        },
         //метод добавляет новую пустую строку в массив table_rows, и, соответственно в табличную часть формы
         addToTable() {
             this.item.table_rows.push(new StorageDocumentTableRow(null));
         },
+        //метод выбора основного склада (склада-отправителя для перемещений и склада, с которого списывается товар в списании)
         selectingSourceStorage() {
             this.choosing_state = 3;
         },
+        //метод выбора склада получателя для перемещений
         selectingDestinationStorage() {
             this.choosing_state = 4;
         },
-        selectingAgent() {
-            this.choosing_state = 1;
-        },
-        selectingNomenclature(row) {
-            this.choosing_state = 2;
-        },
-        selectingCharacteristic() {
-            this.buffer_row = this.selectingRow;
-            this.characteristic_dialog = true;
-
-        },
-        onSelectedCharacteristic(data) {
-            let flag = true;
-
-            this.selectingRow = this.buffer_row
-            this.item.table_rows.forEach(p => {
-                if (p.characteristic.id === data.characteristic.id) {
-                    //удаляем строку из табличной части
-                    let index = this.item.table_rows.indexOf(this.hover_row);
-                    this.item.table_rows.splice(index, 1);
-
-                    this.hover_row = p;
-                    this.selectingRow = p;
-                    flag = false;
-                    this.$notify.error({
-                        title: 'Ошибка!',
-                        message: "Строка с такой номенклатурой уже присутствует в таблице!"
-                    });
-                }
-            })
-            if (flag) {
-                console.log(this.selectingRow)
-                this.selectingRow.characteristic = data.characteristic;
-            }
-            this.choosing_state = 0;
-            this.characteristic_dialog = false;
-        },
-
+        //метод выбранного основного склада
         onSelectedSourceStorage(data) {
             this.choosing_state = 0;
+            //если расход  и табличная часть не пуста - запрещаем изменять склад
             if (this.item.type === 2 && this.item.table_rows.length > 0) {
                 this.$notify.error({
                     title: 'Ошибка!',
@@ -125,33 +46,29 @@ export default {
             } else this.item.source_storage = data.storage;
 
         },
+        //метод выбранного склада-получателя в перемещении
         onSelectedDestinationStorage(data) {
             this.choosing_state = 0;
             this.item.destination_storage = data.storage;
 
         },
-        onSelectedNomenclature(data) {
-            this.selectingRow.nomenclature = data.nomenclature;
-            this.choosing_state = 0;
-        },
-        onBack() {
-            this.choosing_state = 0;
-        },
-        // Create callback function to receive barcode when the scanner is already done
+        //метод работы сканера штрих-кодов
         onBarcodeScanned(barcode) {
-            console.log(barcode)
-
+            //если не выбран основной склад - не выполняем
             if (this.item.source_storage.id != null) {
+                //пост-запрос - ищет номенклатуру по штрихкоду
                 axios.post("/api/barcodes/findNomenclatureByBarcode", {barcode: barcode}).then((response) => {
-
-                    console.log(response.data)
+                    //проверка на пришедшую номенклатуру
                     if (response.data.nomenclature !== null) {
+                        //если все ок - создаем новую строку
                         let row = new StorageDocumentTableRow(null);
+                        //помещаем в новую строку пришедшую номенклатуру
                         row.nomenclature = response.data.nomenclature;
-
+                        //помещаем новую строку в табличную часть документа
                         this.item.table_rows.push(row);
-                        this.selectingRow = row;
-                        this.buffer_row = row;
+                        //ставим редактирование на данную строку
+                        this.selectingRow =  this.buffer_row  = row;
+                        //переходим к окну характеристики по данной номенклатуре
                         this.selectingCharacteristic();
                     } else {
                         this.$notify.error({
@@ -170,17 +87,3 @@ export default {
         },
     }
 }
-/*
-*
-* onSelectedNomenclature(data) {
-            if(this.buffer_row != null) {
-
-            }
-            let row = new StorageDocumentTableRow();
-            row.nomenclature = data.nomenclature;
-            row.characteristic = data.nomenclature.characteristic;
-
-            this.item.table_rows.push(row);
-            this.choosing_state = 0;
-        }
-* */

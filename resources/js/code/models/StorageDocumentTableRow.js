@@ -25,7 +25,7 @@ class StorageDocumentTableRow {
 
         }
     }
-
+    //валидная ли строка?
     isValid() {
 
         return !(this.nomenclature.id === -1 ||
@@ -35,7 +35,7 @@ class StorageDocumentTableRow {
             this.count <= 0);
 
     }
-
+    //проверка - равны ли строки документа - не по ссылкам, а по значениям
     isEqual(row) {
         if(row === null) return false;
         return this.nomenclature.id === row.nomenclature.id &&

@@ -35,27 +35,21 @@
 
 <script>
 import mixin_create from "../../code/mixins/mixin_create";
-import Characteristic from "../../code/models/Characteristic";
 
 export default {
     name: "CharacteristicCreate",
     mixins: [mixin_create],
-    props: [
-        "prop_nomenclature_id"
-    ],
+
     data() {
         return {
             item: {barcode : "" , nomenclature: {id: null, name: ""}},
+            //поле блокирует доступ к кнопке submit
             loaded: true,
-            errors: [],
             success: true,
             choosing_state : 0
 
         };
     },
-    mounted() {
-    },
-
 
     methods: {
 

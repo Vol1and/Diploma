@@ -75,15 +75,9 @@ export default {
     mixins: [mixin_index],
     data: function () {
         return {
-
             action_namespace: "agents"
-
         };
     },
-    mounted() {
-        this.update();
-    },
-    methods: {}
 
 }
 </script>

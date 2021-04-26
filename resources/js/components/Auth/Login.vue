@@ -18,7 +18,6 @@
 
                     <el-form-item>
                         <el-button type="primary" @click="submit">Логин</el-button>
-                        <el-button @click="()=>{this.$router.go(-1)}">Регистрация</el-button>
                     </el-form-item>
                 </el-form>
             </el-card>
@@ -39,9 +38,9 @@ export default {
     },
     computed: {
 
+        //вычисляемое поле - определяет - куда перекинет пользователя после аутентификации
         index_route: function () {
             switch (this.$store.getters["auth/role"]) {
-
                 case 1:
                 case 2:
                     return {name: "cashier.index"}
@@ -56,26 +55,23 @@ export default {
     },
     methods: {
         submit() {
-
-
+            //отправка данных для аутентификации
             this.$store.dispatch('auth/sendLoginRequest', {
                 email: this.item.name,
                 password: this.item.password
             }).then(() => {
                 this.$router.push(this.index_route);
             }).catch((error) => {
+                //если статус ошибки 422 - то логин неправильный
                 if (error.response.status === 422) {
                     this.$notify.error({
-
                         title: 'Ошибка!',
                         message: "Вы ввели некорректные данные!",
                     })
                 } else this.$notify.error({
-
                     title: 'Ошибка!',
                     message: "Сообщение ошибки - " + error.response.data.message,
                 })
-                ///this.$router.push({name: 'income.index'});
             });
         }
     }

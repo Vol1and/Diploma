@@ -1,3 +1,4 @@
+//класс Склад
 class Storage {
     constructor(id = -1, name = "", created_at, updated_at, deleted_at) {
 

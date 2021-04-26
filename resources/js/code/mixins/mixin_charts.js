@@ -1,3 +1,5 @@
+//Примесь для чартов - генерирует рандомный цвет для датасета - чтобы каждый раз был новый цвет
+
 export default {
 
 
@@ -12,7 +14,6 @@ export default {
     methods: {
 
         addNewRandomColorToBackgrounds() {
-
             let r = Math.floor(Math.random() * 255);
             let g = Math.floor(Math.random() * 255);
             let b = Math.floor(Math.random() * 255);

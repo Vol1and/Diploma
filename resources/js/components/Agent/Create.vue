@@ -33,32 +33,32 @@
 
 <script>
 import Agent from "../../code/models/Agent";
+import mixin_create from "../../code/mixins/mixin_create";
 
 export default {
     name: "AgentCreate",
 
+    mixins : [mixin_create],
     data() {
         return {
             item: new Agent(),
 
             loaded: true,
             errors: [],
-            success: true
-
         };
     },
-
 
     methods: {
 
         submit: function () {
-
+            //если валидация не проходит - не продолжаем
             if (!this.validateFields()) return;
 
+            //блокируем доступ к кнопке submit
             this.loaded = false;
+            //пост запрос для создания
+            axios.post('/api/agents', this.item).then(()=> {
 
-
-            axios.post('/api/agents', this.item).then(response => {
                 this.loaded = true;
                 this.$notify({
 
@@ -66,6 +66,7 @@ export default {
                     title: 'Элемент добавлен!',
                     message: `Элемент  успешно добавлен!`,
                 })
+                //переводим на главную страницу
                 this.$router.push({name: 'agents.index'});
 
             }).catch((error) => {
@@ -76,12 +77,17 @@ export default {
                 })
                 this.loaded = true;
             })
+
         },
+        //метод валидации свойств объекта
         validateFields() {
             this.errors = [];
             if (this.item.name.length === 0) this.errors.push("Поле \"Наименование\" должно быть заполнено");
             if (this.item.name.length > 255) this.errors.push("Превышен размер поля \"Наименование\"");
 
+            this.showErrors();
+
+            //возвращает булево, в зависимости от того, пуст ли массив ошибок
             return this.errors.length === 0;
         }
 

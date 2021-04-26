@@ -1,14 +1,8 @@
 //здесь происходит первичная инициализация компонентов, которые используются  в vue
 
 
-import IncomeCreate from "../components/Documents/Income/Create";
-import WaresIndex from "../components/Ware/Index"
-
 import Home from "../components/Menu/Home";
-
-
-Vue.component('IncomeCreate', IncomeCreate.default);
-Vue.component('WaresIndex', WaresIndex.default);
+import Vue from "vue";
 
 
 Vue.component('producer-choose-component',
@@ -51,6 +45,5 @@ Vue.component('SideBar',
 Vue.component('ConfigBoard', require('../components/CashierPlace/ConfigBoard').default)
 Vue.component('CharacteristicSearch', require('../components/CashierPlace/CharacteristicSearch').default)
 Vue.component('CashInput', require('../components/CashierPlace/CashInput').default)
-//Vue.component('CharacteristicForNomenclature',     CharacteristicForNomenclature.default);
 
 Vue.component('HomeComponent', Home.default);

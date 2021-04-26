@@ -50,9 +50,14 @@ class HomeController extends OriginController
             ->accountingConnectionsRepository
             ->findAllSalesByPeriod(Carbon::now()->subDays(7)->toDateString(),Carbon::now()->toDateString());
 
+        $company_balance = $this->accountingConnectionsRepository->getBalance();
+
+
         return [
             'opened_workplace_count' => $active_user_count,
             'last_week_sales_count' => $last_week_sales_count[0]->counting,
-            'most_popular_nomenclature' => $most_popular_nomenclature[0]->nomenclature ];
+            'most_popular_nomenclature' => $most_popular_nomenclature[0]->nomenclature,
+            'company_balance' => $company_balance
+            ];
     }
 }

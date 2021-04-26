@@ -22,7 +22,7 @@ export default {
 
             //сколько элементов будет на одной странице пагинации - можно реинициализировать
             items_per_page: 10,
-            //интересная вещь - в каждой компоненте используется свой набор запросов или команд в хранилище
+            //в каждой компоненте используется свой набор запросов или команд в хранилище
             //все они работают по схеме [текущий модуль]/[действие] (например producers/update)
             //чтобы можно было чуть больше унифицировать компоненты, в данную строку будет помещаться значение [текущий модуль]
             //и некоторые методы можно вынести сюда, следовательно, упростить дальнейшую разработку кода
@@ -55,20 +55,24 @@ export default {
 
             this.$router.push({name: `${this.action_namespace}.edit`, params: {id: this.selected_item.id}});
         },
+        //метод удаления выбранной строки
         deleteSelected() {
-
+            //если строка не выбрана - выходим
             if (this.selected_item.id === undefined) return;
 
+            //модальное окно - подтверждение выбра
             this.$confirm(`Вы действительно хотите удалить элмент с Id=${this.selected_item.id}?`, 'Внимание!', {
                 confirmButtonText: 'Удалить',
                 cancelButtonText: 'Отмена',
                 type: 'warning'
             }).then(() => {
-
-
+                //в vuex отправляем запрос на удаление - удаляем
                 this.$store.dispatch(`${this.action_namespace}/deleteItem`, {id: this.selected_item.id}).then(() => {
+                    //сбрасываем выбранный объект
                     this.selected_item = null;
+                    //делаем повторный запрос - обновляем данные
                     this.onChangePage();
+                    //выводим сообщение об успехе
                     this.$message({
                         type: 'success',
                         title: "Успешно",
@@ -79,6 +83,7 @@ export default {
                 }))
 
             }).catch(() => {
+                //если пользователь отменил удаление - выводим
                 this.$message({
                     type: 'info',
                     title: 'Отмена',
@@ -91,7 +96,6 @@ export default {
 
 
         update: function () {
-            //this.filterClear();
 
             this.is_reload = true;
             this.$store.dispatch(`${this.action_namespace}/update`).then(() => {

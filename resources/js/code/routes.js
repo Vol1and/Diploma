@@ -54,12 +54,13 @@ import Home from "../components/Menu/Home";
 import Login from "../components/Auth/Login"
 
 import DashBoard from "../components/Menu/DashBoard"
-
 import BarcodeIndex from "../components/BarCode/Index"
 import BarcodeCreate from "../components/BarCode/Create"
 
 
-const routes = [
+//экспортирует роуты, которые используются Vue-router для SPA
+export default {
+   routes: [
     {path: '/wares', name: "wares.index", component: WaresIndex, meta: {requiresAuth: true, access_rate: 1}},
 
     {path: '/producers', name: "producers.index", component: ProducerIndex, meta: {requiresAuth: true, access_rate: 2}},
@@ -143,9 +144,7 @@ const routes = [
 
     {path: '/dashboard', name: 'dashboard', component: DashBoard, meta: {requiresAuth: true, access_rate: 3}},
 
-  ];
+  ]
 
-export default {
-    routes
 }
 

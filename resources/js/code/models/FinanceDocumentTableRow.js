@@ -6,10 +6,13 @@ class FinanceDocumentTableRow {
                 characteristic = new Characteristic(), count = 0, income_price = 0) {
 
         this.id = id;
-
+        //номенклатура строки
         this.nomenclature = nomenclature;
+        //характеристика строки
         this.characteristic = characteristic;
+        //количество строки
         this.count = count;
+        //цена поступления - используется в поступлениях товара
         this.income_price = income_price;
     }
 
@@ -27,9 +30,8 @@ class FinanceDocumentTableRow {
             sell_price: this.characteristic.characteristic_price.price
         }
     }
-
+    //валидная ли строка?
     isValid() {
-
         return !(this.nomenclature.id === -1 ||
             this.nomenclature.characteristic.serial === "" ||
             this.nomenclature.characteristic.expiry_date === "" ||
@@ -38,7 +40,7 @@ class FinanceDocumentTableRow {
             this.count <= 0);
 
     }
-
+    //проверка - равны ли строки документа - не по ссылкам, а по значениям
     isEqual(row) {
         if(row === null) return false;
         return this.nomenclature.id === row.nomenclature.id &&

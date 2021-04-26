@@ -27,22 +27,27 @@
 export default {
     name: "CashInput",
 
+
     props: [
+        //в поле хранится сумма созданного чека
         'check_sum'
     ],
 
     data() {
         return {
+            //то, сколько наличных дал клиент
             client_input: 0
         }
     },
     computed: {
+        //возвращает либо сдачу (наличные клиента - сумма чека), либо строку "Недостаточно"
         change: function () {
             return this.client_input - this.check_sum >= 0 ? this.client_input - this.check_sum : "Недостаточно"
         }
     },
     mounted() {
         this.client_input = 0;
+        //ставим фокус на инпуте с вводом налички
         this.$refs.client_input.focus();
     },
     methods: {

@@ -1,3 +1,4 @@
+//класс Контрагента - используется в финансовых документах
 class Agent {
     constructor(id = 1, name = " ", billing = " ", address = "", description = "", created_at, updated_at, deleted_at) {
 
