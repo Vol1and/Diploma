@@ -51,8 +51,8 @@
                     <div class="input-group ">
                         <input id="income_input" type="number" class="form-control" v-model="income_price"/>
 
-                    </div>
 
+                    </div>
 
                 </div>
                 <div class="col-md-2">
@@ -61,6 +61,9 @@
                     </label>
                     <div class="input-group ">
                         <input id="count_input" type="number" class="form-control" v-model="count"/>
+
+
+
 
                     </div>
 
